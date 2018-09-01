@@ -1,4 +1,4 @@
-# Eck dee!! xD 
+# Ecks dee!! xD 
 
 COMP2511 Group project
 
