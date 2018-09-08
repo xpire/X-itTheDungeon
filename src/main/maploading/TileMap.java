@@ -7,6 +7,7 @@ import javafx.scene.shape.Rectangle;
 import main.core.Entity;
 import main.core.ViewComponent;
 import main.math.Vec2f;
+import main.math.Vec2i;
 
 import java.util.ArrayList;
 
@@ -21,11 +22,14 @@ public class TileMap extends Entity{
 
     private ViewComponent viewComponent;
 
+    public TileMap(Vec2i dim) {
+        this(dim.getX(), dim.getY());
+    }
+
     public TileMap(int nRows, int nCols) {
         super("TileMap");
 
         this.tiles = new Tile[nRows][nCols];
-
 
         this.nRows = nRows;
         this.nCols = nCols;
@@ -50,16 +54,9 @@ public class TileMap extends Entity{
         viewComponent = new ViewComponent(gridView);
     }
 
-
-    public void setTile(int row, int col, ArrayList<Entity> entities) {
-        tiles[row][col].setEntities(entities);
-    }
-
-
     public Node getView() {
         return viewComponent.getView();
     }
-
 
     public int getNRows() {
         return nRows;
@@ -67,6 +64,14 @@ public class TileMap extends Entity{
 
     public int getNCols() {
         return nCols;
+    }
+
+    public Vec2f tileCentreToWorld(int r, int c){
+        return new Vec2f(r, c);
+    }
+
+    public void setTile(int row, int col, ArrayList<Entity> entities) {
+        tiles[row][col].setEntities(entities);
     }
 
     public void setObj(ArrayList<String> obj) {
@@ -77,16 +82,13 @@ public class TileMap extends Entity{
         return objectives;
     }
 
-    public void assignDoor(int[] keyCoord, int[] doorCoord) {
+    public void assignDoor(Vec2i keyCoord, Vec2i doorCoord) {
         getTile(keyCoord).setDoor(doorCoord);
     }
 
-    public Tile getTile(int[] coord) {
-        int row = coord[0], col = coord[1];
+    public Tile getTile(Vec2i coord) {
+        int row = coord.getX(), col = coord.getY();
         return tiles[row][col];
     }
 
-    public Vec2f tileCentreToWorld(int r, int c){
-        return new Vec2f(r, c);
-    }
 }

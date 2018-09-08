@@ -1,5 +1,6 @@
 package main.maploading;
 
+import main.Key;
 import main.core.Entity;
 
 import java.util.ArrayList;
@@ -75,6 +76,9 @@ public class MapInterpreter {
                 break;
             case '^':
                 currEntity = new Entity("Hover Potion");
+                break;
+            case '.':
+                currEntity = new Entity("Ground");
                 break;
         }
 
