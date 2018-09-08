@@ -1,4 +1,4 @@
-package MapLoading;
+package main.core;
 
 public class Entity {
 

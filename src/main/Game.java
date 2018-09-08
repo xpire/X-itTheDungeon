@@ -1,10 +1,13 @@
+package main;
+
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.shape.Box;
-import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
+import main.maploading.TileMap;
+
 
 public class Game extends Application{
 
@@ -13,6 +16,9 @@ public class Game extends Application{
     final static int HEIGHT = 400;
 
     public static Input input = new Input();
+
+
+    private TileMap map;
 
 
     public static void main(String[] args) {
@@ -41,6 +47,10 @@ public class Game extends Application{
     }
 
 
+    public TileMap getMap() {
+        return map;
+    }
+
 
     @Override
     public void start(Stage stage) {
@@ -61,18 +71,22 @@ public class Game extends Application{
 
         root.getChildren().add(inputNode);
 
-        Circle circle = new Circle();
-        circle.setRadius(100);
-        circle.setCenterX(100);
-        circle.setCenterY(100);
-        root.getChildren().add(circle);
+//        Circle circle = new Circle();
+//        circle.setRadius(100);
+//        circle.setCenterX(100);
+//        circle.setCenterY(100);
+//        root.getChildren().add(circle);
 
-//        Avatar avatar = new Avatar();
+        TileMap map = new TileMap(10, 10);
+
+//        root.getChildren().add(new AnchorPane())
+        root.getChildren().add(map.getView());
+
+//        main.Avatar avatar = new main.Avatar();
 //        root.getChildren().add(avatar.getView());
 //
 //        Wall wall = new Wall(230, 320);
 //        root.getChildren().add(wall.getView());
-
 
         stage.setScene(scene);
         stage.show();

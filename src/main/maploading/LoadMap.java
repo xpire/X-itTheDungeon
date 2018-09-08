@@ -1,4 +1,4 @@
-package MapLoading;
+package main.maploading;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -27,7 +27,7 @@ public class LoadMap {
                     i++;
                 } else if (i < numRow) {
                     if (line.length != numCol) {
-                        System.out.println("Input map error");
+                        System.out.println("main.Input map error");
                         break;
                     }
 

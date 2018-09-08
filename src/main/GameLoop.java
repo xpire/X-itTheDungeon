@@ -1,3 +1,5 @@
+package main;
+
 import javafx.animation.AnimationTimer;
 
 import java.util.function.Consumer;
@@ -24,7 +26,7 @@ public class GameLoop extends AnimationTimer {
 //    private Runnable postUpdater;
 
 
-//    public GameLoop(Runnable preUpdater, Consumer<Float> updater, Runnable postUpdater, Consumer<Integer> fpsReporter) {
+//    public main.GameLoop(Runnable preUpdater, Consumer<Float> updater, Runnable postUpdater, Consumer<Integer> fpsReporter) {
 //        this.preUpdater     = preUpdater;
 //        this.updater        = updater;
 //        this.postUpdater    = postUpdater;
@@ -47,7 +49,7 @@ public class GameLoop extends AnimationTimer {
 
         lag += (currTime - prevTime) / NANO_PER_SEC;
 
-        // Input Processing
+        // main.Input Processing
         game.onBeforeUpdate();
 
         // Update Loop
