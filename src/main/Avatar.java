@@ -1,28 +1,34 @@
 package main;
 
+import javafx.scene.Node;
 import javafx.scene.input.KeyCode;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import main.math.Vec2f;
+import main.math.Vec2d;
 import main.math.Vec2i;
+
 
 public class Avatar {
 
-    private Game game;
+    private GameWorld world;
 
-    private Vec2f mapPos;
     private Vec2i gridPos;
-    private Circle view = new Circle();
+    private Circle view;
 
-    public Avatar(Game game) {
+
+    public Avatar(GameWorld world) {
 
         this.gridPos = new Vec2i(0, 0);
-        this.mapPos = new Vec2f(0.0f, 0.0f);
-        this.game = game;
+        this.world = world;
+
+
+        view = new Circle();
+        view.setRadius(10);
+        view.setFill(Color.AQUA);
     }
 
 
-    public void update(float delta) {
-
+    public void update(double delta) {
 
         if (Game.input.isHeld(KeyCode.UP)) {
             gridPos.add(0, -1);
@@ -37,19 +43,26 @@ public class Avatar {
             gridPos.add(1, 0);
         }
 
-
-
+//        gridPos.clip(new Vec2i(0, 0), world.getDimesions());
     }
 
-    public void moveTo(int row, int col) {
-//        TileMap map = game.getMap();
-//        main.math.Vec2f pos = map.tileCentreToWorld(row, col);
 
-
+    public void moveTo(Vec2i pos) {
+        gridPos = new Vec2i(pos);
     }
+
+    public Vec2i getGridPos(){
+        return new Vec2i(gridPos);
+    }
+
 
     public void render() {
-//        view.setTranslateX(pos.getX());
-//        view.setTranslateY(pos.getY());
+        Vec2d pos = world.gridPosToWorldPos(gridPos);
+        view.setTranslateX(pos.getX());
+        view.setTranslateY(pos.getY());
+    }
+
+    public Node getView() {
+        return view;
     }
 }
