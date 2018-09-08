@@ -1,7 +1,7 @@
 package main.maploading;
 
 import main.Key;
-import main.core.Entity;
+import main.Entities.Entity;
 
 import java.util.ArrayList;
 

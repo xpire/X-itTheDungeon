@@ -1,4 +1,4 @@
-package main.core;
+package main.Entities;
 
 public class Entity {
 

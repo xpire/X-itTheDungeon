@@ -1,9 +1,10 @@
 package main;
 
-import main.core.Entity;
+import main.Entities.Entity;
 import main.math.Vec2i;
 
 public class Key extends Entity {
+    //refactor this to contain the door object, rather than coord
     private Vec2i matchingDoor;
 
     public Key(String name) {

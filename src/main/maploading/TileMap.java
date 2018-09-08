@@ -4,7 +4,7 @@ import javafx.scene.Node;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import main.core.Entity;
+import main.Entities.Entity;
 import main.core.ViewComponent;
 import main.math.Vec2d;
 import main.math.Vec2i;
