@@ -1,45 +1,45 @@
 package Behavior;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import main.math.*;
 
 public class HoundBehavior implements AIBehavior {
     // TODO: change the type of the map
     @Override
-    public int[] decideMove(int[] map, int[] currLocation, int[] playerLocation, ArrayList<Integer> pastMoves) {
+    public ArrayList<Vec2i> decideMove(int[] map, Vec2i currLocation, Vec2i playerLocation, ArrayList<Integer> pastMoves) {
         // find the hunter closest to the player
-        lowestDistanceSquared = 64*64*2;
-        closestHunter = null;
+        int lowestDistanceSquared = 64*64*2;
+        Entity closestHunter = null; //NOT SURE ABOUT THIS
         for (Entity e : map.getEntities()) {
             if (e.getName = "Hunter") {
-                distanceSquared = (playerLocation[0] - e.getX())^2 + (playerLocation[1] - e.getY())^2;
+                int distanceSquared = (playerLocation.getX() - e.getNCols())^2 + (playerLocation.getY() - e.getNRows())^2;
                 if (distanceSquared <= lowestDistanceSquared) {
                     lowestDistanceSquared = distanceSquared;
                     closestHunter = e;
                 }
             }
         }
-        ArrayList<int[]> targetSquares = new ArrayList<int[2]>();
-        int[] output = new int[2];
+        ArrayList<Vec2i> targetSquares = new ArrayList<Vec2i>();
         if (closestHunter == null) {
             // no closest hunter, Hound becomes a hunter
             targetSquares.add(playerLocation);
             return targetSquares;
         }
         //pretend we have a cartesian plane
-        changeX = closestHunter.getX() - playerLocation[0];
-        changeY = closestHunter.getY() - playerLocation[1]);
+        int changeX = closestHunter.getNCols() - playerLocation.getX();
+        int changeY = closestHunter.getNRows() - playerLocation.getY());
+        int width = 0;
         if (changeX == 0 && changeY > 0) {
             // Southerly Direction
             // p
             // |
             // v
             // h
-            int width = 0;
-            for (int y = currLocation[1]; y >= 0; y--) {
-                for (int x = currLocation[0] - width; x <= currLocation[0] + width; x++) {
-                    if (x < 0 || x >= map.getX()) continue;
-                    output[0] = x;
-                    output[1] = y;
+            for (int y = currLocation.getY(); y >= 0; y--) {
+                for (int x = currLocation.getX() - width; x <= currLocation.getX() + width; x++) {
+                    if (x < 0 || x >= map.getNCols()) continue;
+                    Vec2i output = new Vec2i(x,y);
                     // check if output is inside the map and is accessible
                     targetSquares.add(output);
                 }
@@ -50,11 +50,10 @@ public class HoundBehavior implements AIBehavior {
             // ^
             // |
             // p
-            for (int y = currLocation[1]; y < map.getY(); y++) {
-                for (int x = currLocation[0] - width; x <= currLocation[0] + width; x++) {
-                    if (x < 0 || x >= map.getX()) continue;
-                    output[0] = x;
-                    output[1] = y;
+            for (int y = currLocation.getY(); y < map.getNRows(); y++) {
+                for (int x = currLocation.getX() - width; x <= currLocation.getX() + width; x++) {
+                    if (x < 0 || x >= map.getNCols()) continue;
+                    Vec2i output = new Vec2i(x,y);
                     // check if output is inside the map and is accessible
                     targetSquares.add(output);
                 }
@@ -62,11 +61,10 @@ public class HoundBehavior implements AIBehavior {
         } else if (changeX > 0 && changeY == 0) {
             // Easterly Direction
             // p->h
-            for (int x = currLocation[0]; x < map.getX(); x++) {
-                for (int y = currLocation[1] - width; y <= currLocation[1] + width; y++) {
-                    if (y < 0 || y >= map.getY()) continue;
-                    output[0] = x;
-                    output[1] = y;
+            for (int x = currLocation.getX(); x < map.getNCols(); x++) {
+                for (int y = currLocation.getY() - width; y <= currLocation.getY() + width; y++) {
+                    if (y < 0 || y >= map.getNRows()) continue;
+                    Vec2i output = new Vec2i(x,y);
                     // check if output is inside the map and is accessible
                     targetSquares.add(output);
                 }
@@ -74,11 +72,10 @@ public class HoundBehavior implements AIBehavior {
         } else if (changeX < 0 && changeY == 0) {
             // Westerly Direction
             // h<-p
-            for (int x = currLocation[0]; x >= 0; x--) {
-                for (int y = currLocation[1] - width; y <= currLocation[1] + width; y++) {
-                    if (y < 0 || y >= map.getY()) continue;
-                    output[0] = x;
-                    output[1] = y;
+            for (int x = currLocation.getX(); x >= 0; x--) {
+                for (int y = currLocation.getY() - width; y <= currLocation.getY() + width; y++) {
+                    if (y < 0 || y >= map.getNRows()) continue;
+                    Vec2i output = new Vec2i(x,y);
                     // check if output is inside the map and is accessible
                     targetSquares.add(output);
                 }
@@ -89,10 +86,9 @@ public class HoundBehavior implements AIBehavior {
             //  \
             //  v
             //   h
-            for (int x = playerLocation[0]; x < map.getX(); x++) {
-                for (int y = playerLocation[1]; y < map.getY(); y++) {
-                    output[0] = x;
-                    output[1] = y;
+            for (int x = playerLocation.getX(); x < map.getNCols(); x++) {
+                for (int y = playerLocation.getY(); y < map.getNRows(); y++) {
+                    Vec2i output = new Vec2i(x,y);
                     // check if output is inside the map and is accessible
                     targetSquares.add(output);
                 }
@@ -103,10 +99,9 @@ public class HoundBehavior implements AIBehavior {
             //  ^
             // /
             //p
-            for (int x = playerLocation[0]; x < map.getX(); x++) {
-                for (int y = playerLocation[1]; y >= 0; y--) {
-                    output[0] = x;
-                    output[1] = y;
+            for (int x = playerLocation.getX(); x < map.getNCols(); x++) {
+                for (int y = playerLocation.getY(); y >= 0; y--) {
+                    Vec2i output = new Vec2i(x,y);
                     // check if output is inside the map and is accessible
                     targetSquares.add(output);
                 }
@@ -117,10 +112,9 @@ public class HoundBehavior implements AIBehavior {
             // ^
             //  \
             //   p
-            for (int x = playerLocation[0]; x >= 0; x--) {
-                for (int y = playerLocation[1]; y >= 0; y--) {
-                    output[0] = x;
-                    output[1] = y;
+            for (int x = playerLocation.getX(); x >= 0; x--) {
+                for (int y = playerLocation.getY(); y >= 0; y--) {
+                    Vec2i output = new Vec2i(x,y);
                     // check if output is inside the map and is accessible
                     targetSquares.add(output);
                 }
@@ -131,10 +125,9 @@ public class HoundBehavior implements AIBehavior {
             //  /
             // v
             // h
-            for (int x = playerLocation[0]; x >= 0; x--) {
-                for (int y = playerLocation[1]; y < map.getY(); y++) {
-                    output[0] = x;
-                    output[1] = y;
+            for (int x = playerLocation.getX(); x >= 0; x--) {
+                for (int y = playerLocation.getY(); y < map.getNRows(); y++) {
+                    Vec2i output = new Vec2i(x,y);
                     // check if output is inside the map and is accessible
                     targetSquares.add(output);
                 }
