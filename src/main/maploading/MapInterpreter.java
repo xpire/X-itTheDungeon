@@ -1,4 +1,6 @@
-package MapLoading;
+package main.maploading;
+
+import main.core.Entity;
 
 import java.util.ArrayList;
 
