@@ -6,8 +6,8 @@ Description: Please work hard for this assignment and have fun :smiling_imp: :sm
 
 Language: Java
 
-Memebers 
- - Ian Park  
+Members 
+ - Ian Park
  - Justin Or 
  - Song Fang 
  - Even Tang
