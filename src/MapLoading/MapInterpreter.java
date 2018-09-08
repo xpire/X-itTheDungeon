@@ -1,10 +1,19 @@
 package MapLoading;
 
+import java.util.ArrayList;
+
 public class MapInterpreter {
 
-//    public String getEntities(String[] row) {
-//        return null;
-//    }
+    public ArrayList<Entity> getTileEntities(String tileInput) {
+        ArrayList<Entity> tileEntities = new ArrayList<>();
+
+        char[] eachEntity = tileInput.toCharArray();
+        for (char ch : eachEntity) {
+
+        }
+
+        return tileEntities;
+    }
 
 }
 
