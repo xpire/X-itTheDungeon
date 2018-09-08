@@ -1,4 +1,4 @@
-package MapLoading;
+package main.maploading;
 
 import java.io.File;
 import java.io.FileNotFoundException;

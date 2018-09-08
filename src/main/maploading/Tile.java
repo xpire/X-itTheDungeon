@@ -1,8 +1,12 @@
-package MapLoading;
+package main.maploading;
+
+
+import main.Key;
+import main.core.Entity;
 
 import java.util.ArrayList;
 
-public class Tile {
+public class Tile{
 
     private ArrayList<Entity> entities;
 
@@ -14,5 +18,4 @@ public class Tile {
         for (Entity e : entities)
             if (e instanceof Key) ((Key) e).setMatchingDoor(mDoor);
     }
-
 }

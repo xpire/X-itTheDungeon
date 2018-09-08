@@ -1,4 +1,6 @@
-package MapLoading;
+package main;
+
+import main.core.Entity;
 
 public class Key extends Entity {
     private int[] matchingDoor;
