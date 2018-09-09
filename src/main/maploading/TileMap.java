@@ -20,7 +20,7 @@ public class TileMap{
 
     private Tile[][] tiles;
 
-    private ViewComponent viewComponent;
+    private ViewComponent view;
 
     public TileMap(int nRows, int nCols) {
         this(nRows, nCols, 10.0);
@@ -44,16 +44,17 @@ public class TileMap{
 
                 Rectangle tile = new Rectangle(size, size);
 
-                int r = (i + j) * 255 / (nCols + nRows);
-                int g = j * 255 / nCols;
-                int b = i * 255 / nRows;
-                tile.setFill(Color.rgb(r, g, b));
+//                int r = (i + j) * 255 / (nCols + nRows);
+//                int g = j * 255 / nCols;
+//                int b = i * 255 / nRows;
+                tile.setFill(Color.rgb(200, 200, 200));
+
                 gridView.add(tile, i, j);
             }
         }
 
         gridView.gridLinesVisibleProperty().setValue(true);
-        viewComponent = new ViewComponent(gridView);
+        view = new ViewComponent(gridView);
     }
 
     public double getHeight() {
@@ -68,9 +69,16 @@ public class TileMap{
         tiles[row][col].setEntities(entities);
     }
 
+    public void addEntity(int row, int col, Entity entity) {
+
+        entity.moveTo(gridPosToWorldPos(new Vec2i(row, col)));
+        view.addNode(entity.getView());
+        tiles[row][col].addEntity(entity);
+    }
+
 
     public Node getView() {
-        return viewComponent.getView();
+        return view.getView();
     }
 
 
@@ -89,6 +97,16 @@ public class TileMap{
 
     public Vec2d gridPosToWorldPos(Vec2i gridPos) {
 //        System.out.println((gridPos.getX() + 0.5) * size);
+        return new Vec2d(gridPos.getX() * size, gridPos.getY() * size);
+    }
+
+    public Vec2d gridPosToWorldPosCentre(Vec2i gridPos) {
+//        System.out.println((gridPos.getX() + 0.5) * size);
         return new Vec2d((gridPos.getX() + 0.5) * size, (gridPos.getY() + 0.5) * size);
+    }
+
+    public boolean isPassable(Vec2i pos) {
+
+        return tiles[pos.getX()][pos.getY()].isPassable();
     }
 }
