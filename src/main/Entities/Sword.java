@@ -6,4 +6,8 @@ public class Sword extends Entity{
         super(name);
         this.symbol = '+';
     }
+
+    public void swingSword() {
+        //needs the tilemap and player location?
+    }
 }
