@@ -1,5 +1,7 @@
 package main.maploading;
 
+import main.Entities.Door;
+import main.Entities.Key;
 import main.math.Vec2i;
 
 import java.io.File;
@@ -71,10 +73,24 @@ public class MapLoader {
                         Integer.parseInt(line[1]));
                 Vec2i doorCoord = new Vec2i(
                         Integer.parseInt(line[2]),
-                        Integer.parseInt(line[3])
-                );
+                        Integer.parseInt(line[3]));
 
-                tileMap.assignDoor(keyCoord, doorCoord);
+                Tile keyTile = tileMap.getTile(keyCoord);
+                Key k = keyTile.getKey();
+                if (k == null) {
+                    System.out.println("No key found at given coordinates");
+                    continue;
+                }
+
+                Tile doorTile = tileMap.getTile(doorCoord);
+                Door d = doorTile.getDoor();
+                if (d == null) {
+                    System.out.println("No door found at given coordinates");
+                    continue;
+                }
+
+                k.setMatchingDoor(d);
+
             }
         } catch (FileNotFoundException e) {
             System.out.println(e.getMessage());
@@ -98,6 +114,10 @@ public class MapLoader {
                 System.out.print("\t");
             }
             System.out.println();
+        }
+
+        for (String s : tileMap.getObjectives()) {
+            System.out.println(s);
         }
 
     }

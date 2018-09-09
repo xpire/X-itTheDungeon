@@ -1,4 +1,9 @@
 package main.Entities;
 
-public class Bomb {
+public class Bomb extends Entity {
+
+    public Bomb(String name) {
+        super(name);
+        this.symbol = '!';
+    }
 }

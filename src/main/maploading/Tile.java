@@ -1,7 +1,8 @@
 package main.maploading;
 
 
-import main.Key;
+import main.Entities.Door;
+import main.Entities.Key;
 import main.Entities.Entity;
 import main.math.Vec2i;
 
@@ -11,18 +12,33 @@ public class Tile{
 
     private ArrayList<Entity> entities;
 
-    public void listEntities() {
-        for (Entity e : entities) {
-            System.out.print(e.getName());
-        }
-    }
-
     public void setEntities(ArrayList<Entity> entities) {
         this.entities = entities;
     }
 
-    public void setDoor(Vec2i mDoor) {
-        for (Entity e : entities)
-            if (e instanceof Key) ((Key) e).setMatchingDoor(mDoor);
+    public void listEntities() {
+        for (Entity e : entities) {
+            System.out.print(e.getName());
+            //testing only
+            if (e instanceof Key) {
+                System.out.print(((Key) e).getMatchingDoor().getName());
+            }
+        }
     }
+
+    public Door getDoor() {
+        for (Entity e : entities) {
+            if (e instanceof Door) return (Door)e;
+        }
+        return null;
+    }
+
+    public Key getKey() {
+        for (Entity e : entities) {
+            if (e instanceof Key) return (Key)e;
+        }
+        return null;
+    }
+
+
 }

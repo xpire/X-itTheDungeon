@@ -65,5 +65,4 @@ public class Vec2i {
     public void setY(int y) {
         this.y = y;
     }
-
 }

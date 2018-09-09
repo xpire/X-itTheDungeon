@@ -96,10 +96,6 @@ public class TileMap{
         return objectives;
     }
 
-    public void assignDoor(Vec2i keyCoord, Vec2i doorCoord) {
-        getTile(keyCoord).setDoor(doorCoord);
-    }
-
     public Tile getTile(Vec2i coord) {
         int row = coord.getX(), col = coord.getY();
         return tiles[row][col];
