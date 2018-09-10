@@ -1,50 +1,62 @@
 import Behavior.AIBehavior;
 import java.util.ArrayList;
 import java.lang.Math;
-import java.util.LinkedList;
+import java.util.Collection;
 import java.util.PriorityQueue;
+import main.math.Vec2i;
 
 public abstract class Enemy {
     private int length;
     private int width;
 
-    private int [] map;
-    private int[] playerLocation;
-    private int[] currLocation;
+    private int [][] map;
+    private Vec2i playerLocation;
+    private Vec2i currLocation;
     private ArrayList<Integer> pastMoves;
 
     private AIBehavior currBehavior;
 
-    public void setMap(int [] map) { this.map = map; }
-    public void setPlayerLocation(int[] playerLocation) { this.playerLocation = playerLocation; }
-    public void setCurrLocation(int[] CurrLocation) { this.currLocation = CurrLocation; }
-    public void givePastMove(int[] pastMoves) { this.currLocation = pastMoves; }
-    public void setCurrBehavior(AIBehavior currBehavior) { this.currBehavior = currBehavior; }
-    public int[] update() {
-        return currBehavior.decideMove(this.map,this.currLocation,this.playerLocation, this.pastMoves);
-    }
+    public void setMap(int [][] map) { this.map = map; }
+    public void setPlayerLocation(Vec2i playerLocation) { this.playerLocation = playerLocation; }
+    public void setCurrLocation(Vec2i CurrLocation) { this.currLocation = CurrLocation; }
+    public void givePastMove(Vec2i pastMoves) { this.currLocation = pastMoves; }
+    //public void setCurrBehavior(AIBehavior currBehavior) { this.currBehavior = currBehavior; }
+//    public int[] update() {
+//        return currBehavior.decideMove(this.map,this.currLocation,this.playerLocation, this.pastMoves);
+//    }
     public void setDimensions(int length, int width) { this.length = length; this.width = width; }
 
     // Inner class for A* search
     private class Node implements Comparable {
-        private int[] coordinate;
-        private int heuristic;
-        private int[] prev;
+        private Vec2i coordinate;
+        private int pathLength;
+        private int mDist;
+        private Node prev;
 
-        public Node(int[] coordinate, int heuristic) {
+        public Node(Vec2i coordinate, int mDist, int pathLength) {
             this.coordinate = coordinate;
-            this.heuristic = heuristic;
+            this.mDist = mDist;
+            this.pathLength = pathLength;
         }
 
-        /** @return previous nodes */
-        public int[] getPrev() { return prev; }
-        /** set previous nodes */
-        public void setPrev(int[] prev) { this.prev = prev; }
+        /** @return Previous nodes */
+        public Node getPrev() { return prev; }
+        /** Set previous nodes */
+        public void setPrev(Node prev) { this.prev = prev; }
+
+        /** set the path length */
+        public void setPathLength(int pathLength) { this.pathLength = pathLength; }
+        /** @return Path length */
+        public int getPathLength() { return pathLength; }
+
+        public int getAll() {
+            return pathLength + mDist;
+        }
 
         /** @return coordinate */
-        public int[] getCoordinate() { return coordinate; }
+        public Vec2i getCoordinate() { return coordinate; }
         /** @return the nodes current heuristic  */
-        public int getHeuristic() { return heuristic; }
+        public int getHeuristic() { return mDist; }
 
         /**
          * @param other the other object
@@ -52,7 +64,7 @@ public abstract class Enemy {
          */
         @Override
         public int compareTo(Object other) {
-            int thisValue = this.heuristic;
+            int thisValue = this.mDist + this.pathLength;
             int otherValue = ((Node)other).getHeuristic();
 
             int v = thisValue - otherValue;
@@ -63,8 +75,29 @@ public abstract class Enemy {
         /**
          * @return All adjacent nodes of the current nodes
          */
-        public ArrayList<Node> getAjdacent() {
-            for (int i = 0; )
+        private ArrayList<Vec2i> getAdjacent(Node request, int [][] map ) {
+            ArrayList<Vec2i> ret = new ArrayList<>();
+            int coordX = request.getCoordinate().getX();
+            int coordY = request.getCoordinate().getY();
+
+            // TODO checking for the item that the tile has can be changed here
+            if(coordX - 1 >= 0 && (map[coordX - 1][coordY] == 0)) {
+                Vec2i buf1 = new Vec2i(coordX - 1, coordY);
+                ret.add(buf1);
+            }
+            if(coordX + 1 < length - 1  && (map[coordX + 1][coordY] == 0)) {
+                Vec2i buf1 = new Vec2i(coordX + 1, coordY);
+                ret.add(buf1);
+            }
+            if(coordY - 1 >= 0 && (map[coordX][coordY - 1] == 0)) {
+                Vec2i buf1 = new Vec2i(coordX, coordY - 1);
+                ret.add(buf1);
+            }
+            if(coordY + 1 < width - 1 && (map[coordX][coordY + 1] == 0)) {
+                Vec2i buf1 = new Vec2i(coordX, coordY + 1);
+                ret.add(buf1);
+            }
+            return ret;
         }
     }
 
@@ -73,55 +106,126 @@ public abstract class Enemy {
      * @param traversed All nodes
      * @return The arrayList of coordinates
      */
-    private ArrayList<int[]> constructPath(ArrayList<Node> traversed) {
-        return null;
+    private ArrayList<Vec2i> constructPath(Node Target, ArrayList<Node> traversed) {
+        ArrayList<Vec2i> ret = new ArrayList<>();
+        ret.add(Target.getCoordinate());
+        Node save = Target.getPrev();
+
+        // Loop until null --> starting node
+        while (save != null) {
+            ret.add(0, save.getCoordinate());
+            save = save.getPrev();
+        }
+
+        return ret;
     }
 
     /**
-     * Finding the shortest path to a specific square using A*
+     * Finding the shortest path to a specific square using A*, the heuristic chosen
+     * to be the mahantten distance and the path length of the current node to the
+     * length node.
      * @param targets target square that the AI wants to go to
      * @return an ArrayList of the path to the square
      */
-    public ArrayList<int[]> shortestPath(ArrayList<int[]> targets) {
-        // List of return
-        ArrayList<Integer> ret = new ArrayList<>();
-        // List of visited tiles
-        ArrayList<Node> visited = new ArrayList<>();
-        // List of traversed nodes
-        PriorityQueue<Node> traversedHeurisic = new PriorityQueue<Node>();
+    protected ArrayList<Vec2i> shortestPath(ArrayList<Vec2i> targets) {
+        // List of currStack tiles
+        PriorityQueue<Node> currStack = new PriorityQueue<>();
+        // List of distance that is stored
+        ArrayList<Node> traversedHeuristic = new ArrayList<>();
 
-        // Set initial cost of enemy and the player and add to traversed visited list
-        Node start_node = new Node(this.currLocation,manhattenDist(currLocation,playerLocation));
+        // Set initial cost of enemy and the player and add to traversed currStack list
+        Node start_node = new Node(currLocation, manHattanDist(currLocation,targets), 0);
         start_node.setPrev(null);
-        visited.add(start_node);
+        currStack.add(start_node);
+        traversedHeuristic.add(start_node);
 
         // Until it runs out of or the algorithm ends
-        while (!traversedHeurisic.isEmpty()) {
+        while (currStack.size() > 0) {
             // Pop the first element in the queque
-            Node buffer = (Node)traversedHeurisic.poll();
-            for(int[] x: targets) {
-                // TODO: note that any location is find first will be the goal position...
-                if(x[0] == buffer.getCoordinate()[0] && x[1] == buffer.getCoordinate()[1])
-                    return constructPath(visited);
+            Node buffer = currStack.poll();
+            for(Vec2i x: targets) {
+                if (x.getX() == buffer.getCoordinate().getX() && x.getY() == buffer.getCoordinate().getY())
+                    return constructPath(buffer, traversedHeuristic);
             }
 
-            // Get all the possible reachable nodes from the current popped node
-            ArrayList<Node> adjs = buffer.getAjdacent();
+            // Get all the possible reachable coordinate from here
+            ArrayList<Vec2i> adjs = buffer.getAdjacent(buffer, map);
+            int aggregateInt = buffer.getPathLength() + 1;
+
+            // For all adjacent nodes, check the following which if unseen node or need to update length
+            for (Vec2i x: adjs) {
+                // Make new node
+                Node curr = new Node(x, manHattanDist(x, targets), aggregateInt);
+                // if (!hasCoord(x,currStack) && !hasCoord(x,traversedHeuristic)) { curr.setPrev(buffer); }
+
+                // If this is not in the currStack nodes, add to it.
+                if (!hasCoord(x, currStack) && !hasCoord(x, traversedHeuristic)) {
+                    currStack.add(curr);
+                    curr.setPrev(buffer);
+                }
+
+                // Update the value
+                if (hasCoord(x,traversedHeuristic)) {
+                    Node buf = getNode(x, traversedHeuristic);
+                    if (buf.getPathLength() > aggregateInt) {
+                            buf.setPathLength(aggregateInt);
+                            curr.setPrev(buffer);
+                    }
+                }
+            }
+            traversedHeuristic.add(buffer);
+        }
+
+        // If it reaches here then return a path to the nearest node (Max heuristic)
+        Node max = null;
+        for (Node x: traversedHeuristic) {
+            if (max == null) {
+                max = x;
+            } else {
+                if (max.getHeuristic() > x.getHeuristic()) {
+                    max = x;
+                }
+            }
+        }
+
+        return constructPath(max, traversedHeuristic);
+    }
+
+    /**
+     * @param check requested coordinate
+     * @param checkArray Array of recorded nodes
+     * @return If the recorded list has a coordinate/node
+     */
+    private boolean hasCoord(Vec2i check, Collection<Node> checkArray) {
+        // does this coordinate make sense ?
+        for (Node x: checkArray) {
+            if (x.getCoordinate().getX() == check.getX() && x.getCoordinate().getY() == check.getY()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private Node getNode(Vec2i check, Collection<Node> checkArray) {
+        // does this coordinate make sense ?
+        for (Node x: checkArray) {
+            if (x.getCoordinate().getX() == check.getX() && x.getCoordinate().getY() == check.getY()) {
+                return x;
+            }
         }
         return null;
     }
 
     /**
      * @param curr Current node
-     * @param result Wanted result
+     * @param targets targets
      * @return The heuristic
      */
-    private int manhattenDist(int[] curr, int[] result) {
-        return Math.abs(curr[0] - result[1]) + Math.abs(curr[1] - result[1]);
-    }
-
-    public static void main(String [] args) {
-        // This is a new function
-
+    private int manHattanDist(Vec2i curr, ArrayList<Vec2i> targets) {
+        int ret = 0;
+        for (Vec2i x: targets) {
+            ret = Math.abs(curr.getX() - x.getX()) + Math.abs(curr.getY() - x.getY());
+        }
+        return ret;
     }
 }
