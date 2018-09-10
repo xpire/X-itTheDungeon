@@ -15,4 +15,8 @@ public class Key extends Entity {
     public Door getMatchingDoor() {
         return matchingDoor;
     }
+
+    public void dropKey() {
+
+    }
 }

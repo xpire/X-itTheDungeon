@@ -6,4 +6,8 @@ public class Bomb extends Entity {
         super(name);
         this.symbol = '!';
     }
+
+    public void placeBomb() {
+
+    }
 }

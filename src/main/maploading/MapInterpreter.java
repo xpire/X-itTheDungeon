@@ -47,8 +47,7 @@ public class MapInterpreter {
                 currEntity = new Key("Key");
                 break;
             case '$':
-                currEntity = new Entity("Treasure");
-                //currEntity = new Treasure();
+                currEntity = new Treasure("Treas");
                 break;
             case '+':
                 currEntity = new Sword("Sword");
@@ -88,8 +87,7 @@ public class MapInterpreter {
                 //currEntity = new HoverPot();
                 break;
             case '.':
-                currEntity = new Entity("Ground");
-                //currEntity = new Ground();
+                currEntity = new Ground("Ground");
                 break;
             default:
                 System.out.println("Unrecognised Entity");

@@ -7,4 +7,7 @@ public class Arrow extends Entity {
         this.symbol = '-';
     }
 
+    public void throwArrow() {
+
+    }
 }

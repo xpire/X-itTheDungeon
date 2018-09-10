@@ -39,10 +39,10 @@ public class Tile{
     public void listEntities() {
         for (Entity e : entities) {
             System.out.print(e.getName());
-            //testing only
-            if (e instanceof Key) {
-                System.out.print(((Key) e).getMatchingDoor().getName());
-            }
+//            testing only
+//            if (e instanceof Key) {
+//                System.out.print(((Key) e).getMatchingDoor().getName());
+//            }
         }
     }
 

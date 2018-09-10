@@ -107,6 +107,8 @@ public class MapLoader {
         TileMap tileMap = mapLoader.getTileMap(args[0]);
 
         int nRow = tileMap.getNRows(), nCol = tileMap.getNCols();
+        System.out.println(nRow + "\t" + nCol);
+
         for (int i = 0; i < nRow; i++) {
             for (int j = 0; j < nCol; j++) {
                 Vec2i coord = new Vec2i(i, j);
