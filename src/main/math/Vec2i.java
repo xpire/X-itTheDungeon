@@ -30,6 +30,23 @@ public class Vec2i {
     }
 
 
+    public boolean withinX(int min, int max) {
+        return within(x, min, max);
+    }
+
+    public boolean withinY(int min, int max) {
+        return within(y, min, max);
+    }
+
+    public boolean within(Vec2i min, Vec2i max) {
+        return withinX(min.getX(), max.getX()) && withinY(min.getY(), max.getY());
+    }
+
+    private boolean within(int value, int min, int max) {
+        return min <= value && value <= max;
+    }
+
+
     public void clipX(int min, int max) {
         x = clip(x, min, max);
     }
@@ -66,4 +83,20 @@ public class Vec2i {
         this.y = y;
     }
 
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || !(o instanceof Vec2i)) return false;
+
+        Vec2i other = (Vec2i) o;
+        return x == other.getX() && y == other.getY();
+    }
+
+
+
+    @Override
+    public String toString() {
+        return String.format("%d, %d", x, y);
+    }
 }

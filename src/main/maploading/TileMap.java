@@ -4,7 +4,7 @@ import javafx.scene.Node;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import main.core.Entity;
+import main.Entities.Entity;
 import main.core.ViewComponent;
 import main.math.Vec2d;
 import main.math.Vec2i;
@@ -21,7 +21,7 @@ public class TileMap{
     private Tile[][] tiles;
     private ArrayList<String> objectives;
 
-    private ViewComponent viewComponent;
+    private ViewComponent view;
 
     public TileMap(Vec2i dim) {
         this(dim.getX(), dim.getY());
@@ -48,33 +48,20 @@ public class TileMap{
 
                 Rectangle tile = new Rectangle(size, size);
 
-                int r = (i + j) * 255 / (nCols + nRows);
-                int g = j * 255 / nCols;
-                int b = i * 255 / nRows;
-                tile.setFill(Color.rgb(r, g, b));
+//                int r = (i + j) * 255 / (nCols + nRows);
+//                int g = j * 255 / nCols;
+//                int b = i * 255 / nRows;
+                tile.setFill(Color.rgb(200, 200, 200));
+
                 gridView.add(tile, i, j);
             }
         }
 
         gridView.gridLinesVisibleProperty().setValue(true);
-        viewComponent = new ViewComponent(gridView);
+        view = new ViewComponent(gridView);
     }
 
-    public double getHeight() {
-        return size * nRows;
-    }
 
-    public double getWidth() {
-        return size * nCols;
-    }
-
-    public void setTile(int row, int col, ArrayList<Entity> entities) {
-        tiles[row][col].setEntities(entities);
-    }
-
-    public Node getView() {
-        return viewComponent.getView();
-    }
 
     public int getNRows() {
         return nRows;
@@ -84,25 +71,63 @@ public class TileMap{
         return nCols;
     }
 
-    public Vec2d gridPosToWorldPos(Vec2i gridPos) {
-        return new Vec2d((gridPos.getX() + 0.5) * size, (gridPos.getY() + 0.5) * size);
+
+    public double getHeight() {
+        return size * nRows;
     }
 
-    public void setObj(ArrayList<String> obj) {
-        this.objectives = obj;
+    public double getWidth() {
+        return size * nCols;
     }
 
-    public ArrayList<String> getObjectives() {
-        return objectives;
+
+    public Node getView() {
+        return view.getView();
     }
 
-    public void assignDoor(Vec2i keyCoord, Vec2i doorCoord) {
-        getTile(keyCoord).setDoor(doorCoord);
+
+
+    public boolean isPassable(Vec2i pos) {
+
+        return tiles[pos.getX()][pos.getY()].isPassable();
     }
+
+
+    public void addEntity(int row, int col, Entity entity) {
+
+        entity.moveTo(gridPosToWorldPos(new Vec2i(row, col)));
+        view.addNode(entity.getView());
+        tiles[row][col].addEntity(entity);
+    }
+
 
     public Tile getTile(Vec2i coord) {
         int row = coord.getX(), col = coord.getY();
         return tiles[row][col];
     }
 
+    public void setTile(int row, int col, ArrayList<Entity> entities) {
+        tiles[row][col].setEntities(entities);
+    }
+
+
+    public void setObj(ArrayList<String> obj) {
+        this.objectives = obj;
+    }
+
+
+    public ArrayList<String> getObjectives() {
+        return objectives;
+    }
+
+
+
+
+    public Vec2d gridPosToWorldPos(Vec2i gridPos) {
+        return new Vec2d(gridPos.getX() * size, gridPos.getY() * size);
+    }
+
+    public Vec2d gridPosToWorldPosCentre(Vec2i gridPos) {
+        return new Vec2d((gridPos.getX() + 0.5) * size, (gridPos.getY() + 0.5) * size);
+    }
 }
