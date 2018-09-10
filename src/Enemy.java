@@ -20,10 +20,6 @@ public abstract class Enemy {
     public void setPlayerLocation(Vec2i playerLocation) { this.playerLocation = playerLocation; }
     public void setCurrLocation(Vec2i CurrLocation) { this.currLocation = CurrLocation; }
     public void givePastMove(Vec2i pastMoves) { this.currLocation = pastMoves; }
-    //public void setCurrBehavior(AIBehavior currBehavior) { this.currBehavior = currBehavior; }
-//    public int[] update() {
-//        return currBehavior.decideMove(this.map,this.currLocation,this.playerLocation, this.pastMoves);
-//    }
     public void setDimensions(int length, int width) { this.length = length; this.width = width; }
 
     // Inner class for A* search
@@ -102,6 +98,36 @@ public abstract class Enemy {
     }
 
     /**
+     * @param check requested coordinate
+     * @param checkArray Array of recorded nodes
+     * @return If the recorded list has a coordinate/node
+     */
+    private boolean hasCoord(Vec2i check, Collection<Node> checkArray) {
+        // does this coordinate make sense ?
+        for (Node x: checkArray) {
+            if (x.getCoordinate().getX() == check.getX() && x.getCoordinate().getY() == check.getY()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * @param check Request coordinate to check
+     * @param checkArray Array List to be checked
+     * @return a Node with the requested coordinate
+     */
+    private Node getNode(Vec2i check, Collection<Node> checkArray) {
+        // does this coordinate make sense ?
+        for (Node x: checkArray) {
+            if (x.getCoordinate().getX() == check.getX() && x.getCoordinate().getY() == check.getY()) {
+                return x;
+            }
+        }
+        return null;
+    }
+
+    /**
      * Construct paths from traversed node
      * @param traversed All nodes
      * @return The arrayList of coordinates
@@ -121,8 +147,21 @@ public abstract class Enemy {
     }
 
     /**
+     * @param curr Current node
+     * @param targets targets
+     * @return The heuristic
+     */
+    private int manHattanDist(Vec2i curr, ArrayList<Vec2i> targets) {
+        int ret = 0;
+        for (Vec2i x: targets) {
+            ret = Math.abs(curr.getX() - x.getX()) + Math.abs(curr.getY() - x.getY());
+        }
+        return ret;
+    }
+
+    /**
      * Finding the shortest path to a specific square using A*, the heuristic chosen
-     * to be the mahantten distance and the path length of the current node to the
+     * to be the Mahanttan distance and the path length of the current node to the
      * length node.
      * @param targets target square that the AI wants to go to
      * @return an ArrayList of the path to the square
@@ -189,43 +228,5 @@ public abstract class Enemy {
         }
 
         return constructPath(max, traversedHeuristic);
-    }
-
-    /**
-     * @param check requested coordinate
-     * @param checkArray Array of recorded nodes
-     * @return If the recorded list has a coordinate/node
-     */
-    private boolean hasCoord(Vec2i check, Collection<Node> checkArray) {
-        // does this coordinate make sense ?
-        for (Node x: checkArray) {
-            if (x.getCoordinate().getX() == check.getX() && x.getCoordinate().getY() == check.getY()) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private Node getNode(Vec2i check, Collection<Node> checkArray) {
-        // does this coordinate make sense ?
-        for (Node x: checkArray) {
-            if (x.getCoordinate().getX() == check.getX() && x.getCoordinate().getY() == check.getY()) {
-                return x;
-            }
-        }
-        return null;
-    }
-
-    /**
-     * @param curr Current node
-     * @param targets targets
-     * @return The heuristic
-     */
-    private int manHattanDist(Vec2i curr, ArrayList<Vec2i> targets) {
-        int ret = 0;
-        for (Vec2i x: targets) {
-            ret = Math.abs(curr.getX() - x.getX()) + Math.abs(curr.getY() - x.getY());
-        }
-        return ret;
     }
 }
