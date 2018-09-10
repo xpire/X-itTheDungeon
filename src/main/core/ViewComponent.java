@@ -1,25 +1,38 @@
 package main.core;
 
+import javafx.scene.Group;
 import javafx.scene.Node;
+import main.math.Vec2d;
 
 public class ViewComponent extends Component {
 
-    private Node view;
+    private Group view;
 
-    public ViewComponent(Node view) {
-        this.view = view;
+    public ViewComponent() {
+        view = new Group();
     }
 
-    public void setView(Node view) {
-        this.view = view;
+    public ViewComponent(Node node) {
+        this();
+        addNode(node);
+    }
+
+    public void addNode(Node node) {
+        view.getChildren().add(node);
     }
 
     public Node getView() {
         return view;
     }
 
+
     public void setPosition(double x, double y) {
         view.setTranslateX(x);
         view.setTranslateY(y);
+    }
+
+    public void moveTo(Vec2d pos) {
+        view.setTranslateX(pos.getX());
+        view.setTranslateY(pos.getY());
     }
 }
