@@ -1,6 +1,7 @@
-package main;
+package main.avatar;
 
 import javafx.scene.input.KeyCode;
+import main.Game;
 import main.math.Vec2i;
 
 public class IdleState extends AvatarState {

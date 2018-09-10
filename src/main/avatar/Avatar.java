@@ -1,9 +1,11 @@
-package main;
+package main.avatar;
 
 import javafx.scene.Node;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import main.Game;
+import main.GameWorld;
 import main.math.Vec2d;
 import main.math.Vec2i;
 
@@ -40,17 +42,18 @@ public class Avatar {
         Vec2i pos = new Vec2i(gridPos);
 
         if (Game.input.isDown(KeyCode.UP)) {
-            pos.add(0, -1);
+            pos._add(0, -1);
         }
         else if (Game.input.isDown(KeyCode.DOWN)) {
-            pos.add(0, 1);
+            pos._add(0, 1);
         }
         else if (Game.input.isDown(KeyCode.LEFT)) {
-            pos.add(-1, 0);
+            pos._add(-1, 0);
         }
         else if (Game.input.isDown(KeyCode.RIGHT)) {
-            pos.add(1, 0);
+            pos._add(1, 0);
         }
+
 
         if ( !pos.equals(gridPos) ) {
             if (world.isPassable(pos)) {

@@ -7,6 +7,7 @@ import main.math.Vec2d;
 public class ViewComponent extends Component {
 
     private Group view;
+    private Vec2d centre = new Vec2d(0, 0);
 
     public ViewComponent() {
         view = new Group();
@@ -25,14 +26,20 @@ public class ViewComponent extends Component {
         return view;
     }
 
-
-    public void setPosition(double x, double y) {
+    public void moveTo(double x, double y) {
         view.setTranslateX(x);
         view.setTranslateY(y);
     }
 
     public void moveTo(Vec2d pos) {
-        view.setTranslateX(pos.getX());
-        view.setTranslateY(pos.getY());
+        moveTo(pos.getX(), pos.getY());
+    }
+
+    public Vec2d getCentre() {
+        return centre;
+    }
+
+    public void setCentre(Vec2d centre) {
+        this.centre = centre;
     }
 }

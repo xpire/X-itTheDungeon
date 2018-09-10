@@ -1,6 +1,6 @@
 package main.maploading;
 
-import main.Entities.*;
+import main.entities.*;
 
 import java.util.ArrayList;
 

@@ -1,14 +1,17 @@
-package main.Entities;
+package main.entities;
 
 import javafx.scene.Node;
+import main.core.GridPositionComponent;
 import main.core.ViewComponent;
 import main.math.Vec2d;
 
-public abstract class Entity {
+public class Entity {
 
     protected String name;
 
     protected ViewComponent view;
+    protected GridPositionComponent pos;
+
     protected char symbol;
 
     public Entity(String name) {
@@ -27,6 +30,10 @@ public abstract class Entity {
 
     public Node getView() {
         return view.getView();
+    }
+
+    public Vec2d getCentre() {
+        return view.getCentre();
     }
 
     public void moveTo(Vec2d pos) {

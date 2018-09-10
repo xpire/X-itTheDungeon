@@ -1,7 +1,7 @@
 package main.core;
 
 
-import main.Entities.Entity;
+import main.entities.Entity;
 
 import java.util.ArrayList;
 

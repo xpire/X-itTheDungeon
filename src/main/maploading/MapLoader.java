@@ -1,7 +1,7 @@
 package main.maploading;
 
-import main.Entities.Door;
-import main.Entities.Key;
+import main.entities.Door;
+import main.entities.Key;
 import main.math.Vec2i;
 
 import java.io.File;

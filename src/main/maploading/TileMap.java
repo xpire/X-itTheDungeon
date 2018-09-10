@@ -4,8 +4,9 @@ import javafx.scene.Node;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import main.Entities.Entity;
 import main.core.ViewComponent;
+import main.entities.Entity;
+import main.entities.GridEntity;
 import main.math.Vec2d;
 import main.math.Vec2i;
 
@@ -95,7 +96,11 @@ public class TileMap{
 
     public void addEntity(int row, int col, Entity entity) {
 
-        entity.moveTo(gridPosToWorldPos(new Vec2i(row, col)));
+        Vec2d pos       = gridPosToWorldPosCentre(new Vec2i(row, col));
+        Vec2d centre    = entity.getCentre();
+        pos.sub(centre);
+
+        entity.moveTo(pos);
         view.addNode(entity.getView());
         tiles[row][col].addEntity(entity);
     }
@@ -129,5 +134,11 @@ public class TileMap{
 
     public Vec2d gridPosToWorldPosCentre(Vec2i gridPos) {
         return new Vec2d((gridPos.getX() + 0.5) * size, (gridPos.getY() + 0.5) * size);
+    }
+
+    public void addGridEntity(int row, int col, GridEntity entity) {
+        entity.moveTo(row, col);
+        view.addNode(entity.getView());
+        tiles[row][col].addEntity(entity);
     }
 }

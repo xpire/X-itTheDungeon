@@ -84,7 +84,7 @@ public class Game extends Application{
 
 
 //        root.getChildren().add(new AnchorPane())
-//        main.Avatar avatar = new main.Avatar();
+//        main.avatar.Avatar avatar = new main.avatar.Avatar();
 //        root.getChildren().add(avatar.getView());
 //
 //        Wall wall = new Wall(230, 320);

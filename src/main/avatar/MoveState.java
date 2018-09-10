@@ -1,4 +1,4 @@
-package main;
+package main.avatar;
 
 public class MoveState extends AvatarState {
 

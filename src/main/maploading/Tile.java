@@ -1,10 +1,10 @@
 package main.maploading;
 
 
-import main.Entities.Door;
-import main.Entities.Key;
-import main.Entities.Entity;
-import main.math.Vec2i;
+import main.entities.Boulder;
+import main.entities.Door;
+import main.entities.Key;
+import main.entities.Entity;
 
 import java.util.ArrayList;
 
@@ -19,6 +19,17 @@ public class Tile{
     public boolean isPassable() {
 
         return entities.stream().noneMatch(e -> !e.isPassable());
+    }
+
+    public boolean isPassableFor(Entity entity) {
+        if (entity instanceof Boulder) {
+//            for (Entity e : entities) {
+//            }
+
+            return entities.size() == 0;
+        }
+
+        return true;
     }
 
     public void addEntity(Entity entity) {
