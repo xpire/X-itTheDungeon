@@ -1,8 +1,8 @@
 package main.entities;
 
 import javafx.scene.Node;
-import main.core.GridPositionComponent;
-import main.core.ViewComponent;
+import main.component.GridPositionComponent;
+import main.component.ViewComponent;
 import main.math.Vec2d;
 
 public class Entity {

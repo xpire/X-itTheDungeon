@@ -1,4 +1,4 @@
-package main.core;
+package main.component;
 
 import main.math.Vec2d;
 import main.math.Vec2i;

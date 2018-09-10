@@ -3,7 +3,7 @@ package main;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import main.avatar.Avatar;
-import main.core.GridPositionComponent;
+import main.component.GridPositionComponent;
 import main.entities.Boulder;
 import main.entities.Wall;
 import main.maploading.TileMap;

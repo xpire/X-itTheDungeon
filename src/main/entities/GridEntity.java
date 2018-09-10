@@ -1,6 +1,6 @@
 package main.entities;
 
-import main.core.GridPositionComponent;
+import main.component.GridPositionComponent;
 import main.math.Vec2d;
 import main.math.Vec2i;
 

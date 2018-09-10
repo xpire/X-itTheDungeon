@@ -2,7 +2,7 @@ package main.entities;
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import main.core.GridPositionComponent;
+import main.component.GridPositionComponent;
 import main.math.Vec2d;
 
 /*

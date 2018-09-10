@@ -1,4 +1,4 @@
-package Behavior;
+package main.behaviour;
 
 import main.math.Vec2i;
 

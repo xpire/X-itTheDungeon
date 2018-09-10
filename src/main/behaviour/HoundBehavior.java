@@ -1,10 +1,9 @@
-package Behavior;
+package main.behaviour;
 
-import java.lang.reflect.Array;
+import main.entities.Entity;
+import main.math.Vec2i;
 
 import java.util.ArrayList;
-import main.math.*;
-import main.core.Entity;
 
 public class HoundBehavior implements AIBehavior {
     // TODO: change the type of the map
@@ -15,7 +14,7 @@ public class HoundBehavior implements AIBehavior {
         int lowestDistanceSquared = 64*64*2;
         Entity closestHunter = null; //NOT SURE ABOUT THIS
         for (Entity e : map.getEntities()) {
-            if (e.getName().equals("Hunter")) {
+            if (e.getName().equals("main.enemies.Hunter")) {
                 int distanceSquared = (playerLocation.getX() - e.getCoord().getX())^2 + (playerLocation.getY() - e.getCoord().getY())^2;
                 if (distanceSquared <= lowestDistanceSquared) {
                     lowestDistanceSquared = distanceSquared;
@@ -25,7 +24,7 @@ public class HoundBehavior implements AIBehavior {
         }
         ArrayList<Vec2i> targetSquares = new ArrayList<Vec2i>();
         if (closestHunter == null) {
-            // no closest hunter, Hound becomes a hunter
+            // no closest hunter, main.enemies.Hound becomes a hunter
             targetSquares.add(playerLocation);
             return targetSquares;
         }

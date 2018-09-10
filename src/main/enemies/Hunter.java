@@ -1,3 +1,5 @@
+package main.enemies;
+
 import main.math.Vec2i;
 
 import java.util.ArrayList;

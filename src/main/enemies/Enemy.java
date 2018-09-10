@@ -1,4 +1,6 @@
-import Behavior.AIBehavior;
+package main.enemies;
+
+import main.behaviour.AIBehavior;
 import java.util.ArrayList;
 import java.lang.Math;
 import java.util.Collection;

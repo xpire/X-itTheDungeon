@@ -63,20 +63,20 @@ public class MapInterpreter {
                 //currEntity = new Pit();
                 break;
             case '1':
-                currEntity = new Entity("Hunter");
-                //currEntity = new Hunter();
+                currEntity = new Entity("main.enemies.Hunter");
+                //currEntity = new main.enemies.Hunter();
                 break;
             case '2':
-                currEntity = new Entity("Strategist");
-                //currEntity = new Strategist();
+                currEntity = new Entity("main.enemies.Strategist");
+                //currEntity = new main.enemies.Strategist();
                 break;
             case '3':
-                currEntity = new Entity("Hound");
-                //currEntity = new Hound();
+                currEntity = new Entity("main.enemies.Hound");
+                //currEntity = new main.enemies.Hound();
                 break;
             case '4':
-                currEntity = new Entity("Coward");
-                //currEntity = new Coward();
+                currEntity = new Entity("main.enemies.Coward");
+                //currEntity = new main.enemies.Coward();
                 break;
             case '>':
                 currEntity = new Entity("Invincibility Potion");

@@ -1,4 +1,4 @@
-package main.Entities;
+package main.entities;
 
 public class Treasure extends Entity {
 

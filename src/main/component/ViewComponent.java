@@ -1,4 +1,4 @@
-package main.core;
+package main.component;
 
 import javafx.scene.Group;
 import javafx.scene.Node;
