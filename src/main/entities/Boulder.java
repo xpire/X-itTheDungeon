@@ -2,13 +2,14 @@ package main.entities;
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import main.component.GridPositionComponent;
 import main.math.Vec2d;
 
 public class Boulder extends Entity{
 
 
-    public Boulder() {
-        super("Boulder");
+    public Boulder(GridPositionComponent pos) {
+        super("Boulder", pos);
 
         Circle circle = new Circle();
         circle.setFill(Color.HONEYDEW);
@@ -21,6 +22,5 @@ public class Boulder extends Entity{
     public boolean isPassable() {
         return false;
     }
-
 
 }

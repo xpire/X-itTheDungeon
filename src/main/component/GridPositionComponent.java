@@ -10,6 +10,7 @@ public class GridPositionComponent extends Component{
     private Function<Vec2i, Vec2d> gridToWorld;
     private Vec2i pos = new Vec2i(0, 0);
 
+
     public GridPositionComponent(Function<Vec2i, Vec2d> gridToWorld) {
         this.gridToWorld = gridToWorld;
     }
@@ -52,10 +53,10 @@ public class GridPositionComponent extends Component{
     }
 
     public int getRow() {
-        return pos.getX();
+        return pos.getY();
     }
 
     public int getCol() {
-        return pos.getY();
+        return pos.getX();
     }
 }

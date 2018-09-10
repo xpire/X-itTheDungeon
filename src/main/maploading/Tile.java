@@ -21,20 +21,43 @@ public class Tile{
         return entities.stream().noneMatch(e -> !e.isPassable());
     }
 
-    public boolean isPassableFor(Entity entity) {
-        if (entity instanceof Boulder) {
-//            for (Entity e : entities) {
-//            }
-
-            return entities.size() == 0;
-        }
-
-        return true;
+    // Create a Pushable component?
+    // how do I check if an entity has a pushable component..
+    // so broken!
+    public boolean isPassableForPushable() {
+        return entities.size() == 0;
     }
 
     public void addEntity(Entity entity) {
         entities.add(entity);
     }
+
+
+    public boolean hasEntity(String name) {
+        for (Entity e : entities) {
+            if (e.getName().equals(name)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public Boulder getBoulder() {
+
+        for (Entity e : entities) {
+            System.out.println(e.getName());
+
+            if (e instanceof Boulder) {
+                System.out.println("Boulder Pos: " + ((Boulder) e).getGridPos());
+                return (Boulder) e;
+            }
+        }
+
+        return null;
+    }
+
+
 
     public void listEntities() {
         for (Entity e : entities) {
@@ -60,4 +83,7 @@ public class Tile{
         return null;
     }
 
+    public void removeEntity(Entity entity) {
+        entities.remove(entity);
+    }
 }

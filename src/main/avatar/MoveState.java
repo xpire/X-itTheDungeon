@@ -18,7 +18,7 @@ public class MoveState extends AvatarState {
         counter++;
 
         if (counter > DURATION) {
-            avatar.enterState(avatar.getIdleState());
+//            avatar.enterState(avatar.getIdleState());
         }
     }
 }

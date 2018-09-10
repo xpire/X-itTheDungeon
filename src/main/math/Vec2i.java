@@ -140,6 +140,9 @@ public class Vec2i {
         this.y = y;
     }
 
+    public boolean isDirection() {
+        return equals(Vec2i.NORTH) || equals(Vec2i.EAST) || equals(Vec2i.SOUTH) || equals(Vec2i.WEST);
+    }
 
     @Override
     public boolean equals(Object o) {

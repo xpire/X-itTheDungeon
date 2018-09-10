@@ -9,6 +9,7 @@ import main.entities.Wall;
 import main.maploading.TileMap;
 import main.math.Vec2d;
 import main.math.Vec2i;
+import main.systems.PushingBoulderSystem;
 
 public class GameWorld {
 
@@ -17,13 +18,12 @@ public class GameWorld {
 
     private Group rootView;
 
+    private PushingBoulderSystem pushSystem = new PushingBoulderSystem(this);
+
     public GameWorld(TileMap map) {
         this.map = map;
-        this.avatar = new Avatar(this);
 
         rootView = new Group();
-        rootView.getChildren().add(map.getView());
-        rootView.getChildren().add(avatar.getView());
 
 
         rootView.setTranslateX(150);
@@ -33,11 +33,17 @@ public class GameWorld {
             gridPosToWorldPosCentre(pos2i)
         );
 
-        map.addGridEntity(5, 5, new Wall(gpc));
-        map.addGridEntity(2, 8, new Wall(gpc));
-        map.addGridEntity(1, 3, new Wall(gpc));
-        map.addGridEntity(2, 0, new Wall(gpc));
-        map.addEntity(4, 4, new Boulder());
+        avatar = new Avatar(gpc.clone(), this);
+
+        map.addEntity(5, 5, new Wall(gpc.clone()));
+        map.addEntity(2, 8, new Wall(gpc.clone()));
+        map.addEntity(1, 3, new Wall(gpc.clone()));
+        map.addEntity(2, 0, new Wall(gpc.clone()));
+        map.addEntity(4, 3, new Boulder(gpc.clone()));
+        map.addEntity(7, 6, new Boulder(gpc.clone()));
+
+        rootView.getChildren().add(map.getView());
+        rootView.getChildren().add(avatar.getView());
     }
 
 
@@ -46,9 +52,6 @@ public class GameWorld {
 
         Vec2i pos = avatar.getGridPos();
 //        pos.clip(new Vec2i(0,0), new Vec2i(map.getNCols() - 1, map.getNRows() - 1));
-
-        avatar.moveTo(pos);
-
     }
 
     public void render() {
@@ -63,25 +66,37 @@ public class GameWorld {
         return map.gridPosToWorldPosCentre(gridPos);
     }
 
+
     public boolean isPassable(Vec2i pos) {
-//        pos.within(new Vec2i(0,0), new Vec2i(map.getNCols() - 1, map.getNRows() - 1));
-        if (!pos.withinX(0, map.getNCols() - 1)) return false;
-        if (!pos.withinY(0, map.getNRows() - 1)) return false;
+        if (!map.isValidGridPos(pos)) return false;
         return map.isPassable(pos);
     }
 
 
+    // WILL BE REMOVED
+    public Boulder getBoulder(Vec2i pos) {
+        if (!map.isValidGridPos(pos)) return null;
+        return map.getTile(pos).getBoulder();
+    }
 
     public TileMap getMap() {
         return map;
     }
 
-//    public void push(Avatar avatar, Boulder boulder) {
-//
-//        Vec2i from = avatar.getGridPos();
-//        Vec2i to = map.getGridPosFor(boulder);
-//
-//        Vec2i push = pushBoulderSystem.push(from, to);
-//        avatar.
-//    }
+    public void push(Avatar avatar, Vec2i pos) {
+
+        Boulder boulder = getBoulder(pos);
+
+        if (boulder == null) return;
+
+        Vec2i from = avatar.getGridPos();
+        Vec2i target = boulder.getGridPos();
+
+        Vec2i push = pushSystem.push(from, target);
+        map.getTile(pos).removeEntity(boulder);
+        map.getTile(pos.add(push)).addEntity(boulder);
+
+        avatar.moveBy(push);
+        boulder.moveBy(push);
+    }
 }

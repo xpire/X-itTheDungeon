@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 public class MapInterpreter {
 
+
     public ArrayList<Entity> getTileEntities(String tileInput) {
         ArrayList<Entity> tileEntities = new ArrayList<>();
 

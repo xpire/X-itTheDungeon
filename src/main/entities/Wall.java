@@ -11,7 +11,7 @@ Idea: tile builder - to enforce stacking rules
 
  */
 
-public class Wall extends GridEntity {
+public class Wall extends Entity {
 
     public Wall(GridPositionComponent pos) {
         super("Wall", pos);

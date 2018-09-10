@@ -4,9 +4,9 @@ import javafx.scene.Node;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import main.component.GridPositionComponent;
 import main.component.ViewComponent;
 import main.entities.Entity;
-import main.entities.GridEntity;
 import main.math.Vec2d;
 import main.math.Vec2i;
 
@@ -23,6 +23,10 @@ public class TileMap{
     private ArrayList<String> objectives;
 
     private ViewComponent view;
+
+
+    private GridPositionComponent posPrototype =
+            new GridPositionComponent(gridPos -> gridPosToWorldPosCentre(gridPos));
 
     public TileMap(Vec2i dim) {
         this(dim.getX(), dim.getY());
@@ -94,24 +98,24 @@ public class TileMap{
     }
 
 
-    public void addEntity(int row, int col, Entity entity) {
-
-        Vec2d pos       = gridPosToWorldPosCentre(new Vec2i(row, col));
-        Vec2d centre    = entity.getCentre();
-        pos.sub(centre);
-
-        entity.moveTo(pos);
-        view.addNode(entity.getView());
-        tiles[row][col].addEntity(entity);
+    public Tile getTile(Vec2i pos) {
+//        if (!isValidGridPos(pos)) return null;
+        return tiles[pos.getX()][pos.getY()];
     }
 
-
-    public Tile getTile(Vec2i coord) {
-        int row = coord.getX(), col = coord.getY();
-        return tiles[row][col];
+    public boolean isValidGridPos(Vec2i pos) {
+        if (!pos.withinX(0, getNCols() - 1)) return false;
+        if (!pos.withinY(0, getNRows() - 1)) return false;
+        return true;
     }
+
 
     public void setTile(int row, int col, ArrayList<Entity> entities) {
+        for (Entity e : entities) {
+            e.setGridPositionComponent(posPrototype.clone());
+            e.moveTo(row, col);
+        }
+
         tiles[row][col].setEntities(entities);
     }
 
@@ -136,7 +140,7 @@ public class TileMap{
         return new Vec2d((gridPos.getX() + 0.5) * size, (gridPos.getY() + 0.5) * size);
     }
 
-    public void addGridEntity(int row, int col, GridEntity entity) {
+    public void addEntity(int row, int col, Entity entity) {
         entity.moveTo(row, col);
         view.addNode(entity.getView());
         tiles[row][col].addEntity(entity);
