@@ -16,6 +16,7 @@ public class Game extends Application{
     final static int HEIGHT = 400;
 
     public static Input input = new Input();
+    public GameWorld world;
 
 
     private TileMap map;
@@ -34,8 +35,8 @@ public class Game extends Application{
         input.processInputs();
     }
 
-    public void onUpdate(float delta) {
-//        avatar.update(timeStep);
+    public void onUpdate(double delta) {
+        world.update(delta);
 
 
     }
@@ -43,6 +44,7 @@ public class Game extends Application{
 
     // After a set of updates
     public void onAfterUpdate() {
+        world.render();
         input.update();
     }
 
@@ -77,16 +79,19 @@ public class Game extends Application{
 //        circle.setCenterY(100);
 //        root.getChildren().add(circle);
 
-        TileMap map = new TileMap(10, 10);
+        TileMap map = new TileMap(10, 10, 30);
+        world = new GameWorld(map);
+
 
 //        root.getChildren().add(new AnchorPane())
-        root.getChildren().add(map.getView());
-
 //        main.Avatar avatar = new main.Avatar();
 //        root.getChildren().add(avatar.getView());
 //
 //        Wall wall = new Wall(230, 320);
 //        root.getChildren().add(wall.getView());
+
+
+        root.getChildren().add(world.getView());
 
         stage.setScene(scene);
         stage.show();
