@@ -1,12 +1,13 @@
 package Behavior;
+import main.math.Vec2i;
+
 import java.util.ArrayList;
 
 public class CowardBehavior implements AIBehavior {
     @Override
-    public int[] decideMove(int[] map, int[] currLocation, int[] playerLocation, ArrayList<Integer> pastMoves) {
-        int[] direction = new int[2];
-        direction[0] = playerLocation.getX() - currLocation.getX();
-        direction[1] = playerLocation.getY() - currLocation.getY();
+    public ArrayList<Vec2i> decideMove(int[] map, Vec2i currLocation, Vec2i playerLocation, ArrayList<Integer> pastMoves) {
+        Vec2i direction = new Vec2i(playerLocation.getX() - currLocation.getX(),
+                                    playerLocation.getY() - currLocation.getY());
         //         N   E   S   W
         // x (sin) 0   +   0   -   (direction[0])
         // y (-cos)-   0   +   0   (direction[1])
@@ -14,34 +15,29 @@ public class CowardBehavior implements AIBehavior {
         //         0   90  180 270
         // find out where player is in relation to coward
         // java.lang.Math.asin(direction[0]*java.lang.Math.PI/2);
-        ArrayList<int[]> targetSquares = new ArrayList<int[2]>();
-        int[] output = new int[2];
-        if (direction[0] >= 0) {
+        ArrayList<Vec2i> targetSquares = new ArrayList<Vec2i>();
+        if (direction.getX() >= 0) {
             // EAST
-            output[0] = currLocation.getX()+1;
-            outout[1] = currLocation.getY();
-            //check if output coord cell type (if a wall or undefined(-1), don't add)
-            targetSquares.add(output);
-        } else if (direction[1] < 0) {
+            Vec2i output = new Vec2i(currLocation.getX()+1, currLocation.getY());
+            if (map.getType(output) == 1) // check if output is inside the map and is accessible
+                targetSquares.add(output);
+        } else if (direction.getX() < 0) {
             // WEST
-            output[0] = currLocation.getX()-1;
-            outout[1] = currLocation.getY();
-            //check if output coord cell type (if a wall or undefined(-1), don't add)
-            targetSquares.add(output);
+            Vec2i output = new Vec2i(currLocation.getX()-1, currLocation.getY());
+            if (map.getType(output) == 1) // check if output is inside the map and is accessible
+                targetSquares.add(output);
         }
         // -java.lang.Math.acos(direction[1]*java.lang.Math.PI/2);
-        if (direction[1] >= 0) {
+        if (direction.getY() >= 0) {
             // SOUTH
-            output[0] = currLocation.getX();
-            outout[1] = currLocation.getY()+1;
-            //check if output coord cell type (if a wall or undefined(-1), don't add)
-            targetSquares.add(output);
-        } else if (direction[1] < 0) {
+            Vec2i output = new Vec2i(currLocation.getX(), currLocation.getY()+1);
+            if (map.getType(output) == 1) // check if output is inside the map and is accessible
+                targetSquares.add(output);
+        } else if (direction.getY() < 0) {
             // NORTH
-            output[0] = currLocation.getX();
-            outout[1] = currLocation.getY()-1;
-            //check if output coord cell type (if a wall or undefined(-1), don't add)
-            targetSquares.add(output);
+            Vec2i output = new Vec2i(currLocation.getX(), currLocation.getY()-1);
+            if (map.getType(output) == 1) // check if output is inside the map and is accessible
+                targetSquares.add(output);
         }
         return targetSquares;
 
