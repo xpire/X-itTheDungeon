@@ -39,8 +39,6 @@ public class GameWorld {
         Vec2i pos = avatar.getGridPos();
 //        pos.clip(new Vec2i(0,0), new Vec2i(map.getNCols() - 1, map.getNRows() - 1));
 
-
-
         avatar.moveTo(pos);
 
     }

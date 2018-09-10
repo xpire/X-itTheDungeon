@@ -1,6 +1,8 @@
 package main.core;
 
 
+import main.Entities.Entity;
+
 import java.util.ArrayList;
 
 public abstract class Component {

@@ -1,6 +1,7 @@
-package main.core;
+package main.Entities;
 
 import javafx.scene.Node;
+import main.core.ViewComponent;
 import main.math.Vec2d;
 
 public abstract class Entity {
@@ -8,6 +9,7 @@ public abstract class Entity {
     protected String name;
 
     protected ViewComponent view;
+    protected char symbol;
 
     public Entity(String name) {
         this.name = name;
@@ -30,4 +32,9 @@ public abstract class Entity {
     public void moveTo(Vec2d pos) {
         view.moveTo(pos);
     }
+
+    public char getSymbol() {
+        return symbol;
+    }
+
 }

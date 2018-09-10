@@ -2,7 +2,7 @@ package main;
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import main.core.Entity;
+import main.Entities.Entity;
 
 /*
 

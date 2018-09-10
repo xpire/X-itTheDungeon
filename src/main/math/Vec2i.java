@@ -14,7 +14,6 @@ public class Vec2i {
         this.y = y;
     }
 
-
     public Vec2i(Vec2i other) {
         this.x = other.x;
         this.y = other.y;
@@ -83,8 +82,6 @@ public class Vec2i {
     public void setY(int y) {
         this.y = y;
     }
-
-
 
 
     @Override
