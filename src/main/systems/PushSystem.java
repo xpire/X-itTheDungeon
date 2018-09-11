@@ -5,12 +5,25 @@ import main.maploading.Tile;
 import main.maploading.TileMap;
 import main.math.Vec2i;
 
-public class PushingBoulderSystem {
+public class PushSystem {
     private GameWorld world;
 
-    public PushingBoulderSystem(GameWorld world) {
+    public PushSystem(GameWorld world) {
         this.world = world;
     }
+
+
+    public boolean canPushInto(Vec2i to) {
+
+        // need fix
+        if (world.getMap().getEntities(to).hasNext()) {
+            return false;
+        }
+
+        return true;
+    }
+
+
 
     /**
      *

@@ -49,12 +49,14 @@ public class Avatar extends Entity {
 
 
         if ( !pos.equals(getGridPos()) ) {
-            if (world.isPassable(pos)) {
-                moveTo(pos);
-            }
-            else {
-                world.push(this, pos);
-            }
+//            if (world.isPassable(pos)) {
+//                moveTo(pos);
+//            }
+////            else {
+////                world.push(this, pos);
+////            }
+
+            world.moveEntity(this, pos);
         }
     }
 

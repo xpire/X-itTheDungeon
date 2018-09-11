@@ -33,6 +33,7 @@ public class GridMovementSystem {
             }
         }
 
+        e.moveBy(target.sub(curr));
         return true;
     }
 

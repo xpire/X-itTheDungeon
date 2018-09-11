@@ -26,9 +26,9 @@ public class Entity {
     }
 
     public Entity(String name, Function<Vec2i, Vec2d> gridToWorld, Vec2i pos) {
-        this.name = name;
-        this.view = new ViewComponent();
-        this.pos = new Vec2i(pos);
+        this.name       = name;
+        this.view       = new ViewComponent();
+        this.pos        = new Vec2i(pos);
         this.gridToWorld = gridToWorld;
 
         onCreated();
@@ -104,6 +104,13 @@ public class Entity {
     }
 
 
+    public int getRow() {
+        return pos.getY();
+    }
+
+    public int getCol() {
+        return pos.getX();
+    }
 
 
     /*
@@ -135,6 +142,6 @@ public class Entity {
      * @return true if allowing the other entity to enter this entity's tile
      */
     public boolean onInvadeBy(Entity other) {
-        return true;
+        return isPassable();
     }
 }

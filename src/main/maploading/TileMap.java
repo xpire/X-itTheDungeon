@@ -73,8 +73,7 @@ public class TileMap{
     Tile Property
      */
     public boolean isPassable(Vec2i pos) {
-
-        return tiles[pos.getX()][pos.getY()].isPassable();
+        return getTile(pos).isPassable();
     }
 
 
@@ -85,7 +84,7 @@ public class TileMap{
      */
 
     public Tile getTile(Vec2i pos) {
-        return tiles[pos.getX()][pos.getY()];
+        return tiles[pos.getY()][pos.getX()];
     }
 
     public Iterator<Entity> getEntities(Vec2i pos) {
@@ -93,7 +92,7 @@ public class TileMap{
     }
 
     public void addEntity(int row, int col, Entity entity) {
-        entity.moveTo(row, col);
+        entity.moveTo(col, row);
         view.addNode(entity.getView());
         tiles[row][col].addEntity(entity);
     }
@@ -101,6 +100,7 @@ public class TileMap{
     public void addNewEntity(int row, int col, Entity entity) {
         entity.setGridToWorld(gridToWorld);
         entity.moveTo(col, row);
+        view.addNode(entity.getView());
         tiles[row][col].addEntity(entity);
     }
 
