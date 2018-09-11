@@ -18,16 +18,25 @@ public class MapInterpreter {
         return tileEntities;
     }
 
+
+    /*
+    TODO:
+    make it cleaner, e.g. store the character to entity mapping in a hash table
+    and return a clone of the entity corresponding to the given character
+    Look up: Prototype Pattern
+     */
     public Entity getSingleEntity(char ch) {
         Entity currEntity = null;
+
+
         switch (ch) {
             case 'P':
                 currEntity = new Entity("Player");
-                //currEntity = new Player();
+                //currEntity = new MockAvatar();
                 break;
             case '*':
-                currEntity = new Entity("Wall");
-                //currEntity = new Wall();
+//                currEntity = new Entity("Wall");
+                currEntity = new Wall();
                 break;
             case 'X':
                 currEntity = new Entity("Exit");
@@ -38,8 +47,8 @@ public class MapInterpreter {
                 //currEntity = new Switch();
                 break;
             case 'O':
-                currEntity = new Entity("Boulder");
-                //currEntity = new Boulder();
+//                currEntity = new Entity("Boulder");
+                currEntity = new Boulder();
                 break;
             case '|':
                 currEntity = new Door("Door");

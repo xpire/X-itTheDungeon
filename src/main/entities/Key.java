@@ -1,6 +1,7 @@
 package main.entities;
 
 public class Key extends Entity {
+
     private Door matchingDoor;
 
     public Key(String name) {

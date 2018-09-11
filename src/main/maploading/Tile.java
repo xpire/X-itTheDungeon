@@ -7,6 +7,7 @@ import main.entities.Key;
 import main.entities.Entity;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class Tile{
 
@@ -43,6 +44,7 @@ public class Tile{
         return false;
     }
 
+
     public Boulder getBoulder() {
 
         for (Entity e : entities) {
@@ -58,6 +60,9 @@ public class Tile{
     }
 
 
+    public Iterator<Entity> getEntities() {
+        return entities.iterator();
+    }
 
     public void listEntities() {
         for (Entity e : entities) {

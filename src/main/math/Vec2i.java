@@ -1,10 +1,10 @@
 package main.math;
 public class Vec2i {
 
-    public static final Vec2i NORTH = new Vec2i(0, -1);
-    public static final Vec2i SOUTH = new Vec2i(0, 1);
-    public static final Vec2i WEST = new Vec2i(-1, 0);
-    public static final Vec2i EAST = new Vec2i(1, 0);
+    private static final Vec2i NORTH = new Vec2i(0, -1);
+    private static final Vec2i SOUTH = new Vec2i(0, 1);
+    private static final Vec2i WEST = new Vec2i(-1, 0);
+    private static final Vec2i EAST = new Vec2i(1, 0);
 
     private int x;
     private int y;

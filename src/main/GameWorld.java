@@ -3,7 +3,6 @@ package main;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import main.avatar.Avatar;
-import main.component.GridPositionComponent;
 import main.entities.Boulder;
 import main.entities.Wall;
 import main.maploading.TileMap;
@@ -29,18 +28,14 @@ public class GameWorld {
         rootView.setTranslateX(150);
         rootView.setTranslateY(50);
 
-        GridPositionComponent gpc = new GridPositionComponent(pos2i ->
-            gridPosToWorldPosCentre(pos2i)
-        );
+        avatar = new Avatar(this);
 
-        avatar = new Avatar(gpc.clone(), this);
-
-        map.addEntity(5, 5, new Wall(gpc.clone()));
-        map.addEntity(2, 8, new Wall(gpc.clone()));
-        map.addEntity(1, 3, new Wall(gpc.clone()));
-        map.addEntity(2, 0, new Wall(gpc.clone()));
-        map.addEntity(4, 3, new Boulder(gpc.clone()));
-        map.addEntity(7, 6, new Boulder(gpc.clone()));
+        map.addNewEntity(5, 5, new Wall());
+        map.addNewEntity(2, 8, new Wall());
+        map.addNewEntity(1, 3, new Wall());
+        map.addNewEntity(2, 0, new Wall());
+        map.addNewEntity(4, 3, new Boulder());
+        map.addNewEntity(7, 6, new Boulder());
 
         rootView.getChildren().add(map.getView());
         rootView.getChildren().add(avatar.getView());

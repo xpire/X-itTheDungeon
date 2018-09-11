@@ -21,18 +21,6 @@ public class GameLoop extends AnimationTimer {
     private Consumer<Integer> fpsReporter;
 
 
-//    private Runnable preUpdater;
-//    private Consumer<Float> updater;
-//    private Runnable postUpdater;
-
-
-//    public main.GameLoop(Runnable preUpdater, Consumer<Float> updater, Runnable postUpdater, Consumer<Integer> fpsReporter) {
-//        this.preUpdater     = preUpdater;
-//        this.updater        = updater;
-//        this.postUpdater    = postUpdater;
-//        this.fpsReporter    = fpsReporter;
-//    }
-
     public GameLoop(Game game, Consumer<Integer> fpsReporter) {
         this.game = game;
         this.fpsReporter = fpsReporter;

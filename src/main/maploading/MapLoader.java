@@ -12,6 +12,9 @@ import java.util.Scanner;
 
 public class MapLoader {
 
+    /*
+    Heavy commenting/refactoring required for others to understand
+     */
     public TileMap getTileMap(String mapName) {
         MapInterpreter mapInt = new MapInterpreter();
         TileMap tileMap = null;
