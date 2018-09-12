@@ -26,10 +26,15 @@ public class GridMovementSystem {
             return false;
         }
 
-        Iterator<Entity> entities = map.getEntities(target);
-        while (entities.hasNext()) {
-            if (!onTileInvaded(e, entities.next())) {
-                return false;
+
+        if (!map.isPassableFor(e, target)) {
+
+            Iterator<Entity> it = map.getEntities(target);
+
+            while (it.hasNext()) {
+                if (!onTileInvaded(e, it.next())) {
+                    return false;
+                }
             }
         }
 
@@ -39,6 +44,6 @@ public class GridMovementSystem {
 
 
     public boolean onTileInvaded(Entity invader, Entity target) {
-        return target.onInvadeBy(invader);
+        return target.onEntityPush(invader);
     }
 }

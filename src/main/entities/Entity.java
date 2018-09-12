@@ -141,7 +141,27 @@ public class Entity {
      * @param other the entity that is planning to enter this entity's tile
      * @return true if allowing the other entity to enter this entity's tile
      */
-    public boolean onInvadeBy(Entity other) {
+
+
+    public boolean isPassableFor(Entity other) {
+        return isPassable(); // later merge
+    }
+
+    public boolean onEntityPush(Entity other) {
         return isPassable();
+    }
+
+
+    public void onEntityEnter(Entity other) {
+
+    }
+
+    public void onEntityLeave(Entity other) {
+
+    }
+
+    public void onRemovedFromMap() {
+        map.removeEntity(this);
+        // view.removeFromParent();
     }
 }

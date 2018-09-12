@@ -22,6 +22,10 @@ public class ViewComponent extends Component {
         view.getChildren().add(node);
     }
 
+    public boolean removeNode(Node node) {
+        return view.getChildren().remove(node);
+    }
+
     public Node getView() {
         return view;
     }
