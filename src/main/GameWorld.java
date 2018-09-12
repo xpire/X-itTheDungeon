@@ -3,13 +3,15 @@ package main;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import main.avatar.Avatar;
-import main.component.GridPositionComponent;
 import main.entities.Boulder;
+import main.entities.Entity;
 import main.entities.Wall;
 import main.maploading.TileMap;
-import main.math.Vec2d;
 import main.math.Vec2i;
-import main.systems.PushingBoulderSystem;
+import main.systems.GridMovementSystem;
+import main.systems.PushSystem;
+
+import java.util.Iterator;
 
 public class GameWorld {
 
@@ -18,7 +20,8 @@ public class GameWorld {
 
     private Group rootView;
 
-    private PushingBoulderSystem pushSystem = new PushingBoulderSystem(this);
+    private PushSystem pushSystem;
+    private GridMovementSystem moveSystem;
 
     public GameWorld(TileMap map) {
         this.map = map;
@@ -29,29 +32,36 @@ public class GameWorld {
         rootView.setTranslateX(150);
         rootView.setTranslateY(50);
 
-        GridPositionComponent gpc = new GridPositionComponent(pos2i ->
-            gridPosToWorldPosCentre(pos2i)
-        );
+        pushSystem = new PushSystem(this);
+        moveSystem = new GridMovementSystem(this, map);
 
-        avatar = new Avatar(gpc.clone(), this);
+        avatar = new Avatar(this);
+        addNewEntity(0, 0, avatar);
 
-        map.addEntity(5, 5, new Wall(gpc.clone()));
-        map.addEntity(2, 8, new Wall(gpc.clone()));
-        map.addEntity(1, 3, new Wall(gpc.clone()));
-        map.addEntity(2, 0, new Wall(gpc.clone()));
-        map.addEntity(4, 3, new Boulder(gpc.clone()));
-        map.addEntity(7, 6, new Boulder(gpc.clone()));
+        addNewEntity(5, 5, new Wall());
+        addNewEntity(2, 8, new Wall());
+        addNewEntity(1, 3, new Wall());
+        addNewEntity(2, 0, new Wall());
+        addNewEntity(4, 3, new Boulder());
+        addNewEntity(7, 6, new Boulder());
+
+        Iterator<Entity> it = map.getEntities(new Vec2i(5, 5));
 
         rootView.getChildren().add(map.getView());
         rootView.getChildren().add(avatar.getView());
     }
 
+    public void addNewEntity(int row, int col, Entity e) {
+
+        if (e instanceof  Boulder) {
+            ((Boulder) e).attachPushSystem(pushSystem);
+        }
+        map.addNewEntity(row, col, e);
+    }
+
 
     public void update(double delta) {
         avatar.update(delta);
-
-        Vec2i pos = avatar.getGridPos();
-//        pos.clip(new Vec2i(0,0), new Vec2i(map.getNCols() - 1, map.getNRows() - 1));
     }
 
     public void render() {
@@ -62,9 +72,6 @@ public class GameWorld {
         return rootView;
     }
 
-    public Vec2d gridPosToWorldPosCentre(Vec2i gridPos) {
-        return map.gridPosToWorldPosCentre(gridPos);
-    }
 
 
     public boolean isPassable(Vec2i pos) {
@@ -74,29 +81,20 @@ public class GameWorld {
 
 
     // WILL BE REMOVED
-    public Boulder getBoulder(Vec2i pos) {
-        if (!map.isValidGridPos(pos)) return null;
-        return map.getTile(pos).getBoulder();
-    }
+//    public Boulder getBoulder(Vec2i pos) {
+//        if (!map.isValidGridPos(pos)) return null;
+//        return map.getTile(pos).getBoulder();
+//    }
 
     public TileMap getMap() {
         return map;
     }
 
-    public void push(Avatar avatar, Vec2i pos) {
 
-        Boulder boulder = getBoulder(pos);
+    // ambiguous name
+    public void moveEntity(Entity e, Vec2i pos) {
+        if (!map.isValidGridPos(pos)) return;
 
-        if (boulder == null) return;
-
-        Vec2i from = avatar.getGridPos();
-        Vec2i target = boulder.getGridPos();
-
-        Vec2i push = pushSystem.push(from, target);
-        map.getTile(pos).removeEntity(boulder);
-        map.getTile(pos.add(push)).addEntity(boulder);
-
-        avatar.moveBy(push);
-        boulder.moveBy(push);
+        moveSystem.onTileMovement(e, pos);
     }
 }

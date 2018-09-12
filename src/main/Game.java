@@ -16,7 +16,7 @@ public class Game extends Application{
     final static int HEIGHT = 400;
 
     public static Input input = new Input();
-    public GameWorld world;
+    public static GameWorld world;
 
 
     private TileMap map;

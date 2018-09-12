@@ -5,7 +5,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import main.Game;
 import main.GameWorld;
-import main.component.GridPositionComponent;
 import main.entities.Entity;
 import main.math.Vec2d;
 import main.math.Vec2i;
@@ -13,23 +12,16 @@ import main.math.Vec2i;
 
 public class Avatar extends Entity {
 
+    protected GameWorld world;
 
-    private AvatarState state;
-
-    private AvatarState idleState = new IdleState(this);
-    private AvatarState moveState = new MoveState(this);
-
-    private GameWorld world;
-
-    public Avatar(GridPositionComponent gpc, GameWorld world) {
-
-        super("Avatar", gpc);
-        moveTo(0,0);
-
-        enterState(idleState);
-
+    public Avatar(GameWorld world) {
+        super("Avatar");
         this.world = world;
+    }
 
+
+    @Override
+    public void onCreated() {
         Circle circle = new Circle();
         circle.setRadius(10);
         circle.setFill(Color.AQUA);
@@ -40,8 +32,6 @@ public class Avatar extends Entity {
 
 
     public void update(double delta) {
-//        state.update(delta);
-
         Vec2i pos = new Vec2i(getGridPos());
 
         if (Game.input.isDown(KeyCode.UP)) {
@@ -59,12 +49,14 @@ public class Avatar extends Entity {
 
 
         if ( !pos.equals(getGridPos()) ) {
-            if (world.isPassable(pos)) {
-                moveTo(pos);
-            }
-            else {
-                world.push(this, pos);
-            }
+//            if (world.isPassable(pos)) {
+//                moveTo(pos);
+//            }
+////            else {
+////                world.push(this, pos);
+////            }
+
+            world.moveEntity(this, pos);
         }
     }
 
@@ -75,17 +67,4 @@ public class Avatar extends Entity {
 //        view.setTranslateX(pos.getX());
 //        view.setTranslateY(pos.getY());
     }
-
-    public void enterState(AvatarState state) {
-        this.state = state;
-        state.enter();
-    }
-
-//    public AvatarState getIdleState() {
-//        return idleState;
-//    }
-//
-//    public AvatarState getMoveState() {
-//        return moveState;
-//    }
 }
