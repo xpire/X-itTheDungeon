@@ -5,7 +5,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import main.Game;
 import main.GameWorld;
+import main.entities.Door;
 import main.entities.Entity;
+import main.entities.Key;
 import main.math.Vec2d;
 import main.math.Vec2i;
 
@@ -13,6 +15,7 @@ import main.math.Vec2i;
 public class Avatar extends Entity {
 
     protected GameWorld world;
+    private Key key = null;
 
     public Avatar(GameWorld world) {
         super("Avatar");
@@ -66,5 +69,24 @@ public class Avatar extends Entity {
 //        Vec2d pos = world.gridPosToWorldPosCentre(gridPos);
 //        view.setTranslateX(pos.getX());
 //        view.setTranslateY(pos.getY());
+    }
+
+    public boolean pickUp(Key key) {
+
+        // Already has a key
+        if (this.key != null)
+            return false;
+
+        // Pickup key
+        this.key = key;
+        return true;
+    }
+
+    public boolean hasKeyFor(Door door) {
+        return key != null && key.getMatchingDoor().equals(door);
+    }
+
+    public void useKey() {
+        key = null;
     }
 }

@@ -1,23 +1,67 @@
 package main.entities;
 
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import main.avatar.Avatar;
+import main.maploading.TileMap;
+import main.math.Vec2i;
+
 public class Key extends Entity {
 
-    private Door matchingDoor;
+    private Door door;
+    private Circle circ;
+
+    public Key() {
+        super("Door");
+    }
 
     public Key(String name) {
         super(name);
-        this.symbol = 'K';
     }
 
-    public void setMatchingDoor(Door d) {
-        matchingDoor = d;
+    public Key(String name, TileMap map, Vec2i pos) {
+        super(name, map, pos);
     }
+
+    @Override
+    public void onCreated(){
+        symbol = 'K';
+
+        circ = new Circle(5);
+        circ.setFill(Color.HOTPINK);
+        view.addNode(circ);
+//        view.setCentre(new Vec2d(3, 15));
+    }
+
+
+    @Override
+    public boolean isPassableFor(Entity other) {
+        if (other.getName().equals("Boulder")) {
+            return false;
+        }
+
+        return true;
+    }
+
+
+    @Override
+    public void onEntityEnter(Entity other) {
+
+        if (other instanceof Avatar) {
+            Avatar avatar = (Avatar) other;
+
+            if (avatar.pickUp(this)) {
+                onRemovedFromMap();
+            }
+        }
+    }
+
 
     public Door getMatchingDoor() {
-        return matchingDoor;
+        return door;
     }
 
-    public void dropKey() {
-
+    public void setMatchingDoor(Door door) {
+        this.door = door;
     }
 }

@@ -1,9 +1,12 @@
 package main.systems;
 
 import main.GameWorld;
+import main.entities.Entity;
 import main.maploading.Tile;
 import main.maploading.TileMap;
 import main.math.Vec2i;
+
+import java.util.Iterator;
 
 public class PushSystem {
     private GameWorld world;
@@ -18,8 +21,15 @@ public class PushSystem {
         // need fix
         if (!world.getMap().isValidGridPos(to)) return false;
 
-        if (world.getMap().getEntities(to).hasNext()) {
-            return false;
+        Iterator<Entity> it = world.getMap().getEntities(to);
+
+        while(it.hasNext()) {
+
+            Entity e = it.next();
+
+            if(!e.getName().equals("Switch")) {
+                return false;
+            }
         }
 
         return true;

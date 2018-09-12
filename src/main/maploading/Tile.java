@@ -29,8 +29,23 @@ public class Tile{
         return entities.size() == 0;
     }
 
+//    private ArrayList<Entity> save = new ArrayList<>();
+
+    // Essentially, observer
+
     public void addEntity(Entity entity) {
         entities.add(entity);
+        getEntities().forEach(e -> e.onEntityEnter(entity));
+    }
+
+
+    public boolean removeEntity(Entity entity) {
+
+        if (entities.remove(entity)) {
+            getEntities().forEach(e -> e.onEntityLeave(entity));
+            return true;
+        }
+        return false;
     }
 
 
@@ -88,7 +103,4 @@ public class Tile{
         return null;
     }
 
-    public boolean removeEntity(Entity entity) {
-        return entities.remove(entity);
-    }
 }

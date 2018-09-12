@@ -178,4 +178,24 @@ public class TileMap{
         Tile next = getTile(new Vec2i(x, y));
         next.addEntity(e);
     }
+
+    public boolean isPassableFor(Entity e, Vec2i target) {
+
+        Iterator<Entity> it = getEntities(target);
+        while (it.hasNext()) {
+
+            Entity tileEntity = it.next();
+
+            if (!tileEntity.isPassableFor(e)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public void removeEntity(Entity entity) {
+        getTile(entity.getGridPos()).removeEntity(entity);
+        view.removeNode(entity.getView());
+    }
 }

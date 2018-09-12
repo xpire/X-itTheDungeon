@@ -41,7 +41,7 @@ public class Boulder extends Entity{
 
 
     @Override
-    public boolean onInvadeBy(Entity other) {
+    public boolean onEntityPush(Entity other) {
 
         System.out.println(other.getName());
         if (other.getName().equals("Avatar")) {

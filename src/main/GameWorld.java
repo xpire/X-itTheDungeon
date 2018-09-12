@@ -3,9 +3,7 @@ package main;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import main.avatar.Avatar;
-import main.entities.Boulder;
-import main.entities.Entity;
-import main.entities.Wall;
+import main.entities.*;
 import main.maploading.TileMap;
 import main.math.Vec2i;
 import main.systems.GridMovementSystem;
@@ -38,17 +36,27 @@ public class GameWorld {
         avatar = new Avatar(this);
         addNewEntity(0, 0, avatar);
 
+        Door door = new Door();
+
+        Key key = new Key();
+        key.setMatchingDoor(door);
+
         addNewEntity(5, 5, new Wall());
         addNewEntity(2, 8, new Wall());
-        addNewEntity(1, 3, new Wall());
+        addNewEntity(5, 3, key);
+        addNewEntity(1, 3, door);
         addNewEntity(2, 0, new Wall());
         addNewEntity(4, 3, new Boulder());
         addNewEntity(7, 6, new Boulder());
+
+        Switch sw = new Switch();
+        addNewEntity(3, 3, sw);
 
         Iterator<Entity> it = map.getEntities(new Vec2i(5, 5));
 
         rootView.getChildren().add(map.getView());
         rootView.getChildren().add(avatar.getView());
+
     }
 
     public void addNewEntity(int row, int col, Entity e) {
