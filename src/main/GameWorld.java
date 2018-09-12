@@ -36,15 +36,22 @@ public class GameWorld {
         avatar = new Avatar(this);
         addNewEntity(0, 0, avatar);
 
-        Door door = new Door();
+        Door door1 = new Door();
+        Door door2 = new Door();
 
-        Key key = new Key();
-        key.setMatchingDoor(door);
+        Key key1 = new Key();
+        Key key2 = new Key();
+        key1.setMatchingDoor(door1);
+        key2.setMatchingDoor(door2);
+
+
 
         addNewEntity(5, 5, new Wall());
         addNewEntity(2, 8, new Wall());
-        addNewEntity(5, 3, key);
-        addNewEntity(1, 3, door);
+        addNewEntity(7, 7, key2);
+        addNewEntity(5, 3, key1);
+        addNewEntity(8, 3, door2);
+        addNewEntity(1, 3, door1);
         addNewEntity(2, 0, new Wall());
         addNewEntity(4, 3, new Boulder());
         addNewEntity(7, 6, new Boulder());

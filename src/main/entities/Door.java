@@ -73,6 +73,7 @@ public class Door extends Entity{
 
             if (avatar.hasKeyFor(this)) {
                 onOpen();
+                avatar.useKey();
                 return true;
             }
         }
