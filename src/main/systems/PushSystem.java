@@ -16,6 +16,8 @@ public class PushSystem {
     public boolean canPushInto(Vec2i to) {
 
         // need fix
+        if (!world.getMap().isValidGridPos(to)) return false;
+
         if (world.getMap().getEntities(to).hasNext()) {
             return false;
         }

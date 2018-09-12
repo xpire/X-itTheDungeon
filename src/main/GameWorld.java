@@ -11,6 +11,8 @@ import main.math.Vec2i;
 import main.systems.GridMovementSystem;
 import main.systems.PushSystem;
 
+import java.util.Iterator;
+
 public class GameWorld {
 
     private TileMap map;
@@ -43,6 +45,8 @@ public class GameWorld {
         addNewEntity(4, 3, new Boulder());
         addNewEntity(7, 6, new Boulder());
 
+        Iterator<Entity> it = map.getEntities(new Vec2i(5, 5));
+
         rootView.getChildren().add(map.getView());
         rootView.getChildren().add(avatar.getView());
     }
@@ -70,8 +74,6 @@ public class GameWorld {
 
 
 
-
-
     public boolean isPassable(Vec2i pos) {
         if (!map.isValidGridPos(pos)) return false;
         return map.isPassable(pos);
@@ -91,23 +93,8 @@ public class GameWorld {
 
     // ambiguous name
     public void moveEntity(Entity e, Vec2i pos) {
+        if (!map.isValidGridPos(pos)) return;
+
         moveSystem.onTileMovement(e, pos);
     }
-
-//    public void push(Avatar avatar, Vec2i pos) {
-//
-//        Boulder boulder = getBoulder(pos);
-//
-//        if (boulder == null) return;
-//
-//        Vec2i from = avatar.getGridPos();
-//        Vec2i target = boulder.getGridPos();
-//
-//        Vec2i push = pushSystem.push(from, target);
-//        map.getTile(pos).removeEntity(boulder);
-//        map.getTile(pos.add(push)).addEntity(boulder);
-//
-//        avatar.moveBy(push);
-//        boulder.moveBy(push);
-//    }
 }

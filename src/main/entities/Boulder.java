@@ -2,30 +2,26 @@ package main.entities;
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import main.Game;
+import main.maploading.TileMap;
 import main.math.Vec2d;
 import main.math.Vec2i;
 import main.systems.PushSystem;
-
-import java.util.function.Function;
 
 public class Boulder extends Entity{
 
     private PushSystem pushSystem = null;
 
     public Boulder() {
-        super("Wall");
+        super("Boulder");
     }
 
     public Boulder(String name) {
         super(name);
     }
 
-    public Boulder(String name, Function<Vec2i, Vec2d> gridToWorld) {
-        super(name, gridToWorld);
-    }
-
-    public Boulder(String name, Function<Vec2i, Vec2d> gridToWorld, Vec2i pos) {
-        super(name, gridToWorld, pos);
+    public Boulder(String name, TileMap map, Vec2i pos) {
+        super(name, map, pos);
     }
 
     @Override
@@ -52,10 +48,15 @@ public class Boulder extends Entity{
 
             if (pushSystem == null) return false;
 
-            Vec2i dir = pos.sub(other.getGridPos());
-            moveBy(dir);
+            Vec2i curr  = new Vec2i(pos);
+            Vec2i dir   = curr.sub(other.getGridPos());
 
-            return pushSystem.canPushInto(pos.add(dir));
+            System.out.println("Push in the direction: " + dir);
+
+            if (pushSystem.canPushInto(curr.add(dir))) {
+                Game.world.moveEntity(this, curr.add(dir));
+                return true;
+            }
         }
 
         return false;

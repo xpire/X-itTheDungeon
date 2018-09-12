@@ -3,11 +3,11 @@ package main.maploading;
 
 import main.entities.Boulder;
 import main.entities.Door;
-import main.entities.Key;
 import main.entities.Entity;
+import main.entities.Key;
 
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.List;
 
 public class Tile{
 
@@ -60,8 +60,8 @@ public class Tile{
     }
 
 
-    public Iterator<Entity> getEntities() {
-        return entities.iterator();
+    public List<Entity> getEntities() {
+        return new ArrayList<>(entities);
     }
 
     public void listEntities() {
@@ -88,7 +88,7 @@ public class Tile{
         return null;
     }
 
-    public void removeEntity(Entity entity) {
-        entities.remove(entity);
+    public boolean removeEntity(Entity entity) {
+        return entities.remove(entity);
     }
 }

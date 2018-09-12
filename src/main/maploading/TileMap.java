@@ -84,11 +84,13 @@ public class TileMap{
      */
 
     public Tile getTile(Vec2i pos) {
+        if (!isValidGridPos(pos)) return null;
+
         return tiles[pos.getY()][pos.getX()];
     }
 
     public Iterator<Entity> getEntities(Vec2i pos) {
-        return getTile(pos).getEntities();
+        return getTile(pos).getEntities().iterator();
     }
 
     public void addEntity(int row, int col, Entity entity) {
@@ -98,10 +100,8 @@ public class TileMap{
     }
 
     public void addNewEntity(int row, int col, Entity entity) {
-        entity.setGridToWorld(gridToWorld);
-        entity.moveTo(col, row);
-        view.addNode(entity.getView());
-        tiles[row][col].addEntity(entity);
+        entity.setMap(this);
+        addEntity(row, col, entity);
     }
 
 
@@ -169,5 +169,13 @@ public class TileMap{
 
     public Node getView() {
         return view.getView();
+    }
+
+    public void moveTo(Entity e, int x, int y) {
+        Tile curr = getTile(e.getGridPos());
+        if (!curr.removeEntity(e)) return;
+
+        Tile next = getTile(new Vec2i(x, y));
+        next.addEntity(e);
     }
 }
