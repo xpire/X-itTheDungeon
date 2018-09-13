@@ -19,6 +19,12 @@ public class Entity {
         this(name, null, new Vec2i());
     }
 
+    //temp measure - can remove once Enemies conform to UML
+    public Entity(String name, char symbol) {
+        this(name, null, new Vec2i());
+        this.symbol = symbol;
+    }
+
 
 //    public Entity(String name, Function<Vec2i, Vec2d> gridToWorld) {
 //        this(name, gridToWorld, new Vec2i(0, 0));

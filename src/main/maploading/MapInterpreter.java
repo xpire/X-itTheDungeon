@@ -35,19 +35,15 @@ public class MapInterpreter {
                 //currEntity = new MockAvatar();
                 break;
             case '*':
-//                currEntity = new Entity("Wall");
                 currEntity = new Wall();
                 break;
             case 'X':
-                currEntity = new Entity("Exit");
-                //currEntity = new Exit();
+                currEntity = new Exit();
                 break;
             case '/':
-                currEntity = new Entity("Switch");
-                //currEntity = new Switch();
+                currEntity = new Switch();
                 break;
             case 'O':
-//                currEntity = new Entity("Boulder");
                 currEntity = new Boulder();
                 break;
             case '|':
@@ -69,32 +65,29 @@ public class MapInterpreter {
                 currEntity = new Bomb();
                 break;
             case '#':
-                currEntity = new Entity("Pit");
-                //currEntity = new Pit();
+                currEntity = new Pit();
                 break;
             case '1':
-                currEntity = new Entity("Hunter");
+                currEntity = new Entity("Hunter", '1');
                 //currEntity = new main.enemies.Hunter();
                 break;
             case '2':
-                currEntity = new Entity("Strategist");
+                currEntity = new Entity("Strategist", '2');
                 //currEntity = new main.enemies.Strategist();
                 break;
             case '3':
-                currEntity = new Entity("Hound");
+                currEntity = new Entity("Hound", '3');
                 //currEntity = new main.enemies.Hound();
                 break;
             case '4':
-                currEntity = new Entity("Coward");
+                currEntity = new Entity("Coward", '4');
                 //currEntity = new main.enemies.Coward();
                 break;
             case '>':
-                currEntity = new Entity("Invincibility Potion");
-                //currEntity = new InvincibilityPot();
+                currEntity = new InvincibilityPot();
                 break;
             case '^':
-                currEntity = new Entity("Hover Potion");
-                //currEntity = new HoverPot();
+                currEntity = new HoverPot();
                 break;
             case '.':
                 currEntity = new Ground();
