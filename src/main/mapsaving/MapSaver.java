@@ -42,10 +42,14 @@ public class MapSaver{
                     Tile t = tileMap.getTile(pos);
                     StringBuilder sb = new StringBuilder();
 
-                    List<Entity> tileEntities = t.getEntities();
-                    for (Entity e : tileEntities) {
-                        char ch = e.getSymbol();
-                        sb.append(ch);
+                    if (t.isEmpty()) {
+                        sb.append('.');
+                    } else {
+                        List<Entity> tileEntities = t.getEntities();
+                        for (Entity e : tileEntities) {
+                            char ch = e.getSymbol();
+                            sb.append(ch);
+                        }
                     }
                     w.write(sb.toString() + "\t");
                 }

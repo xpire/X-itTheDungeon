@@ -79,6 +79,10 @@ public class Tile{
         return new ArrayList<>(entities);
     }
 
+    public boolean isEmpty() {
+        return entities.isEmpty();
+    }
+
     public void listEntities() {
         for (Entity e : entities) {
             System.out.print(e.getName());
