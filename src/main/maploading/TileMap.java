@@ -6,9 +6,11 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import main.component.ViewComponent;
 import main.entities.Entity;
+import main.entities.Key;
 import main.math.Vec2d;
 import main.math.Vec2i;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.function.Function;
@@ -116,6 +118,19 @@ public class TileMap{
         if (!pos.withinX(0, getNCols() - 1)) return false;
         if (!pos.withinY(0, getNRows() - 1)) return false;
         return true;
+    }
+
+    public ArrayList<Key> findKeys() {
+        ArrayList<Key> keys = new ArrayList<>();
+
+        for (int y = 0; y < nRows; y++) {
+            for (int x = 0; x < nCols; x++) {
+                Key k = tiles[y][x].getKey();
+                if (k != null) keys.add(k);
+            }
+        }
+
+        return keys;
     }
 
 
