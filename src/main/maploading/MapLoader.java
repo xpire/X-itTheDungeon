@@ -68,7 +68,7 @@ public class MapLoader {
             } else System.out.println("Error: No objectives specified");
 
             while (sc.hasNextLine()) {
-                line = sc.nextLine().split(",");
+                line = sc.nextLine().split("\\s+");
                 if (line.length != 4) {
                     System.out.println("Error: Key-Door mapping incorrect");
                     break;
