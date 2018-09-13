@@ -3,6 +3,7 @@ package main.entities;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import main.avatar.Avatar;
+import main.maploading.Level;
 import main.maploading.TileMap;
 import main.math.Vec2d;
 import main.math.Vec2i;
@@ -30,7 +31,7 @@ public class Bomb extends Entity {
         super(name, symbol);
     }
 
-    public Bomb(String name, TileMap map, Vec2i pos) {
+    public Bomb(String name, Level map, Vec2i pos) {
         super(name, map, pos);
     }
 

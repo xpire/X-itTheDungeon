@@ -6,7 +6,7 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.shape.Box;
 import javafx.stage.Stage;
-import main.maploading.TileMap;
+import main.maploading.Level;
 
 
 public class Game extends Application{
@@ -19,7 +19,7 @@ public class Game extends Application{
     public static GameWorld world;
 
 
-    private TileMap map;
+    private Level map;
 
 
     public static void main(String[] args) {
@@ -49,7 +49,7 @@ public class Game extends Application{
     }
 
 
-    public TileMap getMap() {
+    public Level getMap() {
         return map;
     }
 
@@ -79,7 +79,11 @@ public class Game extends Application{
 //        circle.setCenterY(100);
 //        root.getChildren().add(circle);
 
+<<<<<<< HEAD
         TileMap map = new TileMap(16, 16, 30);
+=======
+        Level map = new Level(10, 10, 30);
+>>>>>>> Began refactoring TileMap->Level; Level and Draft will both aggregate the new TileMap. Skeleton for Draft done pre-refactoring.
         world = new GameWorld(map);
 
 

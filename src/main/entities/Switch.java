@@ -2,7 +2,7 @@ package main.entities;
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import main.maploading.TileMap;
+import main.maploading.Level;
 import main.math.Vec2d;
 import main.math.Vec2i;
 
@@ -20,7 +20,7 @@ public class Switch extends Entity{
         super(name);
     }
 
-    public Switch(String name, TileMap map, Vec2i pos) {
+    public Switch(String name, Level map, Vec2i pos) {
         super(name, map, pos);
     }
 
