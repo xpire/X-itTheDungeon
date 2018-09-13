@@ -2,12 +2,9 @@ package main.entities;
 
 public class Bomb extends Entity {
 
-    public Bomb(String name) {
-        super(name);
+    public Bomb() {
+        super("Bomb");
         this.symbol = '!';
     }
 
-    public void placeBomb() {
-
-    }
 }

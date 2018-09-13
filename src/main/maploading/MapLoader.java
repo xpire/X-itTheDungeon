@@ -19,10 +19,13 @@ public class MapLoader {
         MapInterpreter mapInt = new MapInterpreter();
         TileMap tileMap = null;
 
+        StringBuilder mapPath = new StringBuilder("./src/main/levels/");
+        mapPath.append(mapName);
+
         Scanner sc = null;
 
         try {
-            sc = new Scanner(new File(mapName));
+            sc = new Scanner(new File(mapPath.toString()));
             String[] line;
             int numRow = 0, numCol = 0;
 
@@ -107,7 +110,7 @@ public class MapLoader {
     public static void main(String[] args) {
         MapLoader mapLoader = new MapLoader();
 
-        TileMap tileMap = mapLoader.getTileMap(args[0]);
+        TileMap tileMap = mapLoader.getTileMap("map1");
 
         int nRow = tileMap.getNRows(), nCol = tileMap.getNCols();
         System.out.println(nRow + "\t" + nCol);

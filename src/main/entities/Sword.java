@@ -2,12 +2,23 @@ package main.entities;
 
 public class Sword extends Entity{
 
-    public Sword(String name) {
-        super(name);
+    private int durability;
+
+    public Sword() {
+        super("Sword");
         this.symbol = '+';
+        this.durability = 5;
     }
 
-    public void swingSword() {
-        //needs the tilemap and player location?
+    public int getDurability() {
+        return durability;
     }
+
+    public void reduceDurability() {
+        durability--;
+        if (durability == 0) {
+            System.out.println("Sword has broken");
+        }
+    }
+
 }

@@ -51,41 +51,41 @@ public class MapInterpreter {
                 currEntity = new Boulder();
                 break;
             case '|':
-                currEntity = new Door("Door");
+                currEntity = new Door();
                 break;
             case 'K':
-                currEntity = new Key("Key");
+                currEntity = new Key();
                 break;
             case '$':
-                currEntity = new Treasure("Treas");
+                currEntity = new Treasure();
                 break;
             case '+':
-                currEntity = new Sword("Sword");
+                currEntity = new Sword();
                 break;
             case '-':
-                currEntity = new Arrow("Arrow");
+                currEntity = new Arrow();
                 break;
             case '!':
-                currEntity = new Bomb("Bomb");
+                currEntity = new Bomb();
                 break;
             case '#':
                 currEntity = new Entity("Pit");
                 //currEntity = new Pit();
                 break;
             case '1':
-                currEntity = new Entity("main.enemies.Hunter");
+                currEntity = new Entity("Hunter");
                 //currEntity = new main.enemies.Hunter();
                 break;
             case '2':
-                currEntity = new Entity("main.enemies.Strategist");
+                currEntity = new Entity("Strategist");
                 //currEntity = new main.enemies.Strategist();
                 break;
             case '3':
-                currEntity = new Entity("main.enemies.Hound");
+                currEntity = new Entity("Hound");
                 //currEntity = new main.enemies.Hound();
                 break;
             case '4':
-                currEntity = new Entity("main.enemies.Coward");
+                currEntity = new Entity("Coward");
                 //currEntity = new main.enemies.Coward();
                 break;
             case '>':
@@ -97,7 +97,7 @@ public class MapInterpreter {
                 //currEntity = new HoverPot();
                 break;
             case '.':
-                currEntity = new Ground("Ground");
+                currEntity = new Ground();
                 break;
             default:
                 System.out.println("Unrecognised Entity");
