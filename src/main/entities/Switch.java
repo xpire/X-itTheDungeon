@@ -57,7 +57,7 @@ public class Switch extends Entity{
         }
     }
 
-//    @Override
+    @Override
     public void onEntityLeave(Entity other) {
         if (other.getName().equals("Boulder")) {
             onDeactivated();

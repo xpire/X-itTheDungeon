@@ -148,6 +148,11 @@ public class Avatar extends Entity {
         isInvicinble = false;
     }
 
+    public void onDeath() {
+        onRemovedFromMap();
+        world.gameOver();
+    }
+
 
     /*
     Key Methods

@@ -10,7 +10,6 @@ import main.entities.Key;
 import main.math.Vec2d;
 import main.math.Vec2i;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -204,6 +203,14 @@ public class TileMap{
 
     public Node getView() {
         return view.getView();
+    }
+
+    public void moveTo(Entity e, Vec2i from, Vec2i to) {
+        Tile curr = getTile(from);
+        if (!curr.removeEntity(e)) return;
+
+        Tile next = getTile(to);
+        next.addEntity(e);
     }
 
     public void moveTo(Entity e, int x, int y) {

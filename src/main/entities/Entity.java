@@ -71,9 +71,11 @@ public class Entity {
      */
 
     public void moveTo(int x, int y) {
-        map.moveTo(this, x, y);
+        Vec2i from = new Vec2i(pos);
         pos.set(x, y);
         view.moveTo(getWorldPos().sub(view.getCentre()));
+
+        map.moveTo(this, from, pos);
     }
 
     public void moveTo(Vec2i newPos) {
