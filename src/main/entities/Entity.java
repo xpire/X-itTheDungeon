@@ -5,7 +5,7 @@ import main.component.ViewComponent;
 import main.maploading.TileMap;
 import main.math.Vec2d;
 import main.math.Vec2i;
-
+//note: Aarthi doesnt like this being a class. alternatives?
 public class Entity {
 
     protected String name;
