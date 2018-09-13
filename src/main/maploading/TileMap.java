@@ -70,8 +70,6 @@ public class TileMap{
 
 
 
-
-
     /*
     Tile Property
      */

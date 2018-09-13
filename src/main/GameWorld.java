@@ -1,7 +1,9 @@
 package main;
 
+import javafx.beans.binding.Bindings;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.control.Label;
 import main.avatar.Avatar;
 import main.entities.*;
 import main.maploading.TileMap;
@@ -25,16 +27,16 @@ public class GameWorld {
         this.map = map;
 
         rootView = new Group();
+        Group gridView = new Group();
 
-
-        rootView.setTranslateX(150);
-        rootView.setTranslateY(50);
+        gridView.setTranslateX(120);
+        gridView.setTranslateY(20);
 
         pushSystem = new PushSystem(this);
         moveSystem = new GridMovementSystem(this, map);
 
         avatar = new Avatar(this);
-        addNewEntity(0, 0, avatar);
+        addNewEntity(8, 8, avatar);
 
         Door door1 = new Door();
         Door door2 = new Door();
@@ -49,22 +51,50 @@ public class GameWorld {
 
         addNewEntity(5, 5, new Wall());
         addNewEntity(2, 8, new Wall());
-        addNewEntity(7, 7, key2);
-        addNewEntity(5, 3, key1);
-        addNewEntity(8, 3, door2);
-        addNewEntity(1, 3, door1);
         addNewEntity(2, 0, new Wall());
         addNewEntity(4, 3, new Boulder());
         addNewEntity(7, 6, new Boulder());
 
+        addNewEntity(7, 7, key2);
+        addNewEntity(5, 3, key1);
+        addNewEntity(8, 3, door2);
+        addNewEntity(1, 3, door1);
 
+        addNewEntity(1, 2, new Arrow());
+        addNewEntity(4, 4, new Arrow());
+        addNewEntity(8, 10, new Bomb());
+        addNewEntity(12, 6, new Bomb());
+        addNewEntity(14, 6, new Treasure());
+        addNewEntity(2, 11, new Treasure());
+        addNewEntity(10, 13, new Treasure());
+        addNewEntity(10, 5, new Sword());
+        addNewEntity(10, 7, new Sword());
+
+
+
+        Label lblNumArrows = new Label();
+        lblNumArrows.textProperty().bind(Bindings.format("Arrows: %d", avatar.getNumArrowsProperty()));
+
+        Label lblNumBombs = new Label();
+        lblNumBombs.textProperty().bind(Bindings.format("Bombs: %d", avatar.getNumBombsProperty()));
+        lblNumBombs.setTranslateY(15);
+
+        Label lblNumTreasures = new Label();
+        lblNumTreasures.textProperty().bind(Bindings.format("Treasures: %d", avatar.getNumTreasuresProperty()));
+        lblNumTreasures.setTranslateY(30);
 
         Iterator<Entity> it = map.getEntities(new Vec2i(5, 5));
 
-        rootView.getChildren().add(map.getView());
-        rootView.getChildren().add(avatar.getView());
+        gridView.getChildren().add(map.getView());
+        gridView.getChildren().add(avatar.getView());
 
+        rootView.getChildren().add(gridView);
+        rootView.getChildren().add(lblNumArrows);
+        rootView.getChildren().add(lblNumBombs);
+        rootView.getChildren().add(lblNumTreasures);
     }
+
+
     public void addEntity(int x, int y, Entity e) {
         map.addEntity(x, y, e);
     }
