@@ -13,6 +13,7 @@ import main.entities.Entity;
 import main.maploading.MapLoader;
 import main.maploading.Tile;
 import main.maploading.TileMap;
+import main.math.Vec2i;
 
 public class MapSaver{
 
@@ -41,7 +42,7 @@ public class MapSaver{
                     Tile t = tileMap.getTile(pos);
                     StringBuilder sb = new StringBuilder();
 
-                    ArrayList<Entity> tileEntities = t.getEntities();
+                    List<Entity> tileEntities = t.getEntities();
                     for (Entity e : tileEntities) {
                         char ch = e.getSymbol();
                         sb.append(ch);
@@ -69,14 +70,14 @@ public class MapSaver{
         } catch (IOException e) {
             System.err.println("Error: could not write to file");
         } finally {
-            if (w != null) w.close();
+//            if (w != null) w.close();
         }
 
     }
 
     public static void main(String[] args) {
         MapLoader mapLoader = new MapLoader();
-        TileMap tileMap = mapLoader.getTileMap(map1);
+        TileMap tileMap = mapLoader.getTileMap("map1");
 
         MapSaver mapSaver = new MapSaver();
         mapSaver.saveMap(tileMap, "map1.1");
