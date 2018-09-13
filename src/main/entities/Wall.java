@@ -28,6 +28,8 @@ public class Wall extends Entity {
 
     @Override
     public void onCreated() {
+        symbol = '*';
+
         Rectangle rect = new Rectangle();
         rect.setFill(Color.BROWN);
         rect.setHeight(30);

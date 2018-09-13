@@ -12,7 +12,7 @@ public class Key extends Entity {
     private Circle circ;
 
     public Key() {
-        super("Door");
+        super("Key");
     }
 
     public Key(String name) {
