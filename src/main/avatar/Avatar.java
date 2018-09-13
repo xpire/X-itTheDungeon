@@ -49,6 +49,9 @@ public class Avatar extends Entity {
         else if (Game.input.isDown(KeyCode.RIGHT)) {
             pos._add(1, 0);
         }
+        else if (Game.input.isDown(KeyCode.Z)) {
+            dropKey();
+        }
 
 
         if ( !pos.equals(getGridPos()) ) {
@@ -88,5 +91,14 @@ public class Avatar extends Entity {
 
     public void useKey() {
         key = null;
+    }
+
+    public void dropKey() {
+
+        if (key != null) {
+            if (world.onPlace(key, pos)) {
+                key = null;
+            }
+        }
     }
 }

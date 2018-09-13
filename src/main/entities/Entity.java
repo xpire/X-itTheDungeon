@@ -154,7 +154,7 @@ public class Entity {
     }
 
     public boolean onEntityPush(Entity other) {
-        return isPassable();
+        return isPassableFor(other);
     }
 
 
