@@ -26,6 +26,8 @@ public class Boulder extends Entity{
 
     @Override
     public void onCreated(){
+        symbol = 'O';
+
         Circle circle = new Circle();
         circle.setFill(Color.HONEYDEW);
         circle.setRadius(12);

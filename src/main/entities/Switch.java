@@ -38,6 +38,8 @@ public class Switch extends Entity{
 
     @Override
     public void onCreated(){
+        symbol = '/';
+
         rect = new Rectangle();
         rect.setWidth(30);
         rect.setHeight(30);
