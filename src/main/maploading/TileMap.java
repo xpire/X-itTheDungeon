@@ -13,6 +13,7 @@ import main.math.Vec2i;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.function.Function;
 
 public class TileMap{
@@ -131,6 +132,27 @@ public class TileMap{
         }
 
         return keys;
+    }
+
+    public void displayTileMap() {
+        for (int i = 0; i < nRows; i++) {
+            for (int j = 0; j < nCols; j++) {
+                Vec2i pos = new Vec2i(i, j);
+                Tile t = getTile(pos);
+                StringBuilder sb = new StringBuilder();
+
+                if (t.isEmpty()) sb.append('.');
+                else {
+                    List<Entity> ent = t.getEntities();
+                    for (Entity e : ent) {
+                        char ch = e.getSymbol();
+                        sb.append(ch);
+                    }
+                }
+                System.out.print((sb.toString() + "\t"));
+            }
+            System.out.println();
+        }
     }
 
 

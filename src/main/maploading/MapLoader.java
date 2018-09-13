@@ -115,14 +115,16 @@ public class MapLoader {
         int nRow = tileMap.getNRows(), nCol = tileMap.getNCols();
         System.out.println(nRow + "\t" + nCol);
 
-        for (int i = 0; i < nRow; i++) {
-            for (int j = 0; j < nCol; j++) {
-                Vec2i coord = new Vec2i(i, j);
-                tileMap.getTile(coord).listEntities();
-                System.out.print("\t");
-            }
-            System.out.println();
-        }
+//        for (int i = 0; i < nRow; i++) {
+//            for (int j = 0; j < nCol; j++) {
+//                Vec2i coord = new Vec2i(i, j);
+//                tileMap.getTile(coord).listEntities();
+//                System.out.print("\t");
+//            }
+//            System.out.println();
+//        }
+
+        tileMap.displayTileMap();
 
         for (String s : tileMap.getObjectives()) {
             System.out.println(s);
