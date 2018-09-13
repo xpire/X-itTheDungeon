@@ -43,5 +43,8 @@ public class Pit extends Entity {
         if (other.getName().equals("Avatar")) {
             ((Avatar) other).onDeath();
         }
+        else if (other.getName().equals("Boulder")) {
+            other.onDestroyed();
+        }
     }
 }

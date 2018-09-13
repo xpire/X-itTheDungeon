@@ -52,7 +52,7 @@ public class Entity {
 
 
     public void onDestroyed() {
-
+        onRemovedFromMap();
     }
 
 

@@ -37,7 +37,7 @@ public class GameWorld {
         moveSystem = new GridMovementSystem(this, map);
 
         avatar = new Avatar(this);
-        addNewEntity(8, 8, avatar);
+
 
         Door door1 = new Door();
         Door door2 = new Door();
@@ -74,7 +74,7 @@ public class GameWorld {
         addNewEntity(10, 10, new InvincibilityPot());
         addNewEntity(14, 14, new Pit());
 
-
+        addNewEntity(8, 8, avatar);
 
         Label lblNumArrows = new Label();
         lblNumArrows.textProperty().bind(Bindings.format("Arrows: %d", avatar.getNumArrowsProperty()));
