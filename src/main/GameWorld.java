@@ -69,6 +69,8 @@ public class GameWorld {
         addNewEntity(10, 13, new Treasure());
         addNewEntity(10, 5, new Sword());
         addNewEntity(10, 7, new Sword());
+        addNewEntity(9, 9, new HoverPot());
+        addNewEntity(10, 10, new InvincibilityPot());
 
 
 

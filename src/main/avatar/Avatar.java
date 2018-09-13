@@ -21,6 +21,9 @@ public class Avatar extends Entity {
     private Sword sword = null;
     private Line swordEquipView = new Line(-10, 0, 10, 0);
 
+    private boolean isHovering = false;
+    private boolean isInvicinble = false;
+
     private IntegerProperty numArrows = new SimpleIntegerProperty(0);
     private IntegerProperty numBombs = new SimpleIntegerProperty(0);
     private IntegerProperty numTreasures = new SimpleIntegerProperty(0);
@@ -125,6 +128,24 @@ public class Avatar extends Entity {
     public boolean pickUp(Treasure treasure) {
         numTreasures.setValue(numTreasures.get() + 1);
         return true;
+    }
+
+    // Infinite time -> no timer callback
+    // Limited time -> timer callback setup
+    public void onHoverStart() {
+        isHovering = true;
+    }
+
+    public void onHoverEnd() {
+        isHovering = false;
+    }
+
+    public void onRageStart() {
+        isInvicinble = true;
+    }
+
+    public void onRageEnd() {
+        isInvicinble = false;
     }
 
 
