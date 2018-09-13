@@ -5,11 +5,11 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 
 import main.entities.Entity;
+import main.entities.Key;
 import main.maploading.MapLoader;
 import main.maploading.Tile;
 import main.maploading.TileMap;
@@ -18,12 +18,12 @@ import main.math.Vec2i;
 public class MapSaver{
 
     public void saveMap(TileMap tileMap, String mapName) {
+        StringBuilder mapPath = new StringBuilder("./src/main/drafts/");
+        mapPath.append(mapName).append(".txt");
 
+        BufferedWriter w = null;
         try {
-            StringBuilder mapPath = new StringBuilder("./src/main/drafts/");
-            mapPath.append(mapName).append(".txt");
-
-            Writer w = new BufferedWriter(
+            w = new BufferedWriter(
                     new OutputStreamWriter(
                     new FileOutputStream(
                     new File(mapPath.toString()))));
@@ -47,32 +47,37 @@ public class MapSaver{
                         char ch = e.getSymbol();
                         sb.append(ch);
                     }
-
-                    w.write(sb.toString());
-                    w.append("\t");
-
-
+                    w.write(sb.toString() + "\t");
                 }
-                w.append("\n");
+                w.newLine();
             }
 
             //set the objectives
             ArrayList<String> obj = tileMap.getObjectives();
             for (String s : obj) {
-                w.write(s);
-                w.append("\t");
+                w.write(s + "\t");
             }
-            w.append("\n");
+            w.newLine();
 
             //set the key-door mapping
-            
+            ArrayList<Key> mapKeys = tileMap.findKeys();
+            for (Key k : mapKeys) {
+                Vec2i kPos = k.getGridPos();
+                w.write(kPos.getX() + "\t" + kPos.getY() + "\t");
+                Vec2i dPos = k.getMatchingDoor().getGridPos();
+                w.write(dPos.getX() + "\t" + dPos.getY());
+                w.newLine();
+            }
 
         } catch (IOException e) {
-            System.err.println("Error: could not write to file");
+            System.out.println(e.getMessage());
         } finally {
-//            if (w != null) w.close();
+            try {
+                if (w != null) w.close();
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+            }
         }
-
     }
 
     public static void main(String[] args) {

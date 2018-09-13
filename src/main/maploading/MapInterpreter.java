@@ -31,7 +31,7 @@ public class MapInterpreter {
 
         switch (ch) {
             case 'P':
-                currEntity = new Entity("Player");
+                currEntity = new Entity("Player", 'P');
                 //currEntity = new MockAvatar();
                 break;
             case '*':
