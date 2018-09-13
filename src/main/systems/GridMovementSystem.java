@@ -2,7 +2,7 @@ package main.systems;
 
 import main.GameWorld;
 import main.entities.Entity;
-import main.maploading.TileMap;
+import main.maploading.Level;
 import main.math.Vec2i;
 
 import java.util.Iterator;
@@ -10,10 +10,10 @@ import java.util.Iterator;
 public class GridMovementSystem {
 
     private GameWorld world;
-    private TileMap map;
+    private Level map;
 
 
-    public GridMovementSystem(GameWorld world, TileMap map) {
+    public GridMovementSystem(GameWorld world, Level map) {
         this.world = world;
         this.map = map;
     }

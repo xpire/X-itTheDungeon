@@ -15,9 +15,9 @@ public class MapLoader {
     /*
     Heavy commenting/refactoring required for others to understand
      */
-    public TileMap getTileMap(String mapName) {
+    public Level getTileMap(String mapName) {
         MapInterpreter mapInt = new MapInterpreter();
-        TileMap tileMap = null;
+        Level level = null;
 
         StringBuilder mapPath = new StringBuilder("./src/main/levels/");
         mapPath.append(mapName);
@@ -39,11 +39,11 @@ public class MapLoader {
                 numRow = Integer.parseInt(line[0]);
                 numCol = Integer.parseInt(line[1]);
 
-                tileMap = new TileMap(numRow, numCol);
+                level = new Level(numRow, numCol);
 
             } else System.out.println("Error: Empty Map");
 
-            if (tileMap == null) {
+            if (level == null) {
                 System.out.println("Error: Map did not load");
                 return null;
             }
@@ -57,14 +57,14 @@ public class MapLoader {
                 }
 
                 for (int j = 0; j < numCol; j++) {
-                    tileMap.setTile(i, j, mapInt.getTileEntities(line[j]));
+                    level.setTile(i, j, mapInt.getTileEntities(line[j]));
                 }
             }
 
             if (sc.hasNextLine()) {
                 line = sc.nextLine().split("\\s+");
                 ArrayList<String> objectives = new ArrayList<>(Arrays.asList(line));
-                tileMap.setObj(objectives);
+                level.setObj(objectives);
             } else System.out.println("Error: No objectives specified");
 
             while (sc.hasNextLine()) {
@@ -81,14 +81,14 @@ public class MapLoader {
                         Integer.parseInt(line[2]),
                         Integer.parseInt(line[3]));
 
-                Tile keyTile = tileMap.getTile(keyCoord);
+                Tile keyTile = level.getTile(keyCoord);
                 Key k = keyTile.getKey();
                 if (k == null) {
                     System.out.println("No key found at given coordinates");
                     continue;
                 }
 
-                Tile doorTile = tileMap.getTile(doorCoord);
+                Tile doorTile = level.getTile(doorCoord);
                 Door d = doorTile.getDoor();
                 if (d == null) {
                     System.out.println("No door found at given coordinates");
@@ -104,29 +104,29 @@ public class MapLoader {
             if (sc != null) sc.close();
         }
 
-        return tileMap;
+        return level;
     }
 
     public static void main(String[] args) {
         MapLoader mapLoader = new MapLoader();
 
-        TileMap tileMap = mapLoader.getTileMap("map1");
+        Level level = mapLoader.getTileMap("map1");
 
-        int nRow = tileMap.getNRows(), nCol = tileMap.getNCols();
+        int nRow = level.getNRows(), nCol = level.getNCols();
         System.out.println(nRow + "\t" + nCol);
 
 //        for (int i = 0; i < nRow; i++) {
 //            for (int j = 0; j < nCol; j++) {
 //                Vec2i coord = new Vec2i(i, j);
-//                tileMap.getTile(coord).listEntities();
+//                level.getTile(coord).listEntities();
 //                System.out.print("\t");
 //            }
 //            System.out.println();
 //        }
 
-        tileMap.displayTileMap();
+        level.displayTileMap();
 
-        for (String s : tileMap.getObjectives()) {
+        for (String s : level.getObjectives()) {
             System.out.println(s);
         }
 

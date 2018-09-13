@@ -3,7 +3,7 @@ package main.systems;
 import main.GameWorld;
 import main.entities.Entity;
 import main.maploading.Tile;
-import main.maploading.TileMap;
+import main.maploading.Level;
 import main.math.Vec2i;
 
 import java.util.Iterator;
@@ -46,7 +46,7 @@ public class PushSystem {
      */
     public boolean canPush(Vec2i from, Vec2i target) {
 
-        TileMap map = world.getMap();
+        Level map = world.getMap();
         Vec2i dir = target.sub(from);
 
         if (!dir.isDirection()) return false;

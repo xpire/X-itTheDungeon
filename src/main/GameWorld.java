@@ -4,7 +4,7 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import main.avatar.Avatar;
 import main.entities.*;
-import main.maploading.TileMap;
+import main.maploading.Level;
 import main.math.Vec2i;
 import main.systems.GridMovementSystem;
 import main.systems.PushSystem;
@@ -13,7 +13,7 @@ import java.util.Iterator;
 
 public class GameWorld {
 
-    private TileMap map;
+    private Level map;
     private Avatar avatar;
 
     private Group rootView;
@@ -21,7 +21,7 @@ public class GameWorld {
     private PushSystem pushSystem;
     private GridMovementSystem moveSystem;
 
-    public GameWorld(TileMap map) {
+    public GameWorld(Level map) {
         this.map = map;
 
         rootView = new Group();
@@ -104,7 +104,7 @@ public class GameWorld {
 //        return map.getTile(pos).getBoulder();
 //    }
 
-    public TileMap getMap() {
+    public Level getMap() {
         return map;
     }
 
