@@ -10,7 +10,6 @@ import main.math.Vec2i;
 
 public class Door extends Entity{
 
-
     private boolean isOpen;
     private Rectangle rect;
 

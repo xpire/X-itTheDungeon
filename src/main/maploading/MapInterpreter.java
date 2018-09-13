@@ -35,69 +35,62 @@ public class MapInterpreter {
                 //currEntity = new MockAvatar();
                 break;
             case '*':
-//                currEntity = new Entity("Wall");
                 currEntity = new Wall();
                 break;
             case 'X':
-                currEntity = new Entity("Exit");
-                //currEntity = new Exit();
+                currEntity = new Exit();
                 break;
             case '/':
-                currEntity = new Entity("Switch");
-                //currEntity = new Switch();
+                currEntity = new Switch();
                 break;
             case 'O':
-//                currEntity = new Entity("Boulder");
                 currEntity = new Boulder();
                 break;
             case '|':
-                currEntity = new Door("Door");
+                currEntity = new Door();
                 break;
             case 'K':
-                currEntity = new Key("Key");
+                currEntity = new Key();
                 break;
             case '$':
-                currEntity = new Treasure("Treas");
+                currEntity = new Treasure();
                 break;
             case '+':
-                currEntity = new Sword("Sword");
+                currEntity = new Sword();
                 break;
             case '-':
-                currEntity = new Arrow("Arrow");
+                currEntity = new Arrow();
                 break;
             case '!':
-                currEntity = new Bomb("Bomb");
+                currEntity = new Bomb();
                 break;
             case '#':
-                currEntity = new Entity("Pit");
-                //currEntity = new Pit();
+                currEntity = new Pit();
                 break;
             case '1':
-                currEntity = new Entity("main.enemies.Hunter");
+                currEntity = new Entity("Hunter", '1');
                 //currEntity = new main.enemies.Hunter();
                 break;
             case '2':
-                currEntity = new Entity("main.enemies.Strategist");
+                currEntity = new Entity("Strategist", '2');
                 //currEntity = new main.enemies.Strategist();
                 break;
             case '3':
-                currEntity = new Entity("main.enemies.Hound");
+                currEntity = new Entity("Hound", '3');
                 //currEntity = new main.enemies.Hound();
                 break;
             case '4':
-                currEntity = new Entity("main.enemies.Coward");
+                currEntity = new Entity("Coward", '4');
                 //currEntity = new main.enemies.Coward();
                 break;
             case '>':
-                currEntity = new Entity("Invincibility Potion");
-                //currEntity = new InvincibilityPot();
+                currEntity = new InvincibilityPot();
                 break;
             case '^':
-                currEntity = new Entity("Hover Potion");
-                //currEntity = new HoverPot();
+                currEntity = new HoverPot();
                 break;
             case '.':
-                currEntity = new Ground("Ground");
+                currEntity = new Ground();
                 break;
             default:
                 System.out.println("Unrecognised Entity");
