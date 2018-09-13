@@ -12,8 +12,8 @@ import main.maploading.TileMap;
 public class Game extends Application{
 
 
-    final static int WIDTH = 600;
-    final static int HEIGHT = 400;
+    final static int WIDTH = 800;
+    final static int HEIGHT = 540;
 
     public static Input input = new Input();
     public static GameWorld world;
@@ -79,7 +79,7 @@ public class Game extends Application{
 //        circle.setCenterY(100);
 //        root.getChildren().add(circle);
 
-        TileMap map = new TileMap(10, 10, 30);
+        TileMap map = new TileMap(16, 16, 30);
         world = new GameWorld(map);
 
 

@@ -1,13 +1,14 @@
 package main.avatar;
 
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
 import main.Game;
 import main.GameWorld;
-import main.entities.Door;
-import main.entities.Entity;
-import main.entities.Key;
+import main.entities.*;
 import main.math.Vec2d;
 import main.math.Vec2i;
 
@@ -16,6 +17,17 @@ public class Avatar extends Entity {
 
     protected GameWorld world;
     private Key key = null;
+
+    private Sword sword = null;
+    private Line swordEquipView = new Line(-10, 0, 10, 0);
+
+    private boolean isHovering = false;
+    private boolean isInvicinble = false;
+
+    private IntegerProperty numArrows = new SimpleIntegerProperty(0);
+    private IntegerProperty numBombs = new SimpleIntegerProperty(0);
+    private IntegerProperty numTreasures = new SimpleIntegerProperty(0);
+
 
     public Avatar(GameWorld world) {
         super("Avatar");
@@ -28,6 +40,8 @@ public class Avatar extends Entity {
         Circle circle = new Circle();
         circle.setRadius(10);
         circle.setFill(Color.AQUA);
+
+//        swordEquipView.setTranslateY(5);
 
         view.addNode(circle);
         view.setCentre(new Vec2d(0, 0));
@@ -74,17 +88,70 @@ public class Avatar extends Entity {
 //        view.setTranslateY(pos.getY());
     }
 
-    public boolean pickUp(Key key) {
+
+
+    /*
+    Visitor Pattern
+     */
+    public boolean pickUp(Key k) {
 
         // Already has a key
-        if (this.key != null)
+        if (key != null)
             return false;
 
         // Pickup key
-        this.key = key;
+        key = k;
         return true;
     }
 
+    public boolean pickUp(Sword s) {
+
+        // Already has a key
+        if (sword != null)
+            return false;
+
+        // Pickup key
+        onEquipSword(s);
+        return true;
+    }
+
+    public boolean pickUp(Arrow arrow) {
+        numArrows.setValue(numArrows.get() + 1);
+        return true;
+    }
+
+    public boolean pickUp(Bomb bomb) {
+        numBombs.setValue(numBombs.get() + 1);
+        return true;
+    }
+
+    public boolean pickUp(Treasure treasure) {
+        numTreasures.setValue(numTreasures.get() + 1);
+        return true;
+    }
+
+    // Infinite time -> no timer callback
+    // Limited time -> timer callback setup
+    public void onHoverStart() {
+        isHovering = true;
+    }
+
+    public void onHoverEnd() {
+        isHovering = false;
+    }
+
+    public void onRageStart() {
+        isInvicinble = true;
+    }
+
+    public void onRageEnd() {
+        isInvicinble = false;
+    }
+
+
+    /*
+    Key Methods
+     */
     public boolean hasKeyFor(Door door) {
         return key != null && key.getMatchingDoor().equals(door);
     }
@@ -95,10 +162,70 @@ public class Avatar extends Entity {
 
     public void dropKey() {
 
-        if (key != null) {
-            if (world.onPlace(key, pos)) {
-                key = null;
+        if (key == null) return;
+
+        if (world.onPlace(key, pos)) {
+            key = null;
+        }
+    }
+
+
+
+    /*
+    Sword methods
+     */
+    public void swingSword() {
+        if (sword == null) return;
+
+        if (true) { // If attack successful
+            sword.reduceDurability();
+
+            if (sword.isBroken()) {
+                onUnequipSword();
             }
         }
     }
+
+    public void onEquipSword(Sword s) {
+        sword = s;
+        view.addNode(swordEquipView);
+    }
+
+    public void onUnequipSword() {
+        sword = null;
+        view.removeNode(swordEquipView);
+    }
+
+
+    /*
+    Arrow Methods
+     */
+
+    public IntegerProperty getNumArrowsProperty() {
+        return numArrows;
+    }
+
+    public IntegerProperty getNumBombsProperty() {
+        return numBombs;
+    }
+
+    public IntegerProperty getNumTreasuresProperty() {
+        return numTreasures;
+    }
+
+
+
+    /*
+    Bomb Methods
+     */
+    public void placeBomb() {
+        if (numBombs.get() <= 0) return;
+
+        Bomb bomb = new Bomb();
+        if (world.onPlace(bomb, pos)) {
+            bomb.onLit();
+        }
+    }
+
+
 }
