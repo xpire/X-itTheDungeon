@@ -44,7 +44,8 @@ public class GameWorld {
         key1.setMatchingDoor(door1);
         key2.setMatchingDoor(door2);
 
-
+        Switch sw = new Switch();
+        addNewEntity(3, 3, sw);
 
         addNewEntity(5, 5, new Wall());
         addNewEntity(2, 8, new Wall());
@@ -56,8 +57,7 @@ public class GameWorld {
         addNewEntity(4, 3, new Boulder());
         addNewEntity(7, 6, new Boulder());
 
-        Switch sw = new Switch();
-        addNewEntity(3, 3, sw);
+
 
         Iterator<Entity> it = map.getEntities(new Vec2i(5, 5));
 
@@ -65,13 +65,16 @@ public class GameWorld {
         rootView.getChildren().add(avatar.getView());
 
     }
+    public void addEntity(int x, int y, Entity e) {
+        map.addEntity(x, y, e);
+    }
 
-    public void addNewEntity(int row, int col, Entity e) {
+    public void addNewEntity(int x, int y, Entity e) {
 
         if (e instanceof  Boulder) {
             ((Boulder) e).attachPushSystem(pushSystem);
         }
-        map.addNewEntity(row, col, e);
+        map.addNewEntity(x, y, e);
     }
 
 
@@ -106,10 +109,26 @@ public class GameWorld {
     }
 
 
+    public boolean onPlace(Entity entity, Vec2i pos) {
+        Iterator<Entity> it = map.getEntities(pos);
+        while(it.hasNext()) {
+            Entity e = it.next();
+            if(!e.onEntityPush(entity)) {
+                return false;
+            }
+        }
+
+        map.addEntity(pos.getX(), pos.getY(), entity);
+        return true;
+    }
+
+
     // ambiguous name
     public void moveEntity(Entity e, Vec2i pos) {
         if (!map.isValidGridPos(pos)) return;
 
         moveSystem.onTileMovement(e, pos);
     }
+
+
 }

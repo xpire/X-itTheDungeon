@@ -93,21 +93,21 @@ public class TileMap{
         return getTile(pos).getEntities().iterator();
     }
 
-    public void addEntity(int row, int col, Entity entity) {
-        entity.moveTo(col, row);
+    public void addEntity(int x, int y, Entity entity) {
+        entity.moveTo(x, y);
         view.addNode(entity.getView());
-        tiles[row][col].addEntity(entity);
+        tiles[y][x].addEntity(entity);
     }
 
-    public void addNewEntity(int row, int col, Entity entity) {
+    public void addNewEntity(int x, int y, Entity entity) {
         entity.setMap(this);
-        addEntity(row, col, entity);
+        addEntity(x, y, entity);
     }
 
 
-    public void setTile(int row, int col, ArrayList<Entity> entities) {
+    public void setTile(int x, int y, ArrayList<Entity> entities) {
         for (Entity e : entities) {
-            addNewEntity(row, col, e);
+            addNewEntity(x, y, e);
         }
     }
 

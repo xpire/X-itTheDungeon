@@ -30,9 +30,11 @@ public class Key extends Entity {
     }
 
 
+    // IDEA: give tags - item, entity, etc. to define the type
+
     @Override
     public boolean isPassableFor(Entity other) {
-        if (other.getName().equals("Boulder")) {
+        if (other.getName().equals("Boulder") || other.getName().equals("Key")) {
             return false;
         }
 
