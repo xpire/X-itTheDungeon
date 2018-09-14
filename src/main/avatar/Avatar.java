@@ -288,4 +288,8 @@ public class Avatar extends Entity {
             onRageEnd();
         }
     }
+
+    public boolean isRaged() {
+        return isInvincible.get();
+    }
 }

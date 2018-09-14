@@ -45,7 +45,6 @@ public class Bomb extends Entity {
 
 
     public void onExplode() {
-
         destroyEntity(pos.add(-1, 0));
         destroyEntity(pos.add(1, 0));
         destroyEntity(pos.add(0, -1));
@@ -61,7 +60,11 @@ public class Bomb extends Entity {
                 map.removeEntity(e);
             }
             else if (e.getName().equals("Avatar")) {
-                ((Avatar) e).onDeath();
+                Avatar avatar = ((Avatar) e);
+
+                if (!avatar.isRaged()) {
+                    avatar.onDeath();
+                }
             }
         }
     }
