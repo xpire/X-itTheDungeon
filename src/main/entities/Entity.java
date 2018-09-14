@@ -14,7 +14,7 @@ public class Entity {
 
     protected ViewComponent view;
     protected Vec2i pos;
-    protected TileMap map;
+    protected Level map;
 
     public Entity(String name) {
         this(name, null, new Vec2i());
@@ -31,7 +31,7 @@ public class Entity {
 //        this(name, gridToWorld, new Vec2i(0, 0));
 //    }
 
-    public Entity(String name, TileMap map, Vec2i pos) {
+    public Entity(String name, Level map, Vec2i pos) {
         this.name  = name;
         this.view  = new ViewComponent();
         this.pos   = new Vec2i(pos);
@@ -42,7 +42,7 @@ public class Entity {
 
 
     // Temporary measure
-    public void setMap(TileMap map) {
+    public void setMap(Level map) {
         this.map = map;
     }
 

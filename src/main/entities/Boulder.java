@@ -21,7 +21,7 @@ public class Boulder extends Entity{
         super(name);
     }
 
-    public Boulder(String name, TileMap map, Vec2i pos) {
+    public Boulder(String name, Level map, Vec2i pos) {
         super(name, map, pos);
     }
 

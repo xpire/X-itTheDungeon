@@ -16,7 +16,7 @@ public class Key extends Entity {
         super("Key");
     }
 
-    public Key(String name, TileMap map, Vec2i pos) {
+    public Key(String name, Level map, Vec2i pos) {
         super(name, map, pos);
     }
 

@@ -23,7 +23,7 @@ public class Wall extends Entity {
         super(name);
     }
 
-    public Wall(String name, TileMap map, Vec2i pos) {
+    public Wall(String name, Level map, Vec2i pos) {
         super(name, map, pos);
     }
 

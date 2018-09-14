@@ -22,7 +22,7 @@ public class Door extends Entity{
         super(name);
     }
 
-    public Door(String name, TileMap map, Vec2i pos) {
+    public Door(String name, Level map, Vec2i pos) {
         super(name, map, pos);
     }
 
