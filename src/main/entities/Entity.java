@@ -3,6 +3,7 @@ package main.entities;
 import javafx.scene.Node;
 import main.component.ViewComponent;
 import main.maploading.Level;
+import main.maploading.TileMap;
 import main.math.Vec2d;
 import main.math.Vec2i;
 //note: Aarthi doesnt like this being a class. alternatives?
@@ -13,7 +14,7 @@ public class Entity {
 
     protected ViewComponent view;
     protected Vec2i pos;
-    protected Level map;
+    protected TileMap map;
 
     public Entity(String name) {
         this(name, null, new Vec2i());
@@ -30,7 +31,7 @@ public class Entity {
 //        this(name, gridToWorld, new Vec2i(0, 0));
 //    }
 
-    public Entity(String name, Level map, Vec2i pos) {
+    public Entity(String name, TileMap map, Vec2i pos) {
         this.name  = name;
         this.view  = new ViewComponent();
         this.pos   = new Vec2i(pos);
@@ -41,7 +42,7 @@ public class Entity {
 
 
     // Temporary measure
-    public void setMap(Level map) {
+    public void setMap(TileMap map) {
         this.map = map;
     }
 
