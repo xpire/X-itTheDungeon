@@ -79,11 +79,8 @@ public class Game extends Application{
 //        circle.setCenterY(100);
 //        root.getChildren().add(circle);
 
-<<<<<<< HEAD
-        TileMap map = new TileMap(16, 16, 30);
-=======
         Level map = new Level(10, 10, 30);
->>>>>>> Began refactoring TileMap->Level; Level and Draft will both aggregate the new TileMap. Skeleton for Draft done pre-refactoring.
+
         world = new GameWorld(map);
 
 
