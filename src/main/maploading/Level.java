@@ -62,7 +62,9 @@ public class Level {
 
 
     public boolean isValidGridPos(Vec2i pos) {
-        return tileMap.isValidGridPos(pos);
+        if (!pos.withinX(0, getNCols() - 1)) return false;
+        if (!pos.withinY(0, getNRows() - 1)) return false;
+        return true;
     }
 
     public void displayTileMap() {
