@@ -3,6 +3,7 @@ package main.entities;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import main.avatar.Avatar;
+import main.maploading.Level;
 import main.maploading.TileMap;
 import main.math.Vec2d;
 import main.math.Vec2i;
@@ -21,7 +22,7 @@ public class Door extends Entity{
         super(name);
     }
 
-    public Door(String name, TileMap map, Vec2i pos) {
+    public Door(String name, Level map, Vec2i pos) {
         super(name, map, pos);
     }
 

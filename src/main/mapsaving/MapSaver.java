@@ -10,14 +10,13 @@ import java.util.List;
 
 import main.entities.Entity;
 import main.entities.Key;
-import main.maploading.MapLoader;
+import main.maploading.Draft;
 import main.maploading.Tile;
-import main.maploading.TileMap;
 import main.math.Vec2i;
 
 public class MapSaver{
 
-    public void saveMap(TileMap tileMap, String mapName) {
+    public void saveMap(Draft draft, String mapName) {
         StringBuilder mapPath = new StringBuilder("./src/main/drafts/");
         mapPath.append(mapName).append(".txt");
 
@@ -28,8 +27,8 @@ public class MapSaver{
                     new FileOutputStream(
                     new File(mapPath.toString()))));
             
-            int nRow = tileMap.getNRows();
-            int nCol = tileMap.getNCols();
+            int nRow = draft.getNRows();
+            int nCol = draft.getNCols();
 
             //set the map size
             w.write(nRow + "\t" + nCol);
@@ -39,7 +38,7 @@ public class MapSaver{
             for (int i = 0; i < nRow; i++) {
                 for (int j = 0; j < nCol; j++) {
                     Vec2i pos = new Vec2i(i, j);
-                    Tile t = tileMap.getTile(pos);
+                    Tile t = draft.getTile(pos);
                     StringBuilder sb = new StringBuilder();
 
                     if (t.isEmpty()) {
@@ -57,14 +56,14 @@ public class MapSaver{
             }
 
             //set the objectives
-            ArrayList<String> obj = tileMap.getObjectives();
+            ArrayList<String> obj = draft.getObjectives();
             for (String s : obj) {
                 w.write(s + "\t");
             }
             w.newLine();
 
             //set the key-door mapping
-            ArrayList<Key> mapKeys = tileMap.findKeys();
+            ArrayList<Key> mapKeys = draft.findKeys();
             for (Key k : mapKeys) {
                 Vec2i kPos = k.getGridPos();
                 w.write(kPos.getX() + "\t" + kPos.getY() + "\t");
@@ -85,12 +84,11 @@ public class MapSaver{
     }
 
     public static void main(String[] args) {
-        MapLoader mapLoader = new MapLoader();
-        TileMap tileMap = mapLoader.getTileMap("map1");
-
-        MapSaver mapSaver = new MapSaver();
-        mapSaver.saveMap(tileMap, "map1.1");
-
+//        MapLoader mapLoader = new MapLoader();
+//        Level tileMap = mapLoader.getTileMap("map1");
+//
+//        MapSaver mapSaver = new MapSaver();
+//        mapSaver.saveMap(tileMap, "map1.1");
     }
 
 }
