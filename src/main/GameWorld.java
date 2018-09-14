@@ -4,6 +4,7 @@ import javafx.beans.binding.Bindings;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.text.Font;
 import main.avatar.Avatar;
 import main.entities.*;
 import main.maploading.TileMap;
@@ -36,7 +37,7 @@ public class GameWorld {
         moveSystem = new GridMovementSystem(this, map);
 
         avatar = new Avatar(this);
-        addNewEntity(8, 8, avatar);
+
 
         Door door1 = new Door();
         Door door2 = new Door();
@@ -71,8 +72,9 @@ public class GameWorld {
         addNewEntity(10, 7, new Sword());
         addNewEntity(9, 9, new HoverPot());
         addNewEntity(10, 10, new InvincibilityPot());
+        addNewEntity(14, 14, new Pit());
 
-
+        addNewEntity(8, 8, avatar);
 
         Label lblNumArrows = new Label();
         lblNumArrows.textProperty().bind(Bindings.format("Arrows: %d", avatar.getNumArrowsProperty()));
@@ -88,7 +90,6 @@ public class GameWorld {
         Iterator<Entity> it = map.getEntities(new Vec2i(5, 5));
 
         gridView.getChildren().add(map.getView());
-        gridView.getChildren().add(avatar.getView());
 
         rootView.getChildren().add(gridView);
         rootView.getChildren().add(lblNumArrows);
@@ -163,4 +164,12 @@ public class GameWorld {
     }
 
 
+    public void gameOver() {
+
+        Label lblGameOver = new Label("GAME OVER");
+        lblGameOver.setTranslateX(250);
+        lblGameOver.setTranslateY(220);
+        lblGameOver.fontProperty().set(Font.font(40));
+        rootView.getChildren().add(lblGameOver);
+    }
 }
