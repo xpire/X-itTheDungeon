@@ -79,7 +79,7 @@ public class Game extends Application{
 //        circle.setCenterY(100);
 //        root.getChildren().add(circle);
 
-        Level map = new Level(10, 10, 30);
+        Level map = new Level(16, 16, 30);
 
         world = new GameWorld(map);
 

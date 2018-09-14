@@ -3,7 +3,7 @@ package main.entities;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import main.avatar.Avatar;
-import main.maploading.TileMap;
+import main.maploading.Level;
 import main.math.Vec2d;
 import main.math.Vec2i;
 
@@ -27,8 +27,8 @@ public class Treasure extends Entity {
         super(name, symbol);
     }
 
-    public Treasure(String name, TileMap map, Vec2i pos) {
-        super(name, map, pos);
+    public Treasure(String name, Level level, Vec2i pos) {
+        super(name, level, pos);
     }
 
 

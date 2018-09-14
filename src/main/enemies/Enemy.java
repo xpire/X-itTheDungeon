@@ -2,7 +2,7 @@ package main.enemies;
 
 import main.behaviour.AIBehavior;
 import main.entities.Entity;
-import main.maploading.TileMap;
+import main.maploading.Level;
 import main.math.Vec2i;
 
 import java.util.ArrayList;
@@ -28,8 +28,8 @@ public abstract class Enemy extends Entity {
         super(name, symbol);
     }
 
-    public Enemy(String name, TileMap map, Vec2i pos) {
-        super(name, map, pos);
+    public Enemy(String name, Level level, Vec2i pos) {
+        super(name, level, pos);
     }
 
     public void setMap(int [][] map) { this.map = map; }
