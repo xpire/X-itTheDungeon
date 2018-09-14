@@ -176,6 +176,11 @@ public class Draft {
                     return;
                 }
 
+                if (!isValidEntities(command[3])) {
+                    System.out.println("Error: invalid entity stacking");
+                    return;
+                }
+
                 Vec2i tile = new Vec2i(Integer.parseInt(command[1]),
                         Integer.parseInt(command[2]));
 
@@ -199,29 +204,73 @@ public class Draft {
             case "objective":
             case "Objective":
                 if (command.length > 4) {
-                    System.out.println("Error: invalid set of objectives");
+                    System.out.println("Error: too many objectives");
                     return;
                 }
 
                 ArrayList<String> levelObj = new ArrayList<>();
 
-                for (int i = 1; i < command.length; i++) {
-                    levelObj.add(command[i]);
-                }
+                for (int i = 1; i < command.length; i++) levelObj.add(command[i]);
 
-                setObj(levelObj);
-                displayTileMap();
+                if (isValidObj(levelObj)) {
+                    setObj(levelObj);
+                    displayTileMap();
+                } else System.out.println("Error: invalid set of objectives");
+
                 return;
             case "play":
             case "Play":
-                System.out.println("Not yet available");
+                System.out.println("Please upgrade to premium for just $99.99 a month to access this feature");
                 return;
             case "publish":
             case "Publish":
-                System.out.println("Not yet available");
+                System.out.println("Please upgrade to premium for just $99.99 a month to access this feature");
                 return;
             default:
                 System.out.println("Command not recognised");
         }
+    }
+
+    private boolean isValidEntities(String entities) {
+        char[] ch = entities.toCharArray();
+
+        if (ch.length == 0 || ch.length == 1) return true;
+
+        if (ch.length > 3) {
+            System.out.println("Error: too many entities");
+            return false;
+        }
+
+        //check for duplicates
+
+        //layer 1 entities
+        String neverStack = "*X|#";
+        for (char c : ch) {
+            if (neverStack.contains(Character.toString(c))) return false;
+        }
+
+        //layer 2 entities
+        //cannot stack each other
+
+        //layer 3 entities
+
+        return true;
+    }
+
+    private boolean isValidObj(ArrayList<String> objectives) {
+        //check all objectives are a single letter between A and D
+        for (String s : objectives) {
+            char[] ch = s.toCharArray();
+            if (ch.length != 1) {
+                System.out.println(s + " is not a valid objective");
+                return false;
+            }
+            if (!(ch[0] >= 'A') || !(ch[0] <= 'D')) return false;
+        }
+
+        if (objectives.size() == 1) return true;
+
+        //check "Exit" objective isn't coupled with others
+        return (!objectives.contains("A"));
     }
 }
