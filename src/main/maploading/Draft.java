@@ -8,78 +8,101 @@ import java.util.ArrayList;
 
 public class Draft {
 
-    private int nRows;
-    private int nCols;
+    private TileMap tileMap;
+    private String draftName;
 
-    private Tile[][] tiles;
-    private ArrayList<String> objectives;
-
-    public Draft() {
-        this(8, 8);
+    public Draft(String draftName) {
+        this(8, 8, draftName);
     }
 
-    public Draft(int nRows, int nCols) {
-        this.nRows = nRows;
-        this.nCols = nCols;
-        this.objectives = new ArrayList<>();
-    }
-
-    public Draft CreateDraft(String draftName) {
-        Draft draft = new Draft(8, 8);
-
-        MapSaver mapSaver = new MapSaver();
-        mapSaver.saveMap(draft, draftName);
-
-        return draft;
+    public Draft(int nRows, int nCols, String draftName) {
+        tileMap = new TileMap(nRows, nCols);
+        this.draftName = draftName;
     }
 
     public int getNRows() {
-        return nRows;
+        return tileMap.getNRows();
     }
 
     public int getNCols() {
-        return nCols;
+        return tileMap.getNCols();
     }
 
-    public ArrayList<String> getObjectives() {
-
-        return null;
+    public String getDraftName() {
+        return draftName;
     }
 
-    public ArrayList<Key> findKeys() {
-        ArrayList<Key> keys = new ArrayList<>();
+    public ArrayList<String> getObjectives(){
+        return tileMap.getObjectives();
+    }
 
-
-
-        return keys;
+    public void setObj(ArrayList<String> obj) {
+        tileMap.setObj(obj);
     }
 
     public Tile getTile(Vec2i pos) {
-
-
-        return null;
+        return tileMap.getTile(pos);
     }
 
-    public void editTile(Vec2i tile, char[] entities) {
-
+    public void displayTileMap() {
+        tileMap.displayTileMap();
     }
 
-    public void resizeDraft(int newRow, int newCol) {
-
+    public ArrayList<Key> findKeys() {
+        return tileMap.findKeys();
     }
 
-    public void setObjectives(ArrayList<String> obj) {
-
+    public void resize(int newNRow, int newNCol) {
+        tileMap.resize(newNRow, newNCol);
     }
 
-    public void displayDraft() {
+//    move the MapSaver class into here
+//    public void saveDraft() {
+//
+//    }
 
+    public void editTile(Vec2i tile, String entities) {
+        Tile t = tileMap.getTile(tile);
+        MapInterpreter mapInterpreter = new MapInterpreter();
+
+        t.setEntities(mapInterpreter.getTileEntities(entities));
     }
 
     public static void main(String[] args) {
+        Draft d = new Draft("draft1");
 
+        //this needs to be updated
+        MapSaver mapSaver = new MapSaver();
+        mapSaver.saveMap(d, d.getDraftName());
 
+        d.editTile(new Vec2i(2,3), "*");
+        d.editTile(new Vec2i(4, 5), "*");
 
+        //tile override test
+        d.editTile(new Vec2i(2, 3), "O");
+
+        //test multiple entities
+        d.editTile(new Vec2i(0, 6), "K/1");
+        d.displayTileMap();
+
+        //test resize
+        d.resize(5, 5);
+        d.displayTileMap();
+
+        d.resize(10, 10);
+        d.displayTileMap();
+
+        d.resize(3, 3);
+        d.resize(3, 6);
+        d.resize(68, 1);
+
+        //test placing empty entity
+        System.out.println();
+        d.editTile(new Vec2i(3, 3), "*");
+        d.displayTileMap();
+        System.out.println();
+        d.editTile(new Vec2i(3, 3), "");
+        d.displayTileMap();
     }
 
     public void editorInterpreter() {
