@@ -1,42 +1,33 @@
 package main.enemies;
 
-import main.behaviour.AIBehavior;
-import main.entities.Entity;
-import main.maploading.Level;
-import main.math.Vec2i;
-
+import main.behaviour.AIBehaviour;
 import java.util.ArrayList;
+import java.lang.Math;
 import java.util.Collection;
 import java.util.PriorityQueue;
 
-public abstract class Enemy extends Entity {
+import main.maploading.TileMap;
+import main.math.Vec2i;
+
+public abstract class Enemy {
     private int length;
     private int width;
 
-    private int [][] map;
+    private TileMap map;
     private Vec2i playerLocation;
     private Vec2i currLocation;
     private ArrayList<Integer> pastMoves;
 
-    private AIBehavior currBehavior;
+    private AIBehaviour currBehavior;
 
-    public Enemy(String name) {
-        super(name);
-    }
-
-    public Enemy(String name, char symbol) {
-        super(name, symbol);
-    }
-
-    public Enemy(String name, Level level, Vec2i pos) {
-        super(name, level, pos);
-    }
-
-    public void setMap(int [][] map) { this.map = map; }
+    public void setMap(TileMap map) { this.map = map; }
     public void setPlayerLocation(Vec2i playerLocation) { this.playerLocation = playerLocation; }
     public void setCurrLocation(Vec2i CurrLocation) { this.currLocation = CurrLocation; }
     public void givePastMove(Vec2i pastMoves) { this.currLocation = pastMoves; }
+
     public void setDimensions(int length, int width) { this.length = length; this.width = width; }
+    public void setCurrBehavior(AIBehaviour b) { this.currBehavior = b;}
+    public AIBehaviour getCurrBehavior() { return this.currBehavior; }
 
     // Inner class for A* search
     private class Node implements Comparable {
@@ -85,27 +76,28 @@ public abstract class Enemy extends Entity {
         }
 
         /**
+         * TODO redundant sort of with strategist behavior... idk
          * @return All adjacent nodes of the current nodes
          */
-        private ArrayList<Vec2i> getAdjacent(Node request, int [][] map ) {
+        private ArrayList<Vec2i> getAdjacent(Node request, TileMap map ) {
             ArrayList<Vec2i> ret = new ArrayList<>();
             int coordX = request.getCoordinate().getX();
             int coordY = request.getCoordinate().getY();
 
             // TODO checking for the item that the tile has can be changed here
-            if(coordX - 1 >= 0 && (map[coordX - 1][coordY] == 0)) {
+            if (coordX - 1 >= 0 && (map.isPassable(new Vec2i(coordX - 1, coordY)))) {
                 Vec2i buf1 = new Vec2i(coordX - 1, coordY);
                 ret.add(buf1);
             }
-            if(coordX + 1 < length - 1  && (map[coordX + 1][coordY] == 0)) {
+            if (coordX + 1 < length && (map.isPassable(new Vec2i(coordX + 1, coordY)))) {
                 Vec2i buf1 = new Vec2i(coordX + 1, coordY);
                 ret.add(buf1);
             }
-            if(coordY - 1 >= 0 && (map[coordX][coordY - 1] == 0)) {
+            if (coordY - 1 >= 0 && (map.isPassable(new Vec2i(coordX, coordY - 1)))) {
                 Vec2i buf1 = new Vec2i(coordX, coordY - 1);
                 ret.add(buf1);
             }
-            if(coordY + 1 < width - 1 && (map[coordX][coordY + 1] == 0)) {
+            if (coordY + 1 < width && (map.isPassable(new Vec2i(coordX, coordY + 1)))) {
                 Vec2i buf1 = new Vec2i(coordX, coordY + 1);
                 ret.add(buf1);
             }
@@ -165,15 +157,35 @@ public abstract class Enemy extends Entity {
     /**
      * @param curr Current node
      * @param targets targets
-     * @return The heuristic
+     * @return The heuristic takes the Mahanttan distance from the closest node
      */
     private int manHattanDist(Vec2i curr, ArrayList<Vec2i> targets) {
-        int ret = 0;
+
+        // TODO change this, runs everytime, maybe dont
+        // Closest node
+        Vec2i min = null;
+        int minVal = 0;
         for (Vec2i x: targets) {
-            ret = Math.abs(curr.getX() - x.getX()) + Math.abs(curr.getY() - x.getY());
+            if (min == null) {
+                min = x;
+                minVal = mDist(x,curr);
+            } else {
+                if (minVal > mDist(x,curr)) {
+                    min = x;
+                    minVal = mDist(x,curr);
+                }
+            }
         }
-        return ret;
+        return minVal;
     }
+
+    /**
+     *
+     * @param x First coordinate
+     * @param y Second coordinate
+     * @return the manhatten distance from 2 nodes on the grid
+     */
+    private int mDist(Vec2i x, Vec2i y) { return Math.abs(y.getX() - x.getX()) + Math.abs(y.getY() - x.getY()); }
 
     /**
      * Finding the shortest path to a specific square using A*, the heuristic chosen
@@ -196,7 +208,7 @@ public abstract class Enemy extends Entity {
 
         // Until it runs out of or the algorithm ends
         while (currStack.size() > 0) {
-            // Pop the first element in the queque
+            // Pop the first element in the queue
             Node buffer = currStack.poll();
             for(Vec2i x: targets) {
                 if (x.getX() == buffer.getCoordinate().getX() && x.getY() == buffer.getCoordinate().getY())
