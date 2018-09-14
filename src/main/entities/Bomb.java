@@ -2,17 +2,20 @@ package main.entities;
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import main.Game;
 import main.avatar.Avatar;
 import main.maploading.Level;
 import main.maploading.TileMap;
 import main.math.Vec2d;
 import main.math.Vec2i;
 
+import java.util.Iterator;
+
 public class Bomb extends Entity {
 
     private Circle circ;
 
-    private int fuseLength = 3;
+    private int fuseLength = 5;
     private boolean isLit = false;
 
     {
@@ -40,17 +43,40 @@ public class Bomb extends Entity {
         isLit = true;
     }
 
+
     public void onExplode() {
-        System.out.println("KABOOMBA!");
+
+        destroyEntity(pos.add(-1, 0));
+        destroyEntity(pos.add(1, 0));
+        destroyEntity(pos.add(0, -1));
+        destroyEntity(pos.add(0, 1));
     }
+
+    public void destroyEntity(Vec2i target) {
+        Iterator<Entity> it = map.getEntities(target);
+        while(it.hasNext()) {
+            Entity e = it.next();
+
+            if (e.getName().equals("Boulder")) {
+                map.removeEntity(e);
+            }
+            else if (e.getName().equals("Avatar")) {
+                ((Avatar) e).onDeath();
+            }
+        }
+    }
+
 
     public void onTurnUpdate() {
         if (!isLit) return;
 
         fuseLength--;
+        circ.setFill(Color.rgb((int)((1 - fuseLength/5.0) * 255),0,0));
+
         if (fuseLength <= 0) {
             onExplode();
-            isLit = false; // safety measure for now
+            Game.world.removeBomb(this);
+            onRemovedFromMap();
         }
     }
 
@@ -76,6 +102,8 @@ public class Bomb extends Entity {
 
     @Override
     public void onEntityEnter(Entity other) {
+
+        if (isLit) return;
 
         if (other instanceof Avatar) {
             Avatar avatar = (Avatar) other;

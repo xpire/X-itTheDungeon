@@ -13,7 +13,7 @@ public class InvincibilityPot extends Entity {
 
     {
         symbol = '>';
-        duration = 5;
+        duration = 10;
     }
 
     public InvincibilityPot() {
@@ -63,8 +63,13 @@ public class InvincibilityPot extends Entity {
         if (other instanceof Avatar) {
             Avatar avatar = (Avatar) other;
 
-            avatar.onRageStart();
-            onRemovedFromMap();
+            if (avatar.pickUp(this)) {
+                onRemovedFromMap();
+            }
         }
+    }
+
+    public boolean hasExpired() {
+        return duration <= 0;
     }
 }
