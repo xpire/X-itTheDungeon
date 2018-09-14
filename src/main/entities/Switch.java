@@ -25,6 +25,7 @@ public class Switch extends Entity{
         super(name, map, pos);
     }
 
+    public Boolean getIsOn() { return isOn; }
 
     public void onActivated() {
         System.out.println("Switch Activated");
