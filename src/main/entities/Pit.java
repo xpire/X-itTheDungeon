@@ -3,6 +3,7 @@ package main.entities;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import main.avatar.Avatar;
+import main.enemies.Enemy;
 import main.maploading.TileMap;
 import main.math.Vec2d;
 import main.math.Vec2i;
@@ -50,5 +51,14 @@ public class Pit extends Entity {
         else if (other.getName().equals("Boulder")) {
             other.onDestroyed();
         }
+    }
+
+    @Override
+    public boolean isPassableFor(Entity other) {
+        if (other instanceof Enemy) {
+            return false;
+        }
+
+        return true;
     }
 }
