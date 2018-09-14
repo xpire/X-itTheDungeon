@@ -16,7 +16,7 @@ public class Draft {
     }
 
     public Draft(int nRows, int nCols, String draftName) {
-        tileMap = new TileMap(nRows, nCols, 10.0);
+        tileMap = new TileMap(nRows, nCols);
         this.draftName = draftName;
     }
 
