@@ -134,23 +134,23 @@ public class Level {
     }
 
     public void displayTileMap() {
-        for (int i = 0; i < nRows; i++) {
-            for (int j = 0; j < nCols; j++) {
-                Tile t = getTile(new Vec2i(i, j));
-                StringBuilder sb = new StringBuilder();
-
-                if (t.isEmpty()) sb.append('.');
-                else {
-                    List<Entity> ent = t.getEntities();
-                    for (Entity e : ent) {
-                        char ch = e.getSymbol();
-                        sb.append(ch);
-                    }
-                }
-                System.out.print((sb.toString() + "\t"));
-            }
-            System.out.println();
-        }
+//        for (int i = 0; i < nRows; i++) {
+//            for (int j = 0; j < nCols; j++) {
+//                Tile t = getTile(new Vec2i(i, j));
+//                StringBuilder sb = new StringBuilder();
+//
+//                if (t.isEmpty()) sb.append('.');
+//                else {
+//                    List<Entity> ent = t.getEntities();
+//                    for (Entity e : ent) {
+//                        char ch = e.getSymbol();
+//                        sb.append(ch);
+//                    }
+//                }
+//                System.out.print((sb.toString() + "\t"));
+//            }
+//            System.out.println();
+//        }
     }
 
 
