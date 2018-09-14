@@ -6,4 +6,10 @@ public class Exit extends Entity {
         super("Exit");
         this.symbol = 'X';
     }
+
+
+    public boolean isPassableFor(Entity other) {
+        if (other.getName().equals("Avatar")) return true;
+        return false;
+    }
 }

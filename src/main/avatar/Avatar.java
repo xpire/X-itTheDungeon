@@ -26,6 +26,7 @@ public class Avatar extends Entity {
     private BooleanProperty isHovering;
     private Circle hoveringView;
 
+    private InvincibilityPot ragePot;
     private BooleanProperty isInvincible;
     private Circle rageView;
 
@@ -33,6 +34,10 @@ public class Avatar extends Entity {
     private IntegerProperty numArrows = new SimpleIntegerProperty(0);
     private IntegerProperty numBombs = new SimpleIntegerProperty(0);
     private IntegerProperty numTreasures = new SimpleIntegerProperty(0);
+
+    {
+        symbol = 'P';
+    }
 
 
     public Avatar(GameWorld world) {
@@ -87,6 +92,10 @@ public class Avatar extends Entity {
         else if (Game.input.isDown(KeyCode.Z)) {
             dropKey();
         }
+        else if (Game.input.isDown(KeyCode.X)) {
+            placeBomb();
+        }
+
 
 
         if ( !pos.equals(getGridPos()) ) {
@@ -98,6 +107,9 @@ public class Avatar extends Entity {
 ////            }
 
             world.moveEntity(this, pos);
+            if (pos.equals(getGridPos())) {
+                world.onPlayerTurnEnded();
+            }
         }
     }
 
@@ -127,12 +139,18 @@ public class Avatar extends Entity {
 
     public boolean pickUp(Sword s) {
 
-        // Already has a key
+        // Already has a sword
         if (sword != null)
             return false;
 
-        // Pickup key
+        // Pickup sword
         onEquipSword(s);
+        return true;
+    }
+
+    public boolean pickUp(InvincibilityPot p) {
+        // Pickup pot
+        onRageStart(p);
         return true;
     }
 
@@ -161,7 +179,8 @@ public class Avatar extends Entity {
         isHovering.set(false);
     }
 
-    public void onRageStart() {
+    public void onRageStart(InvincibilityPot p) {
+        ragePot = p;
         isInvincible.set(true);
     }
 
@@ -192,6 +211,7 @@ public class Avatar extends Entity {
 
         if (world.onPlace(key, pos)) {
             key = null;
+            world.onPlayerTurnEnded();
         }
     }
 
@@ -249,6 +269,7 @@ public class Avatar extends Entity {
 
         Bomb bomb = new Bomb();
         if (world.onPlace(bomb, pos)) {
+            numBombs.set(numBombs.get() - 1);
             bomb.onLit();
         }
     }
@@ -256,5 +277,19 @@ public class Avatar extends Entity {
 
     public boolean isHovering() {
         return isHovering.get();
+    }
+
+    // Potion debuff should be handled as an event handler
+    public void onRoundEnd() {
+        if (ragePot == null) return;
+        ragePot.reduceDuration();
+
+        if (ragePot.hasExpired()) {
+            onRageEnd();
+        }
+    }
+
+    public boolean isRaged() {
+        return isInvincible.get();
     }
 }

@@ -12,6 +12,7 @@ import main.math.Vec2i;
 import main.systems.GridMovementSystem;
 import main.systems.PushSystem;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 
 public class GameWorld {
@@ -23,6 +24,7 @@ public class GameWorld {
 
     private PushSystem pushSystem;
     private GridMovementSystem moveSystem;
+
 
     public GameWorld(Level map) {
         this.map = map;
@@ -98,9 +100,13 @@ public class GameWorld {
     }
 
 
+
+
     public void addEntity(int x, int y, Entity e) {
         map.addEntity(x, y, e);
     }
+
+
 
     public void addNewEntity(int x, int y, Entity e) {
 
@@ -111,12 +117,43 @@ public class GameWorld {
     }
 
 
+
+    private boolean isPlayerTurn = true;
+
     public void update(double delta) {
-        avatar.update(delta);
+
+        if (isPlayerTurn) { // || noEnemies();
+            onPlayerTurn();
+        }
+        else {
+            onEnemyTurn();
+            onRoundEnd();
+        }
     }
 
+
+    public void onPlayerTurn() {
+        avatar.update(0);
+    }
+
+    public void onPlayerTurnEnded() {
+        isPlayerTurn = false;
+    }
+
+    public void onEnemyTurn() {
+        isPlayerTurn = true;
+    }
+
+    public void onRoundEnd() {
+        avatar.onRoundEnd();
+        for (Bomb bomb : new ArrayList<>(bombs)) {
+            bomb.onTurnUpdate();
+        }
+    }
+
+
     public void render() {
-        avatar.render();
+//        avatar.render();
     }
 
     public Node getView() {
@@ -142,6 +179,7 @@ public class GameWorld {
     }
 
 
+    private ArrayList<Bomb> bombs = new ArrayList<>();
     public boolean onPlace(Entity entity, Vec2i pos) {
         Iterator<Entity> it = map.getEntities(pos);
         while(it.hasNext()) {
@@ -151,7 +189,11 @@ public class GameWorld {
             }
         }
 
-        map.addEntity(pos.getX(), pos.getY(), entity);
+        if (entity instanceof  Bomb) {
+            bombs.add((Bomb) entity);
+        }
+
+        map.addNewEntity(pos.getX(), pos.getY(), entity);
         return true;
     }
 
@@ -165,11 +207,14 @@ public class GameWorld {
 
 
     public void gameOver() {
-
         Label lblGameOver = new Label("GAME OVER");
         lblGameOver.setTranslateX(250);
         lblGameOver.setTranslateY(220);
         lblGameOver.fontProperty().set(Font.font(40));
         rootView.getChildren().add(lblGameOver);
+    }
+
+    public void removeBomb(Bomb bomb) {
+        bombs.remove(bomb);
     }
 }

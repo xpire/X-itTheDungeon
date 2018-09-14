@@ -1,13 +1,15 @@
 package main.enemies;
 
 import main.behaviour.AIBehavior;
-import java.util.ArrayList;
-import java.lang.Math;
-import java.util.Collection;
-import java.util.PriorityQueue;
+import main.entities.Entity;
+import main.maploading.TileMap;
 import main.math.Vec2i;
 
-public abstract class Enemy {
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.PriorityQueue;
+
+public abstract class Enemy extends Entity {
     private int length;
     private int width;
 
@@ -17,6 +19,18 @@ public abstract class Enemy {
     private ArrayList<Integer> pastMoves;
 
     private AIBehavior currBehavior;
+
+    public Enemy(String name) {
+        super(name);
+    }
+
+    public Enemy(String name, char symbol) {
+        super(name, symbol);
+    }
+
+    public Enemy(String name, TileMap map, Vec2i pos) {
+        super(name, map, pos);
+    }
 
     public void setMap(int [][] map) { this.map = map; }
     public void setPlayerLocation(Vec2i playerLocation) { this.playerLocation = playerLocation; }
