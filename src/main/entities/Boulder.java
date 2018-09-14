@@ -4,6 +4,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import main.Game;
 import main.maploading.Level;
+import main.maploading.TileMap;
 import main.math.Vec2d;
 import main.math.Vec2i;
 import main.systems.PushSystem;
@@ -20,7 +21,7 @@ public class Boulder extends Entity{
         super(name);
     }
 
-    public Boulder(String name, Level map, Vec2i pos) {
+    public Boulder(String name, TileMap map, Vec2i pos) {
         super(name, map, pos);
     }
 

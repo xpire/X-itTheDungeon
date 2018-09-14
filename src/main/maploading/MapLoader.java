@@ -112,23 +112,11 @@ public class MapLoader {
 
         Level level = mapLoader.getTileMap("map1");
 
-        int nRow = level.getNRows(), nCol = level.getNCols();
-        System.out.println(nRow + "\t" + nCol);
-
-//        for (int i = 0; i < nRow; i++) {
-//            for (int j = 0; j < nCol; j++) {
-//                Vec2i coord = new Vec2i(i, j);
-//                level.getTile(coord).listEntities();
-//                System.out.print("\t");
-//            }
-//            System.out.println();
-//        }
-
+        System.out.println(level.getNRows() + "\t" + level.getNCols());
         level.displayTileMap();
 
         for (String s : level.getObjectives()) {
             System.out.println(s);
         }
-
     }
 }
