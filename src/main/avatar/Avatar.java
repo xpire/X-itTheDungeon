@@ -1,6 +1,8 @@
 package main.avatar;
 
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
@@ -19,10 +21,14 @@ public class Avatar extends Entity {
     private Key key = null;
 
     private Sword sword = null;
-    private Line swordEquipView = new Line(-10, 0, 10, 0);
+    private Line swordEquipView;
 
-    private boolean isHovering = false;
-    private boolean isInvicinble = false;
+    private BooleanProperty isHovering;
+    private Circle hoveringView;
+
+    private BooleanProperty isInvincible;
+    private Circle rageView;
+
 
     private IntegerProperty numArrows = new SimpleIntegerProperty(0);
     private IntegerProperty numBombs = new SimpleIntegerProperty(0);
@@ -45,6 +51,21 @@ public class Avatar extends Entity {
 
         view.addNode(circle);
         view.setCentre(new Vec2d(0, 0));
+
+        hoveringView = new Circle(8, Color.LIMEGREEN);
+        rageView = new Circle(4, Color.TOMATO);
+        swordEquipView = new Line(-10, 0, 10, 0);
+
+        view.addNode(hoveringView);
+        view.addNode(rageView);
+        view.addNode(swordEquipView);
+
+        isHovering = new SimpleBooleanProperty(false);
+        isInvincible = new SimpleBooleanProperty(false);
+
+        hoveringView.visibleProperty().bind(isHovering);
+        rageView.visibleProperty().bind(isInvincible);
+        swordEquipView.setVisible(false);
     }
 
 
@@ -133,19 +154,19 @@ public class Avatar extends Entity {
     // Infinite time -> no timer callback
     // Limited time -> timer callback setup
     public void onHoverStart() {
-        isHovering = true;
+        isHovering.set(true);
     }
 
     public void onHoverEnd() {
-        isHovering = false;
+        isHovering.set(false);
     }
 
     public void onRageStart() {
-        isInvicinble = true;
+        isInvincible.set(true);
     }
 
     public void onRageEnd() {
-        isInvicinble = false;
+        isInvincible.set(false);
     }
 
     public void onDeath() {
@@ -193,12 +214,12 @@ public class Avatar extends Entity {
 
     public void onEquipSword(Sword s) {
         sword = s;
-        view.addNode(swordEquipView);
+        swordEquipView.setVisible(true);
     }
 
     public void onUnequipSword() {
         sword = null;
-        view.removeNode(swordEquipView);
+        swordEquipView.setVisible(false);
     }
 
 
@@ -233,4 +254,7 @@ public class Avatar extends Entity {
     }
 
 
+    public boolean isHovering() {
+        return isHovering.get();
+    }
 }

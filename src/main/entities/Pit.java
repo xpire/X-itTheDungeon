@@ -41,7 +41,11 @@ public class Pit extends Entity {
     @Override
     public void onEntityEnter(Entity other) {
         if (other.getName().equals("Avatar")) {
-            ((Avatar) other).onDeath();
+            Avatar avatar = (Avatar) other;
+
+            if (!avatar.isHovering())
+                avatar.onDeath();
+
         }
         else if (other.getName().equals("Boulder")) {
             other.onDestroyed();
