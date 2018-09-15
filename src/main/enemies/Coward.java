@@ -1,23 +1,41 @@
 package main.enemies;
 
+import main.behaviour.AIBehaviour;
 import main.behaviour.CowardBehaviour;
+import main.behaviour.HunterBehaviour;
 import main.maploading.MapLoader;
 import main.maploading.TileMap;
 import main.math.Vec2i;
+import main.maploading.Level;
 
 import java.util.ArrayList;
 
-public class Coward extends Enemy {
-    public Coward(TileMap map, Vec2i userLocation, Vec2i currLocation) {
-        super.setCurrLocation(currLocation);
-        super.setMap(map);
-        super.setPlayerLocation(userLocation);
+public class Coward extends Enemy implements stateDecision {
+    public Coward(String name, Level map, Vec2i pos) {
+        super(name, map, pos, false);
         super.setCurrBehavior(new CowardBehaviour());
+        super.setManager(null);
+    }
+
+    // TODO: Check with Justin
+    @Override
+    public void decideBehaviour(Level map) {
+        if (super.mDist(map.getAvatar().getCoord, pos) < 2) {
+            super.setCurrBehavior(new CowardBehaviour());
+        }
+        else {
+            super.setCurrBehavior(new HunterBehaviour());
+        }
+    }
+
+    @Override
+    public boolean IsHunter() {
+        return false;
     }
 
     public static void main(String[] args) {
         MapLoader ML = new MapLoader();
-        TileMap map = ML.getTileMap("C:\\Users\\Justin Or\\IdeaProjects\\ecksDee\\src\\main\\levels\\map2.txt");
+        Level map = ML.getTileMap("C:\\Users\\Justin Or\\IdeaProjects\\ecksDee\\src\\main\\levels\\map2.txt");
 
         int nRow = map.getNRows(), nCol = map.getNCols();
         System.out.println(nRow + "\t" + nCol);
@@ -33,7 +51,7 @@ public class Coward extends Enemy {
         Vec2i cowardLocation = new Vec2i(2,1);
         Vec2i userLocation = new Vec2i(2,2);
         System.out.printf("c:%d %d,u:%d %d\n",cowardLocation.getX(), cowardLocation.getY(), userLocation.getX(), userLocation.getY());
-        Enemy testCoward = new Coward(map,userLocation,cowardLocation);
+        Enemy testCoward = new Coward("Coward",map, cowardLocation);
         char [] [] charMap = new char[5][5];
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {

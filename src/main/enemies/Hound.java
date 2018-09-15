@@ -1,24 +1,41 @@
 package main.enemies;
 
+import main.behaviour.AIBehaviour;
+import main.behaviour.CowardBehaviour;
 import main.behaviour.HoundBehaviour;
+import main.behaviour.HunterBehaviour;
 import main.maploading.MapLoader;
-import main.maploading.TileMap;
 import main.math.Vec2i;
+import main.maploading.Level;
 
 import java.util.ArrayList;
 
-public class Hound extends Enemy {
-    public Hound(TileMap map, Vec2i userLocation, Vec2i currLocation) {
-        super.setCurrLocation(currLocation);
-        super.setMap(map);
-        super.setPlayerLocation(userLocation);
+public class Hound extends Enemy implements stateDecision {
+    public Hound(String name, Level map, Vec2i pos) {
+        super(name, map, pos, false);
         super.setCurrBehavior(new HoundBehaviour());
+        super.setManager(null);
+    }
+
+    @Override
+    public void decideBehaviour(Level map) {
+        if (super.manager.hunterExist()) {
+            super.setCurrBehavior(new HoundBehaviour());
+        }
+        else {
+            super.setCurrBehavior(new HunterBehaviour());
+        }
+    }
+
+    @Override
+    public boolean IsHunter() {
+        return false;
     }
 
     // Testing code for A* search
     public static void main(String[] args) {
         MapLoader ML = new MapLoader();
-        TileMap map = ML.getTileMap("C:\\Users\\Justin Or\\IdeaProjects\\ecksDee\\src\\main\\levels\\map2.txt");
+        Level map = ML.getTileMap("C:\\Users\\Justin Or\\IdeaProjects\\ecksDee\\src\\main\\levels\\map2.txt");
 
         int nRow = map.getNRows(), nCol = map.getNCols();
         System.out.println(nRow + "\t" + nCol);
@@ -34,7 +51,7 @@ public class Hound extends Enemy {
         Vec2i hunterLocation = new Vec2i(2,0);
         Vec2i userLocation = new Vec2i(2,2);
         System.out.printf("c:%d %d,u:%d %d\n",hunterLocation.getX(), hunterLocation.getY(), userLocation.getX(), userLocation.getY());
-        Enemy testHound = new Hound(map,userLocation,hunterLocation);
+        Enemy testHound = new Hound("Hound", map, hunterLocation);
         char [] [] charMap = new char[5][5];
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {

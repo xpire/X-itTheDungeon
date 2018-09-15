@@ -5,27 +5,20 @@ import java.util.ArrayList;
 import java.lang.Math;
 import java.util.Collection;
 import java.util.PriorityQueue;
-
-import main.maploading.TileMap;
+import main.maploading.Level;
 import main.math.Vec2i;
+import main.entities.*;
 
-public abstract class Enemy {
-    private int length;
-    private int width;
-
-    private TileMap map;
-    private Vec2i playerLocation;
-    private Vec2i currLocation;
-    private ArrayList<Integer> pastMoves;
-
+public class Enemy extends Entity {
+    private boolean isHunter;
+    EnemyManager manager;
     private AIBehaviour currBehavior;
 
-    public void setMap(TileMap map) { this.map = map; }
-    public void setPlayerLocation(Vec2i playerLocation) { this.playerLocation = playerLocation; }
-    public void setCurrLocation(Vec2i CurrLocation) { this.currLocation = CurrLocation; }
-    public void givePastMove(Vec2i pastMoves) { this.currLocation = pastMoves; }
+    public Enemy(String name, Level map, Vec2i pos, Boolean isHunter) {
+        super(name, map, pos);
+        this.isHunter = isHunter;
+    }
 
-    public void setDimensions(int length, int width) { this.length = length; this.width = width; }
     public void setCurrBehavior(AIBehaviour b) { this.currBehavior = b;}
     public AIBehaviour getCurrBehavior() { return this.currBehavior; }
 
@@ -79,7 +72,7 @@ public abstract class Enemy {
          * TODO redundant sort of with strategist behavior... idk
          * @return All adjacent nodes of the current nodes
          */
-        private ArrayList<Vec2i> getAdjacent(Node request, TileMap map ) {
+        private ArrayList<Vec2i> getAdjacent(Node request, Level map ) {
             ArrayList<Vec2i> ret = new ArrayList<>();
             int coordX = request.getCoordinate().getX();
             int coordY = request.getCoordinate().getY();
@@ -89,7 +82,7 @@ public abstract class Enemy {
                 Vec2i buf1 = new Vec2i(coordX - 1, coordY);
                 ret.add(buf1);
             }
-            if (coordX + 1 < length && (map.isPassable(new Vec2i(coordX + 1, coordY)))) {
+            if (coordX + 1 < map.getNCols() && (map.isPassable(new Vec2i(coordX + 1, coordY)))) {
                 Vec2i buf1 = new Vec2i(coordX + 1, coordY);
                 ret.add(buf1);
             }
@@ -97,7 +90,7 @@ public abstract class Enemy {
                 Vec2i buf1 = new Vec2i(coordX, coordY - 1);
                 ret.add(buf1);
             }
-            if (coordY + 1 < width && (map.isPassable(new Vec2i(coordX, coordY + 1)))) {
+            if (coordY + 1 < map.getNRows() && (map.isPassable(new Vec2i(coordX, coordY + 1)))) {
                 Vec2i buf1 = new Vec2i(coordX, coordY + 1);
                 ret.add(buf1);
             }
@@ -119,6 +112,37 @@ public abstract class Enemy {
         }
         return false;
     }
+
+    /**
+     * Print map for testing
+     * @param map Request map
+     */
+    public void printMap(Level map) {
+        for (int i = 0; i < map.getNRows(); i++) {
+            for (int j = 0; j < map.getNCols(); j++) {
+                Vec2i coord = new Vec2i(i, j);
+                map.getTile(coord).listEntities();
+                System.out.print("\t");
+            }
+            System.out.println();
+        }
+    }
+
+    /**
+     * @return If this is a hunter
+     */
+    public boolean IsHunter() { return this.isHunter; }
+
+    /**
+     * Set the manager of this entity
+     * @param manager Manager of all AIs
+     */
+    public void setManager(EnemyManager manager) { this.manager = manager; }
+
+    /**
+     * @return The current manager of the Enemies
+     */
+    public EnemyManager getManager() { return manager; }
 
     /**
      * @param check Request coordinate to check
@@ -185,7 +209,7 @@ public abstract class Enemy {
      * @param y Second coordinate
      * @return the manhatten distance from 2 nodes on the grid
      */
-    private int mDist(Vec2i x, Vec2i y) { return Math.abs(y.getX() - x.getX()) + Math.abs(y.getY() - x.getY()); }
+    public int mDist(Vec2i x, Vec2i y) { return Math.abs(y.getX() - x.getX()) + Math.abs(y.getY() - x.getY()); }
 
     /**
      * Finding the shortest path to a specific square using A*, the heuristic chosen
@@ -201,7 +225,7 @@ public abstract class Enemy {
         ArrayList<Node> traversedHeuristic = new ArrayList<>();
 
         // Set initial cost of enemy and the player and add to traversed currStack list
-        Node start_node = new Node(currLocation, manHattanDist(currLocation,targets), 0);
+        Node start_node = new Node(pos, manHattanDist(pos,targets), 0);
         start_node.setPrev(null);
         currStack.add(start_node);
         traversedHeuristic.add(start_node);
@@ -243,9 +267,20 @@ public abstract class Enemy {
             traversedHeuristic.add(buffer);
         }
 
+        Node max = findMax(traversedHeuristic);
+
+        return constructPath(max, traversedHeuristic);
+    }
+
+    /**
+     * Find the best heuristic
+     * @param heuristicList Resultant list from A* search
+     * @return The best node
+     */
+    private Node findMax(ArrayList<Node> heuristicList) {
         // If it reaches here then return a path to the nearest node (Max heuristic)
         Node max = null;
-        for (Node x: traversedHeuristic) {
+        for (Node x: heuristicList) {
             if (max == null) {
                 max = x;
             } else {
@@ -254,7 +289,22 @@ public abstract class Enemy {
                 }
             }
         }
+        return max;
+    }
 
-        return constructPath(max, traversedHeuristic);
+    /**
+     * Get the move of an AI
+     * @return
+     */
+    public Vec2i getMove() {
+        ArrayList<Vec2i> wantedTiles = currBehavior.decideMove(
+                map,
+                pos,
+                getAvatar().getCoordinate,
+                manager.getPastMoves(),
+                manager.getEntities()
+        );
+
+        return shortestPath(wantedTiles).get(wantedTiles.size() - 1);
     }
 }

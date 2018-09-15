@@ -1,12 +1,13 @@
 package main.behaviour;
-import main.maploading.TileMap;
-import main.math.Vec2i;
 
+import main.math.Vec2i;
+import main.entities.*;
+import main.maploading.Level;
 import java.util.ArrayList;
 
 public class CowardBehaviour implements AIBehaviour {
     @Override
-    public ArrayList<Vec2i> decideMove(TileMap map, Vec2i currLocation, Vec2i playerLocation, ArrayList<Integer> pastMoves, ArrayList<main.entities.Entity> entities, ArrayList<Vec2i> entitiesCoord) {
+    public ArrayList<Vec2i> decideMove(Level map, Vec2i currLocation, Vec2i playerLocation, ArrayList<Integer> pastMoves, ArrayList<Entity> entities) {
         Vec2i direction = new Vec2i(playerLocation.getX() - currLocation.getX(),
                                     playerLocation.getY() - currLocation.getY());
         //         N   E   S   W
