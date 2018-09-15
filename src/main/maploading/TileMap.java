@@ -76,7 +76,7 @@ public class TileMap {
         System.out.println(nRows + "\t" + nCols);
         for (int i = 0; i < nRows; i++) {
             for (int j = 0; j < nCols; j++) {
-                Tile t = getTile(new Vec2i(i, j));
+                Tile t = getTile(new Vec2i(j, i));
 
                 StringBuilder sb = new StringBuilder();
 

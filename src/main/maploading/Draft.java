@@ -80,7 +80,7 @@ public class Draft {
             //set the main body of the map
             for (int i = 0; i < nRow; i++) {
                 for (int j = 0; j < nCol; j++) {
-                    Vec2i pos = new Vec2i(i, j);
+                    Vec2i pos = new Vec2i(j, i);
                     Tile t = getTile(pos);
                     StringBuilder sb = new StringBuilder();
 
@@ -188,6 +188,30 @@ public class Draft {
 
                 displayTileMap();
                 return;
+            case "addr":
+            case "addR":
+                resize((getNRows() + 1), getNCols());
+                displayTileMap();
+
+                return;
+            case "addc":
+            case "addC":
+                resize(getNRows(), (getNCols() + 1));
+                displayTileMap();
+
+                return;
+            case "remr":
+            case "remR":
+                resize((getNRows() - 1), getNCols());
+                displayTileMap();
+
+                return;
+            case "remc":
+            case "remC":
+                resize(getNRows(), (getNCols() - 1));
+                displayTileMap();
+
+                return;
             case "resize":
             case "Resize":
                 if (command.length != 3) {
@@ -272,5 +296,7 @@ public class Draft {
 
         //check "Exit" objective isn't coupled with others
         return (!objectives.contains("A"));
+
+        //enforce that the objective exists for it to be added?
     }
 }
