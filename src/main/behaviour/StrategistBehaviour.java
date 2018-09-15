@@ -1,14 +1,18 @@
 package main.behaviour;
 
-import main.maploading.Tile;
-import main.maploading.TileMap;
+import main.maploading.Level;
 import main.math.Vec2i;
+import main.entities.*;
+import java.util.Iterator;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.List;
 
 public class StrategistBehaviour implements AIBehaviour {
     @Override
-    public ArrayList<Vec2i> decideMove(TileMap map,
+    public ArrayList<Vec2i> decideMove(Level map,
                                        Vec2i currLocation,
                                        Vec2i userLocation,
                                        ArrayList<Integer> pastMoves,
@@ -16,8 +20,67 @@ public class StrategistBehaviour implements AIBehaviour {
                                        ArrayList<Vec2i> entitiesCoord) {
         // Possible coordinates
         ArrayList<Vec2i> pCoord = getPossibleCoord(map,currLocation);
-        // Handles case where nothing is accessible -> strategist go for the player
-        return null;
+        // Test for all possible solutions
+        if (pCoord.size() == 0) {
+            // No accessible square and hence just go to the player
+            pCoord.add(userLocation);
+            return pCoord;
+        }
+        else {
+
+            // If there is a direct goal of the user
+            if (hasItem(pCoord, map)) {
+                // Rank the priority of the contained goals
+                Map<Vec2i, Integer> rank = new HashMap<Vec2i, Integer>();
+
+                // Check for that all the included square have items on them or not?
+                for (Vec2i x : pCoord) {
+                    // Hash map to store all the ranks
+                    int currRank = determineRank(x, map);
+                    rank.put(x, currRank);
+                }
+
+
+                // Find the maximum
+                Vec2i maxCoord = null;
+                int maxRank = 0;
+                for (Map.Entry<Vec2i, Integer> Rank : rank.entrySet()) {
+                    if (maxCoord == null) {
+                        maxCoord = Rank.getKey();
+                        maxRank = Rank.getValue();
+                    }
+                    else {
+                        if (maxRank < Rank.getValue()) {
+                            maxCoord = Rank.getKey();
+                            maxRank = Rank.getValue();
+                        }
+                    }
+                }
+
+                // Return that maximum coordinate
+                ArrayList<Vec2i> ret = new ArrayList<>();
+                ret.add(maxCoord);
+                return ret;
+
+            }
+            // No item hence its markov time xD
+            else {
+                // If there are only 1 option left
+                if (pCoord.size() == 1) {
+                    return pCoord;
+                }
+                else {
+                    int[][] markovMat = initMatrice();
+                    // Use data
+                    // repeated multiplication
+                }
+            }
+            /*
+            else {
+
+            }
+            */
+        }
     }
 
     /**
@@ -26,7 +89,7 @@ public class StrategistBehaviour implements AIBehaviour {
      * @param currLocation Current location of the strategist
      * @return list of possible coordinates
      */
-    private ArrayList<Vec2i> getPossibleCoord(TileMap map, Vec2i currLocation) {
+    private ArrayList<Vec2i> getPossibleCoord(Level map, Vec2i currLocation) {
         ArrayList<Vec2i> ret = new ArrayList<>();
         // Get current coordinate
         int coordX = currLocation.getX();
@@ -56,4 +119,65 @@ public class StrategistBehaviour implements AIBehaviour {
         return ret;
     }
 
+    /**
+     * Check if the coordinates have any direct items within them
+     * @param pCoord All possible coordinates
+     * @param map Map of current state
+     * @return If there are item in the near square then return true
+     */
+    private boolean hasItem(ArrayList<Vec2i> pCoord, Level map) {
+        // Sequential check
+        for (Vec2i x: pCoord) {
+            if (isItem(x, map)) {
+                return true;
+            }
+        }
+    }
+
+    private boolean isItem(Vec2i x, Level map) {
+        List<Entity> Item = map.getTile(x).getEntities();
+
+        switch ((Item.get(0)).getSymbol()) {
+            case 'K' :
+            case '$' :
+            case '+' :
+            case '-' :
+            case '!' :
+            case '>' :
+            case '^' : return true;
+            default  : return false;
+        }
+    }
+
+    /**
+     * Determine the rank of the the item on a tile, threat based level as the AI
+     * assumes that player must want to protect
+     * @param x Coordinate on map
+     * @param map Current map state
+     * @return
+     */
+    private int determineRank(Vec2i x,Level map) {
+        // Rank of the items for priority
+        List<Entity> Item = map.getTile(x).getEntities();
+        switch((Item.get(0)).getSymbol()) {
+            case '+' :
+            case '-' :
+            case '!' :
+            case '>' : return 3;
+            case '^' :
+            case 'K' : return 2;
+            case '$' : return 1;
+            default  : return 0;
+
+        }
+    }
+
+    private int[][] initMatrice() {
+        int [][] ret = new int [4][4];
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                ret[i][j] = 1/4;
+            }
+        }
+    }
 }
