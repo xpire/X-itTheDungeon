@@ -22,6 +22,10 @@ public class Door extends Entity{
         super(name);
     }
 
+    public void setPos(Vec2i pos) {
+        this.pos = pos;
+    }
+
     public Door(String name, Level map, Vec2i pos) {
         super(name, map, pos);
     }

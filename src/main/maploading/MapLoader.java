@@ -15,12 +15,12 @@ public class MapLoader {
     /*
     Heavy commenting/refactoring required for others to understand
      */
-    public Level getTileMap(String mapName) {
+    public Level getLevel(String mapName, String path) {
         MapInterpreter mapInt = new MapInterpreter();
         Level level = null;
 
-        StringBuilder mapPath = new StringBuilder("./src/main/levels/");
-        mapPath.append(mapName);
+        StringBuilder mapPath = new StringBuilder("./src/main/");
+        mapPath.append(path).append("/").append(mapName).append(".txt");
 
         Scanner sc = null;
 
@@ -49,15 +49,17 @@ public class MapLoader {
             }
 
             for (int i = 0; i < numRow; i++) {
-                line = sc.nextLine().split("\\s+");
+                if (sc.hasNextLine()) {
+                    line = sc.nextLine().split("\\s+");
 
-                if (line.length != numCol) {
-                    System.out.println("Error: Inconsistent Map");
-                    return null;
-                }
+                    if (line.length != numCol) {
+                        System.out.println("Error: Inconsistent Map");
+                        return null;
+                    }
 
-                for (int j = 0; j < numCol; j++) {
-                    level.setTile(i, j, mapInt.getTileEntities(line[j]));
+                    for (int j = 0; j < numCol; j++) {
+                        level.setTile(i, j, mapInt.getTileEntities(line[j]));
+                    }
                 }
             }
 
@@ -110,7 +112,7 @@ public class MapLoader {
     public static void main(String[] args) {
         MapLoader mapLoader = new MapLoader();
 
-        Level level = mapLoader.getTileMap("map1");
+        Level level = mapLoader.getLevel("map1", "levels");
 
         System.out.println(level.getNRows() + "\t" + level.getNCols());
         level.displayTileMap();
