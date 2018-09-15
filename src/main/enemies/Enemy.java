@@ -293,14 +293,13 @@ public class Enemy extends Entity {
     }
 
     /**
-     * Get the move of an AI
-     * @return
+     * @return move of an AI
      */
     public Vec2i getMove() {
         ArrayList<Vec2i> wantedTiles = currBehavior.decideMove(
                 map,
                 pos,
-                getAvatar().getCoordinate,
+                manager.getWorld().getAvatar().getGridPos(),
                 manager.getPastMoves(),
                 manager.getEntities()
         );

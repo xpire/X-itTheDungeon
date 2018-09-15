@@ -1,6 +1,7 @@
 package main.enemies;
 
 import main.Game;
+import main.avatar.Avatar;
 import main.entities.Entity;
 import main.math.Vec2i;
 import main.GameWorld;
@@ -8,16 +9,16 @@ import main.GameWorld;
 import java.util.ArrayList;
 public class EnemyManager {
     private ArrayList<Entity> entities;
-    private int pastMoves;
+    private ArrayList<Integer> pastMoves;
     GameWorld world;
 
-    public EnemyManager(ArrayList<Entity> entities, int pastMoves, GameWorld world) {
+    public EnemyManager(ArrayList<Entity> entities, GameWorld world) {
         this.entities = entities;
-        this.pastMoves = pastMoves;
         for (Entity x : this.entities) {
             ((Enemy) x).setManager(this);
         }
         this.world = world;
+        this.pastMoves = ((Avatar) world.getAvatar()).getPastmoves();
     }
 
     /**
@@ -46,10 +47,15 @@ public class EnemyManager {
     /**
      * @return The past moves of the avatar
      */
-    public int getPastMoves() { return pastMoves; }
+    public ArrayList<Integer> getPastMoves() { return pastMoves; }
 
     /**
      * @return a list of entity
      */
     public ArrayList<Entity> getEntities() { return entities; }
+
+    /**
+     * @return The world
+     */
+    public GameWorld getWorld() { return world; }
 }
