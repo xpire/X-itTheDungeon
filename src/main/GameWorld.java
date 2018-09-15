@@ -275,4 +275,6 @@ public class GameWorld {
     public void removeBomb(Bomb bomb) {
         bombs.remove(bomb);
     }
+
+    public Entity getAvatar() {return avatar;}
 }

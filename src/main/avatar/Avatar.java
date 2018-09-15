@@ -13,6 +13,7 @@ import main.GameWorld;
 import main.entities.*;
 import main.math.Vec2d;
 import main.math.Vec2i;
+import java.util.ArrayList;
 
 
 public class Avatar extends Entity {
@@ -30,6 +31,7 @@ public class Avatar extends Entity {
     private BooleanProperty isInvincible;
     private Circle rageView;
 
+    private ArrayList<Integer> pastMoves;
 
     private IntegerProperty numArrows = new SimpleIntegerProperty(0);
     private IntegerProperty numBombs = new SimpleIntegerProperty(0);
@@ -43,6 +45,7 @@ public class Avatar extends Entity {
     public Avatar(GameWorld world) {
         super("Avatar");
         this.world = world;
+        this.pastMoves = new ArrayList<>();
     }
 
 
@@ -291,5 +294,9 @@ public class Avatar extends Entity {
 
     public boolean isRaged() {
         return isInvincible.get();
+    }
+
+    public ArrayList<Integer> getPastmoves() {
+        return this.pastMoves;
     }
 }
