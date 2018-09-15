@@ -149,8 +149,58 @@ public class GameWorld {
         for (Bomb bomb : new ArrayList<>(bombs)) {
             bomb.onTurnUpdate();
         }
+        checkObjective();
     }
 
+    /*A : Exit the Dungeon
+    B : Collect all Treasure
+    C : Kill all Enemies
+    D : Activate all Switches*/
+    public void checkObjective() {
+        if (map.getObjectives().contains("A")) {
+            for (Entity e : map.getExits()) {
+                if (avatar.getX() == e.getX() && avatar.getY() == e.getY()) {
+                    //PLAYER ON EXIT
+                    gameWin();
+                }
+            }
+        } else {
+            Boolean failure = false;
+            for (String o : map.getObjectives()) {
+                if (o.equals("B")) {
+                    if (avatar.getNumTreasuresProperty().getValue() == map.getTreasures().size()) {
+                        //successful
+                        continue;
+                    } else {
+                        failure = true;
+                    }
+                } else if (o.equals("C")) {
+                    if (map.getEnemies().size() == 0) {
+                        //successful
+                        continue;
+                    } else {
+                        failure = true;
+                    }
+                } else if (o.equals("D")) {
+                    for (Entity s : map.getSwitches()) {
+                        if (((Switch) s).getIsOn()) {
+                            //so far successful
+                            continue;
+                        } else {
+                            failure = true;
+                        }
+                    }
+//                    if (!failure) {
+//                        continue;
+//                    }
+                }
+            }
+            if (!failure) {
+                gameWin();
+            }
+        }
+
+    }
 
     public void render() {
 //        avatar.render();
@@ -212,6 +262,14 @@ public class GameWorld {
         lblGameOver.setTranslateY(220);
         lblGameOver.fontProperty().set(Font.font(40));
         rootView.getChildren().add(lblGameOver);
+    }
+
+    public void gameWin() {
+        Label lblGameWin = new Label("GAME WON");
+        lblGameWin.setTranslateX(250);
+        lblGameWin.setTranslateY(220);
+        lblGameWin.fontProperty().set(Font.font(40));
+        rootView.getChildren().add(lblGameWin);
     }
 
     public void removeBomb(Bomb bomb) {

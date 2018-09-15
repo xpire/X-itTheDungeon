@@ -5,7 +5,11 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import main.component.ViewComponent;
+import main.enemies.Enemy;
 import main.entities.Entity;
+import main.entities.Exit;
+import main.entities.Switch;
+import main.entities.Treasure;
 import main.math.Vec2d;
 import main.math.Vec2i;
 
@@ -23,6 +27,10 @@ public class Level {
 
     private Tile[][] tiles;
     private ArrayList<String> objectives;
+    private ArrayList<Entity> exits;
+    private ArrayList<Entity> treasures;
+    private ArrayList<Entity> enemies;
+    private ArrayList<Entity> switches;
 
     private ViewComponent view;
 
@@ -32,11 +40,19 @@ public class Level {
 
     public Level(Vec2i dim) {
         this(dim.getX(), dim.getY());
+        exits = new ArrayList<>();
+        treasures = new ArrayList<>();
+        enemies = new ArrayList<>();
+        switches = new ArrayList<>();
     }
 
 
     public Level(int nRows, int nCols) {
         this(nRows, nCols, 10.0);
+        exits = new ArrayList<>();
+        treasures = new ArrayList<>();
+        enemies = new ArrayList<>();
+        switches = new ArrayList<>();
     }
 
 
@@ -46,6 +62,11 @@ public class Level {
         this.size = size;
         this.nRows = nRows;
         this.nCols = nCols;
+
+        exits = new ArrayList<>();
+        treasures = new ArrayList<>();
+        enemies = new ArrayList<>();
+        switches = new ArrayList<>();
 
 
         GridPane gridView = new GridPane();
@@ -98,6 +119,7 @@ public class Level {
         entity.moveTo(x, y);
         view.addNode(entity.getView());
         tiles[y][x].addEntity(entity);
+        addObjective(entity);
     }
 
     public void addNewEntity(int x, int y, Entity entity) {
@@ -151,6 +173,22 @@ public class Level {
 
     public ArrayList<String> getObjectives() {
         return objectives;
+    }
+    public ArrayList<Entity> getExits() { return exits; }
+    public ArrayList<Entity> getTreasures() { return treasures; }
+    public ArrayList<Entity> getEnemies() { return enemies; }
+    public ArrayList<Entity> getSwitches() { return switches; }
+
+    public void addObjective(Entity e) {
+        if (e instanceof Exit) {
+            exits.add(e);
+        } else if (e instanceof Treasure) {
+            treasures.add(e);
+        } /*else if (e instanceof Enemy) { MAKE SURE ENEMY EXTENDS ENTITY
+            enemies.add(e);
+        } */else if (e instanceof Switch) {
+            switches.add(e);
+        }
     }
 
 

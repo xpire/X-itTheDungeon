@@ -8,6 +8,8 @@ import javafx.scene.shape.Box;
 import javafx.stage.Stage;
 import main.maploading.Level;
 
+import java.util.ArrayList;
+
 
 public class Game extends Application{
 
@@ -46,6 +48,7 @@ public class Game extends Application{
     public void onAfterUpdate() {
         world.render();
         input.update();
+
     }
 
 
@@ -80,6 +83,10 @@ public class Game extends Application{
 //        root.getChildren().add(circle);
 
         Level map = new Level(16, 16, 30);
+        ArrayList<String> obj = new ArrayList<>();
+        obj.add("B");
+        obj.add("D");
+        map.setObj(obj);
 
         world = new GameWorld(map);
 
