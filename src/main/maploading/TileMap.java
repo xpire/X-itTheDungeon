@@ -70,13 +70,13 @@ public class TileMap {
         this.tiles = resized;
         this.nRows = newNRow;
         this.nCols = newNCol;
-
     }
 
     public void displayTileMap() {
+        System.out.println(nRows + "\t" + nCols);
         for (int i = 0; i < nRows; i++) {
             for (int j = 0; j < nCols; j++) {
-                Tile t = getTile(new Vec2i(i, j));
+                Tile t = getTile(new Vec2i(j, i));
 
                 StringBuilder sb = new StringBuilder();
 
@@ -92,6 +92,12 @@ public class TileMap {
             }
             System.out.println();
         }
+
+        System.out.print("Objectives:");
+        for (String s : getObjectives()) {
+            System.out.print(" " + s);
+        }
+        System.out.println();
     }
 
     public Tile getTile(Vec2i pos) {
