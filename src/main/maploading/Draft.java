@@ -1,5 +1,6 @@
 package main.maploading;
 
+import main.entities.Door;
 import main.entities.Entity;
 import main.entities.Key;
 import main.math.Vec2i;
@@ -59,9 +60,9 @@ public class Draft {
         tileMap.resize(newNRow, newNCol);
     }
 
-    public void saveMap(String mapName) {
-        StringBuilder mapPath = new StringBuilder("./src/main/drafts/");
-        mapPath.append(mapName).append(".txt");
+    public void saveMap(String mapName, String path) {
+        StringBuilder mapPath = new StringBuilder("./src/main/");
+        mapPath.append(path).append("/").append(mapName).append(".txt");
 
         BufferedWriter w = null;
         try {
@@ -130,7 +131,27 @@ public class Draft {
         Tile t = tileMap.getTile(tile);
         MapInterpreter mapInterpreter = new MapInterpreter();
 
-        t.setEntities(mapInterpreter.getTileEntities(entities));
+        ArrayList<Entity> entities1 =mapInterpreter.getTileEntities(entities);
+        entities1.forEach(e -> {
+            if (e instanceof Door) {
+                ((Door) e).setPos(tile);
+            }
+
+        });
+        t.setEntities(entities1);
+    }
+
+    public void addToTile(Vec2i tile, char entity) {
+        Tile t = tileMap.getTile(tile);
+        MapInterpreter mapInterpreter = new MapInterpreter();
+
+        Entity e = mapInterpreter.getSingleEntity(entity);
+
+        if (e instanceof Key) {
+            ((Key) e).setPos(tile);
+        }
+
+        t.addEntity(e);
     }
 
     public static void main(String[] args) {
@@ -142,78 +163,103 @@ public class Draft {
             if ((command = sc.nextLine().split("\\s+")).length != 1) {
                 System.out.println("Error: no white space allowed");
                 command = null;
-            } else if (command[0].equals("Exit")) return;
+            } else if (command[0].equals("exit")) {
+                sc.close();
+                return;
+            }
         }
 
         Draft draft = new Draft(command[0]);
 
-        //temp save method here
-        draft.saveMap(draft.getDraftName());
+        draft.saveMap(draft.getDraftName(), "drafts");
 
         System.out.println("You may begin editing " + draft.getDraftName());
         draft.displayTileMap();
 
-        while ((command = sc.nextLine().split("\\s+")).length > 0) {
-            if (command[0].equals("Exit")) return;
-            draft.commandInterpreter(command);
+        while (sc.hasNextLine()) {
+            if ((command = sc.nextLine().split("\\s+")).length > 0) {
+                if (command[0].equals("exit")) {
+                    sc.close();
+                    return;
+                }
+                draft.commandInterpreter(command, sc);
+            }
         }
 
         sc.close();
     }
 
-    public void commandInterpreter(String[] command) {
-        switch (command[0]) {
+    public void commandInterpreter(String[] command, Scanner sc) {
+        switch (command[0].toLowerCase()) {
             case "save":
-            case "Save":
-                saveMap(getDraftName());
+                saveMap(getDraftName(), "drafts");
 
                 System.out.println("Map Saved");
                 return;
             case "edit":
-            case "Edit":
-                if (command.length != 4) {
-                    System.out.println("Usage: <X coord> <Y coord> <Entities String>");
+                if (!isValidEdit(command)) {
+                    System.out.println("Error: invalid command");
                     return;
                 }
 
-                if (!isValidEntities(command[3])) {
-                    System.out.println("Error: invalid entity stacking");
+                Vec2i tile = new Vec2i(Integer.parseInt(command[1]), Integer.parseInt(command[2]));
+
+                if (!tileMap.isValidGridPos(tile)) {
+                    System.out.println("Error: tile out of bounds");
                     return;
                 }
-
-                Vec2i tile = new Vec2i(Integer.parseInt(command[1]),
-                        Integer.parseInt(command[2]));
 
                 editTile(tile, command[3]);
+
+                if (isDoor(command[3])) {
+                    String[] matchingKey = null;
+
+                    while (matchingKey == null) {
+                        System.out.println("Please set the matching key");
+                        if (sc.hasNextLine()) {
+                            matchingKey = sc.nextLine().split("\\s+");
+                            if (matchingKey.length != 2) {
+                                System.out.println("Error: must be a tile location");
+                                matchingKey = null;
+                            }
+                        }
+                    }
+
+                    //contract that this is accurate
+                    Vec2i keyCoord = new Vec2i(Integer.parseInt(matchingKey[0]),
+                            Integer.parseInt(matchingKey[1]));
+
+                    addToTile(keyCoord, 'K');
+                    Key k = tileMap.getTile(keyCoord).getKey();
+                    Door d = tileMap.getTile(tile).getDoor();
+
+                    k.setMatchingDoor(d);
+
+                }
 
                 displayTileMap();
                 return;
             case "addr":
-            case "addR":
                 resize((getNRows() + 1), getNCols());
                 displayTileMap();
 
                 return;
             case "addc":
-            case "addC":
                 resize(getNRows(), (getNCols() + 1));
                 displayTileMap();
 
                 return;
             case "remr":
-            case "remR":
                 resize((getNRows() - 1), getNCols());
                 displayTileMap();
 
                 return;
             case "remc":
-            case "remC":
                 resize(getNRows(), (getNCols() - 1));
                 displayTileMap();
 
                 return;
             case "resize":
-            case "Resize":
                 if (command.length != 3) {
                     System.out.println("Usage: Resize <newNRow> <newNCol>");
                     return;
@@ -226,7 +272,6 @@ public class Draft {
                 return;
             case "obj":
             case "objective":
-            case "Objective":
                 if (command.length > 4) {
                     System.out.println("Error: too many objectives");
                     return;
@@ -243,25 +288,49 @@ public class Draft {
 
                 return;
             case "play":
-            case "Play":
                 System.out.println("Please upgrade to premium for just $99.99 a month to access this feature");
+
+                saveMap(getDraftName(), "draft");
+                MapLoader mapLoader = new MapLoader();
+                Level playTest = mapLoader.getLevel(getDraftName(), "drafts");
+
+                //playGame(playTest);
+
                 return;
             case "publish":
-            case "Publish":
-                System.out.println("Please upgrade to premium for just $99.99 a month to access this feature");
+                // still needs to check for conquerable
+                System.out.println("Please upgrade to premium for just $99.99 a month for complete feature");
+
+                saveMap(getDraftName(), "levels");
+                System.out.println("Map published");
+
                 return;
             default:
                 System.out.println("Command not recognised");
         }
     }
 
-    private boolean isValidEntities(String entities) {
-        char[] ch = entities.toCharArray();
+    private boolean isValidEdit(String[] command) {
+        if (command.length != 4) {
+            System.out.println("Usage: Edit <X coord> < Y coord> <Entities>");
+            return false;
+        }
 
-        if (ch.length == 0 || ch.length == 1) return true;
+        String validEntities = "P*X/O|$+-!#1234>^.";
+        char[] ch = command[3].toCharArray();
 
-        if (ch.length > 3) {
-            System.out.println("Error: too many entities");
+        for (char c : ch) {
+            if (!validEntities.contains(Character.toString(c))) {
+                System.out.println("Error: unrecognised entities");
+                System.out.println("Note: keys can only be placed by placing a door");
+                return false;
+            }
+        }
+
+        if (ch.length == 1) return true;
+
+        if (ch.length > 3 || ch.length == 0) {
+            System.out.println("Error: invalid number of entities");
             return false;
         }
 
@@ -279,6 +348,10 @@ public class Draft {
         //layer 3 entities
 
         return true;
+    }
+
+    private boolean isDoor(String entities) {
+        return entities.contains("|");
     }
 
     private boolean isValidObj(ArrayList<String> objectives) {

@@ -93,7 +93,9 @@ public class TileMap {
             System.out.println();
         }
 
-        System.out.print("Objectives:");
+        System.out.print("Objectives are:");
+        if (getObjectives().isEmpty())
+            System.out.print(" no objectives set");
         for (String s : getObjectives()) {
             System.out.print(" " + s);
         }
@@ -114,9 +116,9 @@ public class TileMap {
     public ArrayList<Key> findKeys() {
         ArrayList<Key> keys = new ArrayList<>();
 
-        for (int y = 0; y < nRows; y++) {
-            for (int x = 0; x < nCols; x++) {
-                Key k = tiles[y][x].getKey();
+        for (int i = 0; i < nRows; i++) {
+            for (int j = 0; j < nCols; j++) {
+                Key k = tiles[i][j].getKey();
                 if (k != null) keys.add(k);
             }
         }

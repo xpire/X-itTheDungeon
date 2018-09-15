@@ -16,6 +16,15 @@ public class Key extends Entity {
         super("Key");
     }
 
+    public Key(Vec2i pos) {
+        super("Key");
+        this.pos = pos;
+    }
+
+    public void setPos(Vec2i pos) {
+        this.pos = pos;
+    }
+
     public Key(String name, Level map, Vec2i pos) {
         super(name, map, pos);
     }
