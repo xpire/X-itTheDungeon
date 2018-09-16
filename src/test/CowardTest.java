@@ -64,8 +64,8 @@ public class CowardTest {
         Coward coward = new Coward(level, cowardLocation);
         level.setEnemy(cowardLocation, coward);
         level.displayLevel();
-        coward.decideBehaviour(level);
-        ArrayList<Vec2i> targets =  coward.getCurrBehavior().decideMove(
+        coward.decideBehaviour();
+        ArrayList<Vec2i> targets = coward.getCurrBehaviour().decideMove(
                 level,
                 cowardLocation,
                 avatarLocation,
