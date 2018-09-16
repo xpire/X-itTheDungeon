@@ -4,6 +4,9 @@ import javafx.event.EventHandler;
 import main.events.EnemyEvent;
 import main.events.EventBus;
 
+/**
+ * Class which tracks the "Kill all enemies" game objective
+ */
 public class KillAllEnemiesAchievement extends Achievement{
 
     private int numEnemies = 0;

@@ -7,10 +7,17 @@ import main.entities.prop.Prop;
 import main.maploading.Level;
 import main.math.Vec2i;
 
+/**
+ * Abstracts the Pickup entities on the level
+ */
 public abstract class Pickup extends Entity {
 
     protected int score = 0; //TODO: define it for each pickup
 
+    /**
+     * Basic Constructor
+     * @param level : current level
+     */
     public Pickup(Level level) {
         super(level);
     }
@@ -45,6 +52,19 @@ public abstract class Pickup extends Entity {
     }
 
     @Override
+    public void onEnterByAvatar(Avatar avatar) {
+        if (onPickupBy(avatar))
+            onDestroyed();
+    }
+
+    /**
+     * checks if item can be picked up by an avatar
+     * @param avatar Avatar
+     * @return true if can be picked up, false otherwise
+     */
+    public abstract boolean onPickupBy(Avatar avatar);
+
+    @Override
     public boolean canStackFor(Entity entity) {
         return false;
     }
@@ -59,13 +79,11 @@ public abstract class Pickup extends Entity {
         return true;
     }
 
-    @Override
-    public void onEnterByAvatar(Avatar avatar) {
-        if (onPickupBy(avatar))
-            onDestroyed();
-    }
 
-    public abstract boolean onPickupBy(Avatar avatar);
+    /**
+     * Getter for the Pickups score
+     * @return the score
+     */
 
     public int getScore() { return score; }
 }

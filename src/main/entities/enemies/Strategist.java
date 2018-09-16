@@ -7,6 +7,11 @@ import main.behaviour.StrategistBehaviour;
 import main.maploading.Level;
 import main.math.Vec2i;
 
+/**
+ * The Strategist enemy entity
+ * Follows the shortest path to a tile the Avatar
+ * is likely to go into
+ */
 public class Strategist extends Enemy {
 
     {
@@ -14,8 +19,12 @@ public class Strategist extends Enemy {
         isHunter    = false;
     }
 
-    public Strategist(Level map) {
-        super(map);
+    /**
+     * Basic constructor
+     * @param level Level the enemy will exist in
+     */
+    public Strategist(Level level) {
+        super(level);
     }
 
     public Strategist(Level map, Vec2i pos) {

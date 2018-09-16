@@ -3,6 +3,10 @@ package main.events;
 import javafx.event.Event;
 import javafx.event.EventType;
 
+/**
+ * Event which indicates when a switch has been activated,
+ * deactivated, created or destroyed
+ */
 public class SwitchEvent extends GameEvent {
 
     public static final EventType<SwitchEvent> ANY
@@ -20,6 +24,10 @@ public class SwitchEvent extends GameEvent {
     public static final EventType<SwitchEvent> SWITCH_DESTROYED
             = new EventType<>(SwitchEvent.ANY,"SWITCH_DESTROYED");
 
+    /**
+     * Constructor for the Switch Event
+     * @param eventType type of Event
+     */
     public SwitchEvent(EventType<? extends Event> eventType) {
         super(eventType);
     }

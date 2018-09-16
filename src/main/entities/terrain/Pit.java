@@ -10,6 +10,9 @@ import main.maploading.Level;
 import main.math.Vec2d;
 import main.math.Vec2i;
 
+/**
+ * Class describing the Pit entity
+ */
 public class Pit extends Terrain{
 
     private Rectangle hole;
@@ -18,6 +21,10 @@ public class Pit extends Terrain{
         symbol = '#';
     }
 
+    /**
+     * Basic constructor
+     * @param level
+     */
     public Pit(Level level) {
         super(level);
     }

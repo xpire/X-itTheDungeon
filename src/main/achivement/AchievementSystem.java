@@ -5,6 +5,9 @@ import main.events.EventBus;
 
 import java.util.ArrayList;
 
+/**
+ * Class which manages the set of achievements for a game
+ */
 public class AchievementSystem {
 
     private EventBus eventBus;

@@ -13,6 +13,9 @@ import main.maploading.Level;
 import main.math.Vec2d;
 import main.math.Vec2i;
 
+/**
+ * Class describing the Door entity
+ */
 public class Door extends Terrain {
 
     // TODO unused methods, eclipse testing, user stories -- deep, assumptions
@@ -25,6 +28,10 @@ public class Door extends Terrain {
         isOpen = false;
     }
 
+    /**
+     * Basic constructor
+     * @param level : current Level
+     */
     public Door(Level level) {
         super(level);
     }
@@ -55,7 +62,9 @@ public class Door extends Terrain {
     }
 
 
-
+    /**
+     * flag to open a door
+     */
     public void onOpen() {
         isOpen = true;
         doorFrame.setFill(Color.SILVER);

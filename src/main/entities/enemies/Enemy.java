@@ -10,6 +10,10 @@ import main.math.Vec2i;
 
 import java.util.ArrayList;
 
+/**
+ * Class which abstracts Enemy entities on the Level.
+ * Determines their next move and also the enemies current behaviour
+ */
 public abstract class Enemy extends Entity implements StateDecision {
 
     protected boolean isHunter = false;
@@ -18,6 +22,10 @@ public abstract class Enemy extends Entity implements StateDecision {
     private AIBehaviour currBehaviour = null;
 
 
+    /**
+     * Constructors for Enemies
+     * @param level reference to the level the Enemy will exist in
+     */
     public Enemy(Level level) {
         super(level);
     }
@@ -39,7 +47,7 @@ public abstract class Enemy extends Entity implements StateDecision {
 
     /**
      * Finding the shortest path to a specific square using A*, the heuristic chosen
-     * to be the Mahanttan distance and the path length of the current node to the
+     * to be the Manhattan distance and the path length of the current node to the
      * length node.
      * @param targets target square that the AI wants to go to
      * @return an ArrayList of the path to the square
@@ -50,6 +58,7 @@ public abstract class Enemy extends Entity implements StateDecision {
     }
 
     /**
+     * Determines the move of an Enemy
      * @return Move of an AI
      */
     public Vec2i getMove() {
@@ -97,12 +106,16 @@ public abstract class Enemy extends Entity implements StateDecision {
             avatar.onDestroyed();
     }
 
-
+    /**
+     * Getter for current behaviour
+     * @return the Enemies current behaviour
+     */
     public AIBehaviour getCurrBehaviour() { return currBehaviour; }
     public void setCurrBehaviour(AIBehaviour behaviour) { currBehaviour = behaviour;}
 
 
     /**
+     * Getter for the enemy manager
      * @return The current manager of the Enemies
      */
     public EnemyManager getManager() { return manager; }
@@ -115,7 +128,8 @@ public abstract class Enemy extends Entity implements StateDecision {
 
 
     /**
-     * @return If this is a hunter
+     * Checks if the current entity is a hunter
+     * @return True if hunter, false otherwise
      */
     public boolean isHunter() { return isHunter; }
 }

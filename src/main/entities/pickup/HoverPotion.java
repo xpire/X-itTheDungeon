@@ -8,6 +8,9 @@ import main.entities.Avatar;
 import main.maploading.Level;
 import main.math.Vec2i;
 
+/**
+ * Class describing the Hover Potion entity
+ */
 public class HoverPotion extends Pickup{
 
     private Group pot;
@@ -16,6 +19,10 @@ public class HoverPotion extends Pickup{
         symbol = '^';
     }
 
+    /**
+     * Basic constructor
+     * @param level
+     */
     public HoverPotion(Level level) {
         super(level);
     }

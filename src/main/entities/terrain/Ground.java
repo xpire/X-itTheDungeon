@@ -8,12 +8,19 @@ import main.maploading.Level;
 import main.math.Vec2d;
 import main.math.Vec2i;
 
+/**
+ * Class describing the Ground entity
+ */
 public class Ground extends Terrain {
 
     {
         symbol = '.';
     }
 
+    /**
+     * Basic constructor
+     * @param level : current level
+     */
     public Ground(Level level) { super(level); }
 
     public Ground(Level level, Vec2i pos) {

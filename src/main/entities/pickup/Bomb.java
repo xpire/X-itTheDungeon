@@ -6,12 +6,19 @@ import main.entities.Avatar;
 import main.maploading.Level;
 import main.math.Vec2i;
 
+/**
+ * Class describing the Bomb entity
+ */
 public class Bomb extends Pickup{
 
     {
         symbol = '!';
     }
 
+    /**
+     * Basic constructor
+     * @param level : current Level
+     */
     public Bomb(Level level) {
         super(level);
     }

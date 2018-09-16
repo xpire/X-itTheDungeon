@@ -21,6 +21,10 @@ public class EventBus {
         eventHandlers.removeEventHandler(type, handler);
     }
 
+    /**
+     * Sends out events to listeners
+     * @param event event to be sent out
+     */
     public void postEvent(Event event) {
         eventHandlers.fireEvent(event);
     }

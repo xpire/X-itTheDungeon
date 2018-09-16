@@ -9,6 +9,9 @@ import main.events.KeyEvent;
 import main.maploading.Level;
 import main.math.Vec2i;
 
+/**
+ * Class describing the key entity
+ */
 public class Key extends Pickup {
 
     private Door door;
@@ -18,6 +21,10 @@ public class Key extends Pickup {
         score = 1;
     }
 
+    /**
+     * Basic constructor
+     * @param level : current level
+     */
     public Key(Level level) {
         super(level);
     }
@@ -55,10 +62,19 @@ public class Key extends Pickup {
         return avatar.pickUpKey(this);
     }
 
+    /**
+     * Check if a door is the matching one for this key
+     * @param door : door being checked
+     * @return true if the door is the matching one
+     */
     public boolean isMatchingDoor(Door door) {
         return this.door.equals(door);
     }
 
+    /**
+     * Sets the keys matching door
+     * @param door : the door to be set as matching
+     */
     public void setMatchingDoor(Door door) {
         this.door = door;
     }
