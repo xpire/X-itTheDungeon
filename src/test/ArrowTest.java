@@ -1,5 +1,8 @@
 package test;
 
+import javafx.scene.input.KeyCode;
+import main.Game;
+import main.GameWorld;
 import main.entities.Avatar;
 import main.entities.enemies.Coward;
 import main.entities.pickup.Arrow;
@@ -24,12 +27,16 @@ public class ArrowTest {
     public void avatarHoldArrows() {
         MapLoader mapLoader = new MapLoader();
         Level level = mapLoader.loadLevel("TestArrow1", "../testdata/");
-        //TEST1 - RUN AWAY FROM PLAYER
         Vec2i arrowLocation = new Vec2i(2, 2);
-        Vec2i avatarLocation = new Vec2i(3, 3);
+        Vec2i avatarLocation = new Vec2i(2, 3);
         level.setAvatar(avatarLocation, new Avatar(level, avatarLocation));
         level.setPickup(arrowLocation, new Arrow(level, arrowLocation));
         level.displayLevel();
+        System.out.println(level.getAvatar().getNumArrowsProperty());
+        assertEquals((int) level.getAvatar().getNumArrowsProperty().getValue(), 0);
+
+        level.moveAvatar(arrowLocation);
+        assertEquals((int) level.getAvatar().getNumArrowsProperty().getValue(), 1);
     }
 
 
@@ -38,16 +45,27 @@ public class ArrowTest {
         MapLoader mapLoader = new MapLoader();
         Level level = mapLoader.loadLevel("TestArrow1", "../testdata/");
         //TEST1 - RUN AWAY FROM PLAYER
-        Vec2i cowardLocation = new Vec2i(2, 2);
+        Vec2i cowardLocation = new Vec2i(2, 5);
         Vec2i avatarLocation = new Vec2i(3, 3);
-
-        ArrayList<Vec2i> expected = new ArrayList<>();
-        expected.add(new Vec2i(1, 2));
-        expected.add(new Vec2i(2, 1));
+        Vec2i arrowLocation = new Vec2i(2, 2);
         level.setAvatar(avatarLocation, new Avatar(level, avatarLocation));
+        level.setPickup(arrowLocation, new Arrow(level, arrowLocation));
         Coward coward = new Coward(level, cowardLocation);
         level.setEnemy(cowardLocation, coward);
+
         level.displayLevel();
+        System.out.println(level.getAvatar().getNumArrowsProperty());
+        assertEquals((int) level.getAvatar().getNumArrowsProperty().getValue(), 0);
+
+        level.moveAvatar(arrowLocation);
+        assertEquals((int) level.getAvatar().getNumArrowsProperty().getValue(), 1);
+        level.displayLevel();
+
+        level.getAvatar().shootArrow();
+        level.displayLevel();
+
+
+
     }
 
 
