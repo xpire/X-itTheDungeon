@@ -4,6 +4,9 @@ import javafx.event.EventHandler;
 import main.events.EventBus;
 import main.events.TreasureEvent;
 
+/**
+ * Class which tracks the "collect all treasures" game objectives
+ */
 public class CollectAllTreasuresAchievement extends Achievement{
 
     private int numTreasures = 0;

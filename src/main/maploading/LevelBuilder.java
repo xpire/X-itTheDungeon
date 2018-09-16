@@ -9,14 +9,19 @@ import main.entities.terrain.Door;
 import main.entities.terrain.Terrain;
 import main.math.Vec2i;
 
+/**
+ * A Class using Factory Pattern to add entities to a Level
+ */
 public class LevelBuilder {
 
-    /*
-    TODO:
-        when ian changes the removing terrains function,
-        adding ground tiles here is redundant
+    /**
+     * Adds individual entities to the a level
+     *
+     * @param entity Symbol of the entity to be added
+     * @param pos position to add that entity
+     * @param level reference to the Level the entity will be added to
+     * @throws Exception If symbol is unrecognised
      */
-
     public void buildEntity(char entity, Vec2i pos, Level level) throws Exception {
 
         EnemyFactory enemyFactory = new EnemyFactory();
@@ -103,6 +108,14 @@ public class LevelBuilder {
         }
     }
 
+    /**
+     * Separately adds Keys and Doors to Levels. This is so
+     * keys can have their matching door set, and it enforces key-doors to be
+     * placed in pairs
+     * @param level : reference to the level where entities will be added
+     * @param keyPos : position of the key
+     * @param doorPos : position of the door
+     */
     public void buildKeyDoor(Level level, Vec2i keyPos, Vec2i doorPos) {
 
         Key key = new Key(level, keyPos);

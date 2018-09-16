@@ -55,6 +55,15 @@ public class Level {
     private EventBus eventBus = new EventBus();
     private AchievementSystem achievementSystem = new AchievementSystem(eventBus);
 
+    /**
+     * Constructor for the Level class
+     * @param nRows : number of rows
+     * @param nCols : number of columns
+     * @param size : size of each tile (in the view)
+     * @param name : name of the Level
+     * @param isCreateMode : flag to differentiate events that should be triggered
+     */
+
     public Level(int nRows, int nCols, double size, String name, boolean isCreateMode) {
         this.nRows = nRows;
         this.nCols = nCols;
@@ -90,19 +99,34 @@ public class Level {
         view.addNode(avatarLayer);
     }
 
+    /**
+     * Level constructor which sets PlayMode as the default flag
+     * @param nRows : number of rows
+     * @param nCols : number of cols
+     * @param size : size of each tile (in the view)
+     * @param name : name of the Level
+     */
     public Level(int nRows, int nCols, double size, String name) {
         this(nRows, nCols, size, name, false);
     }
 
 
     /*
-        Name tools
+        NAME TOOLS
      */
 
+    /**
+     * Getter for Level's name
+     * @return the Level's name
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Sets the Level name
+     * @param name : name of the Level
+     */
     public void setName(String name) {
         this.name = name;
     }
@@ -111,22 +135,47 @@ public class Level {
     /*
         ENTITY GETTERS
      */
+
+    /**
+     * Gets a Terrain entity at the given position
+     * @param pos : the position on the Level where you want to look for a Terrain
+     * @return The Terrain entity at the given position if there is one
+     */
     public Terrain getTerrain(Vec2i pos) {
         return terrains[pos.getY()][pos.getX()];
     }
 
+    /**
+     * Gets a Prop entity at the given position
+     * @param pos : the position on the Level where you want to look for a Prop
+     * @return The Prop entity at the given position if there is one
+     */
     public Prop getProp(Vec2i pos) {
         return props.get(pos);
     }
 
+    /**
+     * Gets the Pickup entity at the given position
+     * @param pos : the position on the Level where you want to look for a Pickup
+     * @return The Pickup entity at the given position if there is one
+     */
     public Pickup getPickup(Vec2i pos) {
         return pickups.get(pos);
     }
 
+    /**
+     * Gets the Enemy entity at the given position
+     * @param pos : the position on the Level where you want to look for an Enemy
+     * @return The Enemy entity at the given position if there is one
+     */
     public Enemy getEnemy(Vec2i pos) {
         return enemies.get(pos);
     }
 
+    /**
+     * Gets the Avatar entity on the Level
+     * @return The Avatar entity
+     */
     public Avatar getAvatar() {
         return avatar;
     }
@@ -136,13 +185,25 @@ public class Level {
     /*
         ENTITY SETTERS
      */
+
+    /**
+     * Sets a Terrain entity on the level at a given position
+     * Overwrites the previous Terrain entity at the location
+     * @param pos : position to set the Terrain entity
+     * @param terrain : Terrain entity to be set
+     */
     public void setTerrain(Vec2i pos, Terrain terrain) {
         removeTerrain(pos);
         terrains[pos.getY()][pos.getX()] = terrain;
         moveEntityTo(pos, terrain);
     }
 
-
+    /**
+     * Sets a Prop entity on the level at a given position
+     * Overwrites the previous Prop entity at the location
+     * @param pos : position to set the Prop entity
+     * @param prop : Prop entity to be set
+     */
     public void setProp(Vec2i pos, Prop prop) {
         removeProp(pos);
         props.put(new Vec2i(pos), prop);
@@ -151,12 +212,24 @@ public class Level {
         notifyOnEnterByProp(pos, prop);
     }
 
+    /**
+     * Sets a Pickup entity on the level at a given position
+     * Overwrites the previous Pickup entity at the location
+     * @param pos : position to set the Pickup entity
+     * @param pickup : Terrain entity to be set
+     */
     public void setPickup(Vec2i pos, Pickup pickup) {
         removePickup(pos);
         pickups.put(new Vec2i(pos), pickup);
         moveEntityTo(pos, pickup);
     }
 
+    /**
+     * Sets a Enemy entity on the level at a given position
+     * Overwrites the previous Enemy entity at the location
+     * @param pos : position to set the Enemy entity
+     * @param enemy : Enemy entity to be set
+     */
     public void setEnemy(Vec2i pos, Enemy enemy) {
         removeEnemy(pos);
         enemies.put(new Vec2i(pos), enemy);
@@ -165,6 +238,12 @@ public class Level {
         notifyOnEnterByEnemy(pos, enemy);
     }
 
+    /**
+     * Sets a Avatar entity on the level at a given position
+     * Overwrites the previous Avatar entity at the location
+     * @param pos : position to set the Avatar entity
+     * @param avatar : Avatar entity to be set
+     */
     public void setAvatar(Vec2i pos, Avatar avatar) {
         removeAvatar();
         this.avatar = avatar;
@@ -173,6 +252,11 @@ public class Level {
         notifyOnEnterByAvatar(pos, avatar);
     }
 
+    /**
+     * Moves an entity from their current position to a new on on the Level
+     * @param pos : new position
+     * @param entity : entity to be moved
+     */
     private void moveEntityTo(Vec2i pos, Entity entity) {
         entity.moveTo(pos);
     }
@@ -181,31 +265,62 @@ public class Level {
     /*
        ADDING NEW ENTITIES
     */
+
+    /**
+     * Sets a Terrain entity onto the Level and also updates it on the Game view
+     * @param pos : position on the Level
+     * @param terrain : Terrain entity
+     */
     public void addTerrain(Vec2i pos, Terrain terrain) {
         setTerrain(pos, terrain);
         addEntityView(terrainLayer, terrain);
     }
 
+    /**
+     * Sets a Prop entity onto the Level and also updates it on the Game view
+     * @param pos : position on the Level
+     * @param prop : Prop entity
+     */
     public void addProp(Vec2i pos, Prop prop) {
         setProp(pos, prop);
         addEntityView(propLayer, prop);
     }
 
+    /**
+     * Sets a Pickup entity onto the Level and also updates it on the Game view
+     * @param pos : position on the Level
+     * @param pickup : Pickup entity
+     */
     public void addPickup(Vec2i pos, Pickup pickup) {
         setPickup(pos, pickup);
         addEntityView(pickupLayer, pickup);
     }
 
+    /**
+     * Sets an Enemy entity onto the Level and also updates it on the Game view
+     * @param pos : position on the Level
+     * @param enemy : Enemy entity
+     */
     public void addEnemy(Vec2i pos, Enemy enemy) {
         setEnemy(pos, enemy);
         addEntityView(enemyLayer, enemy);
     }
 
+    /**
+     * Sets an Avatar entity onto the Level and also updates it on the Game view
+     * @param pos : position on the Level
+     * @param avatar : Avatar entity
+     */
     public void addAvatar(Vec2i pos, Avatar avatar) {
         setAvatar(pos, avatar);
         addEntityView(avatarLayer, avatar);
     }
 
+    /**
+     * Adds an entity to the Game View
+     * @param layer : entity layer to be displayed
+     * @param entity : entity to be added
+     */
     private void addEntityView(Group layer, Entity entity) {
         layer.getChildren().add(entity.getView());
     }
@@ -213,6 +328,12 @@ public class Level {
 
     /*
         ENTITY REMOVERS
+     */
+
+    /**
+     * Removes all entities at a position
+     * @param pos : position on the Level to remove everything
+     * @param replaceWithDefault : flag to replace the cleared tile with a Ground tile
      */
     public void removeAllAt(Vec2i pos, boolean replaceWithDefault) {
         removeTerrain(pos, replaceWithDefault);
@@ -223,6 +344,11 @@ public class Level {
 
     }
 
+    /**
+     * Removes a Terrain entity at a certain position
+     * @param pos : position on the Level
+     * @return The Terrain entity just removed
+     */
     public Terrain removeTerrain(Vec2i pos) {
         Terrain terrain = terrains[pos.getY()][pos.getX()];
         terrains[pos.getY()][pos.getX()] = null;
@@ -233,6 +359,12 @@ public class Level {
         return terrain;
     }
 
+    /**
+     * Overloaded method: allows a flag to set a Ground tile at the removed Terrain entity
+     * @param pos : position on the Level
+     * @param replaceWithDefault : flag to replace the removed Terrain with a Ground tile
+     * @return The Terrain entity just removed
+     */
     public Terrain removeTerrain(Vec2i pos, boolean replaceWithDefault) {
         Terrain terrain = removeTerrain(pos);
 
@@ -243,6 +375,11 @@ public class Level {
     }
 
 
+    /**
+     * Removes a Prop entity at a certain position
+     * @param pos : position on the Level
+     * @return The Prop entity just removed
+     */
     public Prop removeProp(Vec2i pos) {
         Prop prop = props.remove(pos);
         if (prop != null) {
@@ -253,6 +390,11 @@ public class Level {
         return prop;
     }
 
+    /**
+     * Removes a Pickup entity at a certain position
+     * @param pos : position on the Level
+     * @return The Pickup entity just removed
+     */
     public Pickup removePickup(Vec2i pos) {
         Pickup pickup = pickups.remove(pos);
         if (pickup != null)
@@ -260,6 +402,11 @@ public class Level {
         return pickup;
     }
 
+    /**
+     * Removes a Enemy entity at a certain position
+     * @param pos : position on the Level
+     * @return The Enemy entity just removed
+     */
     public Enemy removeEnemy(Vec2i pos) {
         Enemy enemy = enemies.remove(pos);
         if (enemy != null) {
@@ -269,6 +416,10 @@ public class Level {
         return enemy;
     }
 
+    /**
+     * Removes the Avatar entity from the Level
+     * I.e when the Avatar dies
+     */
     public void removeAvatar() {
         if (avatar != null) {
             removeEntityView(avatarLayer, avatar);
@@ -277,6 +428,11 @@ public class Level {
         avatar = null;
     }
 
+    /**
+     * Removes the graphical component of an entity from the Game View
+     * @param layer : layer the entity is on
+     * @param entity : the entity to be removed
+     */
     private void removeEntityView(Group layer, Entity entity) {
         layer.getChildren().remove(entity.getView());
         entity.onRemovedFromLevel();
@@ -286,6 +442,12 @@ public class Level {
     /*
         MOVE ENTITY
      */
+
+    /**
+     * Moves a Prop entity on the Level
+     * @param pos : position to move onto
+     * @param prop : Prop entity
+     */
     public void moveProp(Vec2i pos, Prop prop) {
         if (!hasProp(prop.getGridPos())) return;
 
@@ -294,6 +456,11 @@ public class Level {
         setProp(pos, prop);
     }
 
+    /**
+     * Moves an Enemy entity on the Level
+     * @param pos : position to move onto
+     * @param enemy : Enemy entity to move
+     */
     public void moveEnemy(Vec2i pos, Enemy enemy) {
         if (!hasEnemy(enemy.getGridPos())) return;
 
@@ -302,6 +469,10 @@ public class Level {
         setEnemy(pos, enemy);
     }
 
+    /**
+     * Moves the Avatar on the Level
+     * @param pos : position to move onto
+     */
     public void moveAvatar(Vec2i pos) {
         if (avatar == null) return;
 
@@ -315,6 +486,12 @@ public class Level {
     /*
         NOTIFY TILE OBSERVERS
      */
+
+    /**
+     * Notifies the Terrain entity when a Prop moves on top of it
+     * @param pos : position of Terrain entity
+     * @param prop : Prop entity which was moved
+     */
     private void notifyOnEnterByProp(Vec2i pos, Prop prop) {
         Terrain currTerrain = getTerrain(pos);
         if (currTerrain != null) currTerrain.onEnterByProp(prop);
@@ -325,6 +502,11 @@ public class Level {
         if (hasAvatar(pos))     getAvatar().onEnterByProp(prop);
     }
 
+    /**
+     * Notifies the Terrain entity when an Enemy moves on top of it
+     * @param pos : position of the Terrain entity
+     * @param enemy : Enemy which was moved
+     */
     private void notifyOnEnterByEnemy(Vec2i pos, Enemy enemy) {
         if (hasTerrain(pos))    getTerrain(pos).onEnterByEnemy(enemy);
         if (hasProp(pos))       getProp(pos).onEnterByEnemy(enemy);
@@ -332,6 +514,11 @@ public class Level {
         if (hasAvatar(pos))     getAvatar().onEnterByEnemy(enemy);
     }
 
+    /**
+     * Notifies the Terrain entity and Pickup entity when the Avatar moves on top of it
+     * @param pos : position of the Terrain & Pickup entity
+     * @param avatar : Avatar entity
+     */
     private void notifyOnEnterByAvatar(Vec2i pos, Avatar avatar) {
         if (hasTerrain(pos))    getTerrain(pos).onEnterByAvatar(avatar);
         if (hasProp(pos))       getProp(pos).onEnterByAvatar(avatar);
@@ -339,6 +526,11 @@ public class Level {
         if (hasEnemy(pos))      getEnemy(pos).onEnterByAvatar(avatar);
     }
 
+    /**
+     * Notifies the Terrain entity when a Prop is moved from on top of it
+     * @param pos : position of the Terrain
+     * @param prop : Prop which was moved
+     */
     private void notifyOnLeaveByProp(Vec2i pos, Prop prop) {
         if (hasTerrain(pos))    getTerrain(pos).onLeaveByProp(prop);
         if (hasProp(pos))       getProp(pos).onLeaveByProp(prop);
@@ -346,6 +538,11 @@ public class Level {
         if (hasAvatar(pos))     getAvatar().onLeaveByProp(prop);
     }
 
+    /**
+     * Notifies the Terrain when an Enemy is moved from on top of it
+     * @param pos : position of the Terrain
+     * @param enemy : Enemy which moved
+     */
     private void notifyOnLeaveByEnemy(Vec2i pos, Enemy enemy) {
         if (hasTerrain(pos))    getTerrain(pos).onLeaveByEnemy(enemy);
         if (hasProp(pos))       getProp(pos).onLeaveByEnemy(enemy);
@@ -353,6 +550,11 @@ public class Level {
         if (hasAvatar(pos))     getAvatar().onLeaveByEnemy(enemy);
     }
 
+    /**
+     * Notifies the Terrain when an Avatar is moved from on top of it
+     * @param pos : position of the Terrain
+     * @param avatar : Avatar entity
+     */
     private void notifyOnLeaveByAvatar(Vec2i pos, Avatar avatar) {
         if (hasTerrain(pos))    getTerrain(pos).onLeaveByAvatar(avatar);
         if (hasProp(pos))       getProp(pos).onLeaveByAvatar(avatar);
@@ -363,22 +565,48 @@ public class Level {
     /*
         HAS ENTITY
      */
+
+    /**
+     * Checks if there is a Terrain entity at a given position
+     * @param pos : position to check
+     * @return True if the Terrain exists, False otherwise
+     */
     public boolean hasTerrain(Vec2i pos) {
         return getTerrain(pos) != null;
     }
 
+    /**
+     * Checks if there is a Prop entity at a given position
+     * @param pos : position to check
+     * @return True if the Prop exists, False otherwise
+     */
     public boolean hasProp(Vec2i pos) {
         return props.containsKey(pos);
     }
 
+    /**
+     * Checks if there is a Pickup entity at a given position
+     * @param pos : position to check
+     * @return True if the Pickup exists, False otherwise
+     */
     public boolean hasPickup(Vec2i pos) {
         return pickups.containsKey(pos);
     }
 
+    /**
+     * Checks if there is an Enemy entity at a given position
+     * @param pos : position to check
+     * @return True if the Enemy exists, False otherwise
+     */
     public boolean hasEnemy(Vec2i pos) {
         return enemies.containsKey(pos);
     }
 
+    /**
+     * Checks if there is an Avatar entity at a given position
+     * @param pos : position to check
+     * @return True if the Avatar exists, False otherwise
+     */
     public boolean hasAvatar(Vec2i pos) {
         return avatar != null && avatar.getGridPos().equals(pos);
     }
@@ -387,36 +615,78 @@ public class Level {
         CAN STACK FOR
      */
 
+    /**
+     * Checks if you can place a Terrain entity at a certain position, without
+     * violating stacking rules
+     * @param pos : position to check
+     * @param terrain : Terrain entity to be placed
+     * @return True if you can place the Terrain down, false otherwise
+     */
     public boolean canPlaceTerrain(Vec2i pos, Terrain terrain) {
         if (hasTerrain(pos)) return false;
 
         return canReplaceTerrain(pos, terrain);
     }
 
+    /**
+     * Checks if you can place a Prop entity at a certain position, without
+     * violating stacking rules
+     * @param pos : position to check
+     * @param prop : Prop entity to be placed
+     * @return True if you can place the Prop down, false otherwise
+     */
     public boolean canPlaceProp(Vec2i pos, Prop prop) {
         if (hasProp(pos)) return false;
 
         return canReplaceProp(pos, prop);
     }
 
+    /**
+     * Checks if you can place a Pickup entity at a certain position, without
+     * violating stacking rules
+     * @param pos : position to check
+     * @param pickup : Pickup entity to be placed
+     * @return True if you can place the Pickup down, false otherwise
+     */
     public boolean canPlacePickup(Vec2i pos, Pickup pickup) {
         if (hasPickup(pos)) return false;
 
         return canReplacePickup(pos, pickup);
     }
 
+    /**
+     * Checks if you can place an Enemy entity at a certain position, without
+     * violating stacking rules
+     * @param pos : position to check
+     * @param enemy : Enemy entity to be placed
+     * @return True if you can place the Enemy down, false otherwise
+     */
     public boolean canPlaceEnemy(Vec2i pos, Enemy enemy) {
         if (hasEnemy(pos)) return false;
 
         return canReplaceEnemy(pos, enemy);
     }
 
+    /**
+     * Checks if you can place an Avatar entity at a certain position, without
+     * violating stacking rules
+     * @param pos : position to check
+     * @param avatar : Avatar entity to be placed
+     * @return True if you can place the Avatar down, false otherwise
+     */
     public boolean canPlaceAvatar(Vec2i pos, Avatar avatar) {
         if (hasAvatar(pos)) return false;
 
         return canReplaceAvatar(pos, avatar);
     }
 
+    /**
+     * Checks if you can place a Terrain entity at a certain position, without
+     * violating stacking rules if a current Terrain entity is removed
+     * @param pos : position to check
+     * @param terrain : Terrain to be placed
+     * @return True if you can place it, false otherwise
+     */
     public boolean canReplaceTerrain(Vec2i pos, Terrain terrain) {
         if (hasProp(pos)) {
             if (!terrain.canStackForProp(getProp(pos))) return false;
@@ -439,6 +709,13 @@ public class Level {
         return true;
     }
 
+    /**
+     * Checks if you can place a Prop entity at a certain position, without
+     * violating stacking rules if a current Prop entity is removed
+     * @param pos : position to check
+     * @param prop : Prop to be placed
+     * @return True if you can place it, false otherwise
+     */
     public boolean canReplaceProp(Vec2i pos, Prop prop) {
         if (hasTerrain(pos)) {
             if (!getTerrain(pos).canStackForProp(prop)) return false;
@@ -459,6 +736,13 @@ public class Level {
         return true;
     }
 
+    /**
+     * Checks if you can place a Pickup entity at a certain position, without
+     * violating stacking rules if a current Pickup entity is removed
+     * @param pos : position to check
+     * @param pickup : Pickup to be placed
+     * @return True if you can place it, false otherwise
+     */
     public boolean canReplacePickup(Vec2i pos, Pickup pickup) {
         if (hasTerrain(pos)) {
             if (!getTerrain(pos).canStackForPickup(pickup)) return false;
@@ -479,6 +763,13 @@ public class Level {
         return true;
     }
 
+    /**
+     * Checks if you can place a Enemy entity at a certain position, without
+     * violating stacking rules if a current Enemy entity is removed
+     * @param pos : position to check
+     * @param enemy : Enemy to be placed
+     * @return True if you can place it, false otherwise
+     */
     public boolean canReplaceEnemy(Vec2i pos, Enemy enemy) {
         if (hasTerrain(pos)) {
             if (!getTerrain(pos).canStackForEnemy(enemy)) return false;
@@ -499,6 +790,13 @@ public class Level {
         return true;
     }
 
+    /**
+     * Checks if you can place a Avatar entity at a certain position, without
+     * violating stacking rules if a current Avatar entity is removed
+     * @param pos : position to check
+     * @param avatar : Avatar to be placed
+     * @return True if you can place it, false otherwise
+     */
     public boolean canReplaceAvatar(Vec2i pos, Avatar avatar) {
         if (hasTerrain(pos)) {
             if (!getTerrain(pos).canStackForAvatar(avatar)) return false;
@@ -523,6 +821,13 @@ public class Level {
     /*
         ENTITY PASSABLE FOR
      */
+
+    /**
+     * Checks if an Avatar entity can pass through a certain tile
+     * @param pos : position to check
+     * @param other : Other entity which wants to move onto the tile
+     * @return True if the entity can move, false otherwise
+     */
     public boolean isPassableForAvatar(Vec2i pos, Avatar other) {
         if(!isValidGridPos(pos)) return false;
 
@@ -538,7 +843,12 @@ public class Level {
         return true;
     }
 
-
+    /**
+     * Checks if an Enemy entity can pass through a certain tile
+     * @param pos : position to check
+     * @param other : Other entity which wants to move onto the tile
+     * @return True if the entity can move, false otherwise
+     */
     public boolean isPassableForEnemy(Vec2i pos, Enemy other) {
         if(!isValidGridPos(pos)) return false;
 
@@ -557,7 +867,12 @@ public class Level {
         return true;
     }
 
-
+    /**
+     * Checks if an Prop entity can pass through a certain tile
+     * @param pos : position to check
+     * @param other : Other entity which wants to move onto the tile
+     * @return True if the entity can move, false otherwise
+     */
     public boolean isPassableForProp(Vec2i pos, Prop other) {
         if(!isValidGridPos(pos)) return false;
 
@@ -577,10 +892,18 @@ public class Level {
         Objective tools
      */
 
+    /**
+     * Getter for the objectives of the Level
+     * @return ArrayList of Level objectives
+     */
     public ArrayList<String> getObjectives() {
         return objectives;
     }
 
+    /**
+     * Setter for the objectives of the Level
+     * @param objectives ArrayList of objectives
+     */
     public void setObjectives(ArrayList<String> objectives) {
         this.objectives = objectives;
     }
@@ -588,35 +911,71 @@ public class Level {
     /*
         Dimensions and View
      */
+
+    /**
+     * Getter for the # of rows in the Level
+     * @return The # of rows in the Level
+     */
     public int getNRows() {
         return nRows;
     }
 
+    /**
+     * Getter for the # of cols in the Level
+     * @return The # of cols in the Level
+     */
     public int getNCols() {
         return nCols;
     }
 
+    /**
+     * Getter for the Height of each tile
+     * @return The height of each tile
+     */
     public double getHeight() {
         return size * nRows;
     }
 
+    /**
+     * Getter for the width of each tile
+     * @return the width of each tile
+     */
     public double getWidth() {
         return size * nCols;
     }
 
+    /**
+     * Getter for the View of the Level
+     * @return the View of the Level
+     */
     public Node getView() {
         return view.getView();
     }
 
 
+    /**
+     * Checks if a certain coordinate is a valid point on the Level
+     * @param pos : coordinate to check
+     * @return True if valid, false otherwise
+     */
     public boolean isValidGridPos(Vec2i pos) {
         return pos.withinX(0, getNCols() - 1) && pos.withinY(0, getNRows() - 1);
     }
 
+    /**
+     * Computes the position of a Tile on the screen
+     * @param pos : position of the tile
+     * @return The coordinate of the Tile on the screen
+     */
     public Vec2d gridPosToWorldPosCentre(Vec2i pos) {
         return new Vec2d((pos.getX() + 0.5) * size, (pos.getY() + 0.5) * size);
     }
 
+    /**
+     * Resizes the # of rows and cols of the Level
+     * @param newNRow : new # of rows for the Level
+     * @param newNCol : new # of cols for the Level
+     */
     public void resize(int newNRow, int newNCol) {
         Vec2i newDim = new Vec2i(newNRow, newNCol);
         if (!newDim.within(new Vec2i(4, 4), new Vec2i(64, 64))) {
@@ -672,29 +1031,52 @@ public class Level {
     }
 
 
+    /**
+     * Gets an iterator for the Terrain entities of the Level
+     * @return an iterator of the Terrain entities
+     */
     public Iterator<Terrain> getTerrainIterator() {
         return new Array2DIterator<>(terrains);
     }
 
+    /**
+     * Gets an iterator for the Prop entities of the Level
+     * @return an iterator of the Prop entities
+     */
     public Iterator<Prop> getPropIterator() {
         return new ArrayList<>(props.values()).iterator();
     }
 
+    /**
+     * Gets an iterator for the Pickup entities of the Level
+     * @return an iterator of the Pickup entities
+     */
     public Iterator<Pickup> getPickupIterator() {
         return new ArrayList<>(pickups.values()).iterator();
     }
 
+    /**
+     * Gets an iterator for the Enemy entities of the Level
+     * @return an iterator of the Pickup entities
+     */
     public Iterator<Enemy> getEnemyIterator() {
         return new ArrayList<>(enemies.values()).iterator();
     }
 
+    /**
+     * Gets an ArrayList of the Enemy entities of the Level
+     * @return an ArrayList of the Enemy entities
+     */
     public ArrayList<Enemy> getEnemies() {
         return new ArrayList<>(enemies.values());
     }
 
 
-
-
+    /**
+     * Gets an iterator for the entities at a certain position
+     * @param pos : the position to find entities
+     * @return an iterator of the entities at the position
+     */
     public Iterator<Entity> getEntitiesAt(Vec2i pos) {
         ArrayList<Entity> entities = new ArrayList<>();
         if (hasTerrain(pos))    entities.add(getTerrain(pos));
@@ -706,6 +1088,9 @@ public class Level {
         return entities.iterator();
     }
 
+    /**
+     * Displays the Level to the terminal in symbol format
+     */
     public void displayLevel() {
 
         System.out.println(nRows + "\t" + nCols);
@@ -736,14 +1121,32 @@ public class Level {
     /*
         GAME EVENT
      */
+
+    /**
+     * Dispatches a given event to all listeners of that event
+     * @param event Event to dispatch
+     */
     public void postEvent(Event event) {
         eventBus.postEvent(event);
     }
 
+    /**
+     * Adds an event handler
+     * @param type type of event
+     * @param handler handler object for the event
+     * @param <T> event type
+     */
     public <T extends Event> void addEventHandler(EventType<T> type, EventHandler<? super T> handler) {
         eventBus.addEventHandler(type, handler);
     }
 
+
+    /**
+     * Removes an event handler
+     * @param type type of event
+     * @param handler handler object for the event
+     * @param <T> event type
+     */
     public <T extends Event> void removeEventHandler(EventType<T> type, EventHandler<? super T> handler) {
         eventBus.removeEventHandler(type, handler);
     }
@@ -752,14 +1155,26 @@ public class Level {
         GAME ACHIEVEMENT
      */
 
+    /**
+     * Getter for the Event Bus
+     * @return The event bus
+     */
     public EventBus getEventBus() {
         return eventBus;
     }
 
+    /**
+     * Adds objectives to the Level
+     * @param objective the objective to add
+     */
     public void addObjectives(Achievement objective){
         achievementSystem.addAchievement(objective);
     }
 
+    /**
+     * Checks if all objectives have been completed
+     * @return true if all completed, false otherwise
+     */
     public boolean checkAchievedAllObjectives(){
         return achievementSystem.checkAchievedAll();
     }
@@ -769,13 +1184,19 @@ public class Level {
         TOGGLE PLAY-MODE / CREATE-MODE
      */
 
+    /**
+     * Checks if the level is running on Create Mode
+     * @return True if on create mode, false otherwise
+     */
     public boolean isCreateMode() {
         return isCreateMode;
     }
 
+    /**
+     * Sets the level into Create Mode
+     * @param isCreateMode
+     */
     public void setCreateMode(boolean isCreateMode) {
         this.isCreateMode = isCreateMode;
     }
 }
-
-

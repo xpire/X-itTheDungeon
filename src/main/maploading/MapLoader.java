@@ -10,8 +10,23 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Scanner;
 
+/**
+ * A Class to load in maps from txt files which can then be used in Play Mode and Create Mode
+ */
 public class MapLoader {
 
+    /**
+     * Loads a Level in from a .txt file.
+     * First gets the dimensions of the map and initialises the Level
+     * Then loads in the body of the Level, using the LevelBuilder to map symbols to
+     * entities
+     * Then sets the Level's objectives
+     * Finally sets the Key-Door Mapping within the Level
+     *
+     * @param mapName name of the Level to load in
+     * @param path Path where the Level is saved, root at main
+     * @return The Level which was just loaded
+     */
     public Level loadLevel(String mapName, String path) {
         LevelBuilder levelBuilder = new LevelBuilder();
         Level level = null;
