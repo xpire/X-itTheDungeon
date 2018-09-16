@@ -8,15 +8,15 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
-import main.Game;
+import main.app.Game;
 import main.entities.enemies.Enemy;
 import main.entities.pickup.*;
+import main.entities.prop.FlyingArrow;
 import main.entities.prop.LitBomb;
 import main.entities.prop.Prop;
 import main.entities.terrain.Door;
 import main.entities.terrain.Terrain;
 import main.maploading.Level;
-import main.math.Vec2d;
 import main.math.Vec2i;
 
 import java.util.ArrayList;
@@ -24,34 +24,45 @@ import java.util.ArrayList;
 
 public class Avatar extends Entity {
 
-    private Key key = null;
+    private Key key;
+    private Sword sword;
+    private InvincibilityPotion ragePotion;
 
-    private Sword sword = null;
-    private Line swordEquipView;
+    private IntegerProperty numArrows;
+    private IntegerProperty numBombs;
+    private IntegerProperty numTreasures;
 
     private BooleanProperty isHovering;
-    private Circle hoveringView;
-
-    private InvincibilityPotion ragePot;
-    private BooleanProperty isInvincible;
-    private Circle rageView;
+    private BooleanProperty isOnRage;
 
     private Vec2i direction;
-    {
-        direction = new Vec2i(1,0);
-    }
-
     private ArrayList<Integer> pastMoves;
 
-    private IntegerProperty numArrows = new SimpleIntegerProperty(0);
-    private IntegerProperty numBombs = new SimpleIntegerProperty(0);
-    private IntegerProperty numTreasures = new SimpleIntegerProperty(0);
+    private Line swordView;
+    private Circle hoverView;
+    private Circle rageView;
 
+    // THINGS THAT CAN BE RUN AFTER ON_CREATED
     {
         symbol = 'P';
-        pastMoves = new ArrayList<>();
+
+        key             = null;
+        sword           = null;
+        ragePotion      = null;
+
+        numArrows       = new SimpleIntegerProperty(0);
+        numBombs        = new SimpleIntegerProperty(0);
+        numTreasures    = new SimpleIntegerProperty(0);
+
+        direction       = new Vec2i(1,0);
+        pastMoves       = new ArrayList<>();
     }
 
+
+    /**
+     * Basic constructor
+     * @param level current level
+     */
     public Avatar(Level level) {
         super(level);
     }
@@ -64,43 +75,43 @@ public class Avatar extends Entity {
 
     @Override
     public void onCreated() {
-        Circle circle = new Circle();
-        circle.setRadius(10);
-        circle.setFill(Color.AQUA);
-
+        Circle circle = new Circle(10, Color.AQUA);
         view.addNode(circle);
-        view.setCentre(new Vec2d(0, 0));
 
-        hoveringView = new Circle(8, Color.LIMEGREEN);
-        rageView = new Circle(4, Color.TOMATO);
-        swordEquipView = new Line(-10, 0, 10, 0);
+        hoverView   = new Circle(8, Color.LIMEGREEN);
+        rageView    = new Circle(4, Color.TOMATO);
+        swordView   = new Line(-10, 0, 10, 0);
 
-        view.addNode(hoveringView);
+        view.addNode(hoverView);
         view.addNode(rageView);
-        view.addNode(swordEquipView);
+        view.addNode(swordView);
 
-        isHovering = new SimpleBooleanProperty(false);
-        isInvincible = new SimpleBooleanProperty(false);
+        isHovering  = new SimpleBooleanProperty(false);
+        isOnRage    = new SimpleBooleanProperty(false);
 
-        hoveringView.visibleProperty().bind(isHovering);
-        rageView.visibleProperty().bind(isInvincible);
-        swordEquipView.setVisible(false);
+        hoverView.visibleProperty().bind(isHovering);
+        rageView.visibleProperty().bind(isOnRage);
+        swordView.setVisible(false);
     }
+
 
     @Override
     public void onDestroyed() {
         level.removeAvatar();
-        Game.world.gameOver();
+        Game.world.gameOver(); //TODO
     }
 
     @Override
     public void onExploded() {
-        if (!isInvincible.get()) {
+        if (!isOnRage.get()) {
             onDestroyed();
         }
     }
 
 
+    /**
+     * Update the grid and world position of the Avatar
+     */
     public void update() {
         Vec2i pos = new Vec2i(getGridPos());
 
@@ -145,7 +156,7 @@ public class Avatar extends Entity {
             direction = new Vec2i(1, 0);
         }
 
-
+        // TODO refactor
         if ( !pos.equals(getGridPos()) ) {
             if (level.isPassableForAvatar(pos, this)) {
                 level.moveAvatar(pos);
@@ -165,235 +176,323 @@ public class Avatar extends Entity {
                 }
             }
 
-            if (pos.equals(getGridPos())) {
-                Game.world.endPlayerTurn();
-            }
+            if (pos.equals(getGridPos()))
+                Game.world.endPlayerTurn(); // TODO
         }
     }
+
+
+    /**
+     * Logic when the Avatars turn ends
+     * reduce potion durations
+     */
+    public void onRoundEnd() {
+        if (ragePotion == null) return;
+
+        ragePotion.reduceDuration();
+
+        if (ragePotion.hasExpired())
+            onRageEnd();
+    }
+
 
     /**
      * The player requested to swing sword
      */
-    private void swingSword() {
-        // Can swing sword ?
-        if (!(sword == null)) {
-            // Kill the entity in direction of user facing
-            if (level.isValidGridPos(pos.add(direction)) && level.hasEnemy(pos.add(direction))) {
-                // Kill the enemy
-                level.getEnemy(pos.add(direction)).onDestroyed();
+    public void swingSword() {
+        // cannot swing if has no sword
+        if (sword == null) return;
 
-                sword.reduceDurability();
-                // Durability and destroy
-                if (sword.getDurability() == 0) { sword.onDestroyed(); }
-            }
+        // kill the entity in the avatar's direction
+        Vec2i target = pos.add(direction);
+        if (level.isValidGridPos(target) && level.hasEnemy(target)) {
+
+            // Kill the enemy
+            level.getEnemy(target).onDestroyed();
+            sword.reduceDurability();
+
+            // check durability and destroy
+            if (sword.isBroken())
+                onUnequipSword();
+
+            Game.world.endPlayerTurn();
         }
-
     }
+
+    /**
+     * when the player picks up a sword
+     * @param s
+     */
+    public void onEquipSword(Sword s) {
+        sword = s;
+        swordView.setVisible(true);
+    }
+
+    /**
+     * when the player loses their sword
+     */
+    public void onUnequipSword() {
+        sword = null;
+        swordView.setVisible(false);
+    }
+
 
     /**
      * The player requested to shoot an arrow
      */
-    private void shootArrow() {
+    public void shootArrow() {
+        // cannot shoot if no arrow
+        if (numArrows.get() <= 0) return;
 
-        // Can shoot arrow ?
-        if (numArrows.get() > 0) {
-            Vec2i arrowPosition = new Vec2i(pos);
-            arrowPosition = arrowPosition.add(direction);
+        FlyingArrow arrow = new FlyingArrow(level);
+        Vec2i arrowPos = new Vec2i(pos).add(direction);
 
-            // Go through and see if there r enemies to kill
-            while(level.isValidGridPos(arrowPosition)) {
-                if (level.hasEnemy(arrowPosition)) {
-                    level.getEnemy(arrowPosition).onDestroyed();
-                }
-                // Destroys arrow if it hit anything at all
-                else if (!level.isPassableForProp(arrowPosition, null)) {
-                    break;
-                }
-                arrowPosition._add(direction);
+        // kill first enemy in avatar's direction, if the enemy exists and is reachable
+        while(level.isValidGridPos(arrowPos)) {
+
+            // enemy hit
+            if (level.hasEnemy(arrowPos)) {
+                level.getEnemy(arrowPos).onDestroyed();
             }
-            // -1 arrow if shot
-            numArrows.set(numArrows.get() - 1);
+            // non-passable entity hit
+            else if (!level.isPassableForProp(arrowPos, arrow)) {
+                break;
+            }
+
+            arrowPos._add(direction);
         }
+
+        // -1 arrow
+        numArrows.set(numArrows.get() - 1);
+        Game.world.endPlayerTurn();
+    }
+
+
+    /**
+     * Player places a bomb
+     */
+    public void placeBomb() {
+        if (numBombs.get() <= 0) return;
+
+        LitBomb bomb = new LitBomb(level);
+
+        if (level.canPlaceProp(pos, bomb)) {
+            level.addProp(pos, bomb);
+            numBombs.set(numBombs.get() - 1);
+            Game.world.endPlayerTurn();
+        }
+    }
+
+    /**
+     * check if Avatar has key
+     * @return true if has key
+     */
+    public boolean hasKey() {
+        return (key != null);
+    }
+
+    /**
+     * check if Avatar has sword
+     * @return true if has sword
+     */
+    public boolean hasSword() {
+        return (sword != null);
+    }
+
+    /**
+     * player drops their key
+     */
+    public void dropKey() {
+        if (key == null) return;
+
+        if (level.canPlacePickup(pos, key)) {
+            level.addPickup(pos, key);
+            key = null;
+            Game.world.endPlayerTurn();
+        }
+    }
+
+    /**
+     * check if the Avatar's key matches a door
+     * @param door door being checked
+     * @return true if key matches
+     */
+    public boolean hasKeyFor(Door door) {
+        return key != null && key.isMatchingDoor(door);
+    }
+
+    /**
+     * when the Avatar uses their key
+     */
+    public void useKey() {
+        key = null;
     }
 
 
 
     /*
-    Visitor Pattern
+        Pickup functions
      */
-//    public boolean pickUp(Pickup pickup) {
-//        System.out.println("PICKUP!");
-//        return false;
-//    }
 
+    /**
+     * Logic when the Avatar picks up a key
+     * @param k key being picked up
+     * @return true if pickup successful, else false
+     */
     public boolean pickUpKey(Key k) {
-        if (key != null)
-            return false;
+        if (key != null) return false;
 
         key = k;
         return true;
     }
 
+    /**
+     * Logic when the Avatar picks up a sword
+     * @param s sword being picked up
+     * @return true if pickup successful, else false
+     */
     public boolean pickUpSword(Sword s) {
-        if (sword != null)
-            return false;
+        if (sword != null) return false;
 
         onEquipSword(s);
         return true;
     }
 
+
+    /**
+     * Logic when the Avatar picks up a Hover pot
+     * @param p hover pot being picked up
+     * @return true if pickup successful, else false
+     */
     public boolean pickUpHoverPotion(HoverPotion p) {
         onHoverStart();
         return true;
     }
 
+    /**
+     * Logic when the Avatar picks up a Invinc pot
+     * @param p invinc pot being picked up
+     * @return true if pickup successful, else false
+     */
     public boolean pickUpInvincibilityPotion(InvincibilityPotion p) {
         onRageStart(p);
         return true;
     }
 
+    /**
+     * Logic when the Avatar picks up a Arrow
+     * @param arrow arrow being picked up
+     * @return true if pickup successful, else false
+     */
     public boolean pickUpArrow(Arrow arrow) {
         numArrows.setValue(numArrows.get() + 1);
         return true;
     }
 
+    /**
+     * Logic when the Avatar picks up a Bomb
+     * @param bomb bomb being picked up
+     * @return true if pickup successful, else false
+     */
     public boolean pickUpBomb(Bomb bomb) {
         numBombs.setValue(numBombs.get() + 1);
         return true;
     }
 
+    /**
+     * Logic when the Avatar picks up a treasure
+     * @param treasure treasure being picked up
+     * @return true if pickup successful, else false
+     */
     public boolean pickUpTreasure(Treasure treasure) {
         numTreasures.setValue(numTreasures.get() + 1);
         return true;
     }
 
 
+    /**
+     * logic when hover pot is picked up
+     */
     public void onHoverStart() {
         isHovering.set(true);
     }
 
+    /**
+     * logic when hover pot ends
+     */
     public void onHoverEnd() {
         isHovering.set(false);
     }
 
+    /**
+     * logic when invinc pot is picked up
+     * @param p invinc pot picked up
+     */
     public void onRageStart(InvincibilityPotion p) {
-        ragePot = p;
-        isInvincible.set(true);
+        ragePotion = p;
+        isOnRage.set(true);
     }
 
+    /**
+     * logic when invinc pot ends
+     */
     public void onRageEnd() {
-        isInvincible.set(false);
+        isOnRage.set(false);
     }
 
 
-    /*
-    Key Methods
+    /**
+     * Getter for curr # arrows
+     * @return curr # arrows
      */
-    public boolean hasKeyFor(Door door) {
-        return key != null && key.getMatchingDoor().equals(door);
-    }
-
-    public void useKey() {
-        key = null;
-    }
-
-
-    /*
-    Sword methods
-     */
-//    public void swingSword() {
-//        if (sword == null) return;
-//
-//        if (true) { // If attack successful
-//            sword.reduceDurability();
-//
-//            if (sword.isBroken()) {
-//                onUnequipSword();
-//            }
-//        }
-//    }
-
-    public void onEquipSword(Sword s) {
-        sword = s;
-        swordEquipView.setVisible(true);
-    }
-
-    public void onUnequipSword() {
-        sword = null;
-        swordEquipView.setVisible(false);
-    }
-
-
-    /*
-    Arrow Methods
-     */
-
     public IntegerProperty getNumArrowsProperty() {
         return numArrows;
     }
 
+    /**
+     * Getter for curr # bomb
+     * @return curr # bomb
+     */
     public IntegerProperty getNumBombsProperty() {
         return numBombs;
     }
 
+    /**
+     * Getter for curr # treasure
+     * @return curr # treasure
+     */
     public IntegerProperty getNumTreasuresProperty() {
         return numTreasures;
     }
 
 
-
-    /*
-    Bomb Methods
+    /**
+     * Check if hovering
+     * @return true if hovering
      */
-    public void placeBomb() {
-        if (numBombs.get() <= 0) return;
-
-        level.addProp(pos, new LitBomb(level));
-        numBombs.set(numBombs.get() - 1);
-
-//        if (world.onPlace(bomb, pos)) {
-//            numBombs.set(numBombs.get() - 1);
-//            bomb.onLit();
-//        }
-
-        Game.world.endPlayerTurn();
-    }
-
-    public void dropKey() {
-
-        if (key == null) return;
-
-        level.addPickup(pos, key);
-        key = null;
-
-        Game.world.endPlayerTurn();
-
-//        if (level.addPickup(pos, key)) {
-//            key = null;
-//            Game.world.onPlayerTurnEnded();
-//        }
-    }
-
-
     public boolean isHovering() {
         return isHovering.get();
     }
 
-    public void onRoundEnd() {
-        if (ragePot == null) return;
-        ragePot.reduceDuration();
-
-        if (ragePot.hasExpired()) {
-            onRageEnd();
-        }
+    /**
+     * check if enraged
+     * @return true if enraged
+     */
+    public boolean isOnRage() {
+        return isOnRage.get();
     }
 
-    public boolean isRaged() {
-        return isInvincible.get();
+    /**
+     * Getter for Avatars past moves
+     * @return
+     */
+    public ArrayList<Integer> getPastMoves() {
+        return new ArrayList<>(pastMoves); // TODO unmodifiable?
     }
 
-    public ArrayList<Integer> getPastmoves() {
-        return this.pastMoves;
+    @Override
+    public boolean isPassableFor(Entity entity) {
+        return false;
     }
 
     @Override
@@ -402,28 +501,10 @@ public class Avatar extends Entity {
     }
 
     @Override
-    public boolean canStackForTerrain(Terrain terrain) {
-        return canStackFor(terrain);
+    public void onEnterByEnemy(Enemy enemy) {
+        if (isOnRage())
+            enemy.onDestroyed();
+        else
+            onDestroyed();
     }
-
-    @Override
-    public boolean canStackForProp(Prop prop) {
-        return canStackFor(prop);
-    }
-
-    @Override
-    public boolean canStackForPickup(Pickup pickup) {
-        return canStackFor(pickup);
-    }
-
-    @Override
-    public boolean canStackForEnemy(Enemy enemy) {
-        return canStackFor(enemy);
-    }
-
-    @Override
-    public boolean canStackForAvatar(Avatar avatar) {
-        return canStackFor(avatar);
-    }
-
 }

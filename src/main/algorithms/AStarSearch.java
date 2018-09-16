@@ -1,6 +1,5 @@
-package main.Algorithms;
+package main.algorithms;
 
-import main.entities.enemies.Enemy;
 import main.maploading.Level;
 import main.math.Vec2i;
 
@@ -170,7 +169,7 @@ public class AStarSearch {
     /**
      * @return The shortest paths for the requested coordinates
      */
-    public ArrayList<Vec2i> Search() {
+    public ArrayList<Vec2i> search() {
         // List of currStack tiles
         PriorityQueue<Node> currStack = new PriorityQueue<>();
         // List of distance that is stored

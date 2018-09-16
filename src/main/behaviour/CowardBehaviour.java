@@ -6,35 +6,31 @@ import main.math.Vec2i;
 
 import java.util.ArrayList;
 
+/**
+ * Implements the behaviour specific to the Coward enemy
+ */
 public class CowardBehaviour implements AIBehaviour {
     @Override
     public ArrayList<Vec2i> decideMove(
-            Level map,
+            Level level,
             Vec2i currLocation,
             Vec2i playerLocation,
             ArrayList<Integer> pastMoves,
-            ArrayList<Enemy> entities
-    ) {
-        Vec2i direction = new Vec2i(playerLocation.getX() - currLocation.getX(),
-                playerLocation.getY() - currLocation.getY());
-        //         N   E   S   W
-        // x (sin) 0   +   0   -   (direction[0])
-        // y (-cos)-   0   +   0   (direction[1])
-        //         0   1   2   3
-        //         0   90  180 270
-        // find out where player is in relation to coward
-        // java.lang.Math.asin(direction[0]*java.lang.Math.PI/2);
-//        ArrayList<Vec2i> targetSquares = new ArrayList<Vec2i>();
-        System.out.printf("x:%d y:%d\n",direction.getX(), direction.getY());
+            ArrayList<Enemy> entities) {
         ArrayList<Vec2i> maxDistance = new ArrayList<>();
-        int maxManhattanDistance = distance(currLocation.getX(),currLocation.getY(),playerLocation);
-        System.out.println(maxManhattanDistance);
-        for (int x = currLocation.getX()-1; x <= currLocation.getX()+1; x++) {
-            for (int y = currLocation.getY()-1; y <= currLocation.getY()+1; y++) {
+
+        int maxManhattanDistance = distance(currLocation.getX(), currLocation.getY(), playerLocation);
+
+        for (int x = currLocation.getX() - 1; x <= currLocation.getX() + 1; x++) {
+            for (int y = currLocation.getY() - 1; y <= currLocation.getY() + 1; y++) {
                 //continue if at diagonal square or at currLocation
                 if ((x + y - currLocation.getX() - currLocation.getY())%2 == 0) continue;
-                if (!check(map,new Vec2i(x,y))) continue;
-                System.out.printf("v:%d %d\n",x,y);
+
+                if (!check(level, new Vec2i(x,y))) continue;
+                if (!level.isValidGridPos(new Vec2i(x, y))) continue;
+
+
+
                 if (distance(x,y,playerLocation) > maxManhattanDistance) {
                     //new max, remove old max
                     maxManhattanDistance = distance(x, y, playerLocation);
@@ -48,11 +44,26 @@ public class CowardBehaviour implements AIBehaviour {
         return maxDistance;
     }
 
+    /**
+     * Same thing as level.isValidGridPos(pos)
+     * TODO Refactor in next iteration
+     * @param map current level
+     * @param location location to check
+     * @return true if valid position
+     */
     public Boolean check(Level map,Vec2i location) {
         return (location.getX() >= 0 && location.getX() < map.getNCols() &&
                 location.getY() >= 0 && location.getY() < map.getNRows());
     }
 
+    /**
+     * Calculates the Manhatten distance
+     *
+     * @param x x-coord of target
+     * @param y y-coord of target
+     * @param playerLocation position of player
+     * @return
+     */
     public int distance(int x, int y, Vec2i playerLocation) {
         return Math.abs(x-playerLocation.getX()) + Math.abs(y-playerLocation.getY());
     }

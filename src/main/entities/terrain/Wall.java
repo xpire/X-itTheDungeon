@@ -2,24 +2,25 @@ package main.entities.terrain;
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import main.entities.Avatar;
 import main.entities.Entity;
-import main.entities.enemies.Enemy;
-import main.entities.pickup.Pickup;
-import main.entities.prop.Prop;
 import main.maploading.Level;
 import main.math.Vec2d;
 import main.math.Vec2i;
 
 
-
-
+/**
+ * Class describing the Wall entity
+ */
 public class Wall extends Terrain {
 
     {
         symbol = '*';
     }
 
+    /**
+     * Basic constructor
+     * @param level current level
+     */
     public Wall(Level level) {
         super(level);
     }
@@ -30,12 +31,8 @@ public class Wall extends Terrain {
 
     @Override
     public void onCreated() {
-        Rectangle rect = new Rectangle();
-        rect.setFill(Color.BROWN);
-        rect.setHeight(30);
-        rect.setWidth(30);
-
-        view.addNode(rect);
+        Rectangle wall = new Rectangle(30, 30, Color.BROWN);
+        view.addNode(wall);
         view.setCentre(new Vec2d(15, 15));
     }
 
@@ -47,25 +44,5 @@ public class Wall extends Terrain {
     @Override
     public boolean canStackFor(Entity entity) {
         return false;
-    }
-
-    @Override
-    public boolean canStackForProp(Prop prop) {
-        return canStackFor(prop);
-    }
-
-    @Override
-    public boolean canStackForPickup(Pickup pickup) {
-        return canStackFor(pickup);
-    }
-
-    @Override
-    public boolean canStackForEnemy(Enemy enemy) {
-        return canStackFor(enemy);
-    }
-
-    @Override
-    public boolean canStackForAvatar(Avatar avatar) {
-        return canStackFor(avatar);
     }
 }

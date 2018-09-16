@@ -3,17 +3,25 @@ package main.entities.pickup;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import main.entities.Avatar;
+import main.events.TreasureEvent;
 import main.maploading.Level;
 import main.math.Vec2i;
 
+/**
+ * Class describing the Treasure entity
+ */
 public class Treasure extends Pickup{
 
-    private Circle circ;
+    private Circle coin;
 
     {
         symbol = '$';
     }
 
+    /**
+     * Basic constructor
+     * @param level : current level
+     */
     public Treasure(Level level) {
         super(level);
     }
@@ -22,11 +30,20 @@ public class Treasure extends Pickup{
         super(level, pos);
     }
 
-
     @Override
     public void onCreated(){
-        circ = new Circle(5, Color.GOLD);
-        view.addNode(circ);
+        super.onCreated(); //TODO: do this for all
+
+        coin = new Circle(5, Color.GOLD);
+        view.addNode(coin);
+
+        level.postEvent(new TreasureEvent(TreasureEvent.TREASURE_CREATED));
+    }
+
+    @Override
+    public void onDestroyed() {
+        super.onDestroyed();
+        level.postEvent(new TreasureEvent(TreasureEvent.TREASURE_COLLECTED));
     }
 
     @Override

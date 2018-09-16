@@ -4,24 +4,27 @@ import main.entities.Avatar;
 import main.entities.Entity;
 import main.entities.enemies.Enemy;
 import main.entities.prop.Prop;
-import main.entities.terrain.Terrain;
 import main.maploading.Level;
 import main.math.Vec2i;
 
+/**
+ * Abstracts the Pickup entities on the level
+ */
 public abstract class Pickup extends Entity {
 
-    protected int score;
+    protected int score = 0; //TODO: define it for each pickup
 
+    /**
+     * Basic Constructor
+     * @param level : current level
+     */
     public Pickup(Level level) {
         super(level);
     }
 
-    public int getScore() { return this.score; }
-
     public Pickup(Level level, Vec2i pos) {
         super(level, pos);
     }
-
 
     @Override
     public void onDestroyed() {
@@ -50,31 +53,20 @@ public abstract class Pickup extends Entity {
 
     @Override
     public void onEnterByAvatar(Avatar avatar) {
-        if (onPickupBy(avatar)) {
+        if (onPickupBy(avatar))
             onDestroyed();
-        }
     }
 
+    /**
+     * checks if item can be picked up by an avatar
+     * @param avatar Avatar
+     * @return true if can be picked up, false otherwise
+     */
     public abstract boolean onPickupBy(Avatar avatar);
 
     @Override
     public boolean canStackFor(Entity entity) {
         return false;
-    }
-
-    @Override
-    public boolean canStackForTerrain(Terrain terrain) {
-        return canStackFor(terrain);
-    }
-
-    @Override
-    public boolean canStackForProp(Prop prop) {
-        return canStackFor(prop);
-    }
-
-    @Override
-    public boolean canStackForPickup(Pickup pickup) {
-        return canStackFor(pickup);
     }
 
     @Override
@@ -86,4 +78,12 @@ public abstract class Pickup extends Entity {
     public boolean canStackForAvatar(Avatar avatar) {
         return true;
     }
+
+
+    /**
+     * Getter for the Pickups score
+     * @return the score
+     */
+
+    public int getScore() { return score; }
 }

@@ -1,54 +1,72 @@
 package main.entities.enemies;
 
-import main.entities.Entity;
 import main.maploading.Level;
 import main.math.Vec2i;
+
 import java.util.ArrayList;
 
+/**
+ * Provides info that the enemies require to make their moves
+ */
 public class EnemyManager {
-    private ArrayList<Integer> pastMoves;
-    private Level level;
 
+    private Level level;
+    private ArrayList<Integer> pastMoves;
+
+    /**
+     * Constructor for enemy manager
+     * @param level Level it will exist in
+     */
     public EnemyManager(Level level) {
-        ArrayList<Enemy> entities = level.getEnemies();
-        for (Entity x : entities) {
-            ((Enemy) x).setManager(this);
-        }
-        this.level = level;
-        this.pastMoves = level.getAvatar().getPastmoves();
+
+        this.level      = level;
+        this.pastMoves  = level.getAvatar().getPastMoves();
+
+        getEnemies().forEach(e -> e.setManager(this));
     }
+
 
     /**
      * Updates the AI decision on where to move
      */
     public void Update() {
-        for (Enemy x : level.getEnemies()) {
-            // Call move and extract first index
-            x.decideBehaviour(level);
-            Vec2i move = x.getMove();
-            if (!x.getGridPos().equals(move)) { level.moveEnemy(move, x); }
-        }
+
+        getEnemies().forEach(e -> {
+
+            // call move and extract first index
+            e.decideBehaviour();
+
+            Vec2i target = e.getMove();
+            if (!e.getGridPos().equals(target))
+                level.moveEnemy(target, e);
+
+        });
     }
 
+
     /**
-     * @return If a hunter exist in the map
+     * Checks if there is a Hunter on the map
+     * @return True if Hunter exists, false otherwise
      */
     public boolean hunterExist() {
-        for (Entity x : level.getEnemies()) {
-            if (((Enemy) x).IsHunter()) {
+        for (Enemy e : getEnemies()) {
+            if (e.isHunter())
                 return true;
-            }
         }
         return false;
     }
 
+
     /**
-     * @return The past moves of the avatar
+     * Gets the past moves of the avatar
+     * @return ArrayList containing the Avatar's past moves
      */
     public ArrayList<Integer> getPastMoves() { return pastMoves; }
 
+
     /**
-     * @return a list of entity
+     * Getter for enemies
+     * @return ArrayList of enemies
      */
-    public ArrayList<Enemy> getEntities() { return level.getEnemies(); }
+    private ArrayList<Enemy> getEnemies() { return level.getEnemies(); } //TODO check if used
 }

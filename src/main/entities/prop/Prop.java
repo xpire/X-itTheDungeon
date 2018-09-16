@@ -2,19 +2,23 @@ package main.entities.prop;
 
 import main.entities.Avatar;
 import main.entities.Entity;
-import main.entities.enemies.Enemy;
-import main.entities.pickup.Pickup;
-import main.entities.terrain.Terrain;
 import main.maploading.Level;
 import main.math.Vec2i;
 
+/**
+ * Abstracts the Prop entity on the Level
+ */
 public abstract class Prop extends Entity {
 
+    // TODO: abstract out Pushable interface
 
     protected boolean isHeavy = false;
     protected boolean isProjectile = false;
 
-
+    /**
+     * Basic constructor
+     * @param level
+     */
     public Prop(Level level) {
         super(level);
     }
@@ -23,54 +27,32 @@ public abstract class Prop extends Entity {
         super(level, pos);
     }
 
-
     @Override
     public void onDestroyed() {
         level.removeProp(getGridPos());
     }
 
-    @Override
-    public boolean isPassableForProp(Prop prop) {
-        return false;
-    }
+    /**
+     * check if the Prop can be pushed by an Avatar
+     * @param avatar : Avatar attempting to push
+     * @return true if can push, false otherwise
+     */
 
     public boolean onPush(Avatar avatar) {
         return false;
     }
 
+    /**
+     * check if prop is heavy enough to activate a switch
+     * @return true if the entity is heavy enough
+     */
     public boolean isHeavy() {
         return isHeavy;
     }
 
-    @Override
-    public boolean canStackFor(Entity entity) {
-        return false;
-    }
-
-    @Override
-    public boolean canStackForTerrain(Terrain terrain) {
-        return canStackFor(terrain);
-    }
-
-    @Override
-    public boolean canStackForProp(Prop prop) {
-        return canStackFor(prop);
-    }
-
-    @Override
-    public boolean canStackForPickup(Pickup pickup) {
-        return canStackFor(pickup);
-    }
-
-    @Override
-    public boolean canStackForEnemy(Enemy enemy) {
-        return canStackFor(enemy);
-    }
-
-    @Override
-    public boolean canStackForAvatar(Avatar avatar) {
-        return canStackFor(avatar);
-    }
-
+    /**
+     * check if the Prop is a projectile
+     * @return true if the Prop is a projectile
+     */
     public boolean isProjectile() { return isProjectile; }
 }

@@ -6,15 +6,17 @@ import main.entities.*;
 import main.maploading.Level;
 import java.util.ArrayList;
 
+/**
+ * Implements the behaviour specific to the Hunter
+ */
 public class HunterBehaviour implements AIBehaviour {
     @Override
     public ArrayList<Vec2i> decideMove(
-            Level map,
+            Level level,
             Vec2i currLocation,
             Vec2i userLocation,
             ArrayList<Integer> pastMoves,
-            ArrayList<Enemy> entities
-    ) {
+            ArrayList<Enemy> entities) {
         ArrayList<Vec2i> result = new ArrayList<>();
         result.add(userLocation);
         return result;

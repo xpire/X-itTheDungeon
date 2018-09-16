@@ -4,18 +4,24 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import main.entities.Entity;
 import main.maploading.Level;
-import main.math.Vec2d;
 import main.math.Vec2i;
 
 import java.util.Iterator;
 
+/**
+ * Class describing the Lit Bomb entity
+ */
 public class LitBomb extends Prop{
 
-    private Circle circ;
+    private Circle bomb;
 
     private final int MAX_FUSE_LENGTH = 5;
     private int fuseLength = MAX_FUSE_LENGTH;
 
+    /**
+     * Basic Constructor
+     * @param level
+     */
     public LitBomb(Level level) {
         super(level);
     }
@@ -27,35 +33,48 @@ public class LitBomb extends Prop{
 
     @Override
     public void onCreated(){
-        circ = new Circle(5, Color.BLACK);
-        view.addNode(circ);
-        view.setCentre(new Vec2d(0, 0));
+        bomb = new Circle(5, Color.BLACK);
+        view.addNode(bomb);
     }
 
 
+    @Override
+    public void onTurnUpdate() {
+        fuseLength--;
+
+        int count = MAX_FUSE_LENGTH - fuseLength;
+        int redness = Math.min( (int)(((double)count)/MAX_FUSE_LENGTH * 255), 255);
+        bomb.setFill(Color.rgb(redness, 0, 0));
+
+        if (fuseLength <= 0)
+            onExplosion();
+    }
+
+
+    /**
+     * Logic when the bomb expodes, killing everything in the
+     * plus shape around the bomb
+     */
     public void onExplosion() {
         destroyEntity(pos);
         destroyEntity(pos.add(-1, 0));
         destroyEntity(pos.add(1, 0));
         destroyEntity(pos.add(0, -1));
         destroyEntity(pos.add(0, 1));
+
+        onDestroyed();
     }
 
+
+    /**
+     * Destroying entities on a certain position
+     * @param pos : position to destroy entities
+     */
     public void destroyEntity(Vec2i pos) {
         Iterator<Entity> it = level.getEntitiesAt(pos);
-        it.forEachRemaining(e -> e.onExploded());
+        it.forEachRemaining(Entity::onExploded);
     }
 
-    @Override
-    public void onTurnUpdate() {
-        fuseLength--;
-        circ.setFill(Color.rgb((int)((1 - (double)fuseLength/MAX_FUSE_LENGTH) * 255),0,0));
-
-        if (fuseLength <= 0) {
-            Prop prop = level.removeProp(getGridPos());
-            onExplosion();
-        }
-    }
 
     @Override
     public boolean isPassableFor(Entity entity) {
@@ -65,5 +84,10 @@ public class LitBomb extends Prop{
     @Override
     public boolean isPassableForProp(Prop prop) {
         return prop.isProjectile;
+    }
+
+    @Override
+    public boolean canStackFor(Entity entity) {
+        return true;
     }
 }

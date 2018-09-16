@@ -5,8 +5,15 @@ import main.entities.Entity;
 import main.maploading.Level;
 import main.math.Vec2i;
 
+/**
+ * Abstracts the Terrain entities of the Level
+ */
 public abstract class Terrain extends Entity {
 
+    /**
+     * Basic constructor
+     * @param level
+     */
     public Terrain(Level level) {
         super(level);
     }
@@ -21,16 +28,16 @@ public abstract class Terrain extends Entity {
     }
 
     @Override
-    public boolean isPassableFor(Entity entity) {
-        return true;
-    }
-
-    public boolean onPush(Avatar avatar) {
+    public boolean canStackForTerrain(Terrain terrain) {
         return false;
     }
 
-    @Override
-    public boolean canStackForTerrain(Terrain terrain) {
+    /**
+     * check if the Terrain can be pushed by an Avatar
+     * @param avatar : the Avatar attempting to push
+     * @return true if can be pushed, false otherwise
+     */
+    public boolean onPush(Avatar avatar) {
         return false;
     }
 }

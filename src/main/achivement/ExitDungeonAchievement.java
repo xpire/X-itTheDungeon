@@ -4,6 +4,9 @@ import javafx.event.EventHandler;
 import main.events.EventBus;
 import main.events.ExitEvent;
 
+/**
+ * Class which tracks the "Pass through the exit" achievement
+ */
 public class ExitDungeonAchievement extends Achievement{
 
     private boolean hasExited = false;

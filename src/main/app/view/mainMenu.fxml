@@ -5,14 +5,15 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.text.Font?>
 
-<Group xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.MainMenuController">
+<Group xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1"
+       fx:controller="main.app.controller.MainMenuController">
    <children>
       <Label text="XD: Xit the Dungeon">
          <font>
             <Font size="64.0" />
          </font>
       </Label>
-      <Button layoutX="50.0" layoutY="300.0" mnemonicParsing="false" onAction="#GoToGamePlay" text="Start Game" />
+      <Button layoutX="50.0" layoutY="300.0" mnemonicParsing="false" onAction="#goToGamePlay" text="Start Game" />
       <Button layoutX="440.0" layoutY="300.0" mnemonicParsing="false" text="Create Mode" />
    </children>
 </Group>

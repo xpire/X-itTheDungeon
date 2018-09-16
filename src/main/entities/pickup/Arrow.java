@@ -7,14 +7,19 @@ import main.maploading.Level;
 import main.math.Vec2d;
 import main.math.Vec2i;
 
+/**
+ * Class describing the Arrow entity
+ */
 public class Arrow extends Pickup{
-
-    private Rectangle rect;
 
     {
         symbol = '-';
     }
 
+    /**
+     * Basic constructor
+     * @param level current Level
+     */
     public Arrow(Level level) {
         super(level);
     }
@@ -23,12 +28,9 @@ public class Arrow extends Pickup{
         super(level, pos);
     }
 
-
     @Override
     public void onCreated(){
-
-        rect = new Rectangle(16, 4, Color.SALMON);
-        view.addNode(rect);
+        view.addNode(new Rectangle(16, 4, Color.SALMON));
         view.setCentre(new Vec2d(8, 2));
     }
 

@@ -1,7 +1,12 @@
 package main.entities.enemies;
 
-import main.maploading.Level;
+/**
+ * Interface to decide AI behaviour
+ */
 
 public interface StateDecision {
-    public void decideBehaviour(Level map);
+    /**
+     * Tells an AI which behaviour it should follow
+     */
+    void decideBehaviour();
 }

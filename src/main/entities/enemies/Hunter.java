@@ -2,55 +2,54 @@ package main.entities.enemies;
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
 import main.behaviour.CowardBehaviour;
 import main.behaviour.HunterBehaviour;
-import main.maploading.MapLoader;
-import main.math.Vec2d;
-import main.math.Vec2i;
+import main.behaviour.StrategistBehaviour;
 import main.maploading.Level;
+import main.math.Vec2i;
 
-import java.util.ArrayList;
-
+/**
+ * The Hunter enemy entity
+ * Always follows the shortest path towards the Avatar
+ */
 public class Hunter extends Enemy {
 
     {
-        isHunter = true;
         symbol = '1';
+        isHunter = true;
     }
 
+    /**
+     * Basic constructor
+     * @param level Level the enemy will exist in
+     */
     public Hunter(Level level) {
         super(level);
-        super.setCurrBehavior(new HunterBehaviour());
-        super.setManager(null);
     }
 
     public Hunter(Level level, Vec2i pos) {
         super(level, pos);
-        super.setCurrBehavior(new HunterBehaviour());
-        super.setManager(null);
     }
 
-
-    @Override
-    public void decideBehaviour(Level map) {
-        if (level.getAvatar().isRaged()) {
-            super.setCurrBehavior(new CowardBehaviour());
-        } else {
-            super.setCurrBehavior(new HunterBehaviour());
-        }
-    }
 
     @Override
     public void onCreated(){
-        Circle hunt = new Circle();
-
-        hunt.setRadius(10);
-        hunt.setFill(Color.RED);
-
-        view.addNode(hunt);
-        view.setCentre(new Vec2d(0, 0));
+        super.onCreated();
+        view.addNode(new Circle(10, Color.RED));
+        setCurrBehaviour(new StrategistBehaviour());
     }
+
+
+    @Override
+    public void decideBehaviour() {
+        if (level.getAvatar().isOnRage())
+            setCurrBehaviour(new CowardBehaviour());
+
+        else
+            setCurrBehaviour(new HunterBehaviour());
+    }
+
+
 
 //
 //    // Testing code for A* search
@@ -62,14 +61,14 @@ public class Hunter extends Enemy {
 //
 //        System.out.println(map.getNRows() + "\t" + map.getNCols());
 //
-////        testHunter.setCurrBehavior(new HunterBehaviour());
+////        testHunter.setCurrBehaviour(new HunterBehaviour());
 //        // Print map
 //        //Code to print map should be here
 //
 ////        ArrayList<Vec2i> target = new ArrayList<>();
 ////        target.add(new Vec2i(0,0));
 ////        target.add(new Vec2i(4,0));
-//        ArrayList<Vec2i> target = testHunter.getCurrBehavior().decideMove(
+//        ArrayList<Vec2i> target = testHunter.getCurrBehaviour().decideMove(
 //                map,
 //                new Vec2i(4,4),
 //                new Vec2i(0,0),

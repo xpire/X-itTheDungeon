@@ -5,13 +5,15 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.text.Font?>
 
-<Group xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.GamePlayController">
+<Group xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1"
+       fx:controller="main.app.controller.PlayModeController">
+
    <children>
       <Label layoutY="500.0" text="Play Mode">
          <font>
             <Font size="34.0" />
          </font>
       </Label>
-      <Button fx:id="Exit" layoutX="700.0" layoutY="10.0" mnemonicParsing="false" onAction="#GoToMainMenu" text="Exit" />
+      <Button fx:id="btnExit" layoutX="700.0" layoutY="10.0" mnemonicParsing="false" onAction="#goToMainMenu" text="Exit" />
    </children>
 </Group>

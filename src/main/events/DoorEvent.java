@@ -4,6 +4,9 @@ import javafx.event.Event;
 import javafx.event.EventType;
 import main.entities.terrain.Door;
 
+/**
+ * An event which indicates that a door has been removed from a draft
+ */
 public class DoorEvent extends GameEvent {
 
     public static final EventType<DoorEvent> ANY
@@ -14,11 +17,20 @@ public class DoorEvent extends GameEvent {
 
     private Door door;
 
+    /**
+     * Constructor for the Door Event
+     * @param eventType type of event
+     * @param door Door which has been removed
+     */
     public DoorEvent(EventType<? extends Event> eventType, Door door) {
         super(eventType);
         this.door = door;
     }
 
+    /**
+     * Getter for the removed door
+     * @return the removed door
+     */
     public Door getDoor() {
         return door;
     }

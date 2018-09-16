@@ -8,6 +8,9 @@ import main.entities.Avatar;
 import main.maploading.Level;
 import main.math.Vec2i;
 
+/**
+ * Class describing the Invincibility Potion Enitity
+ */
 public class InvincibilityPotion extends Pickup{
 
     private Group pot;
@@ -18,6 +21,10 @@ public class InvincibilityPotion extends Pickup{
         duration = 10;
     }
 
+    /**
+     * Basic constructor
+     * @param level
+     */
     public InvincibilityPotion(Level level) {
         super(level);
     }
@@ -44,14 +51,17 @@ public class InvincibilityPotion extends Pickup{
     }
 
 
+    /**
+     * reduce the potions remaining duration
+     */
     public void reduceDuration() {
         duration--;
     }
 
-    public int getDuration() {
-        return duration;
-    }
-
+    /**
+     * check if the potion has expired
+     * @return true if potion has expired
+     */
     public boolean hasExpired() {
         return duration <= 0;
     }

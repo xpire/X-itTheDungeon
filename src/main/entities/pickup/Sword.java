@@ -7,16 +7,22 @@ import main.maploading.Level;
 import main.math.Vec2d;
 import main.math.Vec2i;
 
+/**
+ * Class describing the sword entity
+ */
 public class Sword extends Pickup {
 
     private int durability;
-    private Rectangle rect;
 
     {
         symbol = '+';
         durability = 5;
     }
 
+    /**
+     * Basic constructor
+     * @param level : current level
+     */
     public Sword(Level level) {
         super(level);
     }
@@ -28,24 +34,24 @@ public class Sword extends Pickup {
 
     @Override
     public void onCreated(){
-
-        rect = new Rectangle(16, 4, Color.STEELBLUE);
-        view.addNode(rect);
+        Rectangle stick = new Rectangle(16, 2, Color.STEELBLUE);
+        stick.setRotate(-45);
+        view.addNode(stick);
         view.setCentre(new Vec2d(8, 2));
     }
 
 
-    public int getDurability() {
-        return durability;
-    }
-
+    /**
+     * reduce the durability of the sword after a successful swing
+     */
     public void reduceDurability() {
         durability--;
-        if (durability == 0) {
-            System.out.println("Sword has broken");
-        }
     }
 
+    /**
+     * check if the sword has broken
+     * @return true if sword has broken, false otherwise
+     */
     public boolean isBroken() {
         return durability <= 0;
     }
