@@ -2,7 +2,7 @@ package test;
 
 import java.util.ArrayList;
 
-import main.Algorithms.AStarSearch;
+import main.algorithms.AStarSearch;
 import main.maploading.Level;
 import main.maploading.MapLoader;
 import main.math.Vec2i;
