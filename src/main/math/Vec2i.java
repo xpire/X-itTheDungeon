@@ -1,10 +1,13 @@
 package main.math;
+
+import java.util.Objects;
+
 public class Vec2i {
 
-    public static final Vec2i NORTH = new Vec2i(0, -1);
-    public static final Vec2i SOUTH = new Vec2i(0, 1);
-    public static final Vec2i WEST = new Vec2i(-1, 0);
-    public static final Vec2i EAST = new Vec2i(1, 0);
+    private static final Vec2i NORTH = new Vec2i(0, -1);
+    private static final Vec2i SOUTH = new Vec2i(0, 1);
+    private static final Vec2i WEST = new Vec2i(-1, 0);
+    private static final Vec2i EAST = new Vec2i(1, 0);
 
     private int x;
     private int y;
@@ -74,8 +77,8 @@ public class Vec2i {
     }
 
     public void _add(Vec2i other) {
-        x -= other.x;
-        y -= other.y;
+        x += other.x;
+        y += other.y;
     }
 
     public void _sub(int u, int v) {
@@ -140,6 +143,9 @@ public class Vec2i {
         this.y = y;
     }
 
+    public boolean isDirection() {
+        return equals(Vec2i.NORTH) || equals(Vec2i.EAST) || equals(Vec2i.SOUTH) || equals(Vec2i.WEST);
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -151,7 +157,20 @@ public class Vec2i {
     }
 
     @Override
+    public int hashCode() {
+        return Objects.hash(x, y);
+    }
+
+    @Override
     public String toString() {
         return String.format("%d, %d", x, y);
     }
+
+    /**
+     *
+     * @param x First coordinate
+     * @param y Second coordinate
+     * @return the manhatten distance from 2 nodes on the grid
+     */
+    public int mDist(Vec2i y) { return Math.abs(y.getX() - this.x) + Math.abs(y.getY() - this.y); }
 }

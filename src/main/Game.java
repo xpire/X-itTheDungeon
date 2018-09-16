@@ -6,20 +6,20 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.shape.Box;
 import javafx.stage.Stage;
-import main.maploading.TileMap;
+import main.maploading.Level;
 
 
 public class Game extends Application{
 
 
-    final static int WIDTH = 600;
-    final static int HEIGHT = 400;
+    final static int WIDTH = 800;
+    final static int HEIGHT = 540;
 
     public static Input input = new Input();
-    public GameWorld world;
+    public static GameWorld world;
 
 
-    private TileMap map;
+    private Level map;
 
 
     public static void main(String[] args) {
@@ -31,25 +31,22 @@ public class Game extends Application{
     public void onBeforeUpdate() {
         // Handle inputs later here
         // since they may be ignored when onUpdate doesn't get called
-
         input.processInputs();
     }
 
     public void onUpdate(double delta) {
-        world.update(delta);
-
-
+        world.update();
     }
 
 
     // After a set of updates
     public void onAfterUpdate() {
-        world.render();
         input.update();
+
     }
 
 
-    public TileMap getMap() {
+    public Level getMap() {
         return map;
     }
 
@@ -64,37 +61,28 @@ public class Game extends Application{
 
 
         final Node inputNode = new Box();
-
         inputNode.setFocusTraversable(true);
         inputNode.requestFocus();
         inputNode.setOnKeyPressed(input);
         inputNode.setOnKeyReleased(input);
 
-
         root.getChildren().add(inputNode);
 
-//        Circle circle = new Circle();
-//        circle.setRadius(100);
-//        circle.setCenterX(100);
-//        circle.setCenterY(100);
-//        root.getChildren().add(circle);
 
-        TileMap map = new TileMap(10, 10, 30);
-        world = new GameWorld(map);
-
-
-//        root.getChildren().add(new AnchorPane())
-//        main.avatar.Avatar avatar = new main.avatar.Avatar();
-//        root.getChildren().add(avatar.getView());
-//
-//        Wall wall = new Wall(230, 320);
-//        root.getChildren().add(wall.getView());
-
-
+        world = new GameWorld();
         root.getChildren().add(world.getView());
+
+
+//        Level map = new Level(16, 16, 30);
+//        ArrayList<String> obj = new ArrayList<>();
+//        obj.add("B");
+//        obj.add("D");
+//        map.setObj(obj);
+
 
         stage.setScene(scene);
         stage.show();
+
 
         GameLoop loop = new GameLoop(this, fps -> System.out.println("FPS: " + fps));
         loop.start();
