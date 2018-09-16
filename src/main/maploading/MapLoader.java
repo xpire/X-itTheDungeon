@@ -1,22 +1,19 @@
 package main.maploading;
 
-import main.entities.Door;
-import main.entities.Key;
+import main.entities.Entity;
 import main.math.Vec2i;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.Scanner;
 
 public class MapLoader {
 
-    /*
-    Heavy commenting/refactoring required for others to understand
-     */
-    public Level getLevel(String mapName, String path) {
-        MapInterpreter mapInt = new MapInterpreter();
+    public Level loadLevel(String mapName, String path) {
+        LevelBuilder levelBuilder = new LevelBuilder();
         Level level = null;
 
         StringBuilder mapPath = new StringBuilder("./src/main/");
@@ -27,7 +24,11 @@ public class MapLoader {
         try {
             sc = new Scanner(new File(mapPath.toString()));
             String[] line;
-            int numRow = 0, numCol = 0;
+            int numRow, numCol;
+
+            /*
+                Extract dimensions, initialise the Level
+             */
 
             if (sc.hasNextLine()) {
                 line = sc.nextLine().split("\\s+");
@@ -39,14 +40,18 @@ public class MapLoader {
                 numRow = Integer.parseInt(line[0]);
                 numCol = Integer.parseInt(line[1]);
 
-                level = new Level(numRow, numCol);
+                level = new Level(numRow, numCol, 30.0, mapName);
+                //change flag when required
 
-            } else System.out.println("Error: Empty Map");
-
-            if (level == null) {
-                System.out.println("Error: Map did not load");
+            } else {
+                System.out.println("Error: Empty Map");
                 return null;
             }
+
+            /*
+                Extract Level's body
+                Skips Keys and Doors for later
+             */
 
             for (int i = 0; i < numRow; i++) {
                 if (sc.hasNextLine()) {
@@ -58,22 +63,50 @@ public class MapLoader {
                     }
 
                     for (int j = 0; j < numCol; j++) {
-                        level.setTile(i, j, mapInt.getTileEntities(line[j]));
+
+                        Vec2i pos = new Vec2i(j, i);
+
+                        char[] entities = line[j].toCharArray();
+                        for (char entity : entities) {
+                            try {
+                                levelBuilder.buildEntity(entity, pos, level);
+                            } catch (Exception e) {
+                                System.out.println(e.getMessage());
+                            }
+                        }
                     }
                 }
             }
 
+            /*
+                Extract objectives
+             */
+
             if (sc.hasNextLine()) {
                 line = sc.nextLine().split("\\s+");
-                ArrayList<String> objectives = new ArrayList<>(Arrays.asList(line));
-                level.setObj(objectives);
-            } else System.out.println("Error: No objectives specified");
+                if (line.length > 0) {
+                    ArrayList<String> objectives = new ArrayList<>(Arrays.asList(line));
+                    level.setObjectives(objectives);
+                } else {
+                    System.out.println("Warning: No objectives specified");
+                    //return null;
+                }
+            } else {
+                System.out.println("Error: Bad map @ extract objectives");
+                return null;
+            }
+
+            /*
+                Extract Keys and Doors
+             */
 
             while (sc.hasNextLine()) {
                 line = sc.nextLine().split("\\s+");
-                if (line.length != 4) {
-                    System.out.println("Error: Key-Door mapping incorrect");
-                    break;
+
+                if (line.length == 0) break;
+                else if (line.length != 4) {
+                    System.out.println("Error: invalid Key-Door mapping");
+                    return null;
                 }
 
                 Vec2i keyCoord = new Vec2i(
@@ -83,21 +116,16 @@ public class MapLoader {
                         Integer.parseInt(line[2]),
                         Integer.parseInt(line[3]));
 
-                Tile keyTile = level.getTile(keyCoord);
-                Key k = keyTile.getKey();
-                if (k == null) {
-                    System.out.println("No key found at given coordinates");
-                    continue;
+                if (!level.isValidGridPos(keyCoord) || !level.isValidGridPos(doorCoord)) {
+                    System.out.println("Error: invalid Key/Door position");
+                    return null;
                 }
 
-                Tile doorTile = level.getTile(doorCoord);
-                Door d = doorTile.getDoor();
-                if (d == null) {
-                    System.out.println("No door found at given coordinates");
-                    continue;
+                try {
+                    levelBuilder.buildKeyDoor(level, keyCoord, doorCoord);
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
                 }
-
-                k.setMatchingDoor(d);
 
             }
         } catch (FileNotFoundException e) {
@@ -112,13 +140,25 @@ public class MapLoader {
     public static void main(String[] args) {
         MapLoader mapLoader = new MapLoader();
 
-        Level level = mapLoader.getLevel("map1", "levels");
+        Level level = mapLoader.loadLevel("map1", "levels");
 
-        System.out.println(level.getNRows() + "\t" + level.getNCols());
-        level.displayTileMap();
+        level.displayLevel();
 
-        for (String s : level.getObjectives()) {
-            System.out.println(s);
+
+        //testing meta data
+        for (int i = 0; i < level.getNRows(); i++) {
+            for (int j = 0; j < level.getNCols(); j++) {
+                Iterator<Entity> it = level.getEntitiesAt(new Vec2i(j, i));
+                while (it.hasNext()) {
+                    Entity e = it.next();
+
+                    if (e.getMetaData() != null) {
+                        System.out.println(e.getMetaData());
+                    }
+
+                }
+            }
         }
+
     }
 }

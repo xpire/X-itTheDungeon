@@ -1,15 +1,22 @@
 package main.behaviour;
 
-import main.math.Vec2i;
-import main.entities.*;
+import main.entities.enemies.Enemy;
 import main.maploading.Level;
+import main.math.Vec2i;
+
 import java.util.ArrayList;
 
 public class CowardBehaviour implements AIBehaviour {
     @Override
-    public ArrayList<Vec2i> decideMove(Level map, Vec2i currLocation, Vec2i playerLocation, ArrayList<Integer> pastMoves, ArrayList<Entity> entities) {
+    public ArrayList<Vec2i> decideMove(
+            Level map,
+            Vec2i currLocation,
+            Vec2i playerLocation,
+            ArrayList<Integer> pastMoves,
+            ArrayList<Enemy> entities
+    ) {
         Vec2i direction = new Vec2i(playerLocation.getX() - currLocation.getX(),
-                                    playerLocation.getY() - currLocation.getY());
+                playerLocation.getY() - currLocation.getY());
         //         N   E   S   W
         // x (sin) 0   +   0   -   (direction[0])
         // y (-cos)-   0   +   0   (direction[1])
@@ -17,48 +24,36 @@ public class CowardBehaviour implements AIBehaviour {
         //         0   90  180 270
         // find out where player is in relation to coward
         // java.lang.Math.asin(direction[0]*java.lang.Math.PI/2);
-        ArrayList<Vec2i> targetSquares = new ArrayList<Vec2i>();
-        if (direction.getX() >= 0) {
-            // EAST
-            Vec2i output = new Vec2i(currLocation.getX()+1, currLocation.getY());
-            //check if output is inside the map
-            if (output.getX() >= 0 && output.getX() < map.getNCols() &&
-                output.getY() >= 0 && output.getY() < map.getNRows()) {
-                //check if it is accessible
-                if (map.isPassable(output)) targetSquares.add(output);
-            }
-        } else if (direction.getX() < 0) {
-            // WEST
-            Vec2i output = new Vec2i(currLocation.getX()-1, currLocation.getY());
-            //check if output is inside the map
-            if (output.getX() >= 0 && output.getX() < map.getNCols() &&
-                    output.getY() >= 0 && output.getY() < map.getNRows()) {
-                //check if it is accessible
-                if (map.isPassable(output)) targetSquares.add(output);
-            }
-        }
-        // -java.lang.Math.acos(direction[1]*java.lang.Math.PI/2);
-        if (direction.getY() >= 0) {
-            // SOUTH
-            Vec2i output = new Vec2i(currLocation.getX(), currLocation.getY()+1);
-            //check if output is inside the map
-            if (output.getX() >= 0 && output.getX() < map.getNCols() &&
-                    output.getY() >= 0 && output.getY() < map.getNRows()) {
-                //check if it is accessible
-                if (map.isPassable(output)) targetSquares.add(output);
-            }
-        } else if (direction.getY() < 0) {
-            // NORTH
-            Vec2i output = new Vec2i(currLocation.getX(), currLocation.getY()-1);
-            //check if output is inside the map
-            if (output.getX() >= 0 && output.getX() < map.getNCols() &&
-                    output.getY() >= 0 && output.getY() < map.getNRows()) {
-                //check if it is accessible
-                if (map.isPassable(output)) targetSquares.add(output);
+//        ArrayList<Vec2i> targetSquares = new ArrayList<Vec2i>();
+        System.out.printf("x:%d y:%d\n",direction.getX(), direction.getY());
+        ArrayList<Vec2i> maxDistance = new ArrayList<>();
+        int maxManhattanDistance = distance(currLocation.getX(),currLocation.getY(),playerLocation);
+        System.out.println(maxManhattanDistance);
+        for (int x = currLocation.getX()-1; x <= currLocation.getX()+1; x++) {
+            for (int y = currLocation.getY()-1; y <= currLocation.getY()+1; y++) {
+                //continue if at diagonal square or at currLocation
+                if ((x + y - currLocation.getX() - currLocation.getY())%2 == 0) continue;
+                if (!check(map,new Vec2i(x,y))) continue;
+                System.out.printf("v:%d %d\n",x,y);
+                if (distance(x,y,playerLocation) > maxManhattanDistance) {
+                    //new max, remove old max
+                    maxManhattanDistance = distance(x, y, playerLocation);
+                    maxDistance.clear();
+                    maxDistance.add(new Vec2i(x,y));
+                } else if (distance(x,y,playerLocation) == maxManhattanDistance) {
+                    maxDistance.add(new Vec2i(x,y));
+                }
             }
         }
-        return targetSquares;
+        return maxDistance;
+    }
 
-//        return new int[0];
+    public Boolean check(Level map,Vec2i location) {
+        return (location.getX() >= 0 && location.getX() < map.getNCols() &&
+                location.getY() >= 0 && location.getY() < map.getNRows());
+    }
+
+    public int distance(int x, int y, Vec2i playerLocation) {
+        return Math.abs(x-playerLocation.getX()) + Math.abs(y-playerLocation.getY());
     }
 }

@@ -1,43 +1,56 @@
 package main.behaviour;
 
+// Going around boulder and avoid arrows
+import main.Algorithms.PageRank;
+import main.entities.enemies.Enemy;
+import main.entities.pickup.Pickup;
 import main.maploading.Level;
 import main.math.Vec2i;
-import main.entities.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.List;
+import java.util.Iterator;
 
 public class StrategistBehaviour implements AIBehaviour {
     @Override
-    public ArrayList<Vec2i> decideMove(Level map,
+    public ArrayList<Vec2i> decideMove(Level level,
                                        Vec2i currLocation,
                                        Vec2i userLocation,
                                        ArrayList<Integer> pastMoves,
-                                       ArrayList<main.entities.Entity> entities) {
+                                       ArrayList<Enemy> entities) {
         // Possible coordinates
-        ArrayList<Vec2i> pCoord = getPossibleCoord(map,currLocation);
+        ArrayList<Vec2i> pCoord = getPossibleCoord(level,userLocation);
+
         // Test for all possible solutions
         if (pCoord.size() == 0) {
             // No accessible square and hence just go to the player
             pCoord.add(userLocation);
             return pCoord;
         }
+        else if (hasPlayer(userLocation, currLocation)) {
+            ArrayList<Vec2i> ret = new ArrayList<>();
+            ret.add(userLocation);
+            return ret;
+        }
+        else if (currLocation.equals(userLocation)) {
+            ArrayList<Vec2i> ret = new ArrayList<>();
+            ret.add(currLocation);
+            return ret;
+        }
         else {
 
             // If there is a direct goal of the user
-            if (hasItem(pCoord, map)) {
+            if (hasItem(pCoord, level)) {
                 // Rank the priority of the contained goals
-                Map<Vec2i, Integer> rank = new HashMap<Vec2i, Integer>();
+                Map<Vec2i, Integer> rank = new HashMap<>();
 
                 // Check for that all the included square have items on them or not?
                 for (Vec2i x : pCoord) {
-                    // Hash map to store all the ranks
-                    int currRank = determineRank(x, map);
+                    // Hash level to store all the ranks
+                    int currRank = determineRank(x, level);
                     rank.put(x, currRank);
                 }
-
 
                 // Find the maximum
                 Vec2i maxCoord = null;
@@ -68,17 +81,12 @@ public class StrategistBehaviour implements AIBehaviour {
                     return pCoord;
                 }
                 else {
-                    int[] totals = {4,4,4,4};
-
-                    float[][] stohasticMarkov = dataProcess(initMatrice(), pastMoves, totals);
-                    // repeated multiplication
-
-                    float[] init = {1,1,1,1};
-                    float[] resultRank = pageRank(stohasticMarkov, init);
+                    PageRank rankedResult = new PageRank(pastMoves, pCoord, currLocation);
+                    Vec2i preferredResult = rankedResult.getResult();
 
                     // Heuristic is to pick the lowest rank
                     ArrayList<Vec2i> ret = new ArrayList<>();
-                    ret.add(rankedResult(resultRank, pCoord, currLocation));
+                    ret.add(preferredResult);
 
                     return ret;
                 }
@@ -88,33 +96,33 @@ public class StrategistBehaviour implements AIBehaviour {
 
     /**
      * Get what coordinate is possible, note that it only checks coordinates no entities
-     * @param map Current state of map
-     * @param currLocation Current location of the strategist
+     * @param level Current state of level
+     * @param userLocation Current location of the strategist
      * @return list of possible coordinates
      */
-    private ArrayList<Vec2i> getPossibleCoord(Level map, Vec2i currLocation) {
+    private ArrayList<Vec2i> getPossibleCoord(Level level, Vec2i userLocation) {
         ArrayList<Vec2i> ret = new ArrayList<>();
         // Get current coordinate
-        int coordX = currLocation.getX();
-        int coordY = currLocation.getY();
+        int coordX = userLocation.getX();
+        int coordY = userLocation.getY();
 
-        // Get dimension of the map
-        int dimx = map.getNCols();
-        int dimy = map.getNRows();
+        // Get dimension of the level
+        int dimx = level.getNCols();
+        int dimy = level.getNRows();
 
-        if (coordX - 1 >= 0 && (map.isPassable(new Vec2i(coordX - 1, coordY)))) {
+        if (coordX - 1 >= 0 && (level.isPassableForEnemy(new Vec2i(coordX - 1, coordY), null))) {
             Vec2i buf1 = new Vec2i(coordX - 1, coordY);
             ret.add(buf1);
         }
-        if (coordX + 1 < dimx  && (map.isPassable(new Vec2i(coordX + 1, coordY)))) {
+        if (coordX + 1 < dimx  && (level.isPassableForEnemy(new Vec2i(coordX + 1, coordY), null))) {
             Vec2i buf1 = new Vec2i(coordX + 1, coordY);
             ret.add(buf1);
         }
-        if (coordY - 1 >= 0 && (map.isPassable(new Vec2i(coordX, coordY - 1)))) {
+        if (coordY - 1 >= 0 && (level.isPassableForEnemy(new Vec2i(coordX, coordY - 1), null))) {
             Vec2i buf1 = new Vec2i(coordX, coordY - 1);
             ret.add(buf1);
         }
-        if (coordY + 1 < dimy && (map.isPassable(new Vec2i(coordX, coordY + 1)))) {
+        if (coordY + 1 < dimy && (level.isPassableForEnemy(new Vec2i(coordX, coordY + 1), null))) {
             Vec2i buf1 = new Vec2i(coordX, coordY + 1);
             ret.add(buf1);
         }
@@ -137,183 +145,65 @@ public class StrategistBehaviour implements AIBehaviour {
         return false;
     }
 
-    private boolean isItem(Vec2i x, Level map) {
-        List<Entity> Item = map.getTile(x).getEntities();
+    /**
+     * If the tile x has a items
+     * @param x The requested tile position
+     * @param level the current state of the map
+     * @return
+     */
+    private boolean isItem(Vec2i x, Level level) {
+        Iterator Items = level.getPickupIterator();
 
-        switch ((Item.get(0)).getSymbol()) {
-            case 'K' :
-            case '$' :
-            case '+' :
-            case '-' :
-            case '!' :
-            case '>' :
-            case '^' : return true;
-            default  : return false;
+        while(Items.hasNext()) {
+            Pickup Item =  (Pickup)Items.next();
+
+            if (x.equals(Item.getGridPos())) {
+                return true;
+            }
         }
+        return false;
     }
 
     /**
-     * Determine the rank of the the item on a tile, threat based level as the AI
+     * Determine the rank of the the item on a tile, threat based ranks as the AI
      * assumes that player must want to protect
      * @param x Coordinate on map
-     * @param map Current map state
+     * @param level Current map state
      * @return
      */
-    private int determineRank(Vec2i x,Level map) {
-        // Rank of the items for priority
-        List<Entity> Item = map.getTile(x).getEntities();
-        switch((Item.get(0)).getSymbol()) {
-            case '+' :
-            case '-' :
-            case '!' :
-            case '>' : return 3;
-            case '^' :
-            case 'K' : return 2;
-            case '$' : return 1;
-            default  : return 0;
+    private int determineRank(Vec2i x,Level level) {
+        Iterator Items = level.getPickupIterator();
 
-        }
-    }
-
-    /**
-     * Initialize the markov to a generic matrix
-     * @return A initial matrix
-     */
-    private float[][] initMatrice() {
-        float[][] ret = new float[4][4] ;
-        for (int i = 0; i < 4; i++) {
-            for (int j = 0; j < 4; j++) {
-                ret[i][j] = 1;
+        while(Items.hasNext()) {
+            Pickup Item =  (Pickup)Items.next();
+            if (x.equals(Item.getGridPos())) {
+                return Item.getScore();
             }
         }
-        return  ret;
+        return 0;
     }
 
     /**
-     * Changes to a move frequency matrice from past moves of the player
-     * @param markov The intialized matrix
-     * @param pastMoves players past moves
+     * @param request The list to check if player is reachable
+     * @return if the player is near the strategist
      */
-    private float[][] dataProcess(float[][] markov, ArrayList<Integer> pastMoves, int[] totals) {
-        int prev = -1;
-        // Use data
-        for (int x: pastMoves) {
-            if (prev == -1) {
-                prev = x;
-            } else {
-                // Increase frequency
-                totals[prev]++;
-                // increase normalizing factor
-                markov[prev][x]++;
-            }
-        }
-
-        // Get correct value
-        for (int i = 0; i < 4; i++) {
-            float factor = totals[i];
-            for (int j = 0; j < 4; j++) {
-                markov[i][j] = markov[i][j]/factor;
-            }
-        }
-        return markov;
-    }
-
-    /**
-     * Applying a simple page rank algorithm
-     * @param markovMatrix The markov matrice
-     * @param init Initialized rank
-     * @return
-     */
-    private float[] pageRank(float[][] markovMatrix, float[] init) {
-        float[] buffer = init;
-        // 20 Rounds of matrix multiplication
-        for (int i = 0; i < 20; i++) {
-            buffer = matMul(markovMatrix, buffer);
-        }
-        return buffer;
-    }
-
-    /**
-     * Handles matrix multiplication for this algorithm
-     * @param matrix Request matrices
-     * @param vector Vector of ranks
-     * @return
-     */
-    private float[] matMul(float[][] matrix, float[] vector) {
-        float[] ret = new float[4];
-
-        // Handles each indexing of the vector
-        for (int j = 0; j < 4; j++) {
-            ret[j] = sumCol(matrix[j], vector);
-        }
-        return ret;
-    }
-
-    /**
-     * Handles row multiplication
-     * @param row Desired row
-     * @param vec Current resultant vector
-     * @return result of multiplication
-     */
-    private float sumCol(float[] row, float[] vec) {
-        float ret = 0;
-        for (int j = 0; j < 4; j++){
-            ret += row[j]*vec[j];
-        }
-        return  ret;
-    }
-
-    /**
-     * Get result from possible coordinates and ranks
-     * @param resultRank rank result from algorithm
-     * @param pCoord Possible coordinate to move to
-     * @return Best square to move in
-     */
-    private Vec2i rankedResult(float[] resultRank, ArrayList<Vec2i> pCoord, Vec2i currLocation) {
+    private boolean hasPlayer(Vec2i request, Vec2i currLocation) {
         // Get current coordinate
         int coordX = currLocation.getX();
         int coordY = currLocation.getY();
 
-        Vec2i max = null;
-        float maxRank = 0;
-
-        for (Vec2i x: pCoord) {
-            if (max == null) {
-                max = x;
-                maxRank = getRank(x, resultRank, currLocation);
-            } else {
-                if (getRank(x, resultRank, currLocation) > maxRank) {
-                    max = x;
-                    maxRank = getRank(x, resultRank, currLocation);
-                }
-            }
+        if (new Vec2i(coordX - 1, coordY).equals(request)) {
+            return true;
         }
-        return max;
-    }
-
-    /**
-     * Get the rank number of a specific tile in a direction
-     * @param x Request vector
-     * @param resultRank List of rank
-     * @return The rank of the coordinate
-     */
-    private float getRank(Vec2i x, float[]  resultRank, Vec2i currLocation) {
-        // Get current coordinate
-        int coordX = currLocation.getX();
-        int coordY = currLocation.getY();
-
-        // Get rank of the coordinate
-        if (x.equals(new Vec2i(coordX - 1, coordY))) {
-            return resultRank[2];
+        if (new Vec2i(coordX + 1, coordY).equals(request)) {
+            return true;
         }
-        else if (x.equals(new Vec2i(coordX + 1, coordY))) {
-            return resultRank[3];
+        if (new Vec2i(coordX, coordY - 1).equals(request)) {
+            return true;
         }
-        else if (x.equals(new Vec2i(coordX, coordY - 1))) {
-            return resultRank[0];
+        if (new Vec2i(coordX, coordY + 1).equals(request)) {
+            return true;
         }
-        else {
-            return resultRank[1];
-        }
+        return false;
     }
 }
