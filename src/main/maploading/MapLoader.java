@@ -56,7 +56,6 @@ public class MapLoader {
             for (int i = 0; i < numRow; i++) {
                 if (sc.hasNextLine()) {
                     line = sc.nextLine().split("\\s+");
-
                     if (line.length != numCol) {
                         System.out.println("Error: Inconsistent Map");
                         return null;
