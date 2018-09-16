@@ -25,7 +25,7 @@ public class CowardBehaviour implements AIBehaviour {
         // find out where player is in relation to coward
         // java.lang.Math.asin(direction[0]*java.lang.Math.PI/2);
 //        ArrayList<Vec2i> targetSquares = new ArrayList<Vec2i>();
-        System.out.printf("x:%d y:%d\n",direction.getX(), direction.getY());
+        System.out.printf("P (%d, %d) m:",direction.getX(), direction.getY());
         ArrayList<Vec2i> maxDistance = new ArrayList<>();
         int maxManhattanDistance = distance(currLocation.getX(),currLocation.getY(),playerLocation);
         System.out.println(maxManhattanDistance);
@@ -34,7 +34,7 @@ public class CowardBehaviour implements AIBehaviour {
                 //continue if at diagonal square or at currLocation
                 if ((x + y - currLocation.getX() - currLocation.getY())%2 == 0) continue;
                 if (!check(map,new Vec2i(x,y))) continue;
-                System.out.printf("v:%d %d\n",x,y);
+                System.out.printf("v:%d %d, m:%d\n",x,y, distance(x,y,playerLocation));
                 if (distance(x,y,playerLocation) > maxManhattanDistance) {
                     //new max, remove old max
                     maxManhattanDistance = distance(x, y, playerLocation);
