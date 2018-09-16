@@ -1,4 +1,4 @@
-package main.Algorithms;
+package main.algorithms;
 
 import main.math.Vec2i;
 

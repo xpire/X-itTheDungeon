@@ -11,20 +11,16 @@ import main.math.Vec2i;
 
 public class Key extends Pickup {
 
-    {
-        score = 1;
-    }
     private Door door;
-    private Circle circ;
 
     {
         symbol = 'K';
+        score = 1;
     }
 
     public Key(Level level) {
         super(level);
     }
-
     public Key(Level level, Vec2i pos) {
         super(level, pos);
     }
@@ -32,17 +28,12 @@ public class Key extends Pickup {
 
     @Override
     public void onCreated(){
-        circ = new Circle(5, Color.HOTPINK);
-        view.addNode(circ);
+        view.addNode(new Circle(5, Color.HOTPINK));
 
         // TODO: extract out isCreateMode
         level.addEventHandler(DoorEvent.DOOR_REMOVED, e -> {
-            if (level.isCreateMode()) {
-                Door d = e.getDoor();
-                if (isMatchingDoor(d)) {
-                    onDestroyed();
-                }
-            }
+            if (level.isCreateMode() && isMatchingDoor(e.getDoor()))
+                onDestroyed();
         });
     }
 
@@ -54,10 +45,8 @@ public class Key extends Pickup {
     @Override
     public String getMetaData() {
         StringBuilder sb = new StringBuilder();
-
-        sb.append(pos.getX()).append("\t").append(pos.getY()).append("\t");
-        sb.append(door.getGridPos().getX()).append("\t").append(door.getGridPos().getY());
-
+        sb.append(String.format("%d\t%d\t", pos.getX(), pos.getY()));
+        sb.append(String.format("%d\t%d\t", door.getGridPos().getX(), door.getGridPos().getY()));
         return sb.toString();
     }
 
@@ -66,17 +55,12 @@ public class Key extends Pickup {
         return avatar.pickUpKey(this);
     }
 
-
-    public Door getMatchingDoor() {
-        return door;
+    public boolean isMatchingDoor(Door door) {
+        return this.door.equals(door);
     }
 
     public void setMatchingDoor(Door door) {
         this.door = door;
-    }
-
-    public boolean isMatchingDoor(Door door) {
-        return this.door.equals(door);
     }
 }
 

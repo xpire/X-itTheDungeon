@@ -6,7 +6,6 @@ import javafx.scene.shape.Rectangle;
 import main.entities.Avatar;
 import main.entities.Entity;
 import main.entities.enemies.Enemy;
-import main.entities.pickup.Pickup;
 import main.entities.prop.Prop;
 import main.events.DoorEvent;
 import main.events.KeyEvent;
@@ -16,11 +15,14 @@ import main.math.Vec2i;
 
 public class Door extends Terrain {
 
+    // TODO unused methods, eclipse testing, user stories -- deep, assumptions
+
     private boolean isOpen;
     private Rectangle doorFrame;
 
     {
         symbol = '|';
+        isOpen = false;
     }
 
     public Door(Level level) {
@@ -38,8 +40,7 @@ public class Door extends Terrain {
         view.addNode(doorFrame);
         view.setCentre(new Vec2d(3, 15));
 
-        isOpen = false;
-
+        // Enforce Key-Door coupling in creative mode
         level.addEventHandler(KeyEvent.KEY_REMOVED, e -> {
             if (level.isCreateMode() && e.isMatchingDoor(this)) {
                 onDestroyed();
@@ -47,16 +48,19 @@ public class Door extends Terrain {
         });
     }
 
+
     @Override
     public void onRemovedFromLevel() {
         level.postEvent(new DoorEvent(DoorEvent.DOOR_REMOVED, this));
     }
 
 
+
     public void onOpen() {
         isOpen = true;
-        doorFrame.setFill(Color.WHITE);
+        doorFrame.setFill(Color.SILVER);
     }
+
 
 
     @Override
@@ -79,6 +83,11 @@ public class Door extends Terrain {
         return isOpen;
     }
 
+    @Override
+    public boolean canStackFor(Entity entity) {
+        return false;
+    }
+
 
     @Override
     public boolean onPush(Avatar avatar) {
@@ -90,30 +99,5 @@ public class Door extends Terrain {
         }
 
         return false;
-    }
-
-    @Override
-    public boolean canStackFor(Entity entity) {
-        return false;
-    }
-
-    @Override
-    public boolean canStackForProp(Prop prop) {
-        return canStackFor(prop);
-    }
-
-    @Override
-    public boolean canStackForPickup(Pickup pickup) {
-        return canStackFor(pickup);
-    }
-
-    @Override
-    public boolean canStackForEnemy(Enemy enemy) {
-        return canStackFor(enemy);
-    }
-
-    @Override
-    public boolean canStackForAvatar(Avatar avatar) {
-        return canStackFor(avatar);
     }
 }

@@ -48,10 +48,6 @@ public class InvincibilityPotion extends Pickup{
         duration--;
     }
 
-    public int getDuration() {
-        return duration;
-    }
-
     public boolean hasExpired() {
         return duration <= 0;
     }

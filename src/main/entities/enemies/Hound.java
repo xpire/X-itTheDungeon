@@ -5,14 +5,13 @@ import javafx.scene.shape.Circle;
 import main.behaviour.CowardBehaviour;
 import main.behaviour.HoundBehaviour;
 import main.behaviour.HunterBehaviour;
-import main.maploading.MapLoader;
-import main.math.Vec2d;
-import main.math.Vec2i;
 import main.maploading.Level;
+import main.maploading.MapLoader;
+import main.math.Vec2i;
 
 import java.util.ArrayList;
 
-public class Hound extends Enemy {
+public class Hound extends Enemy { //TODO remove test codes
 
     {
         symbol = '3';
@@ -21,39 +20,38 @@ public class Hound extends Enemy {
 
     public Hound(Level map) {
         super(map);
-        super.setCurrBehavior(new HoundBehaviour());
-        super.setManager(null);
     }
 
     public Hound(Level map, Vec2i pos) {
         super(map, pos);
-        super.setCurrBehavior(new HoundBehaviour());
-        super.setManager(null);
-    }
-
-    @Override
-    public void decideBehaviour(Level map) {
-        if (!level.getAvatar().isRaged()) {
-            if (super.manager.hunterExist()) {
-                super.setCurrBehavior(new HoundBehaviour());
-            } else {
-                super.setCurrBehavior(new HunterBehaviour());
-            }
-        } else {
-            super.setCurrBehavior(new CowardBehaviour());
-        }
     }
 
     @Override
     public void onCreated(){
-        Circle hunt = new Circle();
-
-        hunt.setRadius(10);
-        hunt.setFill(Color.YELLOW);
-
-        view.addNode(hunt);
-        view.setCentre(new Vec2d(0, 0));
+        view.addNode(new Circle(10, Color.YELLOW));
+        setCurrBehaviour(new HoundBehaviour());
     }
+
+    @Override
+    public void decideBehaviour() {
+        if (!level.getAvatar().isOnRage()) {
+            if (manager.hunterExist())
+                setCurrBehaviour(new HoundBehaviour());
+            else
+                setCurrBehaviour(new HunterBehaviour());
+
+        } else {
+            setCurrBehaviour(new CowardBehaviour());
+        }
+    }
+
+
+
+
+
+    //------------------------------ TEST ---------------------------------
+
+
 
     // Testing code for A* search
     public static void main(String[] args) {
@@ -65,6 +63,7 @@ public class Hound extends Enemy {
 
         Vec2i hunterLocation = new Vec2i(2,0);
         Vec2i userLocation = new Vec2i(2,2);
+
         System.out.printf(
                 "c:%d %d,u:%d %d\n",
                 hunterLocation.getX(),
@@ -85,7 +84,7 @@ public class Hound extends Enemy {
             System.out.println();
         }
 
-        ArrayList<Vec2i> target = testHound.getCurrBehavior().decideMove(
+        ArrayList<Vec2i> target = testHound.getCurrBehaviour().decideMove(
                 map,
                 hunterLocation,
                 userLocation,
