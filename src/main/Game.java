@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 
-public class Game extends Application{
+public class Game{
 
 
     final static int WIDTH = 800;
@@ -24,21 +24,24 @@ public class Game extends Application{
 
     public static Input input = new Input();
     public static GameWorld world;
-    public static ApplicationBehaviour appBehaviour = new MainMenuBehaviour();
-    public static Stage stageInstance;
+    public GameLoop gameLoop;
+    public static ApplicationState appState = new MainMenuState();
+    public ApplicationState getAppState() {return appState; }
+    public void setAppState(ApplicationState a) { appState = a; }
 
-    public void setStageInstance(Stage stage) { Game.stageInstance = stage; }
-    public Stage getStageInstance() {return Game.stageInstance; }
+//    public static Stage stageInstance;
+//
+//    public void setStageInstance(Stage stage) { Game.stageInstance = stage; }
+//    public Stage getStageInstance() {return Game.stageInstance; }
 
     private Level map;
 
     public Level getMap() { return map; }
-    public void setApplicationBehaviour(ApplicationBehaviour a) { appBehaviour = a; }
 
 
-    public static void main(String[] args) {
-        launch(args);
-    }
+//    public static void main(String[] args) {
+//        launch(args);
+//    }
 
 
     // Before a set of updates
@@ -64,19 +67,19 @@ public class Game extends Application{
     }
 
 
-    private static Game instance;
-    public Game() {
-        instance = this;
-    }
-    //static method to get instance of game
-    public static Game getInstance() {
-        return instance;
-    }
+//    private static Game instance;
+//    public Game() {
+//        instance = this;
+//    }
+//    //static method to get instance of game
+//    public static Game getInstance() {
+//        return instance;
+//    }
 
-    @Override
-    public void start(Stage stage) throws Exception {
-        setStageInstance(stage);
-        stage.setTitle("XD - Xit the Dungeon");
+//    @Override
+//    public void start(Stage stage) throws Exception {
+//        setStageInstance(stage);
+//        stage.setTitle("XD - Xit the Dungeon");
 //        Parent root;
 //        try {
 //            root = FXMLLoader.load(getClass().getResource("mainMenu.fxml"));
@@ -85,9 +88,10 @@ public class Game extends Application{
 //            e.printStackTrace();
 //            return;
 //        }
-        Scene scene = appBehaviour.load();
-        stage.setScene(scene);
-        stage.show();
+//        Parent root = FXMLLoader.load(getClass().getResource("mainMenu.fxml"));
+//        Scene scene = appState.load(stage);
+//        stage.setScene(scene);
+//        stage.show();
 //        try {
 //            TimeUnit.SECONDS.sleep(5);
 //        } catch (InterruptedException e) {
@@ -95,17 +99,17 @@ public class Game extends Application{
 //        }
 
 //        StartGame(stage);
-    }
+//    }
 
-    public void StartGame(Stage stage) {
-        Scene scene = generateLevel();
+    public void StartGame(Stage stage, Group root) {
+        Scene scene = generateLevel(root);
         stage.setScene(scene);
         stage.show();
         startGameLoop(this);
     }
 
-    Scene generateLevel() {
-        Group root = new Group();
+    Scene generateLevel(Group root) {
+//        Group root = new Group();
         Scene scene = new Scene(root, WIDTH, HEIGHT);
 
 
@@ -147,7 +151,11 @@ public class Game extends Application{
     }
 
     public void startGameLoop(Game g) {
-        GameLoop loop = new GameLoop(this, fps -> System.out.println("FPS: " + fps));
-        loop.start();
+        this.gameLoop = new GameLoop(this, fps -> System.out.println("FPS: " + fps));
+        gameLoop.start();
+    }
+
+    public void stopGameLoop(Game g) {
+        if (this.gameLoop != null) this.gameLoop.stop();
     }
 }

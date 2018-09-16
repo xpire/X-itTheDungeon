@@ -1,24 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.Group?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.Controller">
-    <children>
-        <Label fx:id="mainMenuLabel1" layoutX="147.0" layoutY="14.0" text="XD: Main Menu">
-            <font>
-                <Font size="49.0" />
-            </font>
-        </Label>
-        <FlowPane hgap="150.0" layoutX="80.0" layoutY="320.0" prefHeight="80.0" prefWidth="432.0">
-            <children>
-                <Button fx:id="button1" mnemonicParsing="false" onAction="#handleButton1Action" text="Enter" />
-                <Button fx:id="Button2" mnemonicParsing="false" text="Enter" />
-                <Button fx:id="button3" mnemonicParsing="false" text="Enter" />
-            </children>
-        </FlowPane>
-    </children>
-</AnchorPane>
+<Group xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.MainMenuController">
+   <children>
+      <Label text="XD: Xit the Dungeon">
+         <font>
+            <Font size="64.0" />
+         </font>
+      </Label>
+      <Button layoutX="50.0" layoutY="300.0" mnemonicParsing="false" onAction="#GoToGamePlay" text="Start Game" />
+      <Button layoutX="440.0" layoutY="300.0" mnemonicParsing="false" text="Create Mode" />
+   </children>
+</Group>
