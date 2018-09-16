@@ -24,6 +24,7 @@ public class Strategist extends Enemy {
 
     @Override
     public void onCreated(){
+        super.onCreated();
         view.addNode(new Circle(10, Color.BLUE));
         setCurrBehaviour(new StrategistBehaviour());
     }

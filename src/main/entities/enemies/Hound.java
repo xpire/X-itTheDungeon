@@ -28,6 +28,7 @@ public class Hound extends Enemy { //TODO remove test codes
 
     @Override
     public void onCreated(){
+        super.onCreated();
         view.addNode(new Circle(10, Color.YELLOW));
         setCurrBehaviour(new HoundBehaviour());
     }

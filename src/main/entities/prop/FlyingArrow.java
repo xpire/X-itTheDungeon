@@ -22,4 +22,9 @@ public class FlyingArrow extends Prop{
     public boolean isPassableFor(Entity entity) {
         return false;
     }
+
+    @Override
+    public boolean canStackFor(Entity entity) {
+        return false;
+    }
 }

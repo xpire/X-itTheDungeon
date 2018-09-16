@@ -35,7 +35,8 @@ public class LitBomb extends Prop{
     public void onTurnUpdate() {
         fuseLength--;
 
-        int redness = (int)(1 - (double)fuseLength/MAX_FUSE_LENGTH) * 255;
+        int count = MAX_FUSE_LENGTH - fuseLength;
+        int redness = Math.min( (int)(((double)count)/MAX_FUSE_LENGTH * 255), 255);
         bomb.setFill(Color.rgb(redness, 0, 0));
 
         if (fuseLength <= 0)
@@ -49,6 +50,8 @@ public class LitBomb extends Prop{
         destroyEntity(pos.add(1, 0));
         destroyEntity(pos.add(0, -1));
         destroyEntity(pos.add(0, 1));
+
+        onDestroyed();
     }
 
 
@@ -66,5 +69,10 @@ public class LitBomb extends Prop{
     @Override
     public boolean isPassableForProp(Prop prop) {
         return prop.isProjectile;
+    }
+
+    @Override
+    public boolean canStackFor(Entity entity) {
+        return true;
     }
 }

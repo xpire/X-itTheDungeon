@@ -318,36 +318,46 @@ public class Level {
     private void notifyOnEnterByProp(Vec2i pos, Prop prop) {
         Terrain currTerrain = getTerrain(pos);
         if (currTerrain != null) currTerrain.onEnterByProp(prop);
+
+        if (hasTerrain(pos))    getTerrain(pos).onEnterByProp(prop);
+        if (hasPickup(pos))     getPickup(pos).onEnterByProp(prop);
+        if (hasEnemy(pos))      getEnemy(pos).onEnterByProp(prop);
+        if (hasAvatar(pos))     getAvatar().onEnterByProp(prop);
     }
 
     private void notifyOnEnterByEnemy(Vec2i pos, Enemy enemy) {
-        Terrain currTerrain = getTerrain(pos);
-        if (currTerrain != null) currTerrain.onEnterByEnemy(enemy);
+        if (hasTerrain(pos))    getTerrain(pos).onEnterByEnemy(enemy);
+        if (hasProp(pos))       getProp(pos).onEnterByEnemy(enemy);
+        if (hasPickup(pos))     getPickup(pos).onEnterByEnemy(enemy);
+        if (hasAvatar(pos))     getAvatar().onEnterByEnemy(enemy);
     }
 
     private void notifyOnEnterByAvatar(Vec2i pos, Avatar avatar) {
-        Terrain currTerrain = getTerrain(pos);
-        if (currTerrain != null) currTerrain.onEnterByAvatar(avatar);
-
-        Pickup currPickup = getPickup(pos);
-        if (currPickup != null) currPickup.onEnterByAvatar(avatar);
+        if (hasTerrain(pos))    getTerrain(pos).onEnterByAvatar(avatar);
+        if (hasProp(pos))       getProp(pos).onEnterByAvatar(avatar);
+        if (hasPickup(pos))     getPickup(pos).onEnterByAvatar(avatar);
+        if (hasEnemy(pos))      getEnemy(pos).onEnterByAvatar(avatar);
     }
 
     private void notifyOnLeaveByProp(Vec2i pos, Prop prop) {
-        Terrain currTerrain = getTerrain(pos);
-        if (currTerrain != null) {
-            currTerrain.onLeaveByProp(prop);
-        }
+        if (hasTerrain(pos))    getTerrain(pos).onLeaveByProp(prop);
+        if (hasProp(pos))       getProp(pos).onLeaveByProp(prop);
+        if (hasEnemy(pos))      getEnemy(pos).onLeaveByProp(prop);
+        if (hasAvatar(pos))     getAvatar().onLeaveByProp(prop);
     }
 
     private void notifyOnLeaveByEnemy(Vec2i pos, Enemy enemy) {
-        Terrain currTerrain = getTerrain(pos);
-        if (currTerrain != null) currTerrain.onLeaveByEnemy(enemy);
+        if (hasTerrain(pos))    getTerrain(pos).onLeaveByEnemy(enemy);
+        if (hasProp(pos))       getProp(pos).onLeaveByEnemy(enemy);
+        if (hasPickup(pos))     getPickup(pos).onLeaveByEnemy(enemy);
+        if (hasAvatar(pos))     getAvatar().onLeaveByEnemy(enemy);
     }
 
     private void notifyOnLeaveByAvatar(Vec2i pos, Avatar avatar) {
-        Terrain currTerrain = getTerrain(pos);
-        if (currTerrain != null) currTerrain.onLeaveByAvatar(avatar);
+        if (hasTerrain(pos))    getTerrain(pos).onLeaveByAvatar(avatar);
+        if (hasProp(pos))       getProp(pos).onLeaveByAvatar(avatar);
+        if (hasPickup(pos))     getPickup(pos).onLeaveByAvatar(avatar);
+        if (hasEnemy(pos))      getEnemy(pos).onLeaveByAvatar(avatar);
     }
 
     /*

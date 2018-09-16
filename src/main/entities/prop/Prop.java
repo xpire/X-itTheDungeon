@@ -25,12 +25,6 @@ public abstract class Prop extends Entity {
         level.removeProp(getGridPos());
     }
 
-    @Override
-    public boolean canStackFor(Entity entity) {
-        return false;
-    }
-
-
     public boolean onPush(Avatar avatar) {
         return false;
     }
