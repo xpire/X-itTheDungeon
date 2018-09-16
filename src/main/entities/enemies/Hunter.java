@@ -26,6 +26,7 @@ public class Hunter extends Enemy {
 
     @Override
     public void onCreated(){
+        super.onCreated();
         view.addNode(new Circle(10, Color.RED));
         setCurrBehaviour(new StrategistBehaviour());
     }

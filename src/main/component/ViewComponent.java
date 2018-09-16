@@ -4,7 +4,7 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import main.math.Vec2d;
 
-public class ViewComponent extends Component {
+public class ViewComponent {
 
     private Group view;
     private Vec2d centre = new Vec2d(0, 0);

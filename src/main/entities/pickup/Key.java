@@ -46,7 +46,7 @@ public class Key extends Pickup {
     public String getMetaData() {
         StringBuilder sb = new StringBuilder();
         sb.append(String.format("%d\t%d\t", pos.getX(), pos.getY()));
-        sb.append(String.format("%d\t%d\t", door.getGridPos().getX(), door.getGridPos().getY()));
+        sb.append(String.format("%d\t%d", door.getGridPos().getX(), door.getGridPos().getY()));
         return sb.toString();
     }
 
