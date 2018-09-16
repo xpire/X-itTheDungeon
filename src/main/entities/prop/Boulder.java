@@ -7,6 +7,9 @@ import main.entities.Entity;
 import main.maploading.Level;
 import main.math.Vec2i;
 
+/**
+ * Class describing the Boulder entity
+ */
 public class Boulder extends Prop {
 
     {
@@ -14,6 +17,10 @@ public class Boulder extends Prop {
         isHeavy = true;
     }
 
+    /**
+     * Basic constructor
+     * @param level
+     */
     public Boulder(Level level) {
         super(level);
     }

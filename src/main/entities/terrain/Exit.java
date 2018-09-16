@@ -9,12 +9,19 @@ import main.maploading.Level;
 import main.math.Vec2d;
 import main.math.Vec2i;
 
+/**
+ * Class describing the Exit entity
+ */
 public class Exit extends Terrain{
 
     {
         symbol = 'X';
     }
 
+    /**
+     * Basic constructor
+     * @param level current level
+     */
     public Exit(Level level) {
         super(level);
     }

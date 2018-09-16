@@ -26,6 +26,18 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.function.Supplier;
 
+/**
+ * Class which represents and handles the game map, both in its grid
+ * based view and its game based view. This is used for play mode and create mode
+ *
+ * Entities within the Level are split into 5 layers:
+ *  - Terrains
+ *  - Props
+ *  - Pickups
+ *  - Enemies
+ *  - Avatar
+ *
+ */
 public class Level {
 
     private final Supplier<Terrain> DEFAULT_TERRAIN = () -> new Ground(this);

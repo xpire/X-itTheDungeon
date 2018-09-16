@@ -6,16 +6,17 @@ import main.math.Vec2i;
 
 import java.util.ArrayList;
 
+/**
+ * Implements the behaviour specific to the Hound
+ */
 public class HoundBehaviour implements AIBehaviour {
-    // TODO: change the type of the map
 
     @Override
     public ArrayList<Vec2i> decideMove(Level level,
                                        Vec2i currLocation,
                                        Vec2i playerLocation,
                                        ArrayList<Integer> pastMoves,
-                                       ArrayList<Enemy> entities
-    ){
+                                       ArrayList<Enemy> entities){
     // find the hunter closest to the player
         //GET NEAREST HUNTER FROM AISYSTEM
         Vec2i closestHunterLocation = new Vec2i(-1,-1);
@@ -57,6 +58,13 @@ public class HoundBehaviour implements AIBehaviour {
         return targetSquares;
     }
 
+    /**
+     * Checks whether or not a looping limit has been reached, given an increment/decrement flag
+     * @param increase inc/dec flag
+     * @param value value being inc/dec
+     * @param limit max value
+     * @return
+     */
     public Boolean checkLimit(Boolean increase, int value, int limit) {
         if (increase) {
             return (value < limit);
@@ -65,6 +73,12 @@ public class HoundBehaviour implements AIBehaviour {
         }
     }
 
+    /**
+     * Iterates a value given a inc/dec flag
+     * @param increase inc/dev flag
+     * @param value value to inc/dec
+     * @return the new value
+     */
     public int iterate(Boolean increase, int value) {
         if (increase) {
             return value+1;
@@ -73,6 +87,15 @@ public class HoundBehaviour implements AIBehaviour {
         }
     }
 
+    /**
+     * Get the diagonally opposite quadrant to a Hunter's curr position relative to the player
+     * @param map : Level the hound exists in
+     * @param playerLocation : Avatar location
+     * @param increaseX : inc/dec flag for X
+     * @param increaseY : inc/dec flag for Y
+     * @param distance : Manhatten distance
+     * @return the quadrant diagonally opposite to the hound's current location
+     */
     public ArrayList<Vec2i> quadrantSweep(Level map, Vec2i playerLocation, Boolean increaseX, Boolean increaseY, int distance) {
         ArrayList<Vec2i> targetSquares = new ArrayList<>();
         int limitX = 0;
@@ -95,6 +118,15 @@ public class HoundBehaviour implements AIBehaviour {
         return targetSquares;
     }
 
+    /**
+     * Does the same as above, with a 45\deg rotation to the axis
+     * Gets the vertically opposite quadrant to a Hunter's curr. position, relative to the Avatar
+     * @param map : current level
+     * @param playerLocation : Avatar's location
+     * @param increase inc/dec flag
+     * @param distance manhatten distance
+     * @return quadrant vert. opp. to Hunters curr. position relative to the Avatar
+     */
     public ArrayList<Vec2i> verticalSweep(Level map, Vec2i playerLocation, Boolean increase, int distance) {
         int limit = 0;
         ArrayList<Vec2i> targetSquares = new ArrayList<>();
@@ -115,6 +147,15 @@ public class HoundBehaviour implements AIBehaviour {
         return targetSquares;
     }
 
+    /**
+     * 90/deg rotation of the previous method
+     * Gets the horizontally opp. quadrant to a Hunter's curr postion relative to the Avatar
+     * @param map : current Level
+     * @param playerLocation : Avatar's position
+     * @param increase : inc/dec flag
+     * @param distance : manhatten distance
+     * @return quadrant hori. opp. to a Hunter's curr position, relative the the Avatar
+     */
     public ArrayList<Vec2i> horizontalSweep(Level map, Vec2i playerLocation, Boolean increase, int distance) {
         int limit = 0;
         ArrayList<Vec2i> targetSquares = new ArrayList<>();

@@ -8,14 +8,19 @@ import main.math.Vec2d;
 import main.math.Vec2i;
 
 
-
-
+/**
+ * Class describing the Wall entity
+ */
 public class Wall extends Terrain {
 
     {
         symbol = '*';
     }
 
+    /**
+     * Basic constructor
+     * @param level current level
+     */
     public Wall(Level level) {
         super(level);
     }

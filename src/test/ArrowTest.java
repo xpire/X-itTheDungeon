@@ -1,7 +1,7 @@
 package test;
 
 import javafx.scene.input.KeyCode;
-import main.Game;
+import main.app.Game;
 import main.GameWorld;
 import main.entities.Avatar;
 import main.entities.enemies.Coward;

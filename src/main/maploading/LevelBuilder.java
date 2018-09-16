@@ -31,17 +31,29 @@ public class LevelBuilder {
         AvatarFactory avatarFactory = new AvatarFactory();
 
         switch (entity) {
-            case '1':
-            case '2':
-            case '3':
-            case '4':
-                Enemy enemy = enemyFactory.getEnemy(entity, level, pos);
+            case 'X':
+            case '.':
+            case '#':
+            case '/':
+            case '*':
+                Terrain terrain = terrainFactory.getTerrain(entity, level, pos);
 
-                if (level.canReplaceEnemy(pos, enemy)) {
-                    level.addEnemy(pos, enemy);
+                if (level.canReplaceTerrain(pos, terrain)) {
+                    level.addTerrain(pos, terrain);
                 } else {
                     level.removeAllAt(pos, true);
-                    level.addEnemy(pos, enemy);
+                    level.addTerrain(pos, terrain);
+                }
+
+                return;
+            case 'O':
+                Prop prop = propFactory.getProp(entity, level, pos);
+
+                if (level.canReplaceProp(pos, prop)) {
+                    level.addProp(pos, prop);
+                } else {
+                    level.removeAllAt(pos, true);
+                    level.addProp(pos, prop);
                 }
 
                 return;
@@ -61,29 +73,17 @@ public class LevelBuilder {
                 }
 
                 return;
-            case 'O':
-                Prop prop = propFactory.getProp(entity, level, pos);
+            case '1':
+            case '2':
+            case '3':
+            case '4':
+                Enemy enemy = enemyFactory.getEnemy(entity, level, pos);
 
-                if (level.canReplaceProp(pos, prop)) {
-                    level.addProp(pos, prop);
+                if (level.canReplaceEnemy(pos, enemy)) {
+                    level.addEnemy(pos, enemy);
                 } else {
                     level.removeAllAt(pos, true);
-                    level.addProp(pos, prop);
-                }
-
-                return;
-            case 'X':
-            case '.':
-            case '#':
-            case '/':
-            case '*':
-                Terrain terrain = terrainFactory.getTerrain(entity, level, pos);
-
-                if (level.canReplaceTerrain(pos, terrain)) {
-                    level.addTerrain(pos, terrain);
-                } else {
-                    level.removeAllAt(pos, true);
-                    level.addTerrain(pos, terrain);
+                    level.addEnemy(pos, enemy);
                 }
 
                 return;
