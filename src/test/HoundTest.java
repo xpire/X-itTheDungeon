@@ -99,9 +99,9 @@ import static org.junit.Assert.*;
             level.setEnemy(hunterLocation, hunter);
 
             level.displayLevel();
-//            hound.decideBehaviour(level);
+            hound.decideBehaviour();
             System.out.println(enemyManager.hunterExist());
-            ArrayList<Vec2i> targets =  hound.getCurrBehavior().decideMove(
+            ArrayList<Vec2i> targets =  hound.getCurrBehaviour().decideMove(
                     level,
                     houndLocation,
                     avatarLocation,

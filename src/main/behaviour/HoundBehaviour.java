@@ -22,7 +22,7 @@ public class HoundBehaviour implements AIBehaviour {
         int closestHunterDistance = 64+64;
         int distance;
         for (Enemy e: level.getEnemies()) {
-            if (e.IsHunter()) {
+            if (e.isHunter()) {
                 distance = (Math.abs(e.getGridPos().getX() - playerLocation.getX()) +
                         Math.abs(e.getGridPos().getY() - playerLocation.getY()));
                 if (distance < closestHunterDistance) {
