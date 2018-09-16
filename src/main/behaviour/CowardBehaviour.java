@@ -33,8 +33,12 @@ public class CowardBehaviour implements AIBehaviour {
             for (int y = currLocation.getY()-1; y <= currLocation.getY()+1; y++) {
                 //continue if at diagonal square or at currLocation
                 if ((x + y - currLocation.getX() - currLocation.getY())%2 == 0) continue;
-                if (!check(map,new Vec2i(x,y))) continue;
-                System.out.printf("v:%d %d, m:%d\n",x,y, distance(x,y,playerLocation));
+
+                if (!check(map, new Vec2i(x,y))) continue;
+                if (!map.isValidGridPos(new Vec2i(x, y))) continue;
+
+                System.out.printf("v:%d %d\n",x,y);
+
                 if (distance(x,y,playerLocation) > maxManhattanDistance) {
                     //new max, remove old max
                     maxManhattanDistance = distance(x, y, playerLocation);

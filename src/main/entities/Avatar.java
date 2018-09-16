@@ -206,6 +206,8 @@ public class Avatar extends Entity {
             // check durability and destroy
             if (sword.isBroken())
                 onUnequipSword();
+
+            Game.world.endPlayerTurn();
         }
     }
 
@@ -247,6 +249,7 @@ public class Avatar extends Entity {
 
         // -1 arrow
         numArrows.set(numArrows.get() - 1);
+        Game.world.endPlayerTurn();
     }
 
 
@@ -304,7 +307,7 @@ public class Avatar extends Entity {
         return true;
     }
 
-    public boolean pickUpHoverPotion(HoverPotion p) { // TODO
+    public boolean pickUpHoverPotion(HoverPotion p) {
         onHoverStart();
         return true;
     }

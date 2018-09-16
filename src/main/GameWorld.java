@@ -5,7 +5,8 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.text.Font;
-import main.achivement.ExitDungeonAchievement;
+import main.achivement.AllSwitchesOnAchievement;
+import main.achivement.CollectAllTreasuresAchievement;
 import main.component.ViewComponent;
 import main.entities.Avatar;
 import main.entities.Entity;
@@ -40,9 +41,9 @@ public class GameWorld {
         gridView.getChildren().add(level.getView());
         view = new ViewComponent(gridView);
 
-        level.addObjectives(new ExitDungeonAchievement());
-//        level.addObjectives(new AllSwitchesOnAchievement());
-//        level.addObjectives(new CollectAllTreasuresAchievement());
+//        level.addObjectives(new ExitDungeonAchievement());
+        level.addObjectives(new AllSwitchesOnAchievement());
+        level.addObjectives(new CollectAllTreasuresAchievement());
 //        level.addObjectives(new KillAllEnemiesAchievement());
 
         initWorld();
@@ -75,6 +76,9 @@ public class GameWorld {
         level.addPickup(new Vec2i(8, 13), new Bomb(level));
         level.addPickup(new Vec2i(8, 13), new Bomb(level));
         level.addPickup(new Vec2i(10, 13), new Bomb(level));
+        level.addPickup(new Vec2i(1, 8), new Treasure(level));
+        level.addPickup(new Vec2i(2, 5), new Treasure(level));
+        level.addPickup(new Vec2i(3, 9), new Treasure(level));
 
         level.addPickup(new Vec2i(5, 5), new HoverPotion(level));
         level.addPickup(new Vec2i(7, 10), new HoverPotion(level));
@@ -85,7 +89,7 @@ public class GameWorld {
 //        level.addEnemy(new Vec2i(0, 3), new Hunter(level));
 //        level.addEnemy(new Vec2i(12, 12), new Hound(level));
 //        level.addEnemy(new Vec2i(0, 0), new Coward(level));
-//        level.addEnemy(new Vec2i(12, 11), new Strategist(level));
+////        level.addEnemy(new Vec2i(12, 11), new Strategist(level));
 
         level.addTerrain(new Vec2i(14, 14), new Exit(level));
         level.addTerrain(new Vec2i(15, 15), new Exit(level));
@@ -125,7 +129,7 @@ public class GameWorld {
     public void update() {
         if (!isRunning) return;
 
-        if (level.getEnemies().isEmpty()) {
+        if (!level.getEnemies().isEmpty()) {
             if (isPlayerTurn) {
                 onPlayerTurn();
             } else {
@@ -172,6 +176,7 @@ public class GameWorld {
         lblGameOver.setTranslateY(220);
         lblGameOver.fontProperty().set(Font.font(40));
         view.addNode(lblGameOver);
+        isRunning = false;
     }
 
     public void gameWin() {

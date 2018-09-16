@@ -4,6 +4,7 @@ import main.algorithms.AStarSearch;
 import main.behaviour.AIBehaviour;
 import main.entities.Avatar;
 import main.entities.Entity;
+import main.events.EnemyEvent;
 import main.maploading.Level;
 import main.math.Vec2i;
 
@@ -24,10 +25,15 @@ public abstract class Enemy extends Entity implements StateDecision {
         super(level, pos);
     }
 
+    @Override
+    public void onCreated() {
+        level.postEvent(new EnemyEvent(EnemyEvent.ENEMY_CREATED));
+    }
 
     @Override
     public void onDestroyed() {
-        level.removeEnemy(getGridPos());
+        level.postEvent(new EnemyEvent(EnemyEvent.ENEMY_KILLED));
+        level.removeEnemy(pos);
     }
 
 

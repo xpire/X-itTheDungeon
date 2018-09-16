@@ -28,6 +28,7 @@ public class Coward extends Enemy {
 
     @Override
     public void onCreated(){
+        super.onCreated();
         view.addNode(new Circle(10, Color.GREEN));
         setCurrBehaviour(new CowardBehaviour());
     }

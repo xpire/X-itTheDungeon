@@ -10,11 +10,11 @@ public class KillAllEnemiesAchievement extends Achievement{
     private int numKilled = 0;
 
     private final EventHandler<EnemyEvent> ENEMY_CREATED = e -> numEnemies++;
-    private final EventHandler<EnemyEvent> ENEMY_KILLED = e -> numKilled--;
+    private final EventHandler<EnemyEvent> ENEMY_KILLED = e -> numKilled++;
 
     @Override
     public void activate(EventBus bus) {
-        bus.addEventHandler(EnemyEvent.ENEMY_CREATED,     ENEMY_CREATED);
+        bus.addEventHandler(EnemyEvent.ENEMY_CREATED,  ENEMY_CREATED);
         bus.addEventHandler(EnemyEvent.ENEMY_KILLED,   ENEMY_KILLED);
     }
 
