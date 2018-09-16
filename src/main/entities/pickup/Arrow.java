@@ -9,8 +9,6 @@ import main.math.Vec2i;
 
 public class Arrow extends Pickup{
 
-    private Rectangle rect;
-
     {
         symbol = '-';
     }
@@ -23,12 +21,9 @@ public class Arrow extends Pickup{
         super(level, pos);
     }
 
-
     @Override
     public void onCreated(){
-
-        rect = new Rectangle(16, 4, Color.SALMON);
-        view.addNode(rect);
+        view.addNode(new Rectangle(16, 4, Color.SALMON));
         view.setCentre(new Vec2d(8, 2));
     }
 

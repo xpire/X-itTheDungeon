@@ -4,10 +4,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import main.behaviour.CowardBehaviour;
 import main.behaviour.HunterBehaviour;
-import main.maploading.MapLoader;
-import main.math.Vec2d;
-import main.math.Vec2i;
 import main.maploading.Level;
+import main.maploading.MapLoader;
+import main.math.Vec2i;
 
 import java.util.ArrayList;
 
@@ -18,38 +17,37 @@ public class Coward extends Enemy {
         isHunter = false;
     }
 
-    public Coward(Level map) {
-        super(map);
-        super.setCurrBehavior(new CowardBehaviour());
-        super.setManager(null);
+    public Coward(Level level) {
+        super(level);
     }
 
-    public Coward(Level map, Vec2i pos) {
-        super(map, pos);
-        super.setCurrBehavior(new CowardBehaviour());
-        super.setManager(null);
+    public Coward(Level level, Vec2i pos) {
+        super(level, pos);
     }
 
-    @Override
-    public void decideBehaviour(Level map) {
-        if (pos.mDist(level.getAvatar().getGridPos()) < 4 || level.getAvatar().isRaged()) {
-            super.setCurrBehavior(new CowardBehaviour());
-        }
-        else {
-            super.setCurrBehavior(new HunterBehaviour());
-        }
-    }
 
     @Override
     public void onCreated(){
-        Circle hunt = new Circle();
-
-        hunt.setRadius(10);
-        hunt.setFill(Color.GREEN);
-
-        view.addNode(hunt);
-        view.setCentre(new Vec2d(0, 0));
+        view.addNode(new Circle(10, Color.GREEN));
+        setCurrBehaviour(new CowardBehaviour());
     }
+
+
+    @Override
+    public void decideBehaviour() {
+
+        if (pos.mDist(level.getAvatar().getGridPos()) < 4 || level.getAvatar().isOnRage())
+            setCurrBehaviour(new CowardBehaviour());
+
+        else
+            setCurrBehaviour(new HunterBehaviour());
+    }
+
+
+
+
+    //------------------------------ TEST ---------------------------------
+
 
     public static void main(String[] args) {
         MapLoader ML = new MapLoader();
@@ -79,7 +77,7 @@ public class Coward extends Enemy {
             System.out.println();
         }
         System.out.println("help");
-        ArrayList<Vec2i> target = testCoward.getCurrBehavior().decideMove(
+        ArrayList<Vec2i> target = testCoward.getCurrBehaviour().decideMove(
                 map,
                 cowardLocation,
                 userLocation,

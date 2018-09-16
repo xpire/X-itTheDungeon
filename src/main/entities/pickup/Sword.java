@@ -10,7 +10,6 @@ import main.math.Vec2i;
 public class Sword extends Pickup {
 
     private int durability;
-    private Rectangle rect;
 
     {
         symbol = '+';
@@ -28,22 +27,15 @@ public class Sword extends Pickup {
 
     @Override
     public void onCreated(){
-
-        rect = new Rectangle(16, 4, Color.STEELBLUE);
-        view.addNode(rect);
+        Rectangle stick = new Rectangle(16, 2, Color.STEELBLUE);
+        stick.setRotate(-45);
+        view.addNode(stick);
         view.setCentre(new Vec2d(8, 2));
     }
 
 
-    public int getDurability() {
-        return durability;
-    }
-
     public void reduceDurability() {
         durability--;
-        if (durability == 0) {
-            System.out.println("Sword has broken");
-        }
     }
 
     public boolean isBroken() {

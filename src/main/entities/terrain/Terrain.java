@@ -21,16 +21,11 @@ public abstract class Terrain extends Entity {
     }
 
     @Override
-    public boolean isPassableFor(Entity entity) {
-        return true;
-    }
-
-    public boolean onPush(Avatar avatar) {
+    public boolean canStackForTerrain(Terrain terrain) {
         return false;
     }
 
-    @Override
-    public boolean canStackForTerrain(Terrain terrain) {
+    public boolean onPush(Avatar avatar) {
         return false;
     }
 }

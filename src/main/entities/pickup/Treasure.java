@@ -8,7 +8,7 @@ import main.math.Vec2i;
 
 public class Treasure extends Pickup{
 
-    private Circle circ;
+    private Circle coin;
 
     {
         symbol = '$';
@@ -22,11 +22,10 @@ public class Treasure extends Pickup{
         super(level, pos);
     }
 
-
     @Override
     public void onCreated(){
-        circ = new Circle(5, Color.GOLD);
-        view.addNode(circ);
+        coin = new Circle(5, Color.GOLD);
+        view.addNode(coin);
     }
 
     @Override

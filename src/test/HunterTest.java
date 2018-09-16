@@ -20,7 +20,7 @@
 ////
 ////        System.out.println(map.getNRows() + "\t" + map.getNCols());
 ////
-////        ArrayList<Vec2i> target = testHunter.getCurrBehavior().decideMove(
+////        ArrayList<Vec2i> target = testHunter.getCurrBehaviour().decideMove(
 ////                map,
 ////                new Vec2i(4,4),
 ////                new Vec2i(0,0),

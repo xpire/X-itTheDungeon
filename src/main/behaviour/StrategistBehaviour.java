@@ -1,7 +1,7 @@
 package main.behaviour;
 
 // Going around boulder and avoid arrows
-import main.Algorithms.PageRank;
+import main.algorithms.PageRank;
 import main.entities.enemies.Enemy;
 import main.entities.pickup.Pickup;
 import main.maploading.Level;
