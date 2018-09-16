@@ -120,6 +120,7 @@ public class DraftBuilder {
                 } else {//// if (ent == 'K') {
 
                     String[] matching = null;
+                    Vec2i matchingPos = null;
 
                     while (matching == null) {
                         System.out.println("Please set the matching Key/Door");
@@ -128,12 +129,18 @@ public class DraftBuilder {
                             if (matching.length != 2) {
                                 System.out.println("Error: must be a tile location");
                                 matching = null;
+                                continue;
+                            }
+
+                            matchingPos = new Vec2i(Integer.parseInt(matching[0]),
+                                    Integer.parseInt(matching[1]));
+
+                            if (!level.isValidGridPos(matchingPos) || matchingPos.equals(tile)) {
+                                System.out.println("Error: invalid tile (note: matching tile must be distinct)");
+                                matching = null;
                             }
                         }
                     }
-
-                    Vec2i matchingPos = new Vec2i(Integer.parseInt(matching[0]),
-                            Integer.parseInt(matching[1]));
 
                     if (ent == 'K') {
                         levelBuilder.buildKeyDoor(level, tile, matchingPos);
