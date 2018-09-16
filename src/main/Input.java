@@ -1,6 +1,7 @@
 package main;
 
 import javafx.event.EventHandler;
+import javafx.scene.input.KeyCharacterCombination;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
@@ -38,10 +39,27 @@ public class Input implements EventHandler<KeyEvent> {
         return !wasHeld(code) && isHeld(code);
     }
 
+    /**
+     * Sets the given KeyCode to isDown mode (FOR TESTING PURPOSES)
+     * @param code
+     */
+    public void setIsDown(KeyCode code) {
+        prevKeys.put(code, false);
+        keys.put(code, true);
+    }
+
     public Boolean isUp(KeyCode code) {
         return wasHeld(code) && !isHeld(code);
     }
 
+    /**
+     * Sets the given keyCode to isUp mode (FOR TESTING PURPOSES)
+     * @param code
+     */
+    public void setIsUp(KeyCode code) {
+        prevKeys.put(code, true);
+        keys.put(code, false);
+    }
 
     public Boolean isHeld(KeyCode code) {
         return keys.getOrDefault(code, false);

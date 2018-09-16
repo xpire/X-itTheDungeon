@@ -191,7 +191,7 @@ public class Avatar extends Entity {
     /**
      * The player requested to swing sword
      */
-    private void swingSword() {
+    public void swingSword() {
         // cannot swing if has no sword
         if (sword == null) return;
 
@@ -223,7 +223,7 @@ public class Avatar extends Entity {
     /**
      * The player requested to shoot an arrow
      */
-    private void shootArrow() {
+    public void shootArrow() {
         // cannot shoot if no arrow
         if (numArrows.get() <= 0) return;
 
@@ -265,6 +265,15 @@ public class Avatar extends Entity {
     }
 
 
+    public boolean hasKey() {
+        if (key == null) return false;
+        return true;
+    }
+
+    public boolean hasSword() {
+        if (sword == null) return false;
+        return true;
+    }
 
     public void dropKey() {
         if (key == null) return;
