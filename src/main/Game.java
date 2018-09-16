@@ -158,4 +158,8 @@ public class Game{
     public void stopGameLoop(Game g) {
         if (this.gameLoop != null) this.gameLoop.stop();
     }
+
+    public void resumeGameLoop(Game g) {
+        if (this.gameLoop!= null) this.gameLoop.start();
+    }
 }
