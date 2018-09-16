@@ -24,15 +24,9 @@ public class Input implements EventHandler<KeyEvent> {
         }
     }
 
-
     public void update() {
         prevKeys = new HashMap<>(keys);
     }
-
-    public void processInputs() {
-
-    }
-
 
     public Boolean isDown(KeyCode code) {
         return !wasHeld(code) && isHeld(code);
@@ -41,7 +35,6 @@ public class Input implements EventHandler<KeyEvent> {
     public Boolean isUp(KeyCode code) {
         return wasHeld(code) && !isHeld(code);
     }
-
 
     public Boolean isHeld(KeyCode code) {
         return keys.getOrDefault(code, false);

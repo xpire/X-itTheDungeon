@@ -1,6 +1,7 @@
 package main;
 
 import javafx.animation.AnimationTimer;
+import main.app.Game;
 
 import java.util.function.Consumer;
 
@@ -37,18 +38,18 @@ public class GameLoop extends AnimationTimer {
 
         lag += (currTime - prevTime) / NANO_PER_SEC;
 
-        // main.Input Processing
+        // Before update
         game.onBeforeUpdate();
 
         // Update Loop
         int count = 0;
         while (lag >= SEC_PER_TICK && count < MAX_TICKS_PER_FRAME) {
-            game.onUpdate(SEC_PER_TICK);
+            game.onUpdate();
             lag -= SEC_PER_TICK;
             count++;
         }
 
-        // Rendering
+        // After update
         game.onAfterUpdate();
 
         // Float overflow handling

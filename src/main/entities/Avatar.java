@@ -8,7 +8,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
-import main.Game;
+import main.app.Game;
 import main.entities.enemies.Enemy;
 import main.entities.pickup.*;
 import main.entities.prop.FlyingArrow;
