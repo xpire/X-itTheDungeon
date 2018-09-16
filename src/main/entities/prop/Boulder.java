@@ -41,6 +41,10 @@ public class Boulder extends Prop {
         return false;
     }
 
+    @Override
+    public boolean canStackFor(Entity entity) {
+        return false;
+    }
 
     @Override
     public boolean onPush(Avatar avatar) {

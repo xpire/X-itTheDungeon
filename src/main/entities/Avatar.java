@@ -259,6 +259,7 @@ public class Avatar extends Entity {
         LitBomb bomb = new LitBomb(level);
 
         if (level.canPlaceProp(pos, bomb)) {
+            level.addProp(pos, bomb);
             numBombs.set(numBombs.get() - 1);
             Game.world.endPlayerTurn();
         }
@@ -270,6 +271,7 @@ public class Avatar extends Entity {
         if (key == null) return;
 
         if (level.canPlacePickup(pos, key)) {
+            level.addPickup(pos, key);
             key = null;
             Game.world.endPlayerTurn();
         }

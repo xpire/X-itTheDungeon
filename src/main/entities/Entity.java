@@ -139,19 +139,19 @@ public abstract class Entity {
 
     public abstract boolean canStackFor(Entity entity);
     public boolean canStackForTerrain(Terrain terrain)  {
-        return isPassableFor(terrain);
+        return canStackFor(terrain);
     }
     public boolean canStackForProp(Prop prop)  {
-        return isPassableFor(prop);
+        return canStackFor(prop);
     }
     public boolean canStackForPickup(Pickup pickup)  {
-        return isPassableFor(pickup);
+        return canStackFor(pickup);
     }
     public boolean canStackForEnemy(Enemy enemy)  {
-        return isPassableFor(enemy);
+        return canStackFor(enemy);
     }
     public boolean canStackForAvatar(Avatar avatar)  {
-        return isPassableFor(avatar);
+        return canStackFor(avatar);
     }
 
     public void onEnterBy(Entity entity) {}

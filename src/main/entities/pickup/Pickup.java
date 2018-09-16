@@ -45,14 +45,6 @@ public abstract class Pickup extends Entity {
     }
 
     @Override
-    public void onEnterByAvatar(Avatar avatar) {
-        if (onPickupBy(avatar))
-            onDestroyed();
-    }
-
-    public abstract boolean onPickupBy(Avatar avatar);
-
-    @Override
     public boolean canStackFor(Entity entity) {
         return false;
     }
@@ -66,6 +58,14 @@ public abstract class Pickup extends Entity {
     public boolean canStackForAvatar(Avatar avatar) {
         return true;
     }
+
+    @Override
+    public void onEnterByAvatar(Avatar avatar) {
+        if (onPickupBy(avatar))
+            onDestroyed();
+    }
+
+    public abstract boolean onPickupBy(Avatar avatar);
 
     public int getScore() { return score; }
 }
