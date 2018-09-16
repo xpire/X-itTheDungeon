@@ -19,6 +19,10 @@ EntityVisitor {
 }
  */
 
+/**
+ * Class which represents all Entities available in the Game
+ * provides behaviours and interactions for entities
+ */
 
 public abstract class Entity {
 
@@ -28,6 +32,10 @@ public abstract class Entity {
     protected Level level;
     protected ViewComponent view;
 
+    /**
+     * Basic constructor
+     * @param level current level
+     */
     public Entity(Level level) {
         this(level, new Vec2i());
     }
@@ -40,26 +48,53 @@ public abstract class Entity {
         onCreated();
     }
 
+    /**
+     * Logic when an entity is made
+     */
     public void onCreated() {}
 
+    /**
+     * A to-string like implementation which gives
+     * information about the entity
+     * used in keys and doors to provide their mapping
+     * @return
+     */
     public String getMetaData() {
 
         return null;
     }
 
     // Removes from map
+
+    /**
+     * logic when an entity is destroyed
+     */
     public abstract void onDestroyed();
 
+    /**
+     * logic when an entity is removed from the level
+     */
     public void onRemovedFromLevel() {}
 
+    /**
+     * logic when an entity explodes
+     */
     public void onExploded() { }
 
+    /**
+     * logic when the turn changes
+     */
     public void onTurnUpdate() {}
 
 
 
     /*
     View
+     */
+
+    /**
+     * Getter for the entities view
+     * @return entity view
      */
     public Node getView() {
         return view.getView();
@@ -72,6 +107,11 @@ public abstract class Entity {
     Movement
      */
 
+    /**
+     * Moves an entity by a constant amount
+     * @param x - change in x
+     * @param y - change in y
+     */
     public void moveTo(int x, int y) {
 //        Vec2i from = new Vec2i(pos);
         pos.set(x, y);
@@ -79,10 +119,19 @@ public abstract class Entity {
     }
 
 
+    /**
+     * Move to a new vector position
+     * @param newPos : position to move to
+     */
     public void moveTo(Vec2i newPos) {
         moveTo(newPos.getX(), newPos.getY());
     }
 
+    /**
+     * Move entity by certain amount
+     * @param dx - change in x
+     * @param dy - change in y
+     */
     public void moveBy(int dx, int dy) {
         moveTo(pos.getX() + dx, pos.getY() + dy);
     }
@@ -98,18 +147,34 @@ public abstract class Entity {
     Position
      */
 
+    /**
+     * Getter for grid position
+     * @return the grid position
+     */
     public Vec2i getGridPos() {
         return new Vec2i(pos);
     }
 
+    /**
+     * Getter for the x - coord
+     * @return x coord
+     */
     public int getX() {
         return pos.getX();
     }
 
+    /**
+     * Getter for the y - coord
+     * @return y coord
+     */
     public int getY() {
         return pos.getY();
     }
 
+    /**
+     * Get the entities position on the world
+     * @return the world position
+     */
     public Vec2d getWorldPos() {
         return level.gridPosToWorldPosCentre(pos);
     }
@@ -120,12 +185,20 @@ public abstract class Entity {
     Miscellaneous Properties
      */
 
+    /**
+     * Getter for the entities unique symbol
+     * @return
+     */
     public char getSymbol() {
         return symbol;
     }
 
 
-
+    /**
+     * Check if entities are allowed to pass through a certain entity
+     * @param entity entity requesting to pass through
+     * @return true if can pass, false otherwise
+     */
     public abstract boolean isPassableFor(Entity entity);
     public boolean isPassableForProp(Prop prop) {
         return isPassableFor(prop);
@@ -137,6 +210,11 @@ public abstract class Entity {
         return isPassableFor(avatar);
     }
 
+    /**
+     * check if an entity can be stacked on top of a certain entity
+     * @param entity entity asking to be stacked
+     * @return true if can stack, false otherwise
+     */
     public abstract boolean canStackFor(Entity entity);
     public boolean canStackForTerrain(Terrain terrain)  {
         return canStackFor(terrain);
@@ -154,11 +232,19 @@ public abstract class Entity {
         return canStackFor(avatar);
     }
 
+    /**
+     * logic when an entity enters the current entity
+     * @param entity entity which just entered the current tile
+     */
     public void onEnterBy(Entity entity) {}
     public void onEnterByProp(Prop prop) {}
     public void onEnterByEnemy(Enemy enemy) {}
     public void onEnterByAvatar(Avatar avatar) {}
 
+    /**
+     * logic when an entity leaves the current entity
+     * @param entity entity which just left the current tile
+     */
     public void onLeaveBy(Entity entity) {}
     public void onLeaveByProp(Prop prop) {}
     public void onLeaveByEnemy(Enemy enemy) {}

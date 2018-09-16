@@ -1,6 +1,6 @@
 package test;
 
-import main.Algorithms.AStarSearch;
+import main.algorithms.AStarSearch;
 import main.maploading.Level;
 import main.maploading.MapLoader;
 import main.math.Vec2i;
@@ -32,7 +32,7 @@ public class TestGeneric {
         Level testLevel = getMap(fileName);
         //testLevel.displayLevel();
         AStarSearch AlgoOp = new AStarSearch(testLevel, targets, self);
-        return AlgoOp.Search();
+        return AlgoOp.search();
     }
 
     /**

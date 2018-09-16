@@ -11,6 +11,11 @@ import main.math.Vec2i;
 
 import java.util.ArrayList;
 
+/**
+ * The Hound enemy entity
+ * Tries to trap the Avatar between it and the Hunter nearest to
+ * the Avatar. Becomes a Hunter if no Hunters exist.
+ */
 public class Hound extends Enemy { //TODO remove test codes
 
     {
@@ -18,8 +23,12 @@ public class Hound extends Enemy { //TODO remove test codes
         isHunter = false;
     }
 
-    public Hound(Level map) {
-        super(map);
+    /**
+     * Basic constructor
+     * @param level Level the enemy will exist in
+     */
+    public Hound(Level level) {
+        super(level);
     }
 
     public Hound(Level map, Vec2i pos) {

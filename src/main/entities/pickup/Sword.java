@@ -7,6 +7,9 @@ import main.maploading.Level;
 import main.math.Vec2d;
 import main.math.Vec2i;
 
+/**
+ * Class describing the sword entity
+ */
 public class Sword extends Pickup {
 
     private int durability;
@@ -16,6 +19,10 @@ public class Sword extends Pickup {
         durability = 5;
     }
 
+    /**
+     * Basic constructor
+     * @param level : current level
+     */
     public Sword(Level level) {
         super(level);
     }
@@ -34,10 +41,17 @@ public class Sword extends Pickup {
     }
 
 
+    /**
+     * reduce the durability of the sword after a successful swing
+     */
     public void reduceDurability() {
         durability--;
     }
 
+    /**
+     * check if the sword has broken
+     * @return true if sword has broken, false otherwise
+     */
     public boolean isBroken() {
         return durability <= 0;
     }

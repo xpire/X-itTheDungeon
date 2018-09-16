@@ -7,12 +7,19 @@ import main.maploading.Level;
 import main.math.Vec2d;
 import main.math.Vec2i;
 
+/**
+ * Class describing the Arrow entity
+ */
 public class Arrow extends Pickup{
 
     {
         symbol = '-';
     }
 
+    /**
+     * Basic constructor
+     * @param level current Level
+     */
     public Arrow(Level level) {
         super(level);
     }

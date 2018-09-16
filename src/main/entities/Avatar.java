@@ -59,7 +59,10 @@ public class Avatar extends Entity {
     }
 
 
-
+    /**
+     * Basic constructor
+     * @param level current level
+     */
     public Avatar(Level level) {
         super(level);
     }
@@ -106,8 +109,9 @@ public class Avatar extends Entity {
     }
 
 
-
-
+    /**
+     * Update the grid and world position of the Avatar
+     */
     public void update() {
         Vec2i pos = new Vec2i(getGridPos());
 
@@ -178,6 +182,10 @@ public class Avatar extends Entity {
     }
 
 
+    /**
+     * Logic when the Avatars turn ends
+     * reduce potion durations
+     */
     public void onRoundEnd() {
         if (ragePotion == null) return;
 
@@ -211,11 +219,18 @@ public class Avatar extends Entity {
         }
     }
 
+    /**
+     * when the player picks up a sword
+     * @param s
+     */
     public void onEquipSword(Sword s) {
         sword = s;
         swordView.setVisible(true);
     }
 
+    /**
+     * when the player loses their sword
+     */
     public void onUnequipSword() {
         sword = null;
         swordView.setVisible(false);
@@ -253,9 +268,9 @@ public class Avatar extends Entity {
     }
 
 
-
-
-
+    /**
+     * Player places a bomb
+     */
     public void placeBomb() {
         if (numBombs.get() <= 0) return;
 
@@ -268,17 +283,25 @@ public class Avatar extends Entity {
         }
     }
 
-
+    /**
+     * check if Avatar has key
+     * @return true if has key
+     */
     public boolean hasKey() {
-        if (key == null) return false;
-        return true;
+        return (key != null);
     }
 
+    /**
+     * check if Avatar has sword
+     * @return true if has sword
+     */
     public boolean hasSword() {
-        if (sword == null) return false;
-        return true;
+        return (sword != null);
     }
 
+    /**
+     * player drops their key
+     */
     public void dropKey() {
         if (key == null) return;
 
@@ -289,10 +312,18 @@ public class Avatar extends Entity {
         }
     }
 
+    /**
+     * check if the Avatar's key matches a door
+     * @param door door being checked
+     * @return true if key matches
+     */
     public boolean hasKeyFor(Door door) {
         return key != null && key.isMatchingDoor(door);
     }
 
+    /**
+     * when the Avatar uses their key
+     */
     public void useKey() {
         key = null;
     }
@@ -302,6 +333,12 @@ public class Avatar extends Entity {
     /*
         Pickup functions
      */
+
+    /**
+     * Logic when the Avatar picks up a key
+     * @param k key being picked up
+     * @return true if pickup successful, else false
+     */
     public boolean pickUpKey(Key k) {
         if (key != null) return false;
 
@@ -309,6 +346,11 @@ public class Avatar extends Entity {
         return true;
     }
 
+    /**
+     * Logic when the Avatar picks up a sword
+     * @param s sword being picked up
+     * @return true if pickup successful, else false
+     */
     public boolean pickUpSword(Sword s) {
         if (sword != null) return false;
 
@@ -316,79 +358,134 @@ public class Avatar extends Entity {
         return true;
     }
 
+
+    /**
+     * Logic when the Avatar picks up a Hover pot
+     * @param p hover pot being picked up
+     * @return true if pickup successful, else false
+     */
     public boolean pickUpHoverPotion(HoverPotion p) {
         onHoverStart();
         return true;
     }
 
+    /**
+     * Logic when the Avatar picks up a Invinc pot
+     * @param p invinc pot being picked up
+     * @return true if pickup successful, else false
+     */
     public boolean pickUpInvincibilityPotion(InvincibilityPotion p) {
         onRageStart(p);
         return true;
     }
 
+    /**
+     * Logic when the Avatar picks up a Arrow
+     * @param arrow arrow being picked up
+     * @return true if pickup successful, else false
+     */
     public boolean pickUpArrow(Arrow arrow) {
         numArrows.setValue(numArrows.get() + 1);
         return true;
     }
 
+    /**
+     * Logic when the Avatar picks up a Bomb
+     * @param bomb bomb being picked up
+     * @return true if pickup successful, else false
+     */
     public boolean pickUpBomb(Bomb bomb) {
         numBombs.setValue(numBombs.get() + 1);
         return true;
     }
 
+    /**
+     * Logic when the Avatar picks up a treasure
+     * @param treasure treasure being picked up
+     * @return true if pickup successful, else false
+     */
     public boolean pickUpTreasure(Treasure treasure) {
         numTreasures.setValue(numTreasures.get() + 1);
         return true;
     }
 
 
-
-
-
-
+    /**
+     * logic when hover pot is picked up
+     */
     public void onHoverStart() {
         isHovering.set(true);
     }
 
+    /**
+     * logic when hover pot ends
+     */
     public void onHoverEnd() {
         isHovering.set(false);
     }
 
+    /**
+     * logic when invinc pot is picked up
+     * @param p invinc pot picked up
+     */
     public void onRageStart(InvincibilityPotion p) {
         ragePotion = p;
         isOnRage.set(true);
     }
 
+    /**
+     * logic when invinc pot ends
+     */
     public void onRageEnd() {
         isOnRage.set(false);
     }
 
 
-
-
-
-
+    /**
+     * Getter for curr # arrows
+     * @return curr # arrows
+     */
     public IntegerProperty getNumArrowsProperty() {
         return numArrows;
     }
 
+    /**
+     * Getter for curr # bomb
+     * @return curr # bomb
+     */
     public IntegerProperty getNumBombsProperty() {
         return numBombs;
     }
 
+    /**
+     * Getter for curr # treasure
+     * @return curr # treasure
+     */
     public IntegerProperty getNumTreasuresProperty() {
         return numTreasures;
     }
 
 
+    /**
+     * Check if hovering
+     * @return true if hovering
+     */
     public boolean isHovering() {
         return isHovering.get();
     }
 
+    /**
+     * check if enraged
+     * @return true if enraged
+     */
     public boolean isOnRage() {
         return isOnRage.get();
     }
 
+    /**
+     * Getter for Avatars past moves
+     * @return
+     */
     public ArrayList<Integer> getPastMoves() {
         return new ArrayList<>(pastMoves); // TODO unmodifiable?
     }

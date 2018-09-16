@@ -5,11 +5,18 @@ import main.math.Vec2i;
 
 import java.util.ArrayList;
 
+/**
+ * Provides info that the enemies require to make their moves
+ */
 public class EnemyManager {
 
     private Level level;
     private ArrayList<Integer> pastMoves;
 
+    /**
+     * Constructor for enemy manager
+     * @param level Level it will exist in
+     */
     public EnemyManager(Level level) {
 
         this.level      = level;
@@ -38,7 +45,8 @@ public class EnemyManager {
 
 
     /**
-     * @return If a hunter exist in the map
+     * Checks if there is a Hunter on the map
+     * @return True if Hunter exists, false otherwise
      */
     public boolean hunterExist() {
         for (Enemy e : getEnemies()) {
@@ -50,13 +58,15 @@ public class EnemyManager {
 
 
     /**
-     * @return The past moves of the avatar
+     * Gets the past moves of the avatar
+     * @return ArrayList containing the Avatar's past moves
      */
     public ArrayList<Integer> getPastMoves() { return pastMoves; }
 
 
     /**
-     * @return a list of entity
+     * Getter for enemies
+     * @return ArrayList of enemies
      */
     private ArrayList<Enemy> getEnemies() { return level.getEnemies(); } //TODO check if used
 }

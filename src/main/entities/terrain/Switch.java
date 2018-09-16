@@ -9,6 +9,9 @@ import main.maploading.Level;
 import main.math.Vec2d;
 import main.math.Vec2i;
 
+/**
+ * Class describing the Switch entity
+ */
 public class Switch extends Terrain{
 
     private boolean wasOn;
@@ -21,6 +24,10 @@ public class Switch extends Terrain{
         isOn    = false;
     }
 
+    /**
+     * basic constructor
+     * @param level current level
+     */
     public Switch(Level level) {
         super(level);
     }
@@ -29,12 +36,18 @@ public class Switch extends Terrain{
         super(level, pos);
     }
 
+    /**
+     * Flag if the switch is activated
+     */
     public void onActivated() {
         isOn = true;
         floorSwitch.setFill(Color.GREEN);
 
     }
 
+    /**
+     * Flag if the switch is deactivated
+     */
     public void onDeactivated() {
         isOn = false;
         floorSwitch.setFill(Color.RED);

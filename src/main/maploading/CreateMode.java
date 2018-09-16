@@ -5,8 +5,16 @@ import main.math.Vec2i;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * Terminal based implementation of the games Create Mode
+ * Allows users to create complete original maps
+ */
 public class CreateMode {
 
+    /**
+     * Main function to run the Map Creator
+     * @param args Never used
+     */
     public static void main(String[] args) {
         CreateMode createMode = new CreateMode();
 
@@ -49,6 +57,12 @@ public class CreateMode {
         sc.close();
     }
 
+    /**
+     * Converts arguments from scanner into instructions
+     * @param draftBuilder instance of the DraftBuilder being used
+     * @param command user's input
+     * @param sc copy of an open scanner (used when adding keys/doors)
+     */
     public void commandInterpreter(DraftBuilder draftBuilder, String[] command, Scanner sc) {
         switch (command[0].toLowerCase()) {
             case "save":
@@ -139,6 +153,12 @@ public class CreateMode {
         }
     }
 
+    /**
+     * Checks if a set of objectives the user wishes to set is valid
+     *
+     * @param objectives ArrayList of objectives
+     * @return true if value set of objectives, false otherwise
+     */
     private boolean isValidObj(ArrayList<String> objectives) {
         //check all objectives are a single letter between A and D
         for (String s : objectives) {

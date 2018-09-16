@@ -12,6 +12,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Iterator;
 
+/**
+ * Implements the behaviour specific to the Strategist
+ */
 public class StrategistBehaviour implements AIBehaviour {
     @Override
     public ArrayList<Vec2i> decideMove(Level level,
@@ -95,7 +98,7 @@ public class StrategistBehaviour implements AIBehaviour {
     }
 
     /**
-     * Get what coordinate is possible, note that it only checks coordinates no entities
+     * Get what coordinate is possible, note that it only checks coordinates with no entities
      * @param level Current state of level
      * @param userLocation Current location of the strategist
      * @return list of possible coordinates
@@ -184,6 +187,7 @@ public class StrategistBehaviour implements AIBehaviour {
     }
 
     /**
+     * Checks if the player is reachable by the Strategist
      * @param request The list to check if player is reachable
      * @return if the player is near the strategist
      */

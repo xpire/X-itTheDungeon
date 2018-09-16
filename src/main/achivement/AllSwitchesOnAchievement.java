@@ -4,6 +4,9 @@ import javafx.event.EventHandler;
 import main.events.EventBus;
 import main.events.SwitchEvent;
 
+/**
+ * Class which tracks the "all switches activated" game objective
+ */
 public class AllSwitchesOnAchievement extends Achievement{
 
     private int numSwitches = 0;

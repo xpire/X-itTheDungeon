@@ -8,6 +8,9 @@ import main.math.Vec2i;
 
 import java.util.Iterator;
 
+/**
+ * Class describing the Lit Bomb entity
+ */
 public class LitBomb extends Prop{
 
     private Circle bomb;
@@ -15,6 +18,10 @@ public class LitBomb extends Prop{
     private final int MAX_FUSE_LENGTH = 5;
     private int fuseLength = MAX_FUSE_LENGTH;
 
+    /**
+     * Basic Constructor
+     * @param level
+     */
     public LitBomb(Level level) {
         super(level);
     }
@@ -44,6 +51,10 @@ public class LitBomb extends Prop{
     }
 
 
+    /**
+     * Logic when the bomb expodes, killing everything in the
+     * plus shape around the bomb
+     */
     public void onExplosion() {
         destroyEntity(pos);
         destroyEntity(pos.add(-1, 0));
@@ -55,6 +66,10 @@ public class LitBomb extends Prop{
     }
 
 
+    /**
+     * Destroying entities on a certain position
+     * @param pos : position to destroy entities
+     */
     public void destroyEntity(Vec2i pos) {
         Iterator<Entity> it = level.getEntitiesAt(pos);
         it.forEachRemaining(Entity::onExploded);

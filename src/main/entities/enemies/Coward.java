@@ -10,6 +10,11 @@ import main.math.Vec2i;
 
 import java.util.ArrayList;
 
+/**
+ * The Coward enemy entity
+ * Follows Hunter behaviour while far away from the Avatar,
+ * but runs away when it gets close
+ */
 public class Coward extends Enemy {
 
     {
@@ -17,6 +22,10 @@ public class Coward extends Enemy {
         isHunter = false;
     }
 
+    /**
+     * Basic constructor
+     * @param level Level the enemy will exist in
+     */
     public Coward(Level level) {
         super(level);
     }

@@ -7,6 +7,9 @@ import main.events.TreasureEvent;
 import main.maploading.Level;
 import main.math.Vec2i;
 
+/**
+ * Class describing the Treasure entity
+ */
 public class Treasure extends Pickup{
 
     private Circle coin;
@@ -15,6 +18,10 @@ public class Treasure extends Pickup{
         symbol = '$';
     }
 
+    /**
+     * Basic constructor
+     * @param level : current level
+     */
     public Treasure(Level level) {
         super(level);
     }

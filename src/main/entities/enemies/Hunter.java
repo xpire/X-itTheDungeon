@@ -8,6 +8,10 @@ import main.behaviour.StrategistBehaviour;
 import main.maploading.Level;
 import main.math.Vec2i;
 
+/**
+ * The Hunter enemy entity
+ * Always follows the shortest path towards the Avatar
+ */
 public class Hunter extends Enemy {
 
     {
@@ -15,6 +19,10 @@ public class Hunter extends Enemy {
         isHunter = true;
     }
 
+    /**
+     * Basic constructor
+     * @param level Level the enemy will exist in
+     */
     public Hunter(Level level) {
         super(level);
     }
