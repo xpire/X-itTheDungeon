@@ -5,6 +5,7 @@ import main.entities.enemies.Enemy;
 import main.math.Vec2i;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 
 /**
  * Implements the behaviour specific to the Hound
@@ -19,51 +20,40 @@ public class HoundBehaviour2 implements AIBehaviour {
                                        ArrayList<Enemy> enemies){
 
 
-    // find the hunter closest to the player
-        //GET NEAREST HUNTER FROM AISYSTEM
-
-
-        Vec2i closestHunterPos  = new Vec2i(-1,-1);
-        int closestHunterDist   = 64 + 64; // TODO ?
-        int dist;
-
-        for (Enemy e: level.getEnemies()) {
-            if (!e.isHunter()) continue;
-
-            dist = e.getGridPos().manhattan(playerPos);
-
-            if (dist < closestHunterDist) {
-
-                //found closer hunter
-                closestHunterDist = dist;
-                closestHunterPos  = e.getGridPos();
-            }
-        }
+        // find the hunter closest to the player
+        Vec2i closestHunterPos = level.getEnemies().stream()
+                .filter(Enemy::isHunter)
+                .map(Enemy::getGridPos)
+                .min(Comparator.comparing(v -> v.manhattan(playerPos)))
+                .orElse(null);
 
         ArrayList<Vec2i> targets = new ArrayList<>();
-        if (closestHunterPos.getX() < 0 && closestHunterPos.getY() < 0) {
-            // no closest hunter, main.enemies.Hound becomes a hunter
+
+        // no closest hunter, Hound becomes a hunter
+        if (closestHunterPos == null) {
             targets.add(playerPos);
             return targets;
         }
-
 
         //pretend we have a cartesian plane
         int changeX = closestHunterPos.getX() - playerPos.getX();
         int changeY = closestHunterPos.getY() - playerPos.getY();
 
         //Distance now defines distance to player Location
-        dist = currPos.manhattan(playerPos);
+        int dist = currPos.manhattan(playerPos);
 
-        if (changeX != 0 && changeY != 0) {
+        if (changeX != 0 && changeY != 0)
             targets.addAll(quadrantSweep(level, playerPos, !(changeX>0), !(changeY>0), dist));
-        } else if (changeX == 0) {
+
+        else if (changeX == 0)
             targets.addAll(verticalSweep(level, playerPos,!(changeY>0), dist));
-        } else if (changeY == 0) {
+
+        else if (changeY == 0)
             targets.addAll(horizontalSweep(level, playerPos,!(changeX>0), dist));
-        }
+
         return targets;
     }
+
 
     /**
      * Checks whether or not a looping limit has been reached, given an increment/decrement flag
@@ -80,6 +70,7 @@ public class HoundBehaviour2 implements AIBehaviour {
             return (value >= limit);
     }
 
+
     /**
      * Iterates a value given a inc/dec flag
      * @param increase inc/dev flag
@@ -89,6 +80,7 @@ public class HoundBehaviour2 implements AIBehaviour {
     public int iterate(Boolean increase, int value) {
         return increase ? value + 1 : value - 1;
     }
+
 
     /**
      * Get the diagonally opposite quadrant to a Hunter's curr position relative to the player
