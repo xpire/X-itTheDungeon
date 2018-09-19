@@ -12,12 +12,13 @@ public class HunterBehaviour implements AIBehaviour {
     @Override
     public ArrayList<Vec2i> decideMove(
             Level level,
-            Vec2i currLocation,
-            Vec2i userLocation,
+            Vec2i currPos,
+            Vec2i playerPos,
             ArrayList<Integer> pastMoves,
-            ArrayList<Enemy> entities) {
-        ArrayList<Vec2i> result = new ArrayList<>();
-        result.add(userLocation);
-        return result;
+            ArrayList<Enemy> enemies) {
+
+        ArrayList<Vec2i> targets = new ArrayList<>();
+        targets.add(playerPos);
+        return targets;
     }
 }

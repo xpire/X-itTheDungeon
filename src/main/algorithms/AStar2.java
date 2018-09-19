@@ -1,18 +1,20 @@
 package main.algorithms;
 
 import main.Level;
+import main.math.Tuple;
 import main.math.Vec2i;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.PriorityQueue;
 
-public class AStarSearch {
+public class AStar2 {
+
     private Level level;
     private ArrayList<Vec2i> targets;
     private Vec2i pos;
 
-    public AStarSearch(Level level, ArrayList<Vec2i> targets, Vec2i pos) {
+    public AStar2(Level level, ArrayList<Vec2i> targets, Vec2i pos) {
         this.level = level;
         this.targets = targets;
         this.pos = pos;
@@ -92,6 +94,36 @@ public class AStarSearch {
         }
     }
 
+    private ArrayList<Vec2i> getAdjacent(Node request) {
+        ArrayList<Vec2i> ret = new ArrayList<>();
+
+        int coordX = request.getCoordinate().getX();
+        int coordY = request.getCoordinate().getY();
+
+        if (coordX - 1 >= 0 && (level.isPassableForEnemy(new Vec2i(coordX - 1, coordY), null))) {
+            Vec2i buf1 = new Vec2i(coordX - 1, coordY);
+            ret.add(buf1);
+        }
+        if (coordX + 1 < level.getNCols() && (level.isPassableForEnemy(new Vec2i(coordX + 1, coordY), null))) {
+            Vec2i buf1 = new Vec2i(coordX + 1, coordY);
+            ret.add(buf1);
+        }
+        if (coordY - 1 >= 0 && (level.isPassableForEnemy(new Vec2i(coordX, coordY - 1), null))) {
+            Vec2i buf1 = new Vec2i(coordX, coordY - 1);
+            ret.add(buf1);
+        }
+        if (coordY + 1 < level.getNRows() && (level.isPassableForEnemy(new Vec2i(coordX, coordY + 1), null))) {
+            Vec2i buf1 = new Vec2i(coordX, coordY + 1);
+            ret.add(buf1);
+        }
+        return ret;
+    }
+
+
+
+
+
+
     /**
      * @param check requested coordinate
      * @param checkArray Array of recorded nodes
@@ -166,43 +198,54 @@ public class AStarSearch {
         return minVal;
     }
 
+
+
+
+
+
+
     /**
      * @return The shortest paths for the requested coordinates
      */
     public ArrayList<Vec2i> search() {
         // List of currStack tiles
-        PriorityQueue<Node> currStack = new PriorityQueue<>();
+        PriorityQueue<Node> frontier = new PriorityQueue<>();
+
         // List of distance that is stored
         ArrayList<Node> traversedHeuristic = new ArrayList<>();
 
         // Set initial cost of enemy and the player and add to traversed currStack list
-        Node start_node = new Node(pos, manHattanDist(pos,targets), 0);
-        start_node.setPrev(null);
-        currStack.add(start_node);
-        traversedHeuristic.add(start_node);
+        Node start = new Node(pos, manhattanDist(pos, targets), 0);
+        start.setPrev(null);
+
+        frontier.add(start);
+        traversedHeuristic.add(start);
 
         // Until it runs out of or the algorithm ends
-        while (currStack.size() > 0) {
-            // Pop the first element in the queue
-            Node buffer = currStack.poll();
-            for(Vec2i x: targets) {
-                if (x.getX() == buffer.getCoordinate().getX() && x.getY() == buffer.getCoordinate().getY())
-                    return constructPath(buffer, traversedHeuristic);
-            }
+        while (!frontier.isEmpty()) {
 
-            // Get all the possible reachable coordinate from here
-            ArrayList<Vec2i> adjs = buffer.getAdjacent(buffer);
-            int aggregateInt = buffer.getPathLength() + 1;
+            // Pop the first element in the queue
+            Node curr = frontier.poll();
+
+            if (isGoal(curr.coordinate))
+                return constructPath(curr, traversedHeuristic);
+
+
+            for (Tuple<Vec2i, Integer> adjs : getAdjs(curr.coordinate)) {
+
+                Vec2i x = adjs.getX();
+
+                Node next = new Node(x, manhattanDist(x, targets), adjs.getY() + 1);
+
+
+
+            }
 
             // For all adjacent nodes, check the following which if unseen node or need to update length
             for (Vec2i x: adjs) {
-                // Make new node
-                Node curr = new Node(x, manHattanDist(x, targets), aggregateInt);
-                // if (!hasCoord(x,currStack) && !hasCoord(x,traversedHeuristic)) { curr.setPrev(buffer); }
-
                 // If this is not in the currStack nodes, add to it.
-                if (!hasCoord(x, currStack) && !hasCoord(x, traversedHeuristic)) {
-                    currStack.add(curr);
+                if (!hasCoord(x, frontier) && !hasCoord(x, traversedHeuristic)) {
+                    frontier.add(curr);
                     curr.setPrev(buffer);
                 }
 
