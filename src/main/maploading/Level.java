@@ -843,15 +843,11 @@ public class Level {
     public boolean isPassableForAvatar(Vec2i pos, Avatar other) {
         if(!isValidGridPos(pos)) return false;
 
-        Terrain terrain = getTerrain(pos);
-        if (terrain != null && !terrain.isPassableForAvatar(other)) return false;
-
-        Prop prop = getProp(pos);
-        if (prop != null && !prop.isPassableForAvatar(other)) return false;
-
-        Pickup pickup = getPickup(pos);
-        if (pickup != null && !pickup.isPassableForAvatar(other)) return false;
-
+        if (hasTerrain(pos) && !getTerrain(pos).isPassableForAvatar(other))   return false;
+        if (hasProp(pos)    && !getProp(pos).isPassableForAvatar(other))      return false;
+        if (hasPickup(pos)  && !getPickup(pos).isPassableForAvatar(other))    return false;
+        if (hasEnemy(pos)   && !getEnemy(pos).isPassableForAvatar(other))     return false;
+        if (hasAvatar(pos)  && !getAvatar().isPassableForAvatar(other))       return false;
         return true;
     }
 
@@ -864,18 +860,11 @@ public class Level {
     public boolean isPassableForEnemy(Vec2i pos, Enemy other) {
         if(!isValidGridPos(pos)) return false;
 
-        Terrain terrain = getTerrain(pos);
-        if (terrain != null && !terrain.isPassableForEnemy(other)) return false;
-
-        Prop prop = getProp(pos);
-        if (prop != null && !prop.isPassableForEnemy(other)) return false;
-
-        Pickup pickup = getPickup(pos);
-        if (pickup != null && !pickup.isPassableForEnemy(other)) return false;
-
-        Enemy enemy = getEnemy(pos);
-        if (enemy != null && !enemy.isPassableForEnemy(other)) return false;
-
+        if (hasTerrain(pos) && !getTerrain(pos).isPassableForEnemy(other))   return false;
+        if (hasProp(pos)    && !getProp(pos).isPassableForEnemy(other))      return false;
+        if (hasPickup(pos)  && !getPickup(pos).isPassableForEnemy(other))    return false;
+        if (hasEnemy(pos)   && !getEnemy(pos).isPassableForEnemy(other))     return false;
+        if (hasAvatar(pos)  && !getAvatar().isPassableForEnemy(other))       return false;
         return true;
     }
 
@@ -888,15 +877,11 @@ public class Level {
     public boolean isPassableForProp(Vec2i pos, Prop other) {
         if(!isValidGridPos(pos)) return false;
 
-        Terrain terrain = getTerrain(pos);
-        if (terrain != null && !terrain.isPassableForProp(other)) return false;
-
-        Prop prop = getProp(pos);
-        if (prop != null && !prop.isPassableForProp(other)) return false;
-
-        Pickup pickup = getPickup(pos);
-        if (pickup != null && !pickup.isPassableForProp(other)) return false;
-
+        if (hasTerrain(pos) && !getTerrain(pos).isPassableForProp(other))   return false;
+        if (hasProp(pos)    && !getProp(pos).isPassableForProp(other))      return false;
+        if (hasPickup(pos)  && !getPickup(pos).isPassableForProp(other))    return false;
+        if (hasEnemy(pos)   && !getEnemy(pos).isPassableForProp(other))     return false;
+        if (hasAvatar(pos)  && !getAvatar().isPassableForProp(other))       return false;
         return true;
     }
 
