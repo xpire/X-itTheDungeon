@@ -3,7 +3,9 @@ package main.behaviour;
 import main.entities.enemies.Enemy;
 import main.Level;
 import main.math.Vec2i;
+
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Interface to decide the AI's move
@@ -19,9 +21,9 @@ public interface AIBehaviour {
      * @param entities list of all other enemies
      * @return
      */
-    public ArrayList<Vec2i> decideMove(Level level,
-                                       Vec2i currLocation,
-                                       Vec2i userLocation,
-                                       ArrayList<Integer> pastMoves,
-                                       ArrayList<Enemy> entities);
+     List<Vec2i> decideMove(Level level,
+                            Vec2i currLocation,
+                            Vec2i userLocation,
+                            ArrayList<Integer> pastMoves,
+                            ArrayList<Enemy> entities);
 }

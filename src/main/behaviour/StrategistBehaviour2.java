@@ -13,6 +13,9 @@ import java.util.*;
  * Implements the behaviour specific to the Strategist
  */
 public class StrategistBehaviour2 implements AIBehaviour {
+
+
+
     @Override
     public ArrayList<Vec2i> decideMove(Level level,
                                        Vec2i currPos,
@@ -25,15 +28,12 @@ public class StrategistBehaviour2 implements AIBehaviour {
         ArrayList<Vec2i> adjs = getAdjs(level, playerPos);
 
         // No accessible square and hence just go to the player
-        if (adjs.isEmpty()) {
+        if (adjs.isEmpty() || adjs.contains(playerPos)) {
             adjs.add(playerPos);
             return adjs;
         }
 
 
-        if (adjs.contains(playerPos)) {
-            return new ArrayList<>(Arrays.asList(playerPos));
-        }
 
 
         else if (currPos.equals(playerPos)) {
