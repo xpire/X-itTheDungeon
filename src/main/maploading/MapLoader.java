@@ -150,6 +150,10 @@ public class MapLoader {
         return level;
     }
 
+    public Level loadLevel(String mapName, String path) {
+        return loadLevel(mapName, path, false);
+    }
+
     public static void main(String[] args) {
         MapLoader mapLoader = new MapLoader();
 

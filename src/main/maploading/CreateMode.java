@@ -143,7 +143,7 @@ public class CreateMode {
 
                 draftBuilder.saveMap(draftBuilder.getName(), "drafts");
                 MapLoader mapLoader = new MapLoader();
-                Level playTest = mapLoader.loadLevel(draftBuilder.getName(), "drafts");
+                Level playTest = mapLoader.loadLevel(draftBuilder.getName(), "drafts", false);
 
                 //playGame(playTest);
 
