@@ -33,7 +33,10 @@ public class CreateMode {
             }
         }
 
-        DraftBuilder draftBuilder = new DraftBuilder(8, 8, command[0]);
+        MapLoader mapLoader = new MapLoader();
+        Level level = mapLoader.loadLevel(command[0], "drafts", true);
+
+        DraftBuilder draftBuilder = (level == null) ? new DraftBuilder(8, 8, command[0]) : new DraftBuilder(level);
         draftBuilder.saveMap(draftBuilder.getName(), "drafts");
 
         System.out.println("You may begin editing " + draftBuilder.getName());
@@ -61,8 +64,6 @@ public class CreateMode {
 
         sc.close();
     }
-
-    //TODO : to load maps, use MapLoader with a try catch? to determine wheter or not a draft is loadable
 
     /**
      * Converts arguments from scanner into instructions
@@ -202,7 +203,5 @@ public class CreateMode {
 
         //check "Exit" objective isn't coupled with others
         return (!objectives.contains("A"));
-
-        // TODO: enforce that the objective exists for it to be added?
     }
 }

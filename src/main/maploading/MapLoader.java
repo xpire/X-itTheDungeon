@@ -27,7 +27,7 @@ public class MapLoader {
      * @param path Path where the Level is saved, root at main
      * @return The Level which was just loaded
      */
-    public Level loadLevel(String mapName, String path) {
+    public Level loadLevel(String mapName, String path, Boolean isCreateMode) {
         LevelBuilder levelBuilder = new LevelBuilder();
         Level level = null;
 
@@ -55,8 +55,7 @@ public class MapLoader {
                 numRow = Integer.parseInt(line[0]);
                 numCol = Integer.parseInt(line[1]);
 
-                level = new Level(numRow, numCol, 30.0, mapName);
-                //change flag when required
+                level = new Level(numRow, numCol, 30.0, mapName, isCreateMode);
 
             } else {
                 System.out.println("Error: Empty Map");
@@ -154,7 +153,7 @@ public class MapLoader {
     public static void main(String[] args) {
         MapLoader mapLoader = new MapLoader();
 
-        Level level = mapLoader.loadLevel("map1", "levels");
+        Level level = mapLoader.loadLevel("map1", "levels", false);
 
         level.displayLevel();
 
