@@ -18,7 +18,15 @@ public class DraftBuilder {
     private Level level;
 
     /**
-     * Constructor for the draftBuilder
+     * Constructor when loading in an existing draft
+     * @param level : the existing draft
+     */
+    public DraftBuilder(Level level) {
+        this.level = level;
+    }
+
+    /**
+     * Constructor when creating a new draft
      * @param nRows # of rows for the Draft
      * @param nCols # of cols for the Draft
      * @param draftName name of the Draft
@@ -132,7 +140,7 @@ public class DraftBuilder {
 
                         sb.append(e.getSymbol());
                         if (e.getMetaData() != null)
-                            metaData.append(e.getMetaData());
+                            metaData.append(e.getMetaData()).append("\n");
                     }
 
                     w.write(sb.toString() + "\t");
