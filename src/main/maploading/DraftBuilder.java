@@ -23,6 +23,10 @@ public class DraftBuilder {
      * @param nCols # of cols for the Draft
      * @param draftName name of the Draft
      */
+    public DraftBuilder(Level level) {
+        this.level = level;
+    }
+    
     public DraftBuilder(int nRows, int nCols, String draftName) {
         level = new Level(nRows, nCols, 30.0, draftName, true);
     }
