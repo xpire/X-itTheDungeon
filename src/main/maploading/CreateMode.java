@@ -79,6 +79,10 @@ public class CreateMode {
                 System.out.println("Map Saved");
                 return true;
             case "edit":
+                if (command.length != 4) {
+                    System.out.println("Usage : edit <x-coord> <y-coord> <entities>");
+                    return true;
+                }
 
                 Vec2i tile = new Vec2i(Integer.parseInt(command[1]), Integer.parseInt(command[2]));
 

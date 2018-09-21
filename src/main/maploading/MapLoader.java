@@ -63,6 +63,24 @@ public class MapLoader {
             }
 
             /*
+                Extract objectives
+             */
+
+            if (sc.hasNextLine()) {
+                line = sc.nextLine().split("\\s+");
+                if (line.length > 0) {
+                    ArrayList<String> objectives = new ArrayList<>(Arrays.asList(line));
+                    level.setObjectives(objectives);
+                } else {
+                    System.out.println("Warning: No objectives specified");
+                    //return null;
+                }
+            } else {
+                System.out.println("Error: Bad map @ extract objectives");
+                return null;
+            }
+
+            /*
                 Extract Level's body
                 Skips Keys and Doors for later
              */
@@ -89,24 +107,6 @@ public class MapLoader {
                         }
                     }
                 }
-            }
-
-            /*
-                Extract objectives
-             */
-
-            if (sc.hasNextLine()) {
-                line = sc.nextLine().split("\\s+");
-                if (line.length > 0) {
-                    ArrayList<String> objectives = new ArrayList<>(Arrays.asList(line));
-                    level.setObjectives(objectives);
-                } else {
-                    System.out.println("Warning: No objectives specified");
-                    //return null;
-                }
-            } else {
-                System.out.println("Error: Bad map @ extract objectives");
-                return null;
             }
 
             /*

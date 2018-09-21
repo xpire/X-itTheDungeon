@@ -125,6 +125,13 @@ public class DraftBuilder {
             w.write(nRow + "\t" + nCol);
             w.append("\n");
 
+            //set the objectives
+            ArrayList<String> obj = level.getObjectives();
+            for (String s : obj) {
+                w.write(s + "\t");
+            }
+            w.newLine();
+
             //set the main body of the map
             StringBuilder metaData = new StringBuilder();
 
@@ -147,13 +154,6 @@ public class DraftBuilder {
                 }
                 w.newLine();
             }
-
-            //set the objectives
-            ArrayList<String> obj = level.getObjectives();
-            for (String s : obj) {
-                w.write(s + "\t");
-            }
-            w.newLine();
 
             //set the key-door mapping
             w.write(metaData.toString());
