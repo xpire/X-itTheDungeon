@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
 import javafx.stage.Stage;
 import main.app.controller.MainMenuController;
+import main.app.controller.PauseModeController;
 import main.app.controller.PlayModeController;
 
 public class Main extends Application {
@@ -33,9 +34,16 @@ public class Main extends Application {
         PlayModeController ctrlPlay = playModerLoader.getController();
         System.out.println(ctrlPlay);
 
+        FXMLLoader pauseModeLoader = new FXMLLoader(getClass().getResource("view/PauseScreen.fxml"));
+        root = pauseModeLoader.load();
+
+        PauseModeController ctrlPause = pauseModeLoader.getController();
+        System.out.println(ctrlPause);
+
         Game game = new Game();
         ctrlMain.initGame(game, primaryStage);
         ctrlPlay.initGame(game, primaryStage);
+        ctrlPause.initGame(game, primaryStage);
 
         game.getAppState().load(game, primaryStage);
     }

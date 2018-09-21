@@ -8,6 +8,9 @@ import javafx.stage.Stage;
 import main.GameLoop;
 import main.GameWorld;
 import main.Input;
+import main.app.controller.MainMenuController;
+import main.app.controller.PauseModeController;
+import main.app.controller.PlayModeController;
 
 
 public class Game{
@@ -19,7 +22,19 @@ public class Game{
     public static Input input = new Input();
     public static GameWorld world;
     public GameLoop gameLoop;
+    public Group previousRoot;
+    public PlayModeController ctrlPlay;
+    public PauseModeController ctrlPause;
+    public MainMenuController ctrlMain;
 
+    public void setPlayModeController(PlayModeController ctrl) {ctrlPlay = ctrl;}
+    public PlayModeController getPlayModeController() {return ctrlPlay;}
+    public void setPauseModeController(PauseModeController ctrl) {ctrlPause = ctrl;}
+    public PauseModeController getPauseModeController() {return ctrlPause;}
+    public void setMainMenuController(MainMenuController ctrl) {ctrlMain = ctrl; }
+    public MainMenuController getMainMenuController() {return ctrlMain; }
+
+    public Group getPreviousRoot() { return previousRoot; }
 
     public void runGame(Stage stage, Group root) {
         Scene scene = generateLevel(root);
@@ -28,6 +43,7 @@ public class Game{
 
         gameLoop = new GameLoop(this, fps -> System.out.println("FPS: " + fps));
         gameLoop.start();
+        previousRoot = root;
     }
 
     public void onBeforeUpdate() {}
@@ -44,6 +60,8 @@ public class Game{
     public void stop() {
         if (gameLoop != null) gameLoop.stop();
     }
+
+    public void resume() {if (gameLoop != null) gameLoop.start();}
 
     Scene generateLevel(Group root) {
         Scene scene = new Scene(root, WIDTH, HEIGHT);

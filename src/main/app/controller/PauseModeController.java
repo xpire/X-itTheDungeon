@@ -4,9 +4,11 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.stage.Stage;
 import main.app.Game;
+import main.app.MainMenuState;
 import main.app.PlayModeState;
+import main.app.ResumeModeState;
 
-public class MainMenuController {
+public class PauseModeController {
 
     private Game game;
     private Stage stage;
@@ -17,14 +19,20 @@ public class MainMenuController {
 
         this.game = g;
         this.stage = s;
-        game.setMainMenuController(this);
+        game.setPauseModeController(this);
     }
-
 
     @FXML
     private void goToGamePlay(ActionEvent event) throws Exception {
-        System.out.println("Proceed to game play");
-        game.setAppState(new PlayModeState());
+        System.out.println("Resume game play");
+        game.setAppState(new ResumeModeState());
+        game.getAppState().load(game, stage);
+    }
+
+    @FXML
+    private void goToMainMenu(ActionEvent event) throws Exception {
+        System.out.println("Proceed to Main Menu");
+        game.setAppState(new MainMenuState());
         game.getAppState().load(game, stage);
     }
 }

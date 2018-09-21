@@ -6,6 +6,7 @@ import javafx.scene.control.Button;
 import javafx.stage.Stage;
 import main.app.Game;
 import main.app.MainMenuState;
+import main.app.PauseModeState;
 
 public class PlayModeController {
 
@@ -22,13 +23,14 @@ public class PlayModeController {
         this.game  = g;
         this.stage = s;
         btnExit.setFocusTraversable(false);
+        game.setPlayModeController(this);
     }
 
     @FXML
-    private void goToMainMenu(ActionEvent event) throws Exception {
-        System.out.println("Proceed to Main Menu");
+    private void goToPause(ActionEvent event) throws Exception {
+        System.out.println("Proceed to Pause");
 
-        game.setAppState(new MainMenuState());
+        game.setAppState(new PauseModeState());
         game.getAppState().load(game, stage);
     }
 }
