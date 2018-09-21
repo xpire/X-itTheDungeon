@@ -989,7 +989,7 @@ public class Level {
         int copyNCol = (nCols < newNCol) ? nCols : newNCol;
 
         Vec2i min = new Vec2i(0, 0);
-        Vec2i max = new Vec2i(newNCol, newNRow);
+        Vec2i max = new Vec2i(newNCol - 1, newNRow - 1);
 
         for (int i = 0; i < nRows; i++) {
             for (int j = 0; j < nCols; j++) {
