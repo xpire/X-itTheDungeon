@@ -44,21 +44,8 @@ public class CreateMode {
 
         while (sc.hasNextLine()) {
             if ((command = sc.nextLine().split("\\s+")).length > 0) {
-                // if (command[0].toLowerCase().equals("exit")) {
-                //     sc.close();
-                //     return;
-                // }
-                // if (command[0].toLowerCase().equals("delete")) {
-                //     if (draftBuilder.deleteDraft(draftBuilder.getName())) {
-                //         System.out.println("Draft deleted");
-                //         return;
-                //     }
-                // }
-                // createMode.commandInterpreter(draftBuilder, command, sc);
 
-                if (!createMode.commandInterpreter(draftBuilder, command, sc)) {
-                    break;
-                }
+                if (!createMode.commandInterpreter(draftBuilder, command, sc)) break;
             }
         }
 
@@ -70,6 +57,7 @@ public class CreateMode {
      * @param draftBuilder instance of the DraftBuilder being used
      * @param command user's input
      * @param sc copy of an open scanner (used when adding keys/doors)
+     * @return false when the command should exit the creation environment, true otherwise
      */
     public boolean commandInterpreter(DraftBuilder draftBuilder, String[] command, Scanner sc) {
         switch (command[0].toLowerCase()) {
