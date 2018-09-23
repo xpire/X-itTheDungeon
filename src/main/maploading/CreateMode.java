@@ -27,9 +27,9 @@ public class CreateMode {
             if ((command = sc.nextLine().split("\\s+")).length != 1) {
                 System.out.println("Error: no white space allowed");
                 command = null;
-            } else if (command[0].equals("exit")) {
-                sc.close();
-                return;
+            } else if (!command[0].matches("[a-zA-Z0-9]+")) {
+                System.out.println("Error: alphanumeric characters only");
+                command = null;
             }
         }
 
@@ -44,21 +44,8 @@ public class CreateMode {
 
         while (sc.hasNextLine()) {
             if ((command = sc.nextLine().split("\\s+")).length > 0) {
-                // if (command[0].toLowerCase().equals("exit")) {
-                //     sc.close();
-                //     return;
-                // }
-                // if (command[0].toLowerCase().equals("delete")) {
-                //     if (draftBuilder.deleteDraft(draftBuilder.getName())) {
-                //         System.out.println("Draft deleted");
-                //         return;
-                //     }
-                // }
-                // createMode.commandInterpreter(draftBuilder, command, sc);
 
-                if (!createMode.commandInterpreter(draftBuilder, command, sc)) {
-                    break;
-                }
+                if (!createMode.commandInterpreter(draftBuilder, command, sc)) break;
             }
         }
 
@@ -70,6 +57,7 @@ public class CreateMode {
      * @param draftBuilder instance of the DraftBuilder being used
      * @param command user's input
      * @param sc copy of an open scanner (used when adding keys/doors)
+     * @return false when the command should exit the creation environment, true otherwise
      */
     public boolean commandInterpreter(DraftBuilder draftBuilder, String[] command, Scanner sc) {
         switch (command[0].toLowerCase()) {
@@ -84,16 +72,20 @@ public class CreateMode {
                     return true;
                 }
 
-                Vec2i tile = new Vec2i(Integer.parseInt(command[1]), Integer.parseInt(command[2]));
+                try {
+                    Vec2i tile = new Vec2i(Integer.parseInt(command[1]), Integer.parseInt(command[2]));
+                    if (!draftBuilder.isValidGridPos(tile)) {
+                        System.out.println("Error: tile out of bounds");
+                        return true;
+                    }
 
-                if (!draftBuilder.isValidGridPos(tile)) {
-                    System.out.println("Error: tile out of bounds");
-                    return true;
+                    draftBuilder.editTile(tile, command[3], sc);
+
+                    draftBuilder.displayLevel();
+                } catch (NumberFormatException e) {
+                    System.out.println("Error: bad arguments");
                 }
 
-                draftBuilder.editTile(tile, command[3], sc);
-
-                draftBuilder.displayLevel();
                 return true;
             case "addr":
                 draftBuilder.resize(draftBuilder.getNRows() + 1, draftBuilder.getNCols());
@@ -120,10 +112,13 @@ public class CreateMode {
                     System.out.println("Usage: Resize <newNRow> <newNCol>");
                     return true;
                 }
+                try {
+                    draftBuilder.resize(Integer.parseInt(command[1]), Integer.parseInt(command[2]));
+                    draftBuilder.displayLevel();
+                } catch (NumberFormatException e) {
+                    System.out.println("Error: bad arguments");
+                }
 
-                draftBuilder.resize(Integer.parseInt(command[1]), Integer.parseInt(command[2]));
-
-                draftBuilder.displayLevel();
                 return true;
             case "obj":
             case "objective":
@@ -134,7 +129,8 @@ public class CreateMode {
 
                 ArrayList<String> levelObj = new ArrayList<>();
 
-                for (int i = 1; i < command.length; i++) levelObj.add(command[i]);
+                for (int i = 1; i < command.length && !levelObj.contains(command[i]); i++)
+                    levelObj.add(command[i]);
 
                 if (isValidObj(levelObj)) {
                     draftBuilder.setObjective(levelObj);
