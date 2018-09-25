@@ -1,7 +1,7 @@
 package main.entities.enemies;
 
 import main.Level;
-import main.algorithms.AStarSearch;
+import main.algorithms.GridAStar;
 import main.behaviour.AIBehaviour;
 import main.entities.Avatar;
 import main.entities.Entity;
@@ -63,7 +63,6 @@ public abstract class Enemy extends Entity {
             return path.get(0);
     }
 
-
     protected abstract AIBehaviour decideBehaviour();
 
     /**
@@ -74,9 +73,10 @@ public abstract class Enemy extends Entity {
      * @return an ArrayList of the path to the square
      */
     private List<Vec2i> shortestPath(List<Vec2i> targets) {
-        AStarSearch search = new AStarSearch(level, targets, pos);
-        return search.search();
+        GridAStar star = new GridAStar(level, pos, targets);
+        return star.search();
     }
+
 
     @Override
     public boolean isPassableFor(Entity entity) {

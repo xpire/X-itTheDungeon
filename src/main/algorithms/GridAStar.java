@@ -7,28 +7,28 @@ import main.math.Vec2i;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AStarUser {
+public class GridAStar {
 
-    private Vec2i pos;
     private Level level;
-    private ArrayList<Vec2i> targets;
+    private Vec2i pos;
+    private List<Vec2i> targets;
 
-    public AStarUser(Vec2i pos, Level level, ArrayList<Vec2i> targets) {
-        this.pos = pos;
-        this.level = level;
+    public GridAStar(Level level, Vec2i pos, List<Vec2i> targets) {
+        this.level   = level;
+        this.pos     = pos;
         this.targets = targets;
     }
 
-    public void search() {
-        AStar star = new AStar();
-        List<Vec2i> path = star.search(pos, this::isGoal, this::getAdjs, this::manhattanDist);
+    public List<Vec2i> search() {
+        AStar<Vec2i> star = new AStar<>();
+        return star.search(pos, this::isGoal, this::getAdjs, this::manhattanDist);
     }
 
-    public boolean isGoal(Vec2i vertex) {
+    private boolean isGoal(Vec2i vertex) {
         return targets.stream().anyMatch(t -> t.equals(vertex));
     }
 
-    public ArrayList<Tuple<Vec2i, Integer>> getAdjs(Vec2i vertex) {
+    private ArrayList<Tuple<Vec2i, Integer>> getAdjs(Vec2i vertex) {
 
         ArrayList<Tuple<Vec2i, Integer>> res = new ArrayList<>();
 
@@ -44,9 +44,8 @@ public class AStarUser {
         return res;
     }
 
-
     // Precondition targets non-empty
-    public int manhattanDist(Vec2i vertex) {
+    private int manhattanDist(Vec2i vertex) {
         return targets.stream()
                 .map(t -> t.manhattan(vertex))
                 .min(Integer::compare).get();
