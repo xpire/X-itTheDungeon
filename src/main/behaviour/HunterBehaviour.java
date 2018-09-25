@@ -1,23 +1,23 @@
 package main.behaviour;
 
-import main.entities.enemies.Enemy;
-import main.math.Vec2i;
 import main.Level;
-import java.util.ArrayList;
+import main.math.Vec2i;
+
+import java.util.List;
+
+import static java.util.Collections.singletonList;
 
 /**
  * Implements the behaviour specific to the Hunter
  */
-public class HunterBehaviour implements AIBehaviour {
+public class HunterBehaviour extends AIBehaviour {
+
+    public HunterBehaviour(Level level, Vec2i pos, Vec2i target) {
+        super(level, pos, target);
+    }
+
     @Override
-    public ArrayList<Vec2i> decideMove(
-            Level level,
-            Vec2i currLocation,
-            Vec2i userLocation,
-            ArrayList<Integer> pastMoves,
-            ArrayList<Enemy> entities) {
-        ArrayList<Vec2i> result = new ArrayList<>();
-        result.add(userLocation);
-        return result;
+    public List<Vec2i> decideTargetTiles() {
+        return singletonList(target);
     }
 }

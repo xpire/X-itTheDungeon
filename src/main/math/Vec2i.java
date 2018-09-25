@@ -189,4 +189,21 @@ public class Vec2i {
     public boolean isDirection() {
         return norm1() == 1;
     }
+
+//    public boolean isNorthOf(Vec2i other) {
+//        return this.sub(other).equals(NORTH);
+//    }
+//
+//    public boolean isSouthOf(Vec2i other) {
+//        Vec2i dir = this.sub(other);
+//        return dir.getX() == 0 && dir.getY() < 0;
+//    }
+//
+//    public boolean isWestOf(Vec2i other) {
+//        return this.sub(other).equals(WEST);
+//    }
+//
+//    public boolean isEastOf(Vec2i other) {
+//        return this.sub(other).equals(EAST);
+//    }
 }

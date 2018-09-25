@@ -2,29 +2,33 @@ package main.algorithms;
 
 import main.math.Vec2i;
 
-import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
 public class PageRank {
-    private ArrayList<Integer>pastMoves;
-    private ArrayList<Vec2i> pCoord;
-    private Vec2i curLocation;
-    public PageRank(ArrayList<Integer> pastMoves, ArrayList<Vec2i> pCoord, Vec2i curLocation) {
-        this.pastMoves = pastMoves;
-        this.curLocation = curLocation;
-        this.pCoord = pCoord;
+
+    private Vec2i pos;
+    private List<Vec2i> targets;
+    private List<Integer> pastMoves;
+
+    private final int NUM_ITERATIONS = 20;
+
+    /**
+     * @param pos current enemy position
+     * @param targets enemy target tiles
+     * @param pastMoves past moves of the avatar
+     */
+    public PageRank(Vec2i pos, List<Vec2i> targets, List<Integer> pastMoves) {
+        this.pos        = pos;
+        this.targets    = targets;
+        this.pastMoves  = pastMoves;
     }
 
     /* Getting result */
     public Vec2i getResult() {
-        int[] totals = {4,4,4,4};
-
-        float[][] stohasticMarkov = dataProcess(initMatrice(), pastMoves, totals);
-        // repeated multiplication
-
-        float[] init = {1,1,1,1};
-        float[] resultRank = pageRank(stohasticMarkov, init);
-
-        return rankedResult(resultRank, pCoord, curLocation);
+        float[][] markov = initMarkovMatrix();
+        float[] ranks = pageRank(markov);
+        return getBestPage(ranks);
     }
 
 
@@ -32,72 +36,73 @@ public class PageRank {
      * Initialize the markov to a generic matrix
      * @return A initial matrix
      */
-    private float[][] initMatrice() {
-        float[][] ret = new float[4][4] ;
+    private float[][] initMarkovMatrix() {
+        float[][] markov = new float[4][4];
+
+        // matrix filled with 1s
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
-                ret[i][j] = 1;
-            }
-        }
-        return  ret;
-    }
-
-    /**
-     * Changes to a move frequency matrice from past moves of the player
-     * @param markov The intialized matrix
-     * @param pastMoves players past moves
-     */
-    private float[][] dataProcess(float[][] markov, ArrayList<Integer> pastMoves, int[] totals) {
-        int prev = -1;
-        // Use data
-        for (int x: pastMoves) {
-            if (prev == -1) {
-                prev = x;
-            } else {
-                // Increase frequency
-                totals[prev]++;
-                // increase normalizing factor
-                markov[prev][x]++;
+                markov[i][j] = 1;
             }
         }
 
-        // Get correct value
+        // normalising vector
+        int[] totals = {4,4,4,4};
+
+        // process data
+        processPastMoves(markov, totals);
+
+        // normalise matrix
         for (int i = 0; i < 4; i++) {
-            float factor = totals[i];
             for (int j = 0; j < 4; j++) {
-                markov[i][j] = markov[i][j]/factor;
+                markov[i][j] /= totals[i];
             }
         }
+
         return markov;
     }
 
     /**
+     * Changes to a move frequency matrix from past moves of the player
+     * @param markov The initialised matrix
+     */
+    private void processPastMoves(float[][] markov, int[] totals) {
+        pastMoves.stream()
+            .reduce((prev, curr) -> {
+                markov[prev][curr]++; // increase frequency
+                totals[prev]++;       // increase normalising factor
+                return 0;             // ignore accumulation
+            });
+    }
+
+    /**
      * Applying a simple page rank algorithm
-     * @param markovMatrix The markov matrice
-     * @param init Initialized rank
+     * @param markov The markov matrix
      * @return
      */
-    private float[] pageRank(float[][] markovMatrix, float[] init) {
-        float[] buffer = init;
+    private float[] pageRank(float[][] markov) {
+        float[] ret = {1,1,1,1}; // initial ranks
+
         // 20 Rounds of matrix multiplication
-        for (int i = 0; i < 20; i++) {
-            buffer = matMul(markovMatrix, buffer);
+        for (int i = 0; i < NUM_ITERATIONS; i++) {
+            ret = matMul(markov, ret);
         }
-        return buffer;
+
+        return ret;
     }
 
     /**
      * Handles matrix multiplication for this algorithm
      * @param matrix Request matrices
-     * @param vector Vector of ranks
+     * @param vec Vector of ranks
      * @return
      */
-    private float[] matMul(float[][] matrix, float[] vector) {
+    private float[] matMul(float[][] matrix, float[] vec) {
         float[] ret = new float[4];
 
         // Handles each indexing of the vector
         for (int j = 0; j < 4; j++) {
-            ret[j] = sumCol(matrix[j], vector);
+            ret[j] = sumCol(matrix[j], vec);
         }
         return ret;
     }
@@ -111,62 +116,44 @@ public class PageRank {
     private float sumCol(float[] row, float[] vec) {
         float ret = 0;
         for (int j = 0; j < 4; j++){
-            ret += row[j]*vec[j];
+            ret += row[j] * vec[j];
         }
-        return  ret;
+        return ret;
     }
 
     /**
      * Get result from possible coordinates and ranks
-     * @param resultRank rank result from algorithm
-     * @param pCoord Possible coordinate to move to
+     * @param ranks rank result from algorithm
      * @return Best square to move in
      */
-    private Vec2i rankedResult(float[] resultRank, ArrayList<Vec2i> pCoord, Vec2i currLocation) {
-        // Get current coordinate
-        int coordX = currLocation.getX();
-        int coordY = currLocation.getY();
-
-        Vec2i max = null;
-        float maxRank = 0;
-
-        for (Vec2i x: pCoord) {
-            if (max == null) {
-                max = x;
-                maxRank = getRank(x, resultRank, currLocation);
-            } else {
-                if (getRank(x, resultRank, currLocation) > maxRank) {
-                    max = x;
-                    maxRank = getRank(x, resultRank, currLocation);
-                }
-            }
-        }
-        return max;
+    private Vec2i getBestPage(float[] ranks) {
+        return targets.stream()
+                .max(Comparator.comparingDouble(t -> getRank(t, ranks)))
+                .orElse(pos);
     }
 
     /**
      * Get the rank number of a specific tile in a direction
-     * @param x Request vector
-     * @param resultRank List of rank
+     * @param v Request vector
+     * @param ranks List of rank
      * @return The rank of the coordinate
      */
-    private float getRank(Vec2i x, float[]  resultRank, Vec2i currLocation) {
-        // Get current coordinate
-        int coordX = currLocation.getX();
-        int coordY = currLocation.getY();
-
+    // may be should return an index instead
+    private float getRank(Vec2i v, float[] ranks) {
         // Get rank of the coordinate
-        if (x.equals(new Vec2i(coordX - 1, coordY))) {
-            return resultRank[2];
-        }
-        else if (x.equals(new Vec2i(coordX + 1, coordY))) {
-            return resultRank[3];
-        }
-        else if (x.equals(new Vec2i(coordX, coordY - 1))) {
-            return resultRank[0];
-        }
-        else {
-            return resultRank[1];
-        }
+        if (v.equals(pos.add(Vec2i.NORTH)))
+            return ranks[0];
+
+        if (v.equals(pos.add(Vec2i.SOUTH)))
+            return ranks[1];
+
+        if (v.equals(pos.add(Vec2i.WEST)))
+            return ranks[2];
+
+        if (v.equals(pos.add(Vec2i.EAST)))
+            return ranks[3];
+
+        else
+            return -1;
     }
 }

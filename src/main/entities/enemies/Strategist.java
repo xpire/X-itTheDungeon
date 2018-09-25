@@ -2,6 +2,7 @@ package main.entities.enemies;
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import main.behaviour.AIBehaviour;
 import main.behaviour.CowardBehaviour;
 import main.behaviour.StrategistBehaviour;
 import main.Level;
@@ -35,14 +36,13 @@ public class Strategist extends Enemy {
     public void onCreated(){
         super.onCreated();
         view.addNode(new Circle(10, Color.BLUE));
-        setCurrBehaviour(new StrategistBehaviour());
     }
 
     @Override
-    public void decideBehaviour() {
-        if (level.getAvatar().isRaged())
-            setCurrBehaviour(new CowardBehaviour());
+    public AIBehaviour decideBehaviour() {
+        if (manager.isAvatarRaged())
+            return new CowardBehaviour(level, pos, manager.getAvatarPos());
         else
-            setCurrBehaviour(new StrategistBehaviour());
+            return new StrategistBehaviour(level, pos, manager.getAvatarPos(), manager.getPastMoves());
     }
 }

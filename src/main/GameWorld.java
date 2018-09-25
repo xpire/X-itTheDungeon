@@ -17,7 +17,7 @@ import main.app.engine.UserAction;
 import main.component.ViewComponent;
 import main.entities.Avatar;
 import main.entities.Entity;
-import main.entities.enemies.EnemyManager;
+import main.entities.enemies.*;
 import main.entities.pickup.*;
 import main.entities.prop.Boulder;
 import main.entities.terrain.*;
@@ -105,7 +105,7 @@ public class GameWorld implements Game {
 //        level.addEnemy(new Vec2i(0, 3), new Hunter(level));
 //        level.addEnemy(new Vec2i(12, 12), new Hound(level));
 //        level.addEnemy(new Vec2i(0, 0), new Coward(level));
-////        level.addEnemy(new Vec2i(12, 11), new Strategist(level));
+        level.addEnemy(new Vec2i(12, 11), new Strategist(level));
 
         level.addTerrain(new Vec2i(14, 14), new Exit(level));
         level.addTerrain(new Vec2i(15, 15), new Exit(level));

@@ -1,62 +1,150 @@
 package main.behaviour;
 
-import main.entities.enemies.Enemy;
 import main.Level;
+import main.entities.enemies.Enemy;
 import main.math.Vec2i;
 
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+
+import static java.util.Collections.singletonList;
 
 /**
  * Implements the behaviour specific to the Hound
  */
-public class HoundBehaviour implements AIBehaviour {
+
+public class HoundBehaviour extends AIBehaviour {
+
+    public HoundBehaviour(Level level, Vec2i pos, Vec2i target) {
+        super(level, pos, target);
+    }
 
     @Override
-    public ArrayList<Vec2i> decideMove(Level level,
-                                       Vec2i currLocation,
-                                       Vec2i playerLocation,
-                                       ArrayList<Integer> pastMoves,
-                                       ArrayList<Enemy> entities){
-    // find the hunter closest to the player
-        //GET NEAREST HUNTER FROM AISYSTEM
-        Vec2i closestHunterLocation = new Vec2i(-1,-1);
-        int closestHunterDistance = 64+64;
-        int distance;
-        for (Enemy e: level.getEnemies()) {
-            if (e.isHunter()) {
-                distance = (Math.abs(e.getGridPos().getX() - playerLocation.getX()) +
-                        Math.abs(e.getGridPos().getY() - playerLocation.getY()));
-                if (distance < closestHunterDistance) {
-                    //found closer hunter
-                    closestHunterDistance = distance;
-                    closestHunterLocation = e.getGridPos();
-                }
-            }
+    public List<Vec2i> decideTargetTiles(){
+
+        // find the hunter closest to the player
+        Vec2i closestHunterPos = getClosestHunterPos();
+
+        // no closest hunter, Hound becomes a hunter
+        if (closestHunterPos == null) {
+            return singletonList(target);
         }
 
-        ArrayList<Vec2i> targetSquares = new ArrayList<Vec2i>();
-        if (closestHunterLocation.getX() < 0 && closestHunterLocation.getY() < 0) {
-            // no closest hunter, main.enemies.Hound becomes a hunter
-            targetSquares.add(playerLocation);
-            return targetSquares;
-        }
-        //pretend we have a cartesian plane
-        int changeX = closestHunterLocation.getX() - playerLocation.getX();
-        int changeY = closestHunterLocation.getY() - playerLocation.getY();
-        //Distance now defines distance to player Location
-        distance = Math.abs(playerLocation.getX()-currLocation.getX()) + Math.abs(playerLocation.getY()-currLocation.getY());
-        System.out.println(distance);
-//        int changeX = currLocation.getX() - playerLocation.getX();
-//        int changeY = currLocation.getY() - playerLocation.getY();
-        if (changeX != 0 && changeY != 0) {
-            targetSquares.addAll(quadrantSweep(level,playerLocation,!(changeX>0),!(changeY>0), distance));
-        } else if (changeX == 0) {
-            targetSquares.addAll(verticalSweep(level,playerLocation,!(changeY>0), distance));
-        } else if (changeY == 0) {
-            targetSquares.addAll(horizontalSweep(level,playerLocation,!(changeX>0), distance));
-        }
-        return targetSquares;
+        // pretend we have a cartesian plane
+        return getOppositeTilesTo(closestHunterPos);
     }
+
+
+    private Vec2i getClosestHunterPos() {
+        return level.getEnemies().stream()
+                .filter(Enemy::isHunter)
+                .map(Enemy::getGridPos)
+                .min(Comparator.comparing(v -> v.manhattan(target)))
+                .orElse(null);
+    }
+
+
+    private ArrayList<Vec2i> getOppositeTilesTo(Vec2i closestHunterPos) {
+        int changeX = target.getX() - closestHunterPos.getX();
+        int changeY = target.getY() - closestHunterPos.getY();
+
+        int dist = pos.manhattan(target);
+
+        if (changeX != 0 && changeY != 0)
+            return quadrantSweep(changeX > 0, changeY > 0, dist);
+
+        else if (changeX == 0)
+            return verticalSweep( changeY > 0, dist);
+
+        else // changeY == 0
+            return horizontalSweep(changeX > 0 , dist);
+    }
+
+
+    /**
+     * Get the diagonally opposite quadrant to a Hunter's curr position relative to the player
+     * @param incX : inc/dec flag for X
+     * @param incY : inc/dec flag for Y
+     * @param dist : Manhattan distance
+     * @return the quadrant diagonally opposite to the hound's current location
+     */
+    public ArrayList<Vec2i> quadrantSweep(Boolean incX, Boolean incY, int dist) {
+        ArrayList<Vec2i> tiles = new ArrayList<>();
+
+        int limitX = incX ? level.getNCols() - 1 : 0;
+        int limitY = incY ? level.getNRows() - 1 : 0;
+
+        for (int x = target.getX(); checkLimit(incX, x, limitX); x = iterate(incX, x)) {
+            for (int y = target.getY(); checkLimit(incY, y, limitY); y = iterate(incY, y)) {
+
+                Vec2i target = new Vec2i(x, y);
+                if (isValidTile(target, dist))
+                    tiles.add(target);
+            }
+        }
+        return tiles;
+    }
+
+    /**
+     * Does the same as above, with a 45\deg rotation to the axis
+     * Gets the vertically opposite quadrant to a Hunter's curr. position, relative to the Avatar
+     * @param increase inc/dec flag
+     * @param dist Manhattan distance
+     * @return quadrant vert. opp. to Hunters curr. position relative to the Avatar
+     */
+    public ArrayList<Vec2i> verticalSweep(Boolean increase, int dist) {
+
+        ArrayList<Vec2i> tiles = new ArrayList<>();
+        int limit = increase ? level.getNRows() - 1 : 0;
+
+        for (int y = target.getY(); checkLimit(increase, y, limit); y = iterate(increase, y)) {
+
+            int sweepWidth = Math.abs(y - target.getY());
+            for (int x = target.getX() - sweepWidth; x <= target.getX() + sweepWidth; x++) {
+
+                Vec2i target = new Vec2i(x, y);
+                if (isValidTile(target, dist))
+                    tiles.add(target);
+            }
+        }
+        return tiles;
+    }
+
+    /**
+     * 90/deg rotation of the previous method
+     * Gets the horizontally opp. quadrant to a Hunter's curr postion relative to the Avatar
+     * @param increase : inc/dec flag
+     * @param dist : Manhattan distance
+     * @return quadrant hori. opp. to a Hunter's curr position, relative the the Avatar
+     */
+    public ArrayList<Vec2i> horizontalSweep(Boolean increase, int dist) {
+        ArrayList<Vec2i> tiles = new ArrayList<>();
+        int limit = increase ? level.getNCols() : 0;
+
+        for (int x = target.getX(); checkLimit(increase, x, limit); x = iterate(increase, x)) {
+
+            int sweepWidth = Math.abs(x - target.getX());
+            for (int y = target.getY() - sweepWidth; y <= target.getY() + sweepWidth; y++) {
+
+                Vec2i target = new Vec2i(x, y);
+                if (isValidTile(target, dist))
+                    tiles.add(target);
+            }
+        }
+        return tiles;
+    }
+
+
+    private boolean isValidTile(Vec2i target, int dist) {
+        if (target.manhattan(target) > dist)               return false; //TODO what does this do?
+        if (!level.isValidGridPos(target))                 return false;
+        if (!level.isPassableForEnemy(target, null)) return false;
+
+        return true;
+    }
+
+
 
     /**
      * Checks whether or not a looping limit has been reached, given an increment/decrement flag
@@ -65,13 +153,13 @@ public class HoundBehaviour implements AIBehaviour {
      * @param limit max value
      * @return
      */
-    public Boolean checkLimit(Boolean increase, int value, int limit) {
-        if (increase) {
-            return (value < limit);
-        } else {
+    private Boolean checkLimit(Boolean increase, int value, int limit) {
+        if (increase)
+            return (value <= limit);
+        else
             return (value >= limit);
-        }
     }
+
 
     /**
      * Iterates a value given a inc/dec flag
@@ -79,101 +167,7 @@ public class HoundBehaviour implements AIBehaviour {
      * @param value value to inc/dec
      * @return the new value
      */
-    public int iterate(Boolean increase, int value) {
-        if (increase) {
-            return value+1;
-        } else {
-            return value-1;
-        }
-    }
-
-    /**
-     * Get the diagonally opposite quadrant to a Hunter's curr position relative to the player
-     * @param map : Level the hound exists in
-     * @param playerLocation : Avatar location
-     * @param increaseX : inc/dec flag for X
-     * @param increaseY : inc/dec flag for Y
-     * @param distance : Manhatten distance
-     * @return the quadrant diagonally opposite to the hound's current location
-     */
-    public ArrayList<Vec2i> quadrantSweep(Level map, Vec2i playerLocation, Boolean increaseX, Boolean increaseY, int distance) {
-        ArrayList<Vec2i> targetSquares = new ArrayList<>();
-        int limitX = 0;
-        int limitY = 0;
-        if (increaseX) limitX = map.getNCols();
-        if (increaseY) limitY = map.getNRows();
-        for (int x = playerLocation.getX(); checkLimit(increaseX,x,limitX); x = iterate(increaseX,x)) {
-            for (int y = playerLocation.getY(); checkLimit(increaseY,y,limitY); y = iterate(increaseY,y)) {
-                Vec2i output = new Vec2i(x,y);
-                System.out.printf("o:%d %d\n",x,y);
-                //check if output is inside the map
-                if (Math.abs(x-playerLocation.getX()) + Math.abs(y-playerLocation.getY()) > distance) continue;
-                if (output.getX() >= 0 && output.getX() < map.getNCols() &&
-                        output.getY() >= 0 && output.getY() < map.getNRows()) {
-                    //check if it is accessible
-                    if (map.isPassableForEnemy(output, null)) targetSquares.add(output);
-                }
-            }
-        }
-        return targetSquares;
-    }
-
-    /**
-     * Does the same as above, with a 45\deg rotation to the axis
-     * Gets the vertically opposite quadrant to a Hunter's curr. position, relative to the Avatar
-     * @param map : current level
-     * @param playerLocation : Avatar's location
-     * @param increase inc/dec flag
-     * @param distance manhatten distance
-     * @return quadrant vert. opp. to Hunters curr. position relative to the Avatar
-     */
-    public ArrayList<Vec2i> verticalSweep(Level map, Vec2i playerLocation, Boolean increase, int distance) {
-        int limit = 0;
-        ArrayList<Vec2i> targetSquares = new ArrayList<>();
-        if (increase) limit = map.getNRows();
-        for (int y = playerLocation.getY(); checkLimit(increase,y,limit); y = iterate(increase,y)) {
-            for (int x = playerLocation.getX()-Math.abs(y-playerLocation.getY());
-                 x < 1 + playerLocation.getX()+Math.abs(y-playerLocation.getY()); x++) {
-                Vec2i output = new Vec2i(x,y);
-                //check if output is inside the map
-                if (Math.abs(output.getX()-playerLocation.getX()) + Math.abs(output.getY()-playerLocation.getY()) > distance) continue;
-                if (output.getX() >= 0 && output.getX() < map.getNCols() &&
-                        output.getY() >= 0 && output.getY() < map.getNRows()) {
-                    //check if it is accessible
-                    if (map.isPassableForEnemy(output, null)) targetSquares.add(output);
-                }
-            }
-        }
-        return targetSquares;
-    }
-
-    /**
-     * 90/deg rotation of the previous method
-     * Gets the horizontally opp. quadrant to a Hunter's curr postion relative to the Avatar
-     * @param map : current Level
-     * @param playerLocation : Avatar's position
-     * @param increase : inc/dec flag
-     * @param distance : manhatten distance
-     * @return quadrant hori. opp. to a Hunter's curr position, relative the the Avatar
-     */
-    public ArrayList<Vec2i> horizontalSweep(Level map, Vec2i playerLocation, Boolean increase, int distance) {
-        int limit = 0;
-        ArrayList<Vec2i> targetSquares = new ArrayList<>();
-        if (increase) limit = map.getNCols();
-        for (int x = playerLocation.getX(); checkLimit(increase,x,limit); x = iterate(increase,x)) {
-            for (int y = playerLocation.getY()-Math.abs(x-playerLocation.getX());
-                 y < 1 + playerLocation.getY()+Math.abs(x-playerLocation.getX()); y++) {
-                Vec2i output = new Vec2i(x,y);
-                //check if output is inside the map
-                if (Math.abs(output.getX()-playerLocation.getX()) + Math.abs(output.getY()-playerLocation.getY()) > distance) continue;
-                if (output.getX() >= 0 && output.getX() < map.getNCols() &&
-                        output.getY() >= 0 && output.getY() < map.getNRows()) {
-                    //check if it is accessible
-                    if (map.isPassableForEnemy(output, null)) targetSquares.add(output);
-
-                }
-            }
-        }
-        return targetSquares;
+    private int iterate(Boolean increase, int value) {
+        return increase ? value + 1 : value - 1;
     }
 }

@@ -1,27 +1,31 @@
 package main.behaviour;
 
-import main.entities.enemies.Enemy;
 import main.Level;
 import main.math.Vec2i;
-import java.util.ArrayList;
+
+import java.util.List;
 
 /**
  * Interface to decide the AI's move
  */
-public interface AIBehaviour {
+public abstract class AIBehaviour {
+
+    protected Level level;
+    protected Vec2i pos;
+    protected Vec2i target;
+
     /**
      * Determines the next move for each AI
      *
-     * @param level Level the enemy exists in
-     * @param currLocation the enemies current location
-     * @param userLocation the Avatar's location
-     * @param pastMoves list of the enemies past moves
-     * @param entities list of all other enemies
-     * @return
+     * @param level level the AI exists in
+     * @param pos the AI's current position
+     * @param target the target's current position
      */
-    public ArrayList<Vec2i> decideMove(Level level,
-                                       Vec2i currLocation,
-                                       Vec2i userLocation,
-                                       ArrayList<Integer> pastMoves,
-                                       ArrayList<Enemy> entities);
+    public AIBehaviour(Level level, Vec2i pos, Vec2i target) {
+        this.level  = level;
+        this.pos    = pos;
+        this.target = target;
+    }
+
+    public abstract List<Vec2i> decideTargetTiles();
 }
