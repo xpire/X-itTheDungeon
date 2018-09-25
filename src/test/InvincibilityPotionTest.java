@@ -1,11 +1,20 @@
 package test;
 
+import javafx.scene.input.KeyCode;
+import main.app.Game;
+import main.GameWorld;
 import main.entities.Avatar;
+import main.entities.enemies.Coward;
+import main.entities.pickup.Arrow;
 import main.entities.pickup.HoverPotion;
-import main.Level;
+import main.maploading.Level;
 import main.maploading.MapLoader;
 import main.math.Vec2i;
 import org.junit.Test;
+
+import java.util.ArrayList;
+
+import static org.junit.Assert.*;
 
 public class InvincibilityPotionTest {
 
@@ -24,11 +33,11 @@ public class InvincibilityPotionTest {
         level.setPickup(InvincibilityPotionLocation, new HoverPotion(level, InvincibilityPotionLocation));
 
         level.displayLevel();
-        System.out.println(level.getAvatar().isRaged());
-        assert(!level.getAvatar().isRaged());
+        System.out.println(level.getAvatar().isOnRage());
+        assert(!level.getAvatar().isOnRage());
         level.moveAvatar(InvincibilityPotionLocation);
-        System.out.println(level.getAvatar().isRaged());
-        assert(level.getAvatar().isRaged());
+        System.out.println(level.getAvatar().isOnRage());
+        assert(level.getAvatar().isOnRage());
         level.displayLevel();
     }
 }

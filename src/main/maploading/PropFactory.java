@@ -1,6 +1,5 @@
 package main.maploading;
 
-import main.Level;
 import main.entities.prop.Boulder;
 import main.entities.prop.Prop;
 import main.math.Vec2i;

@@ -4,7 +4,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import main.behaviour.CowardBehaviour;
 import main.behaviour.HunterBehaviour;
-import main.Level;
+import main.maploading.Level;
 import main.maploading.MapLoader;
 import main.math.Vec2i;
 
@@ -46,7 +46,7 @@ public class Coward extends Enemy {
     @Override
     public void decideBehaviour() {
 
-        if (pos.manhattan(level.getAvatar().getGridPos()) < 4 || level.getAvatar().isRaged())
+        if (pos.mDist(level.getAvatar().getGridPos()) < 4 || level.getAvatar().isOnRage())
             setCurrBehaviour(new CowardBehaviour());
 
         else

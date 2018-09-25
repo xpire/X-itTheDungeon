@@ -2,11 +2,13 @@ package test;
 
 import main.behaviour.AIBehaviour;
 import main.behaviour.StrategistBehaviour;
-import main.Level;
+import main.maploading.Level;
 import main.math.Vec2i;
 import org.junit.Test;
 
 import java.util.ArrayList;
+
+import static org.junit.Assert.*;
 
 public class StrategistTest {
 

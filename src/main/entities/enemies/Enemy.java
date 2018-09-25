@@ -5,7 +5,7 @@ import main.behaviour.AIBehaviour;
 import main.entities.Avatar;
 import main.entities.Entity;
 import main.events.EnemyEvent;
-import main.Level;
+import main.maploading.Level;
 import main.math.Vec2i;
 
 import java.util.ArrayList;
@@ -100,7 +100,7 @@ public abstract class Enemy extends Entity implements StateDecision {
 
     @Override
     public void onEnterByAvatar(Avatar avatar) {
-        if (avatar.isRaged())
+        if (avatar.isOnRage())
             onDestroyed();
         else
             avatar.onDestroyed();

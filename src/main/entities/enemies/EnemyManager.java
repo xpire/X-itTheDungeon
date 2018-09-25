@@ -1,6 +1,6 @@
 package main.entities.enemies;
 
-import main.Level;
+import main.maploading.Level;
 import main.math.Vec2i;
 
 import java.util.ArrayList;

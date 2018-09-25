@@ -1,6 +1,5 @@
 package main.maploading;
 
-import main.Level;
 import main.entities.Avatar;
 import main.entities.enemies.Enemy;
 import main.entities.pickup.Key;
