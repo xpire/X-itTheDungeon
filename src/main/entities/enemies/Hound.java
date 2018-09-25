@@ -5,7 +5,7 @@ import javafx.scene.shape.Circle;
 import main.behaviour.CowardBehaviour;
 import main.behaviour.HoundBehaviour;
 import main.behaviour.HunterBehaviour;
-import main.maploading.Level;
+import main.Level;
 import main.maploading.MapLoader;
 import main.math.Vec2i;
 
@@ -44,7 +44,7 @@ public class Hound extends Enemy { //TODO remove test codes
 
     @Override
     public void decideBehaviour() {
-        if (!level.getAvatar().isOnRage()) {
+        if (!level.getAvatar().isRaged()) {
             if (manager.hunterExist())
                 setCurrBehaviour(new HoundBehaviour());
             else

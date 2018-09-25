@@ -4,7 +4,7 @@ import main.entities.Avatar;
 import main.entities.Entity;
 import main.entities.enemies.Enemy;
 import main.entities.prop.Prop;
-import main.maploading.Level;
+import main.Level;
 import main.math.Vec2i;
 
 /**

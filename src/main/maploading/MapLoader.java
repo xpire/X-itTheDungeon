@@ -1,5 +1,6 @@
 package main.maploading;
 
+import main.Level;
 import main.entities.Entity;
 import main.math.Vec2i;
 
@@ -27,7 +28,7 @@ public class MapLoader {
      * @param path Path where the Level is saved, root at main
      * @return The Level which was just loaded
      */
-    public Level loadLevel(String mapName, String path) {
+    public Level loadLevel(String mapName, String path, Boolean isCreateMode) {
         LevelBuilder levelBuilder = new LevelBuilder();
         Level level = null;
 
@@ -55,11 +56,28 @@ public class MapLoader {
                 numRow = Integer.parseInt(line[0]);
                 numCol = Integer.parseInt(line[1]);
 
-                level = new Level(numRow, numCol, 30.0, mapName);
-                //change flag when required
+                level = new Level(numRow, numCol, 30.0, mapName, isCreateMode);
 
             } else {
                 System.out.println("Error: Empty Map");
+                return null;
+            }
+
+            /*
+                Extract objectives
+             */
+
+            if (sc.hasNextLine()) {
+                line = sc.nextLine().split("\\s+");
+                if (line.length > 0) {
+                    ArrayList<String> objectives = new ArrayList<>(Arrays.asList(line));
+                    level.setObjectives(objectives);
+                } else {
+                    System.out.println("Warning: No objectives specified");
+                    //return null;
+                }
+            } else {
+                System.out.println("Error: Bad map @ extract objectives");
                 return null;
             }
 
@@ -90,24 +108,6 @@ public class MapLoader {
                         }
                     }
                 }
-            }
-
-            /*
-                Extract objectives
-             */
-
-            if (sc.hasNextLine()) {
-                line = sc.nextLine().split("\\s+");
-                if (line.length > 0) {
-                    ArrayList<String> objectives = new ArrayList<>(Arrays.asList(line));
-                    level.setObjectives(objectives);
-                } else {
-                    System.out.println("Warning: No objectives specified");
-                    //return null;
-                }
-            } else {
-                System.out.println("Error: Bad map @ extract objectives");
-                return null;
             }
 
             /*
@@ -151,10 +151,14 @@ public class MapLoader {
         return level;
     }
 
+    public Level loadLevel(String mapName, String path) {
+        return loadLevel(mapName, path, false);
+    }
+
     public static void main(String[] args) {
         MapLoader mapLoader = new MapLoader();
 
-        Level level = mapLoader.loadLevel("map1", "levels");
+        Level level = mapLoader.loadLevel("map1", "levels", false);
 
         level.displayLevel();
 
@@ -173,6 +177,5 @@ public class MapLoader {
                 }
             }
         }
-
     }
 }

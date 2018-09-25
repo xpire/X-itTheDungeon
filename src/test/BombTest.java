@@ -2,10 +2,9 @@ package test;
 
 import main.entities.Avatar;
 import main.entities.enemies.Coward;
-import main.entities.pickup.Arrow;
 import main.entities.pickup.Bomb;
 import main.entities.prop.LitBomb;
-import main.maploading.Level;
+import main.Level;
 import main.maploading.MapLoader;
 import main.math.Vec2i;
 import org.junit.Test;

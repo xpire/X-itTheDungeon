@@ -1,5 +1,6 @@
 package main.maploading;
 
+import main.Level;
 import main.entities.Avatar;
 import main.math.Vec2i;
 

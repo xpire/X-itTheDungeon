@@ -1,4 +1,4 @@
-package main.maploading;
+package main;
 
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -6,7 +6,7 @@ import javafx.event.EventType;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.layout.GridPane;
-import main.Array2DIterator;
+import main.util.Array2DIterator;
 import main.achivement.Achievement;
 import main.achivement.AchievementSystem;
 import main.component.ViewComponent;
@@ -843,15 +843,11 @@ public class Level {
     public boolean isPassableForAvatar(Vec2i pos, Avatar other) {
         if(!isValidGridPos(pos)) return false;
 
-        Terrain terrain = getTerrain(pos);
-        if (terrain != null && !terrain.isPassableForAvatar(other)) return false;
-
-        Prop prop = getProp(pos);
-        if (prop != null && !prop.isPassableForAvatar(other)) return false;
-
-        Pickup pickup = getPickup(pos);
-        if (pickup != null && !pickup.isPassableForAvatar(other)) return false;
-
+        if (hasTerrain(pos) && !getTerrain(pos).isPassableForAvatar(other))   return false;
+        if (hasProp(pos)    && !getProp(pos).isPassableForAvatar(other))      return false;
+        if (hasPickup(pos)  && !getPickup(pos).isPassableForAvatar(other))    return false;
+        if (hasEnemy(pos)   && !getEnemy(pos).isPassableForAvatar(other))     return false;
+        if (hasAvatar(pos)  && !getAvatar().isPassableForAvatar(other))       return false;
         return true;
     }
 
@@ -864,18 +860,11 @@ public class Level {
     public boolean isPassableForEnemy(Vec2i pos, Enemy other) {
         if(!isValidGridPos(pos)) return false;
 
-        Terrain terrain = getTerrain(pos);
-        if (terrain != null && !terrain.isPassableForEnemy(other)) return false;
-
-        Prop prop = getProp(pos);
-        if (prop != null && !prop.isPassableForEnemy(other)) return false;
-
-        Pickup pickup = getPickup(pos);
-        if (pickup != null && !pickup.isPassableForEnemy(other)) return false;
-
-        Enemy enemy = getEnemy(pos);
-        if (enemy != null && !enemy.isPassableForEnemy(other)) return false;
-
+        if (hasTerrain(pos) && !getTerrain(pos).isPassableForEnemy(other))   return false;
+        if (hasProp(pos)    && !getProp(pos).isPassableForEnemy(other))      return false;
+        if (hasPickup(pos)  && !getPickup(pos).isPassableForEnemy(other))    return false;
+        if (hasEnemy(pos)   && !getEnemy(pos).isPassableForEnemy(other))     return false;
+        if (hasAvatar(pos)  && !getAvatar().isPassableForEnemy(other))       return false;
         return true;
     }
 
@@ -888,17 +877,22 @@ public class Level {
     public boolean isPassableForProp(Vec2i pos, Prop other) {
         if(!isValidGridPos(pos)) return false;
 
-        Terrain terrain = getTerrain(pos);
-        if (terrain != null && !terrain.isPassableForProp(other)) return false;
-
-        Prop prop = getProp(pos);
-        if (prop != null && !prop.isPassableForProp(other)) return false;
-
-        Pickup pickup = getPickup(pos);
-        if (pickup != null && !pickup.isPassableForProp(other)) return false;
-
+        if (hasTerrain(pos) && !getTerrain(pos).isPassableForProp(other))   return false;
+        if (hasProp(pos)    && !getProp(pos).isPassableForProp(other))      return false;
+        if (hasPickup(pos)  && !getPickup(pos).isPassableForProp(other))    return false;
+        if (hasEnemy(pos)   && !getEnemy(pos).isPassableForProp(other))     return false;
+        if (hasAvatar(pos)  && !getAvatar().isPassableForProp(other))       return false;
         return true;
     }
+
+
+    public boolean onPushByAvatar(Vec2i pos, Avatar avatar) {
+        if (!isValidGridPos(pos)) return false;
+        if (hasTerrain(pos) && !getTerrain(pos).onPush(avatar)) return false;
+        if (hasProp(pos) && !getProp(pos).onPush(avatar)) return false;
+        return true;
+    }
+
 
     /*
         Objective tools
@@ -1004,7 +998,7 @@ public class Level {
         int copyNCol = (nCols < newNCol) ? nCols : newNCol;
 
         Vec2i min = new Vec2i(0, 0);
-        Vec2i max = new Vec2i(newNCol, newNRow);
+        Vec2i max = new Vec2i(newNCol - 1, newNRow - 1);
 
         for (int i = 0; i < nRows; i++) {
             for (int j = 0; j < nCols; j++) {

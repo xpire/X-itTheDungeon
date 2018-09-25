@@ -1,5 +1,6 @@
 package main.maploading;
 
+import main.Level;
 import main.math.Vec2i;
 
 import java.util.ArrayList;
@@ -21,18 +22,22 @@ public class CreateMode {
         Scanner sc = new Scanner(System.in);
         String[] command = null;
 
+        System.out.println("Welcome to the Creation Lab");
         while (command == null) {
             System.out.println("Please name this draft");
             if ((command = sc.nextLine().split("\\s+")).length != 1) {
                 System.out.println("Error: no white space allowed");
                 command = null;
-            } else if (command[0].equals("exit")) {
-                sc.close();
-                return;
+            } else if (!command[0].matches("[a-zA-Z0-9]+")) {
+                System.out.println("Error: alphanumeric characters only");
+                command = null;
             }
         }
 
-        DraftBuilder draftBuilder = new DraftBuilder(8, 8, command[0]);
+        MapLoader mapLoader = new MapLoader();
+        Level level = mapLoader.loadLevel(command[0], "drafts", true);
+
+        DraftBuilder draftBuilder = (level == null) ? new DraftBuilder(8, 8, command[0]) : new DraftBuilder(level);
         draftBuilder.saveMap(draftBuilder.getName(), "drafts");
 
         System.out.println("You may begin editing " + draftBuilder.getName());
@@ -40,17 +45,8 @@ public class CreateMode {
 
         while (sc.hasNextLine()) {
             if ((command = sc.nextLine().split("\\s+")).length > 0) {
-                if (command[0].toLowerCase().equals("exit")) {
-                    sc.close();
-                    return;
-                }
-                if (command[0].toLowerCase().equals("delete")) {
-                    if (draftBuilder.deleteDraft(draftBuilder.getName())) {
-                        System.out.println("Draft deleted");
-                        return;
-                    }
-                }
-                createMode.commandInterpreter(draftBuilder, command, sc);
+
+                if (!createMode.commandInterpreter(draftBuilder, command, sc)) break;
             }
         }
 
@@ -62,84 +58,97 @@ public class CreateMode {
      * @param draftBuilder instance of the DraftBuilder being used
      * @param command user's input
      * @param sc copy of an open scanner (used when adding keys/doors)
+     * @return false when the command should exit the creation environment, true otherwise
      */
-    public void commandInterpreter(DraftBuilder draftBuilder, String[] command, Scanner sc) {
+    public boolean commandInterpreter(DraftBuilder draftBuilder, String[] command, Scanner sc) {
         switch (command[0].toLowerCase()) {
             case "save":
                 draftBuilder.saveMap(draftBuilder.getName(), "drafts");
 
                 System.out.println("Map Saved");
-                return;
+                return true;
             case "edit":
-
-                Vec2i tile = new Vec2i(Integer.parseInt(command[1]), Integer.parseInt(command[2]));
-
-                if (!draftBuilder.isValidGridPos(tile)) {
-                    System.out.println("Error: tile out of bounds");
-                    return;
+                if (command.length != 4) {
+                    System.out.println("Usage : edit <x-coord> <y-coord> <entities>");
+                    return true;
                 }
 
-                draftBuilder.editTile(tile, command[3], sc);
+                try {
+                    Vec2i tile = new Vec2i(Integer.parseInt(command[1]), Integer.parseInt(command[2]));
+                    if (!draftBuilder.isValidGridPos(tile)) {
+                        System.out.println("Error: tile out of bounds");
+                        return true;
+                    }
 
-                draftBuilder.displayLevel();
-                return;
+                    draftBuilder.editTile(tile, command[3], sc);
+
+                    draftBuilder.displayLevel();
+                } catch (NumberFormatException e) {
+                    System.out.println("Error: bad arguments");
+                }
+
+                return true;
             case "addr":
                 draftBuilder.resize(draftBuilder.getNRows() + 1, draftBuilder.getNCols());
                 draftBuilder.displayLevel();
 
-                return;
+                return true;
             case "addc":
                 draftBuilder.resize(draftBuilder.getNRows(), draftBuilder.getNCols() + 1);
                 draftBuilder.displayLevel();
 
-                return;
+                return true;
             case "remr":
                 draftBuilder.resize(draftBuilder.getNRows() - 1, draftBuilder.getNCols());
                 draftBuilder.displayLevel();
 
-                return;
+                return true;
             case "remc":
                 draftBuilder.resize(draftBuilder.getNRows(), draftBuilder.getNCols() - 1);
                 draftBuilder.displayLevel();
 
-                return;
+                return true;
             case "resize":
                 if (command.length != 3) {
                     System.out.println("Usage: Resize <newNRow> <newNCol>");
-                    return;
+                    return true;
+                }
+                try {
+                    draftBuilder.resize(Integer.parseInt(command[1]), Integer.parseInt(command[2]));
+                    draftBuilder.displayLevel();
+                } catch (NumberFormatException e) {
+                    System.out.println("Error: bad arguments");
                 }
 
-                draftBuilder.resize(Integer.parseInt(command[1]), Integer.parseInt(command[2]));
-
-                draftBuilder.displayLevel();
-                return;
+                return true;
             case "obj":
             case "objective":
                 if (command.length > 4) {
                     System.out.println("Error: too many objectives");
-                    return;
+                    return true;
                 }
 
                 ArrayList<String> levelObj = new ArrayList<>();
 
-                for (int i = 1; i < command.length; i++) levelObj.add(command[i]);
+                for (int i = 1; i < command.length && !levelObj.contains(command[i]); i++)
+                    levelObj.add(command[i]);
 
                 if (isValidObj(levelObj)) {
                     draftBuilder.setObjective(levelObj);
                     draftBuilder.displayLevel();
                 } else System.out.println("Error: invalid set of objectives");
 
-                return;
+                return true;
             case "play":
                 System.out.println("Please upgrade to premium for just $99.99 a month to access this feature");
 
                 draftBuilder.saveMap(draftBuilder.getName(), "drafts");
                 MapLoader mapLoader = new MapLoader();
-                Level playTest = mapLoader.loadLevel(draftBuilder.getName(), "drafts");
+                Level playTest = mapLoader.loadLevel(draftBuilder.getName(), "drafts", false);
 
                 //playGame(playTest);
 
-                return;
+                return true;
             case "publish":
                 // still needs to check for conquerable
                 System.out.println("Please upgrade to premium for just $99.99 a month for complete feature");
@@ -147,9 +156,30 @@ public class CreateMode {
                 draftBuilder.saveMap(draftBuilder.getName(), "levels");
                 System.out.println("Map published");
 
-                return;
+                return true;
+            case "delete":
+                return !draftBuilder.deleteDraft(draftBuilder.getName());
+            case "exit":
+                if (command.length > 1) draftBuilder.saveMap(draftBuilder.getName(), "drafts");
+
+                return false;
+            case "help":
+                System.out.println("Valid commands are:");
+                System.out.println("save : saves the draft");
+                System.out.println("edit <x-coord> <y-coord> <entities> : places 'entities' onto tile (x,y)");
+                System.out.println("addr; addc; remr; remc : appends row/col; removes row/col");
+                System.out.println("resize <newNumRows> <newNumCols> : resizes the map to newNumRows x newNumCols");
+                System.out.println("obj/objective <obj_1> (<obj_2>) (<obj_3>) : sets the levels objectives as per input");
+                System.out.println("play : test-plays the map");
+                System.out.println("publish : publishes the map");
+                System.out.println("delete : deletes the draft");
+                System.out.println("exit (<s>) : exits Create Mode; flag <s> will save before exiting");
+                System.out.println("help : displays valid commands");
+
+                return true;
             default:
-                System.out.println("Command not recognised");
+                System.out.println("Command not recognised, type 'help' for more info");
+                return true;
         }
     }
 
@@ -174,7 +204,5 @@ public class CreateMode {
 
         //check "Exit" objective isn't coupled with others
         return (!objectives.contains("A"));
-
-        // TODO: enforce that the objective exists for it to be added?
     }
 }
