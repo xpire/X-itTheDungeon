@@ -1,26 +1,24 @@
 package main.entities.enemies;
 
+import main.Level;
 import main.algorithms.AStarSearch;
 import main.behaviour.AIBehaviour;
 import main.entities.Avatar;
 import main.entities.Entity;
 import main.events.EnemyEvent;
-import main.Level;
 import main.math.Vec2i;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Class which abstracts Enemy entities on the Level.
  * Determines their next move and also the enemies current behaviour
  */
-public abstract class Enemy extends Entity implements StateDecision {
+public abstract class Enemy extends Entity {
 
     protected boolean isHunter = false;
 
     protected EnemyManager manager = null;
-    private AIBehaviour currBehaviour = null;
-
 
     /**
      * Constructors for Enemies
@@ -44,6 +42,24 @@ public abstract class Enemy extends Entity implements StateDecision {
         level.removeEnemy(pos);
     }
 
+    /**
+     * Determines the move of an Enemy
+     * @return Move of an AI
+     */
+    public Vec2i decideMove() {
+        AIBehaviour behaviour = decideBehaviour();
+
+        List<Vec2i> targetTiles = behaviour.decideTargetTiles();
+        List<Vec2i> path        = shortestPath(targetTiles);
+
+        if (path.size() > 1)
+            return path.get(1);
+        else
+            return path.get(0);
+    }
+
+
+    protected abstract AIBehaviour decideBehaviour();
 
     /**
      * Finding the shortest path to a specific square using A*, the heuristic chosen
@@ -52,36 +68,10 @@ public abstract class Enemy extends Entity implements StateDecision {
      * @param targets target square that the AI wants to go to
      * @return an ArrayList of the path to the square
      */
-    protected ArrayList<Vec2i> shortestPath(ArrayList<Vec2i> targets) {
+    private List<Vec2i> shortestPath(List<Vec2i> targets) {
         AStarSearch search = new AStarSearch(level, targets, pos);
         return search.search();
     }
-
-    /**
-     * Determines the move of an Enemy
-     * @return Move of an AI
-     */
-    public Vec2i getMove() {
-        ArrayList<Vec2i> wantedTiles = currBehaviour.decideMove(
-                level,
-                pos,
-                level.getAvatar().getGridPos(),
-                manager.getPastMoves(),
-                level.getEnemies()
-        );
-
-        ArrayList<Vec2i> targets = shortestPath(wantedTiles);
-
-        Vec2i wanted;
-        if (targets.size() > 1)
-            wanted = targets.get(1);
-        else
-            wanted = targets.get(0);
-
-        return wanted;
-    }
-
-
 
     @Override
     public boolean isPassableFor(Entity entity) {
@@ -107,20 +97,6 @@ public abstract class Enemy extends Entity implements StateDecision {
     }
 
     /**
-     * Getter for current behaviour
-     * @return the Enemies current behaviour
-     */
-    public AIBehaviour getCurrBehaviour() { return currBehaviour; }
-    public void setCurrBehaviour(AIBehaviour behaviour) { currBehaviour = behaviour;}
-
-
-    /**
-     * Getter for the enemy manager
-     * @return The current manager of the Enemies
-     */
-    public EnemyManager getManager() { return manager; }
-
-    /**
      * Set the manager of this entity
      * @param manager Manager of all AIs
      */
@@ -132,4 +108,5 @@ public abstract class Enemy extends Entity implements StateDecision {
      * @return True if hunter, false otherwise
      */
     public boolean isHunter() { return isHunter; }
+
 }

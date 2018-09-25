@@ -1,6 +1,5 @@
 package main.behaviour;
 
-import main.entities.enemies.Enemy;
 import main.Level;
 import main.math.Vec2i;
 
@@ -9,62 +8,39 @@ import java.util.ArrayList;
 /**
  * Implements the behaviour specific to the Coward enemy
  */
-public class CowardBehaviour implements AIBehaviour {
+public class CowardBehaviour extends AIBehaviour {
+
+    public CowardBehaviour(Level level, Vec2i pos, Vec2i target) {
+        super(level, pos, target);
+    }
+
     @Override
-    public ArrayList<Vec2i> decideMove(
-            Level level,
-            Vec2i currLocation,
-            Vec2i playerLocation,
-            ArrayList<Integer> pastMoves,
-            ArrayList<Enemy> entities) {
-        ArrayList<Vec2i> maxDistance = new ArrayList<>();
+    public ArrayList<Vec2i> decideTargetTiles() {
 
-        int maxManhattanDistance = distance(currLocation.getX(), currLocation.getY(), playerLocation);
+        ArrayList<Vec2i> tiles = new ArrayList<>();
 
-        for (int x = currLocation.getX() - 1; x <= currLocation.getX() + 1; x++) {
-            for (int y = currLocation.getY() - 1; y <= currLocation.getY() + 1; y++) {
-                //continue if at diagonal square or at currLocation
-                if ((x + y - currLocation.getX() - currLocation.getY())%2 == 0) continue;
+        // distance from target
+        int maxDist = pos.manhattan(target);
 
-                if (!check(level, new Vec2i(x,y))) continue;
-                if (!level.isValidGridPos(new Vec2i(x, y))) continue;
+        for (Vec2i dir : Vec2i.DIRECTIONS) {
 
+            // tile adjacent to the AI
+            Vec2i adj = pos.add(dir);
 
+            // distance away from the target
+            if (!level.isValidGridPos(adj)) continue;
+            int dist = adj.manhattan(target);
 
-                if (distance(x,y,playerLocation) > maxManhattanDistance) {
-                    //new max, remove old max
-                    maxManhattanDistance = distance(x, y, playerLocation);
-                    maxDistance.clear();
-                    maxDistance.add(new Vec2i(x,y));
-                } else if (distance(x,y,playerLocation) == maxManhattanDistance) {
-                    maxDistance.add(new Vec2i(x,y));
-                }
+            // find tiles farthest from the target
+            if (dist > maxDist) {
+                maxDist = dist;
+                tiles.clear();
+                tiles.add(adj);
+            }
+            else if (dist == maxDist) {
+                tiles.add(adj);
             }
         }
-        return maxDistance;
-    }
-
-    /**
-     * Same thing as level.isValidGridPos(pos)
-     * TODO Refactor in next iteration
-     * @param map current level
-     * @param location location to check
-     * @return true if valid position
-     */
-    public Boolean check(Level map,Vec2i location) {
-        return (location.getX() >= 0 && location.getX() < map.getNCols() &&
-                location.getY() >= 0 && location.getY() < map.getNRows());
-    }
-
-    /**
-     * Calculates the Manhatten distance
-     *
-     * @param x x-coord of target
-     * @param y y-coord of target
-     * @param playerLocation position of player
-     * @return
-     */
-    public int distance(int x, int y, Vec2i playerLocation) {
-        return Math.abs(x-playerLocation.getX()) + Math.abs(y-playerLocation.getY());
+        return tiles;
     }
 }

@@ -185,44 +185,8 @@ public class Vec2i {
     public boolean isAdjacent(Vec2i other) {
         return this.sub(other).norm1() <= 1;
     }
-<<<<<<< HEAD
 
     public boolean isDirection() {
         return norm1() == 1;
-=======
-
-
-    public static final Vec2i NORTH = new Vec2i(0, -1);
-    public static final Vec2i SOUTH = new Vec2i(0, 1);
-    public static final Vec2i WEST  = new Vec2i(-1, 0);
-    public static final Vec2i EAST  = new Vec2i(1, 0);
-    public static final List<Vec2i> DIRECTIONS =
-            Collections.unmodifiableList(Arrays.asList(NORTH, SOUTH, WEST, EAST));
-
-
-//    public static Vec2i north(){return new Vec2i(0, -1);}
-//    public static Vec2i south(){return new Vec2i(0, 1);}
-//    public static Vec2i west(){return new Vec2i(-1, 0);}
-//    public static Vec2i east(){return new Vec2i(1, 0);}
-//
-//    public static Vec2i[] directions() {
-//        return new Vec2i[]{
-//                new Vec2i(NORTH), new Vec2i(SOUTH), new Vec2i(WEST), new Vec2i(EAST)
-//        };
-//    }
-
-//    public static Vec2i[] directions() {
-//        return new Vec2i[]{
-//                new Vec2i(NORTH), new Vec2i(SOUTH), new Vec2i(WEST), new Vec2i(EAST)
-//        };
-//    }
-
-//    public static boolean isDirection(Vec2i v) {
-//        return v.equals(NORTH) || v.equals(SOUTH) || v.equals(WEST) || v.equals(EAST);
-//    }
-
-    public static boolean isDirection(Vec2i v) {
-        return v.norm1() == 1;
->>>>>>> Cleanered up the code for most enemy behaviours
     }
 }

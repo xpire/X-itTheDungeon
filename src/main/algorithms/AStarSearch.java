@@ -5,17 +5,18 @@ import main.math.Vec2i;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.PriorityQueue;
 
 public class AStarSearch {
     private Level level;
-    private ArrayList<Vec2i> targets;
+    private List<Vec2i> targets;
     private Vec2i pos;
 
-    public AStarSearch(Level level, ArrayList<Vec2i> targets, Vec2i pos) {
-        this.level = level;
-        this.targets = targets;
-        this.pos = pos;
+    public AStarSearch(Level level, List<Vec2i> targets, Vec2i pos) {
+        this.level      = level;
+        this.targets    = targets;
+        this.pos        = pos;
     }
 
     // Inner class for A* search
@@ -146,7 +147,7 @@ public class AStarSearch {
      * @param targets targets
      * @return The heuristic takes the Mahanttan distance from the closest node
      */
-    private int manHattanDist(Vec2i curr, ArrayList<Vec2i> targets) {
+    private int manHattanDist(Vec2i curr, List<Vec2i> targets) {
 
         // TODO change this, runs everytime, maybe dont
         // Closest node
