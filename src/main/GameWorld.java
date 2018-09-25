@@ -3,17 +3,10 @@ package main;
 import javafx.beans.binding.Bindings;
 import javafx.scene.Group;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Font;
 import main.achivement.AllSwitchesOnAchievement;
 import main.achivement.CollectAllTreasuresAchievement;
-import main.app.engine.Game;
-import main.app.engine.GameLoop;
-import main.app.engine.Input;
-import main.app.engine.UserAction;
 import main.component.ViewComponent;
 import main.entities.Avatar;
 import main.entities.Entity;
@@ -21,54 +14,45 @@ import main.entities.enemies.EnemyManager;
 import main.entities.pickup.*;
 import main.entities.prop.Boulder;
 import main.entities.terrain.*;
-import main.events.AvatarEvent;
+import main.maploading.Level;
 import main.math.Vec2i;
 
-public class GameWorld implements Game {
+public class GameWorld {
 
-    private GameLoop gameLoop;
-    private Input input;
     private Level level;
     private Avatar avatar;
 
     private boolean isRunning = true;
     private boolean isPlayerTurn = true;
 
-    private EnemyManager enemyManager;
+    private EnemyManager manager;
     private ViewComponent view;
 
-    public GameWorld(Scene scene) {
-        gameLoop = new GameLoop(this, fps -> System.out.println("FPS: " + fps));
-
+    public GameWorld() {
         level = new Level(16, 16, 30, "GameWorld");
 
-        // View
+        // Grids
         Group gridView = new Group();
         gridView.setTranslateX(120);
         gridView.setTranslateY(20);
+
+        avatar = new Avatar(level);
+
         gridView.getChildren().add(level.getView());
         view = new ViewComponent(gridView);
 
-        initObjectives();
-        initEvents();
-        initEntities();
-        initUi();
-        initInput(scene);
+//        level.addObjectives(new ExitDungeonAchievement());
+        level.addObjectives(new AllSwitchesOnAchievement());
+        level.addObjectives(new CollectAllTreasuresAchievement());
+//        level.addObjectives(new KillAllEnemiesAchievement());
 
-        enemyManager = new EnemyManager(level);
+        initWorld();
+        initViews();
+
+        this.manager = new EnemyManager(level);
     }
 
-    public void startGame() {
-        gameLoop.start();
-    }
-
-    public void endGame() {
-        gameLoop.stop();
-    }
-
-    private void initEntities() {
-        avatar = new Avatar(level);
-
+    private void initWorld() {
         level.addAvatar(new Vec2i(7, 7), avatar);
         level.addProp(new Vec2i(7, 8), new Boulder(level));
         level.addProp(new Vec2i(4, 5), new Boulder(level));
@@ -122,13 +106,9 @@ public class GameWorld implements Game {
         level.addTerrain(new Vec2i(7, 2), door1);
         level.addTerrain(new Vec2i(14, 12), door2);
     }
-    private void initObjectives() {
-        //        level.addObjectives(new ExitDungeonAchievement());
-        level.addObjectives(new AllSwitchesOnAchievement());
-        level.addObjectives(new CollectAllTreasuresAchievement());
-//        level.addObjectives(new KillAllEnemiesAchievement());
-    }
-    private void initUi() {
+
+
+    private void initViews() {
         Label lblNumArrows = new Label();
         lblNumArrows.textProperty().bind(Bindings.format("Arrows: %d", avatar.getNumArrowsProperty()));
 
@@ -144,100 +124,9 @@ public class GameWorld implements Game {
         view.addNode(lblNumBombs);
         view.addNode(lblNumTreasures);
     }
-    private void initInput(Scene scene) {
-        input = new Input();
-        scene.addEventHandler(KeyEvent.ANY, evt -> input.onKeyEvent(evt));
-        input.addBinding(KeyCode.W, new UserAction() {
-            @Override
-            protected void onActionBegin() {
-                avatar.setNextAction(() -> avatar.faceUp());
-            }
-        });
-        input.addBinding(KeyCode.S, new UserAction() {
-            @Override
-            protected void onActionBegin() {
-                avatar.setNextAction(() -> avatar.faceDown());
-            }
-        });
-        input.addBinding(KeyCode.A, new UserAction() {
-            @Override
-            protected void onActionBegin() {
-                avatar.setNextAction(() -> avatar.faceLeft());
-            }
-        });
-        input.addBinding(KeyCode.D, new UserAction() {
-            @Override
-            protected void onActionBegin() {
-                avatar.setNextAction(() -> avatar.faceRight());
-            }
-        });
-        input.addBinding(KeyCode.UP, new UserAction() {
-            @Override
-            protected void onActionBegin() {
-                avatar.setNextAction(() -> avatar.moveUp());
-            }
-        });
-        input.addBinding(KeyCode.DOWN, new UserAction() {
-            @Override
-            protected void onActionBegin() {
-                avatar.setNextAction(() -> avatar.moveDown());
-            }
-        });
-        input.addBinding(KeyCode.LEFT, new UserAction() {
-            @Override
-            protected void onActionBegin() {
-                avatar.setNextAction(() -> avatar.moveLeft());
-            }
-        });
-        input.addBinding(KeyCode.RIGHT, new UserAction() {
-            @Override
-            protected void onActionBegin() {
-                avatar.setNextAction(() -> avatar.moveRight());
-            }
-        });
-        input.addBinding(KeyCode.Z, new UserAction() {
-            @Override
-            protected void onActionBegin() {
-                avatar.setNextAction(() -> avatar.dropKey());
-            }
-        });
-        input.addBinding(KeyCode.X, new UserAction() {
-            @Override
-            protected void onActionBegin() {
-                avatar.setNextAction(() -> avatar.placeBomb());
-            }
-        });
-        input.addBinding(KeyCode.C, new UserAction() {
-            @Override
-            protected void onActionBegin() {
-                avatar.setNextAction(() -> avatar.shootArrow());
-            }
-        });
-        input.addBinding(KeyCode.V, new UserAction() {
-            @Override
-            protected void onActionBegin() {
-                avatar.setNextAction(() -> avatar.swingSword());
-            }
-        });
-    }
 
-    private void initEvents() {
-        level.addEventHandler(AvatarEvent.AVATAR_TURN_ENDED, event -> endPlayerTurn());
-        level.addEventHandler(AvatarEvent.AVATAR_DIED, event -> gameOver());
-    }
 
-    @Override
-    public void onStart() {
-        input.startListening();
-    }
-
-    @Override
-    public void onUpdateBegin() {
-        input.update();
-    }
-
-    @Override
-    public void onUpdate() {
+    public void update() {
         if (!isRunning) return;
 
         if (!level.getEnemies().isEmpty()) {
@@ -256,15 +145,6 @@ public class GameWorld implements Game {
         }
     }
 
-    @Override
-    public void onUpdateEnd() {
-
-    }
-
-    @Override
-    public void onStop() {
-
-    }
 
     public void onPlayerTurn() {
         avatar.update();
@@ -275,7 +155,7 @@ public class GameWorld implements Game {
     }
 
     public void onEnemyTurn() {
-        enemyManager.Update();
+        manager.Update();
     }
 
     public void onRoundEnd() {
@@ -308,7 +188,12 @@ public class GameWorld implements Game {
         isRunning = false;
     }
 
+
     public Node getView() {
         return view.getView();
+    }
+
+    public Level getLevel() {
+        return level;
     }
 }

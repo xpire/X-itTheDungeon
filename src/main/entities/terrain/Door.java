@@ -9,7 +9,7 @@ import main.entities.enemies.Enemy;
 import main.entities.prop.Prop;
 import main.events.DoorEvent;
 import main.events.KeyEvent;
-import main.Level;
+import main.maploading.Level;
 import main.math.Vec2d;
 import main.math.Vec2i;
 

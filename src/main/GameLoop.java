@@ -1,6 +1,7 @@
-package main.app.engine;
+package main;
 
 import javafx.animation.AnimationTimer;
+import main.app.Game;
 
 import java.util.function.Consumer;
 
@@ -26,11 +27,6 @@ public class GameLoop extends AnimationTimer {
         this.fpsReporter = fpsReporter;
     }
 
-    @Override
-    public void start() {
-        super.start();
-        game.onStart();
-    }
 
     @Override
     public void handle(long currTime)
@@ -43,7 +39,7 @@ public class GameLoop extends AnimationTimer {
         lag += (currTime - prevTime) / NANO_PER_SEC;
 
         // Before update
-        game.onUpdateBegin();
+        game.onBeforeUpdate();
 
         // Update Loop
         int count = 0;
@@ -54,7 +50,7 @@ public class GameLoop extends AnimationTimer {
         }
 
         // After update
-        game.onUpdateEnd();
+        game.onAfterUpdate();
 
         // Float overflow handling
         if (lag > LAG_CAP) {
@@ -82,7 +78,5 @@ public class GameLoop extends AnimationTimer {
         lag = 0.0f;
         nFrames = 0;
         secondsElapsed = 0.0f;
-
-        game.onStop();
     }
 }

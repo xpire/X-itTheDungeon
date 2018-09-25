@@ -1,6 +1,5 @@
 package main.maploading;
 
-import main.Level;
 import main.entities.terrain.*;
 import main.math.Vec2i;
 

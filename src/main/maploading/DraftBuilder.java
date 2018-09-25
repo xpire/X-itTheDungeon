@@ -1,6 +1,5 @@
 package main.maploading;
 
-import main.Level;
 import main.entities.Entity;
 import main.math.Vec2i;
 
@@ -19,15 +18,7 @@ public class DraftBuilder {
     private Level level;
 
     /**
-     * Constructor when loading in an existing draft
-     * @param level : the existing draft
-     */
-    public DraftBuilder(Level level) {
-        this.level = level;
-    }
-
-    /**
-     * Constructor when creating a new draft
+     * Constructor for the draftBuilder
      * @param nRows # of rows for the Draft
      * @param nCols # of cols for the Draft
      * @param draftName name of the Draft
@@ -126,13 +117,6 @@ public class DraftBuilder {
             w.write(nRow + "\t" + nCol);
             w.append("\n");
 
-            //set the objectives
-            ArrayList<String> obj = level.getObjectives();
-            for (String s : obj) {
-                w.write(s + "\t");
-            }
-            w.newLine();
-
             //set the main body of the map
             StringBuilder metaData = new StringBuilder();
 
@@ -148,13 +132,20 @@ public class DraftBuilder {
 
                         sb.append(e.getSymbol());
                         if (e.getMetaData() != null)
-                            metaData.append(e.getMetaData()).append("\n");
+                            metaData.append(e.getMetaData());
                     }
 
                     w.write(sb.toString() + "\t");
                 }
                 w.newLine();
             }
+
+            //set the objectives
+            ArrayList<String> obj = level.getObjectives();
+            for (String s : obj) {
+                w.write(s + "\t");
+            }
+            w.newLine();
 
             //set the key-door mapping
             w.write(metaData.toString());

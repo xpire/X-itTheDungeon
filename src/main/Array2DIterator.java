@@ -1,4 +1,4 @@
-package main.util;
+package main;
 
 import java.util.Arrays;
 import java.util.Iterator;

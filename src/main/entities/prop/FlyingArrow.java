@@ -1,7 +1,7 @@
 package main.entities.prop;
 
 import main.entities.Entity;
-import main.Level;
+import main.maploading.Level;
 import main.math.Vec2i;
 
 /**

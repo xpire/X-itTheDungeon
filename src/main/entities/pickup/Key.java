@@ -6,7 +6,7 @@ import main.entities.Avatar;
 import main.entities.terrain.Door;
 import main.events.DoorEvent;
 import main.events.KeyEvent;
-import main.Level;
+import main.maploading.Level;
 import main.math.Vec2i;
 
 /**

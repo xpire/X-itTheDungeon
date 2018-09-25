@@ -2,7 +2,7 @@
 ////
 ////import static org.junit.Assert.*;
 ////import main.entities.enemies.*;
-////import main.Level;
+////import main.maploading.Level;
 ////import main.maploading.MapLoader;
 ////import main.math.Vec2i;
 ////

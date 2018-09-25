@@ -1,7 +1,7 @@
 package test;
 
 import main.algorithms.AStarSearch;
-import main.Level;
+import main.maploading.Level;
 import main.maploading.MapLoader;
 import main.math.Vec2i;
 

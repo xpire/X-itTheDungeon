@@ -1,12 +1,14 @@
 package test;
 
 import main.entities.Avatar;
+import main.entities.enemies.Enemy;
 import main.entities.enemies.EnemyManager;
 import main.entities.enemies.Hound;
 import main.entities.enemies.Hunter;
-import main.Level;
+import main.maploading.Level;
 import main.maploading.MapLoader;
 import main.math.Vec2i;
+import org.junit.Test;
 
 import java.util.ArrayList;
 
