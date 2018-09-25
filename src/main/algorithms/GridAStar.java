@@ -17,6 +17,9 @@ public class GridAStar {
         this.level   = level;
         this.pos     = pos;
         this.targets = targets;
+
+        System.out.println("Targets: ");
+        targets.forEach(t -> System.out.println("- " + t));
     }
 
     public List<Vec2i> search() {
@@ -44,10 +47,10 @@ public class GridAStar {
         return res;
     }
 
-    // Precondition targets non-empty
+    // Precondition: targets non-empty
     private int manhattanDist(Vec2i vertex) {
         return targets.stream()
-                .map(t -> t.manhattan(vertex))
-                .min(Integer::compare).get();
+                .mapToInt(t -> t.manhattan(vertex))
+                .sum();
     }
 }

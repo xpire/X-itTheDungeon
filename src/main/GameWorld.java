@@ -102,10 +102,10 @@ public class GameWorld implements Game {
         level.addPickup(new Vec2i(7, 11), new InvincibilityPotion(level));
         level.addPickup(new Vec2i(8, 14), new InvincibilityPotion(level));
 
-        level.addEnemy(new Vec2i(0, 3), new Hunter(level));
-        level.addEnemy(new Vec2i(12, 12), new Hound(level));
+//        level.addEnemy(new Vec2i(0, 3), new Hunter(level));
+//        level.addEnemy(new Vec2i(12, 12), new Hound(level));
 //        level.addEnemy(new Vec2i(0, 0), new Coward(level));
-//        level.addEnemy(new Vec2i(12, 11), new Strategist(level));
+        level.addEnemy(new Vec2i(12, 11), new Strategist(level));
 
         level.addTerrain(new Vec2i(14, 14), new Exit(level));
         level.addTerrain(new Vec2i(15, 15), new Exit(level));

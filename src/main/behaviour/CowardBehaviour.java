@@ -29,6 +29,8 @@ public class CowardBehaviour extends AIBehaviour {
 
             // distance away from the target
             if (!level.isValidGridPos(adj)) continue;
+            if (!level.isPassableForEnemy(adj, null)) continue;
+
             int dist = adj.manhattan(target);
 
             // find tiles farthest from the target

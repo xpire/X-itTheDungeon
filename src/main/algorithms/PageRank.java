@@ -2,31 +2,33 @@ package main.algorithms;
 
 import main.math.Vec2i;
 
+import java.util.Comparator;
 import java.util.List;
 
 public class PageRank {
 
+    private Vec2i pos;
+    private List<Vec2i> targets;
     private List<Integer> pastMoves;
-    private List<Vec2i> pCoord;
-    private Vec2i currPos;
 
-    public PageRank(List<Integer> pastMoves, List<Vec2i> pCoord, Vec2i currPos) {
-        this.pastMoves = pastMoves;
-        this.pCoord = pCoord;
-        this.currPos = currPos;
+    private final int NUM_ITERATIONS = 20;
+
+    /**
+     * @param pos current enemy position
+     * @param targets enemy target tiles
+     * @param pastMoves past moves of the avatar
+     */
+    public PageRank(Vec2i pos, List<Vec2i> targets, List<Integer> pastMoves) {
+        this.pos        = pos;
+        this.targets    = targets;
+        this.pastMoves  = pastMoves;
     }
 
     /* Getting result */
     public Vec2i getResult() {
-        int[] totals = {4,4,4,4};
-
-        float[][] markov = dataProcess(initMatrix(), pastMoves, totals);
-
-        // repeated multiplication
-        float[] init = {1,1,1,1};
-        float[] resultRank = pageRank(markov, init);
-
-        return rankedResult(resultRank, pCoord, currPos);
+        float[][] markov = initMarkovMatrix();
+        float[] ranks = pageRank(markov);
+        return getBestPage(ranks);
     }
 
 
@@ -34,41 +36,24 @@ public class PageRank {
      * Initialize the markov to a generic matrix
      * @return A initial matrix
      */
-    private float[][] initMatrix() { //TODO shouldn't it be 1/4 each?
-        float[][] ret = new float[4][4] ;
+    private float[][] initMarkovMatrix() {
+        float[][] markov = new float[4][4];
+
+        // matrix filled with 1s
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
-                ret[i][j] = 1;
-            }
-        }
-        return  ret;
-    }
-
-    /**
-     * Changes to a move frequency matrix from past moves of the player
-     * @param markov The intialized matrix
-     * @param pastMoves players past moves
-     */
-    private float[][] dataProcess(float[][] markov, List<Integer> pastMoves, int[] totals) {
-        int prev = -1;
-
-        // Use data
-        for (int x: pastMoves) {
-            if (prev == -1) {
-                prev = x;
-
-            } else {
-                // Increase frequency
-                markov[prev][x]++;
-
-                // Increase normalizing factor
-                totals[prev]++;
+                markov[i][j] = 1;
             }
         }
 
-        // Get correct value
+        // normalising vector
+        int[] totals = {4,4,4,4};
+
+        // process data
+        processPastMoves(markov, totals);
+
+        // normalise matrix
         for (int i = 0; i < 4; i++) {
-//            float factor = totals[i]; TODO see if it works without this line
             for (int j = 0; j < 4; j++) {
                 markov[i][j] /= totals[i];
             }
@@ -78,20 +63,32 @@ public class PageRank {
     }
 
     /**
+     * Changes to a move frequency matrix from past moves of the player
+     * @param markov The initialised matrix
+     */
+    private void processPastMoves(float[][] markov, int[] totals) {
+        pastMoves.stream()
+            .reduce((prev, curr) -> {
+                markov[prev][curr]++; // increase frequency
+                totals[prev]++;       // increase normalising factor
+                return 0;             // ignore accumulation
+            });
+    }
+
+    /**
      * Applying a simple page rank algorithm
      * @param markov The markov matrix
-     * @param init Initialized rank
      * @return
      */
-    private float[] pageRank(float[][] markov, float[] init) {
-        float[] buffer = init;
+    private float[] pageRank(float[][] markov) {
+        float[] ret = {1,1,1,1}; // initial ranks
 
         // 20 Rounds of matrix multiplication
-        for (int i = 0; i < 20; i++) {
-            buffer = matMul(markov, buffer);
+        for (int i = 0; i < NUM_ITERATIONS; i++) {
+            ret = matMul(markov, ret);
         }
 
-        return buffer;
+        return ret;
     }
 
     /**
@@ -121,60 +118,42 @@ public class PageRank {
         for (int j = 0; j < 4; j++){
             ret += row[j] * vec[j];
         }
-        return  ret;
+        return ret;
     }
 
     /**
      * Get result from possible coordinates and ranks
-     * @param resultRank rank result from algorithm
-     * @param pCoord Possible coordinate to move to
+     * @param ranks rank result from algorithm
      * @return Best square to move in
      */
-    private Vec2i rankedResult(float[] resultRank, List<Vec2i> pCoord, Vec2i currLocation) {
-        // Get current coordinate
-        int coordX = currLocation.getX();
-        int coordY = currLocation.getY();
-
-        Vec2i max = null;
-        float maxRank = 0;
-
-        for (Vec2i x: pCoord) {
-            if (max == null) {
-                max = x;
-                maxRank = getRank(x, resultRank, currLocation);
-            } else {
-                if (getRank(x, resultRank, currLocation) > maxRank) {
-                    max = x;
-                    maxRank = getRank(x, resultRank, currLocation);
-                }
-            }
-        }
-        return max;
+    private Vec2i getBestPage(float[] ranks) {
+        return targets.stream()
+                .max(Comparator.comparingDouble(t -> getRank(t, ranks)))
+                .orElse(pos);
     }
 
     /**
      * Get the rank number of a specific tile in a direction
-     * @param x Request vector
-     * @param resultRank List of rank
+     * @param v Request vector
+     * @param ranks List of rank
      * @return The rank of the coordinate
      */
-    private float getRank(Vec2i x, float[]  resultRank, Vec2i currPos) {
-        // Get current coordinate
-        int coordX = currPos.getX();
-        int coordY = currPos.getY();
-
+    // may be should return an index instead
+    private float getRank(Vec2i v, float[] ranks) {
         // Get rank of the coordinate
-        if (x.equals(new Vec2i(coordX - 1, coordY))) {
-            return resultRank[2];
-        }
-        else if (x.equals(new Vec2i(coordX + 1, coordY))) {
-            return resultRank[3];
-        }
-        else if (x.equals(new Vec2i(coordX, coordY - 1))) {
-            return resultRank[0];
-        }
-        else {
-            return resultRank[1];
-        }
+        if (v.equals(pos.add(Vec2i.NORTH)))
+            return ranks[0];
+
+        if (v.equals(pos.add(Vec2i.SOUTH)))
+            return ranks[1];
+
+        if (v.equals(pos.add(Vec2i.WEST)))
+            return ranks[2];
+
+        if (v.equals(pos.add(Vec2i.EAST)))
+            return ranks[3];
+
+        else
+            return -1;
     }
 }

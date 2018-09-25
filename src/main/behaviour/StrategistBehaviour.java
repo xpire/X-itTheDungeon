@@ -10,8 +10,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-import static java.util.Collections.singletonList;
-
 /**
  * Implements the behaviour specific to the Strategist
  */
@@ -28,26 +26,30 @@ public class StrategistBehaviour extends AIBehaviour {
     public List<Vec2i> decideTargetTiles(){
 
         // possible target tiles
+        List<Vec2i> tiles = new ArrayList<>();
+        tiles.add(target);
+
         List<Vec2i> adjs = getAdjs(target);
 
-        // go to target if no adjacent tiles accessible
-        if (adjs.isEmpty())
-            return singletonList(target);
-
-        // go to target if adjacent to the AI
-        if (pos.isAdjacent(target))
-            return singletonList(target);
+        // go to target if no adjacent tiles accessible, or if adjacent to the AI
+        if (adjs.isEmpty() || pos.isAdjacent(target))
+            return tiles;
 
         // find the tile with highest incentive for the avatar (if any pickups nearby)
-        if (hasPickup(adjs))
-            return singletonList(getHighestIncentiveTile(adjs));
+        if (hasPickup(adjs)) {
+            tiles.add(getHighestIncentiveTile(adjs));
+            return tiles;
+        }
 
         // select the adjacent tile that the avatar is most likely to visit next
-        if (adjs.size() == 1)
-            return adjs;
-
-        PageRank pr = new PageRank(pastMoves, adjs, pos);
-        return singletonList(pr.getResult());
+        if (adjs.size() == 1) {
+            tiles.addAll(adjs);
+        }
+        else {
+            PageRank pr = new PageRank(pos, adjs, pastMoves);
+            tiles.add(pr.getResult());
+        }
+        return tiles;
     }
 
     /**

@@ -28,8 +28,6 @@ public class HoundBehaviour extends AIBehaviour {
 
         // no closest hunter, Hound becomes a hunter
         if (closestHunterPos == null) {
-            ArrayList<Vec2i> targets = new ArrayList<>();
-            targets.add(target);
             return singletonList(target);
         }
 
