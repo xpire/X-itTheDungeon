@@ -8,7 +8,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
-import main.app.Game;
+import main.app.engine.Game;
 import main.entities.enemies.Enemy;
 import main.entities.pickup.*;
 import main.entities.prop.FlyingArrow;
@@ -16,11 +16,11 @@ import main.entities.prop.LitBomb;
 import main.entities.prop.Prop;
 import main.entities.terrain.Door;
 import main.entities.terrain.Terrain;
+import main.events.AvatarEvent;
 import main.maploading.Level;
 import main.math.Vec2i;
 
 import java.util.ArrayList;
-
 
 public class Avatar extends Entity {
 
@@ -33,7 +33,7 @@ public class Avatar extends Entity {
     private IntegerProperty numTreasures;
 
     private BooleanProperty isHovering;
-    private BooleanProperty isOnRage;
+    private BooleanProperty isRaged;
 
     private Vec2i direction;
     private ArrayList<Integer> pastMoves;
@@ -41,6 +41,8 @@ public class Avatar extends Entity {
     private Line swordView;
     private Circle hoverView;
     private Circle rageView;
+
+    private Runnable nextAction;
 
     // THINGS THAT CAN BE RUN AFTER ON_CREATED
     {
@@ -56,6 +58,8 @@ public class Avatar extends Entity {
 
         direction       = new Vec2i(1,0);
         pastMoves       = new ArrayList<>();
+
+        nextAction      = null;
     }
 
 
@@ -87,10 +91,10 @@ public class Avatar extends Entity {
         view.addNode(swordView);
 
         isHovering  = new SimpleBooleanProperty(false);
-        isOnRage    = new SimpleBooleanProperty(false);
+        isRaged = new SimpleBooleanProperty(false);
 
         hoverView.visibleProperty().bind(isHovering);
-        rageView.visibleProperty().bind(isOnRage);
+        rageView.visibleProperty().bind(isRaged);
         swordView.setVisible(false);
     }
 
@@ -98,12 +102,12 @@ public class Avatar extends Entity {
     @Override
     public void onDestroyed() {
         level.removeAvatar();
-        Game.world.gameOver(); //TODO
+        level.postEvent(new AvatarEvent(AvatarEvent.AVATAR_DIED));
     }
 
     @Override
     public void onExploded() {
-        if (!isOnRage.get()) {
+        if (!isRaged.get()) {
             onDestroyed();
         }
     }
@@ -113,6 +117,9 @@ public class Avatar extends Entity {
      * Update the grid and world position of the Avatar
      */
     public void update() {
+
+        if (nextAction == null) return;
+
         Vec2i pos = new Vec2i(getGridPos());
 
         if (Game.input.isDown(KeyCode.UP)) {
@@ -177,8 +184,22 @@ public class Avatar extends Entity {
             }
 
             if (pos.equals(getGridPos()))
-                Game.world.endPlayerTurn(); // TODO
+                endTurn();
         }
+        nextAction = null;
+    }
+
+    public void moveUp() {
+
+    }
+
+
+    public void setNextAction(Runnable action) {
+        nextAction = action;
+    }
+
+    private void endTurn() {
+        level.postEvent(new AvatarEvent(AvatarEvent.AVATAR_TURN_ENDED));
     }
 
 
@@ -215,7 +236,7 @@ public class Avatar extends Entity {
             if (sword.isBroken())
                 onUnequipSword();
 
-            Game.world.endPlayerTurn();
+            endTurn();
         }
     }
 
@@ -264,7 +285,7 @@ public class Avatar extends Entity {
 
         // -1 arrow
         numArrows.set(numArrows.get() - 1);
-        Game.world.endPlayerTurn();
+        endTurn();
     }
 
 
@@ -279,7 +300,7 @@ public class Avatar extends Entity {
         if (level.canPlaceProp(pos, bomb)) {
             level.addProp(pos, bomb);
             numBombs.set(numBombs.get() - 1);
-            Game.world.endPlayerTurn();
+            endTurn();
         }
     }
 
@@ -308,9 +329,10 @@ public class Avatar extends Entity {
         if (level.canPlacePickup(pos, key)) {
             level.addPickup(pos, key);
             key = null;
-            Game.world.endPlayerTurn();
+            endTurn();
         }
     }
+
 
     /**
      * check if the Avatar's key matches a door
@@ -430,14 +452,14 @@ public class Avatar extends Entity {
      */
     public void onRageStart(InvincibilityPotion p) {
         ragePotion = p;
-        isOnRage.set(true);
+        isRaged.set(true);
     }
 
     /**
      * logic when invinc pot ends
      */
     public void onRageEnd() {
-        isOnRage.set(false);
+        isRaged.set(false);
     }
 
 
@@ -478,8 +500,8 @@ public class Avatar extends Entity {
      * check if enraged
      * @return true if enraged
      */
-    public boolean isOnRage() {
-        return isOnRage.get();
+    public boolean isRaged() {
+        return isRaged.get();
     }
 
     /**
@@ -502,7 +524,7 @@ public class Avatar extends Entity {
 
     @Override
     public void onEnterByEnemy(Enemy enemy) {
-        if (isOnRage())
+        if (isRaged())
             enemy.onDestroyed();
         else
             onDestroyed();

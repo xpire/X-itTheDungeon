@@ -6,7 +6,7 @@ import javafx.event.EventType;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.layout.GridPane;
-import main.Array2DIterator;
+import main.util.Array2DIterator;
 import main.achivement.Achievement;
 import main.achivement.AchievementSystem;
 import main.component.ViewComponent;

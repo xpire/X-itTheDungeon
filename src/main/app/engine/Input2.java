@@ -1,13 +1,18 @@
-package main;
+package main.app.engine;
 
-import javafx.event.EventHandler;
-import javafx.scene.input.KeyCharacterCombination;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
 import java.util.HashMap;
 
-public class Input implements EventHandler<KeyEvent> {
+public class Input2 {
+
+    // 1. allow binding switching
+    //
+
+    // 2. allow for multiple user actions per key-code by
+    // storing a list of user actions instead
+    private HashMap<KeyCode, UserAction> bindings = new HashMap<>();
 
     private HashMap<KeyCode, Boolean> prevKeys = new HashMap<>();
     private HashMap<KeyCode, Boolean> keys = new HashMap<>();
@@ -20,51 +25,53 @@ public class Input implements EventHandler<KeyEvent> {
         if (evt.getEventType() == KeyEvent.KEY_PRESSED) {
             keys.put(code, true);
 
+
         } else if (evt.getEventType() == KeyEvent.KEY_RELEASED) {
             keys.put(evt.getCode(), false);
         }
     }
 
+
+
+    public void addBinding(KeyCode code, UserAction action) {
+        bindings.put(code, action);
+    }
+
+    public void removeBinding(KeyCode code) {
+        bindings.remove(code);
+    }
+
+
+    public void processInput() {
+
+    }
+
     public void update() {
+
+
         prevKeys = new HashMap<>(keys);
     }
 
-    public Boolean isDown(KeyCode code) {
-        return !wasHeld(code) && isHeld(code);
+    public void clear() {
+        prevKeys.clear();
+        keys.clear();
     }
 
-    /**
-     * Sets the given KeyCode to isDown mode (FOR TESTING PURPOSES)
-     * @param code
-     */
-    public void setIsDown(KeyCode code) {
-        prevKeys.put(code, false);
-        keys.put(code, true);
+
+    public Boolean isDown(KeyCode code) {
+        return !wasHeld(code) && isHeld(code);
     }
 
     public Boolean isUp(KeyCode code) {
         return wasHeld(code) && !isHeld(code);
     }
 
-    /**
-     * Sets the given keyCode to isUp mode (FOR TESTING PURPOSES)
-     * @param code
-     */
-    public void setIsUp(KeyCode code) {
-        prevKeys.put(code, true);
-        keys.put(code, false);
-    }
 
-    public Boolean isHeld(KeyCode code) {
+    private Boolean isHeld(KeyCode code) {
         return keys.getOrDefault(code, false);
     }
 
     private Boolean wasHeld(KeyCode code) {
         return prevKeys.getOrDefault(code, false);
-    }
-
-    @Override
-    public void handle(KeyEvent event) {
-        onKeyEvent(event);
     }
 }

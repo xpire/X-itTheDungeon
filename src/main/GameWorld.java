@@ -4,9 +4,13 @@ import javafx.beans.binding.Bindings;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.shape.Box;
 import javafx.scene.text.Font;
 import main.achivement.AllSwitchesOnAchievement;
 import main.achivement.CollectAllTreasuresAchievement;
+import main.app.engine.Game;
+import main.app.engine.GameLoop;
+import main.app.engine.Input;
 import main.component.ViewComponent;
 import main.entities.Avatar;
 import main.entities.Entity;
@@ -17,42 +21,50 @@ import main.entities.terrain.*;
 import main.maploading.Level;
 import main.math.Vec2i;
 
-public class GameWorld {
+public class GameWorld implements Game {
 
+    private GameLoop gameLoop;
+    private Input input;
     private Level level;
     private Avatar avatar;
 
     private boolean isRunning = true;
     private boolean isPlayerTurn = true;
 
-    private EnemyManager manager;
+    private EnemyManager enemyManager;
     private ViewComponent view;
 
     public GameWorld() {
+        gameLoop = new GameLoop(this, fps -> System.out.println("FPS: " + fps));
+
         level = new Level(16, 16, 30, "GameWorld");
 
-        // Grids
+        // View
         Group gridView = new Group();
         gridView.setTranslateX(120);
         gridView.setTranslateY(20);
-
-        avatar = new Avatar(level);
-
         gridView.getChildren().add(level.getView());
         view = new ViewComponent(gridView);
 
-//        level.addObjectives(new ExitDungeonAchievement());
-        level.addObjectives(new AllSwitchesOnAchievement());
-        level.addObjectives(new CollectAllTreasuresAchievement());
-//        level.addObjectives(new KillAllEnemiesAchievement());
+        initObjectives();
+        initEntities();
+        initUi();
+        initInput();
 
-        initWorld();
-        initViews();
-
-        this.manager = new EnemyManager(level);
+        enemyManager = new EnemyManager(level);
     }
 
-    private void initWorld() {
+    public void startGame() {
+        gameLoop.start();
+    }
+
+    public void endGame() {
+        gameLoop.stop();
+    }
+
+    private void initEntities() {
+        avatar = new Avatar(level);
+
         level.addAvatar(new Vec2i(7, 7), avatar);
         level.addProp(new Vec2i(7, 8), new Boulder(level));
         level.addProp(new Vec2i(4, 5), new Boulder(level));
@@ -106,9 +118,13 @@ public class GameWorld {
         level.addTerrain(new Vec2i(7, 2), door1);
         level.addTerrain(new Vec2i(14, 12), door2);
     }
-
-
-    private void initViews() {
+    private void initObjectives() {
+        //        level.addObjectives(new ExitDungeonAchievement());
+        level.addObjectives(new AllSwitchesOnAchievement());
+        level.addObjectives(new CollectAllTreasuresAchievement());
+//        level.addObjectives(new KillAllEnemiesAchievement());
+    }
+    private void initUi() {
         Label lblNumArrows = new Label();
         lblNumArrows.textProperty().bind(Bindings.format("Arrows: %d", avatar.getNumArrowsProperty()));
 
@@ -124,9 +140,30 @@ public class GameWorld {
         view.addNode(lblNumBombs);
         view.addNode(lblNumTreasures);
     }
+    private void initInput() {
+        input = new Input();
+
+        Node inputNode = new Box();
+        inputNode.setFocusTraversable(true);
+        inputNode.requestFocus();
+        inputNode.setOnKeyPressed(evt -> input.onKeyEvent(evt));
+        inputNode.setOnKeyReleased(evt -> input.onKeyEvent(evt));
+        view.addNode(inputNode);
+    }
 
 
-    public void update() {
+    @Override
+    public void onStart() {
+        input.startListening();
+    }
+
+    @Override
+    public void onUpdateBegin() {
+        input.update();
+    }
+
+    @Override
+    public void onUpdate() {
         if (!isRunning) return;
 
         if (!level.getEnemies().isEmpty()) {
@@ -145,6 +182,15 @@ public class GameWorld {
         }
     }
 
+    @Override
+    public void onUpdateEnd() {
+
+    }
+
+    @Override
+    public void onStop() {
+
+    }
 
     public void onPlayerTurn() {
         avatar.update();
@@ -155,7 +201,7 @@ public class GameWorld {
     }
 
     public void onEnemyTurn() {
-        manager.Update();
+        enemyManager.Update();
     }
 
     public void onRoundEnd() {
@@ -188,12 +234,7 @@ public class GameWorld {
         isRunning = false;
     }
 
-
     public Node getView() {
         return view.getView();
-    }
-
-    public Level getLevel() {
-        return level;
     }
 }
