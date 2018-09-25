@@ -2,13 +2,8 @@ package test;
 
 import java.util.ArrayList;
 
-import main.algorithms.AStarSearch;
-import main.maploading.Level;
-import main.maploading.MapLoader;
 import main.math.Vec2i;
 import org.junit.Test;
-import java.lang.Math;
-import static org.junit.Assert.*;
 
 // Note that hunter logic is trivial and not really is to be tested
 

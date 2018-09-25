@@ -2,7 +2,7 @@ package test;
 
 import main.entities.Avatar;
 import main.entities.pickup.Key;
-import main.maploading.Level;
+import main.Level;
 import main.maploading.MapLoader;
 import main.math.Vec2i;
 import org.junit.Test;

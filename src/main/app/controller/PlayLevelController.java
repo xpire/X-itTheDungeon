@@ -1,7 +1,7 @@
 package main.app.controller;
 
 import javafx.fxml.FXML;
-import javafx.scene.Group;
+import javafx.scene.layout.Pane;
 import main.app.model.AppScreen;
 import main.app.model.PlayModeSelectScreen;
 
@@ -9,7 +9,7 @@ public class PlayLevelController extends AppController {
 
 
     @FXML
-    private Group dynamicLayer;
+    private Pane dynamicLayer;
 
     public PlayLevelController(AppScreen screen) {
         super(screen);
@@ -25,7 +25,7 @@ public class PlayLevelController extends AppController {
         switchScreen(new PlayModeSelectScreen(screen.getStage()));
     }
 
-    public Group getDynamicLayer() {
+    public Pane getDynamicLayer() {
         return dynamicLayer;
     }
 }

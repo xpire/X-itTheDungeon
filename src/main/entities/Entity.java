@@ -6,7 +6,7 @@ import main.entities.enemies.Enemy;
 import main.entities.pickup.Pickup;
 import main.entities.prop.Prop;
 import main.entities.terrain.Terrain;
-import main.maploading.Level;
+import main.Level;
 import main.math.Vec2d;
 import main.math.Vec2i;
 
@@ -114,7 +114,7 @@ public abstract class Entity {
      */
     public void moveTo(int x, int y) {
 //        Vec2i from = new Vec2i(pos);
-        pos.set(x, y);
+        pos = new Vec2i(x, y);
         view.moveTo(getWorldPos().sub(view.getCentre()));
     }
 

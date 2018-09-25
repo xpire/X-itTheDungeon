@@ -4,7 +4,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import main.entities.Avatar;
 import main.entities.Entity;
-import main.maploading.Level;
+import main.Level;
 import main.math.Vec2i;
 
 /**

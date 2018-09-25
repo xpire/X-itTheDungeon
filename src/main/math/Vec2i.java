@@ -1,6 +1,8 @@
 package main.math;
 
-import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 
 
@@ -10,8 +12,17 @@ import java.util.Objects;
  */
 public class Vec2i {
 
+    public static final Vec2i NORTH = new Vec2i(0, -1);
+    public static final Vec2i SOUTH = new Vec2i(0, 1);
+    public static final Vec2i WEST  = new Vec2i(-1, 0);
+    public static final Vec2i EAST  = new Vec2i(1, 0);
+    public static final List<Vec2i> DIRECTIONS =
+            Collections.unmodifiableList(Arrays.asList(NORTH, SOUTH, WEST, EAST));
+
+
     private int x;
     private int y;
+
 
     /**
      * Default constructor, sets the 0 vector
@@ -88,43 +99,6 @@ public class Vec2i {
         return min <= value && value <= max;
     }
 
-    /**
-     * translates a vector in place by a positive constant
-     * @param u constant to add to x-coord
-     * @param v constant to add to y-coord
-     */
-    public void _add(int u, int v) {
-        x += u;
-        y += v;
-    }
-
-    /**
-     * adds two vectors together in place
-     * @param other vector to be added
-     */
-    public void _add(Vec2i other) {
-        x += other.x;
-        y += other.y;
-    }
-
-    /**
-     * translation by neg constant in place
-     * @param u const to be subtracted from x-coord
-     * @param v const to be subtracted from y-coord
-     */
-    public void _sub(int u, int v) {
-        x -= u;
-        y -= v;
-    }
-
-    /**
-     * subtract two vectors in place
-     * @param other vector to be subtracted
-     */
-    public void _sub(Vec2i other) {
-        x -= other.x;
-        y -= other.y;
-    }
 
     /**
      * checks if the x value of a vector is within given bounds
@@ -153,7 +127,7 @@ public class Vec2i {
      * @return true if vector is within, false otherwise
      */
     public boolean within(Vec2i min, Vec2i max) {
-        return withinX(min.getX(), max.getX()) && withinY(min.getY(), max.getY());
+        return withinX(min.x, max.x) && withinY(min.y, max.y);
     }
 
     /**
@@ -165,14 +139,6 @@ public class Vec2i {
     }
 
     /**
-     * Setter for x-coord of a vector
-     * @param x x-coord to be set
-     */
-    public void setX(int x) {
-        this.x = x;
-    }
-
-    /**
      * Getter for y-coord of a vector
      * @return y-coord
      */
@@ -180,38 +146,11 @@ public class Vec2i {
         return y;
     }
 
-    /**
-     * Setter for y-coord of a vector
-     * @return y-coord to be set
-     */
-    public void setY(int y) {
-        this.y = y;
-    }
-
-    /**
-     * Sets a vector to equal another
-     * @param pos vector to be equal to
-     */
-    public void set(Vec2i pos) {
-        this.x = pos.x;
-        this.y = pos.y;
-    }
-
-    /**
-     * Setter for the x and y-coords for a vector
-     * @param x x-coord
-     * @param y y-coord
-     */
-    public void set(int x, int y) {
-        this.x = x;
-        this.y = y;
-    }
-
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || !(o instanceof Vec2i)) return false;
+        if (!(o instanceof Vec2i)) return false;
 
         Vec2i other = (Vec2i) o;
         return x == other.getX() && y == other.getY();
@@ -227,11 +166,27 @@ public class Vec2i {
         return String.format("%d, %d", x, y);
     }
 
+    public int norm1() {
+        return Math.abs(x) + Math.abs(y);
+    }
+
+    public double length() {
+        return Math.sqrt(x * x + y * y);
+    }
+
     /**
      * Calculates the Manhattan Distance of 2 vectors
      *
      * @param other Second coordinate
-     * @return the manhatten distance from 2 nodes on the grid
+     * @return the Manhattan distance from 2 nodes on the grid
      */
-    public int mDist(Vec2i other) { return Math.abs(other.x - this.x) + Math.abs(other.y - this.y); }
+    public int manhattan(Vec2i other) { return Math.abs(other.x - this.x) + Math.abs(other.y - this.y); } // TODO
+
+    public boolean isAdjacent(Vec2i other) {
+        return this.sub(other).norm1() <= 1;
+    }
+
+    public boolean isDirection() {
+        return norm1() == 1;
+    }
 }

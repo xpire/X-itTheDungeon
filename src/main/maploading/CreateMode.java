@@ -1,5 +1,6 @@
 package main.maploading;
 
+import main.Level;
 import main.math.Vec2i;
 
 import java.util.ArrayList;

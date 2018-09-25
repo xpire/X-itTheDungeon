@@ -1,4 +1,4 @@
-package main.maploading;
+package main;
 
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -884,6 +884,15 @@ public class Level {
         if (hasAvatar(pos)  && !getAvatar().isPassableForProp(other))       return false;
         return true;
     }
+
+
+    public boolean onPushByAvatar(Vec2i pos, Avatar avatar) {
+        if (!isValidGridPos(pos)) return false;
+        if (hasTerrain(pos) && !getTerrain(pos).onPush(avatar)) return false;
+        if (hasProp(pos) && !getProp(pos).onPush(avatar)) return false;
+        return true;
+    }
+
 
     /*
         Objective tools

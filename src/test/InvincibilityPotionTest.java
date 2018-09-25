@@ -2,7 +2,7 @@ package test;
 
 import main.entities.Avatar;
 import main.entities.pickup.HoverPotion;
-import main.maploading.Level;
+import main.Level;
 import main.maploading.MapLoader;
 import main.math.Vec2i;
 import org.junit.Test;
@@ -24,11 +24,11 @@ public class InvincibilityPotionTest {
         level.setPickup(InvincibilityPotionLocation, new HoverPotion(level, InvincibilityPotionLocation));
 
         level.displayLevel();
-        System.out.println(level.getAvatar().isOnRage());
-        assert(!level.getAvatar().isOnRage());
+        System.out.println(level.getAvatar().isRaged());
+        assert(!level.getAvatar().isRaged());
         level.moveAvatar(InvincibilityPotionLocation);
-        System.out.println(level.getAvatar().isOnRage());
-        assert(level.getAvatar().isOnRage());
+        System.out.println(level.getAvatar().isRaged());
+        assert(level.getAvatar().isRaged());
         level.displayLevel();
     }
 }

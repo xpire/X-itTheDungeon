@@ -1,12 +1,11 @@
 package main.app.model;
 
-import javafx.scene.Group;
+import javafx.scene.Scene;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import main.GameWorld;
 import main.app.controller.AppController;
 import main.app.controller.PlayLevelController;
-import main.app.engine.GameLoop;
-import main.app.engine.Input;
 
 public class PlayLevelScreen extends AppScreen {
 
@@ -15,9 +14,7 @@ public class PlayLevelScreen extends AppScreen {
         fxmlName = "main/app/view/playLevel.fxml";
     }
 
-    private Input input = new Input();
     private GameWorld world;
-    private GameLoop gameLoop;
     private PlayLevelController controller;
 
     public PlayLevelScreen(Stage stage) {
@@ -45,25 +42,13 @@ public class PlayLevelScreen extends AppScreen {
 //    @Override
 //    public void onStop() {}
 
-
     @Override
-    protected void beforeSceneDisplay() {
-        Group layer = controller.getDynamicLayer();
+    protected void beforeSceneDisplay(Scene scene) {
+        Pane layer = controller.getDynamicLayer();
 
-        world = new GameWorld();
+        world = new GameWorld(scene);
         layer.getChildren().add(world.getView());
-    }
-
-    @Override
-    protected void afterSceneDisplay() {
-        gameLoop.start();
-    }
-
-
-    // TODO: this never gets called: need to make controllers take in screen as parameter
-    @Override
-    public void onDestroyed() {
-        if (gameLoop != null) gameLoop.stop();
+        world.startGame();
     }
 
     @Override

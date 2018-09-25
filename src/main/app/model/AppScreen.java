@@ -28,7 +28,7 @@ public abstract class AppScreen {
             Parent root = fxmlLoader.load();
             Scene sc = new Scene(root, 960, 640);
 
-            beforeSceneDisplay();
+            beforeSceneDisplay(sc);
 
             stage.setScene(sc);
             stage.show();
@@ -40,7 +40,7 @@ public abstract class AppScreen {
         }
     }
 
-    protected void beforeSceneDisplay(){}
+    protected void beforeSceneDisplay(Scene scene){}
     protected void afterSceneDisplay(){}
 
     public void onDestroyed(){}
