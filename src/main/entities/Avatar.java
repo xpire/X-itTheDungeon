@@ -514,6 +514,9 @@ public class Avatar extends Entity {
     }
 
     @Override
+    public boolean isPassableForEnemy(Enemy enemy) {return true;}
+
+    @Override
     public boolean canStackFor(Entity entity) {
         return false;
     }

@@ -42,6 +42,11 @@ public abstract class Enemy extends Entity {
         level.removeEnemy(pos);
     }
 
+    @Override
+    public void onExploded() {
+        onDestroyed();
+    }
+
     /**
      * Determines the move of an Enemy
      * @return Move of an AI

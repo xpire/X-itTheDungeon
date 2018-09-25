@@ -1,6 +1,7 @@
 package main.entities.enemies;
 
 import main.Level;
+import main.entities.Avatar;
 import main.math.Vec2i;
 
 import java.util.ArrayList;
@@ -11,6 +12,7 @@ import java.util.ArrayList;
 public class EnemyManager {
 
     private Level level;
+    private Avatar avatar;
 
     /**
      * Constructor for enemy manager
@@ -18,6 +20,7 @@ public class EnemyManager {
      */
     public EnemyManager(Level level) {
         this.level = level;
+        this.avatar = level.getAvatar();
         getEnemies().forEach(e -> e.setManager(this));
     }
 
@@ -46,18 +49,18 @@ public class EnemyManager {
 
 
     public Vec2i getAvatarPos() {
-        return level.getAvatar().getGridPos();
+        return avatar.getGridPos();
     }
 
     public boolean isAvatarRaged() {
-        return level.getAvatar().isRaged();
+        return avatar.isRaged();
     }
 
     /**
      * Gets the past moves of the avatar
      * @return ArrayList containing the Avatar's past moves
      */
-    public ArrayList<Integer> getPastMoves() { return level.getAvatar().getPastMoves(); }
+    public ArrayList<Integer> getPastMoves() { return avatar.getPastMoves(); }
 
     /**
      * Getter for enemies
