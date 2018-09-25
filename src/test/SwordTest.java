@@ -1,19 +1,11 @@
 package test;
 
-import main.app.Game;
-import main.GameWorld;
 import main.entities.Avatar;
-import main.entities.enemies.Coward;
-import main.entities.pickup.Arrow;
 import main.entities.pickup.Sword;
-import main.maploading.Level;
+import main.Level;
 import main.maploading.MapLoader;
 import main.math.Vec2i;
 import org.junit.Test;
-
-import java.util.ArrayList;
-
-import static org.junit.Assert.*;
 
 public class SwordTest {
 

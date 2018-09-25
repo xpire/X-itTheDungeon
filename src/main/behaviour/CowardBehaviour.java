@@ -1,7 +1,7 @@
 package main.behaviour;
 
 import main.entities.enemies.Enemy;
-import main.maploading.Level;
+import main.Level;
 import main.math.Vec2i;
 
 import java.util.ArrayList;

@@ -1,5 +1,6 @@
 package main.maploading;
 
+import main.Level;
 import main.entities.pickup.*;
 import main.math.Vec2i;
 

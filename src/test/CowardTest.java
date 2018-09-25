@@ -2,11 +2,10 @@ package test;
 
 import main.entities.Avatar;
 import main.entities.enemies.Coward;
-import main.maploading.Level;
+import main.Level;
 import main.maploading.MapLoader;
 import main.math.Vec2i;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import static org.junit.Assert.*;

@@ -2,7 +2,7 @@ package main.entities.terrain;
 
 import main.entities.Avatar;
 import main.entities.Entity;
-import main.maploading.Level;
+import main.Level;
 import main.math.Vec2i;
 
 /**
@@ -38,6 +38,6 @@ public abstract class Terrain extends Entity {
      * @return true if can be pushed, false otherwise
      */
     public boolean onPush(Avatar avatar) {
-        return false;
+        return isPassableForAvatar(avatar);
     }
 }

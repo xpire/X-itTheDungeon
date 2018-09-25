@@ -3,7 +3,7 @@ package main.entities.prop;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import main.entities.Entity;
-import main.maploading.Level;
+import main.Level;
 import main.math.Vec2i;
 
 import java.util.Iterator;

@@ -1,6 +1,6 @@
 package main.algorithms;
 
-import main.maploading.Level;
+import main.Level;
 import main.math.Vec2i;
 
 import java.util.ArrayList;
@@ -155,11 +155,11 @@ public class AStarSearch {
         for (Vec2i x: targets) {
             if (min == null) {
                 min = x;
-                minVal = x.mDist(curr);
+                minVal = x.manhattan(curr);
             } else {
-                if (minVal > x.mDist(curr)) {
+                if (minVal > x.manhattan(curr)) {
                     min = x;
-                    minVal = x.mDist(curr);
+                    minVal = x.manhattan(curr);
                 }
             }
         }

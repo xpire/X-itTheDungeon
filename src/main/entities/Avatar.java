@@ -4,23 +4,19 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
-import main.app.Game;
+import main.Level;
 import main.entities.enemies.Enemy;
 import main.entities.pickup.*;
 import main.entities.prop.FlyingArrow;
 import main.entities.prop.LitBomb;
-import main.entities.prop.Prop;
 import main.entities.terrain.Door;
-import main.entities.terrain.Terrain;
-import main.maploading.Level;
+import main.events.AvatarEvent;
 import main.math.Vec2i;
 
 import java.util.ArrayList;
-
 
 public class Avatar extends Entity {
 
@@ -33,7 +29,7 @@ public class Avatar extends Entity {
     private IntegerProperty numTreasures;
 
     private BooleanProperty isHovering;
-    private BooleanProperty isOnRage;
+    private BooleanProperty isRaged;
 
     private Vec2i direction;
     private ArrayList<Integer> pastMoves;
@@ -41,6 +37,8 @@ public class Avatar extends Entity {
     private Line swordView;
     private Circle hoverView;
     private Circle rageView;
+
+    private Runnable nextAction;
 
     // THINGS THAT CAN BE RUN AFTER ON_CREATED
     {
@@ -56,6 +54,8 @@ public class Avatar extends Entity {
 
         direction       = new Vec2i(1,0);
         pastMoves       = new ArrayList<>();
+
+        nextAction      = null;
     }
 
 
@@ -87,10 +87,10 @@ public class Avatar extends Entity {
         view.addNode(swordView);
 
         isHovering  = new SimpleBooleanProperty(false);
-        isOnRage    = new SimpleBooleanProperty(false);
+        isRaged = new SimpleBooleanProperty(false);
 
         hoverView.visibleProperty().bind(isHovering);
-        rageView.visibleProperty().bind(isOnRage);
+        rageView.visibleProperty().bind(isRaged);
         swordView.setVisible(false);
     }
 
@@ -98,12 +98,12 @@ public class Avatar extends Entity {
     @Override
     public void onDestroyed() {
         level.removeAvatar();
-        Game.world.gameOver(); //TODO
+        level.postEvent(new AvatarEvent(AvatarEvent.AVATAR_DIED));
     }
 
     @Override
     public void onExploded() {
-        if (!isOnRage.get()) {
+        if (!isRaged.get()) {
             onDestroyed();
         }
     }
@@ -113,73 +113,87 @@ public class Avatar extends Entity {
      * Update the grid and world position of the Avatar
      */
     public void update() {
-        Vec2i pos = new Vec2i(getGridPos());
+        if (nextAction == null) return;
+        nextAction.run();
+        nextAction = null;
+    }
 
-        if (Game.input.isDown(KeyCode.UP)) {
-            pos._add(0, -1);
-            pastMoves.add(0);
-        }
-        else if (Game.input.isDown(KeyCode.DOWN)) {
-            pos._add(0, 1);
-            pastMoves.add(1);
-        }
-        else if (Game.input.isDown(KeyCode.LEFT)) {
-            pos._add(-1, 0);
-            pastMoves.add(2);
-        }
-        else if (Game.input.isDown(KeyCode.RIGHT)) {
-            pos._add(1, 0);
-            pastMoves.add(3);
-        }
-        else if (Game.input.isDown(KeyCode.Z)) {
-            dropKey();
-        }
-        else if (Game.input.isDown(KeyCode.X)) {
-            placeBomb();
-        }
-        else if (Game.input.isDown(KeyCode.C)) {
-            shootArrow();
-        }
-        else if (Game.input.isDown(KeyCode.V)) {
-            swingSword();
-        }
-        else if (Game.input.isDown(KeyCode.W)) {
-            direction = new Vec2i(0, -1);
-        }
-        else if (Game.input.isDown(KeyCode.A)) {
-            direction = new Vec2i(-1, 0);
-        }
-        else if (Game.input.isDown(KeyCode.S)) {
-            direction = new Vec2i(0, 1);
-        }
-        else if (Game.input.isDown(KeyCode.D)) {
-            direction = new Vec2i(1, 0);
-        }
+    public void setNextAction(Runnable action) {
+        nextAction = action;
+    }
 
-        // TODO refactor
-        if ( !pos.equals(getGridPos()) ) {
-            if (level.isPassableForAvatar(pos, this)) {
-                level.moveAvatar(pos);
-            }
-            else if (level.hasProp(pos)){
-                Prop prop = level.getProp(pos);
+    private void endTurn() {
+        level.postEvent(new AvatarEvent(AvatarEvent.AVATAR_TURN_ENDED));
+    }
 
-                if (prop.onPush(this)) {
-                    level.moveAvatar(pos);
-                }
-            }
-            else if (level.hasTerrain(pos)) {
-                Terrain terrain = level.getTerrain(pos);
 
-                if (terrain.onPush(this)) {
-                    level.moveAvatar(pos);
-                }
-            }
+    /*
+        MOVE AVATAR
+     */
+    public void moveUp() {
+        tryMove(Vec2i.NORTH);
+    }
+    public void moveDown() {
+        tryMove(Vec2i.SOUTH);
+    }
+    public void moveLeft() {
+        tryMove(Vec2i.WEST);
+    }
+    public void moveRight() {
+        tryMove(Vec2i.EAST);
+    }
 
-            if (pos.equals(getGridPos()))
-                Game.world.endPlayerTurn(); // TODO
+    private void tryMove(Vec2i dir) {
+
+        if (!dir.isDirection()) return;
+
+        Vec2i newPos = pos.add(dir);
+        if (level.isPassableForAvatar(newPos, this)) {
+            move(dir);
+        }
+        else if(level.onPushByAvatar(newPos, this)) {
+            move(dir);
         }
     }
+
+    private void move(Vec2i dir) {
+        level.moveAvatar(pos.add(dir));
+
+        if (dir.equals(Vec2i.NORTH))
+            pastMoves.add(0);
+        else if (dir.equals(Vec2i.SOUTH))
+            pastMoves.add(1);
+        else if (dir.equals(Vec2i.WEST))
+            pastMoves.add(2);
+        else if (dir.equals(Vec2i.EAST))
+            pastMoves.add(3);
+
+        endTurn();
+    }
+
+
+    /*
+        CHANGE AVATAR DIRECTION
+     */
+    public void faceUp() {
+        setDirection(Vec2i.NORTH);
+    }
+    public void faceDown() {
+        setDirection(Vec2i.SOUTH);
+    }
+    public void faceLeft() {
+        setDirection(Vec2i.WEST);
+    }
+    public void faceRight() {
+        setDirection(Vec2i.EAST);
+    }
+
+    private void setDirection(Vec2i newDir) {
+        if (!newDir.isDirection()) return;
+        direction = newDir;
+    }
+
+
 
 
     /**
@@ -213,9 +227,9 @@ public class Avatar extends Entity {
 
             // check durability and destroy
             if (sword.isBroken())
-                onUnequipSword();
+                onSwordUnequipped();
 
-            Game.world.endPlayerTurn();
+            endTurn();
         }
     }
 
@@ -223,7 +237,7 @@ public class Avatar extends Entity {
      * when the player picks up a sword
      * @param s
      */
-    public void onEquipSword(Sword s) {
+    public void onSwordEquipped(Sword s) {
         sword = s;
         swordView.setVisible(true);
     }
@@ -231,7 +245,7 @@ public class Avatar extends Entity {
     /**
      * when the player loses their sword
      */
-    public void onUnequipSword() {
+    public void onSwordUnequipped() {
         sword = null;
         swordView.setVisible(false);
     }
@@ -259,12 +273,12 @@ public class Avatar extends Entity {
                 break;
             }
 
-            arrowPos._add(direction);
+            arrowPos = arrowPos.add(direction);
         }
 
         // -1 arrow
         numArrows.set(numArrows.get() - 1);
-        Game.world.endPlayerTurn();
+        endTurn();
     }
 
 
@@ -279,7 +293,7 @@ public class Avatar extends Entity {
         if (level.canPlaceProp(pos, bomb)) {
             level.addProp(pos, bomb);
             numBombs.set(numBombs.get() - 1);
-            Game.world.endPlayerTurn();
+            endTurn();
         }
     }
 
@@ -308,9 +322,10 @@ public class Avatar extends Entity {
         if (level.canPlacePickup(pos, key)) {
             level.addPickup(pos, key);
             key = null;
-            Game.world.endPlayerTurn();
+            endTurn();
         }
     }
+
 
     /**
      * check if the Avatar's key matches a door
@@ -354,7 +369,7 @@ public class Avatar extends Entity {
     public boolean pickUpSword(Sword s) {
         if (sword != null) return false;
 
-        onEquipSword(s);
+        onSwordEquipped(s);
         return true;
     }
 
@@ -365,7 +380,7 @@ public class Avatar extends Entity {
      * @return true if pickup successful, else false
      */
     public boolean pickUpHoverPotion(HoverPotion p) {
-        onHoverStart();
+        onHoverBegin();
         return true;
     }
 
@@ -375,7 +390,7 @@ public class Avatar extends Entity {
      * @return true if pickup successful, else false
      */
     public boolean pickUpInvincibilityPotion(InvincibilityPotion p) {
-        onRageStart(p);
+        onRageBegin(p);
         return true;
     }
 
@@ -413,7 +428,7 @@ public class Avatar extends Entity {
     /**
      * logic when hover pot is picked up
      */
-    public void onHoverStart() {
+    public void onHoverBegin() {
         isHovering.set(true);
     }
 
@@ -428,16 +443,16 @@ public class Avatar extends Entity {
      * logic when invinc pot is picked up
      * @param p invinc pot picked up
      */
-    public void onRageStart(InvincibilityPotion p) {
+    public void onRageBegin(InvincibilityPotion p) {
         ragePotion = p;
-        isOnRage.set(true);
+        isRaged.set(true);
     }
 
     /**
      * logic when invinc pot ends
      */
     public void onRageEnd() {
-        isOnRage.set(false);
+        isRaged.set(false);
     }
 
 
@@ -478,8 +493,8 @@ public class Avatar extends Entity {
      * check if enraged
      * @return true if enraged
      */
-    public boolean isOnRage() {
-        return isOnRage.get();
+    public boolean isRaged() {
+        return isRaged.get();
     }
 
     /**
@@ -489,6 +504,9 @@ public class Avatar extends Entity {
     public ArrayList<Integer> getPastMoves() {
         return new ArrayList<>(pastMoves); // TODO unmodifiable?
     }
+
+
+
 
     @Override
     public boolean isPassableFor(Entity entity) {
@@ -502,7 +520,7 @@ public class Avatar extends Entity {
 
     @Override
     public void onEnterByEnemy(Enemy enemy) {
-        if (isOnRage())
+        if (isRaged())
             enemy.onDestroyed();
         else
             onDestroyed();
