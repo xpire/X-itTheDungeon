@@ -16,6 +16,8 @@ import java.util.Scanner;
  */
 public class MapLoader {
 
+    // TODO: assetLoader, asset to path mapping
+
     /**
      * Loads a Level in from a .txt file.
      * First gets the dimensions of the map and initialises the Level
@@ -28,132 +30,114 @@ public class MapLoader {
      * @param path Path where the Level is saved, root at main
      * @return The Level which was just loaded
      */
-    public Level loadLevel(String mapName, String path, Boolean isCreateMode) {
-        LevelBuilder levelBuilder = new LevelBuilder();
-        Level level = null;
+    public Level loadLevel(String mapName, String path, boolean isCreateMode) {
 
-        StringBuilder mapPath = new StringBuilder("./src/main/");
-        mapPath.append(path).append("/").append(mapName).append(".txt");
+        Level level;
+        LevelBuilder levelBuilder = new LevelBuilder(); //TODO shouldn't it be named entityBuilder
 
-        Scanner sc = null;
+        String mapPath = String.format("./src/main/%s/%s.txt", path, mapName);
 
-        try {
-            sc = new Scanner(new File(mapPath.toString()));
-            String[] line;
-            int numRow, numCol;
+        try (Scanner sc = new Scanner(new File(mapPath))) {
+            level = initLevelWithDimensions(sc, mapName, isCreateMode);
+            setObjectives(sc, level);
+            addEntities(sc, level, levelBuilder);
+            addKeysAndDoors(sc, level, levelBuilder);
 
-            /*
-                Extract dimensions, initialise the Level
-             */
-
-            if (sc.hasNextLine()) {
-                line = sc.nextLine().split("\\s+");
-                if (line.length != 2) {
-                    System.out.println("Error: bad map size");
-                    return null;
-                }
-
-                numRow = Integer.parseInt(line[0]);
-                numCol = Integer.parseInt(line[1]);
-
-                level = new Level(numRow, numCol, 30.0, mapName, isCreateMode);
-
-            } else {
-                System.out.println("Error: Empty Map");
-                return null;
-            }
-
-            /*
-                Extract objectives
-             */
-
-            if (sc.hasNextLine()) {
-                line = sc.nextLine().split("\\s+");
-                if (line.length > 0) {
-                    ArrayList<String> objectives = new ArrayList<>(Arrays.asList(line));
-                    level.setObjectives(objectives);
-                } else {
-                    System.out.println("Warning: No objectives specified");
-                    //return null;
-                }
-            } else {
-                System.out.println("Error: Bad map @ extract objectives");
-                return null;
-            }
-
-            /*
-                Extract Level's body
-                Skips Keys and Doors for later
-             */
-
-            for (int i = 0; i < numRow; i++) {
-                if (sc.hasNextLine()) {
-                    line = sc.nextLine().split("\\s+");
-                    if (line.length != numCol) {
-                        System.out.println("Error: Inconsistent Map");
-                        return null;
-                    }
-
-                    for (int j = 0; j < numCol; j++) {
-
-                        Vec2i pos = new Vec2i(j, i);
-
-                        char[] entities = line[j].toCharArray();
-                        for (char entity : entities) {
-                            try {
-                                levelBuilder.buildEntity(entity, pos, level);
-                            } catch (Exception e) {
-                                System.out.println(e.getMessage());
-                            }
-                        }
-                    }
-                }
-            }
-
-            /*
-                Extract Keys and Doors
-             */
-
-            while (sc.hasNextLine()) {
-                line = sc.nextLine().split("\\s+");
-
-                if (line.length == 0) break;
-                else if (line.length != 4) {
-                    System.out.println("Error: invalid Key-Door mapping");
-                    return null;
-                }
-
-                Vec2i keyCoord = new Vec2i(
-                        Integer.parseInt(line[0]),
-                        Integer.parseInt(line[1]));
-                Vec2i doorCoord = new Vec2i(
-                        Integer.parseInt(line[2]),
-                        Integer.parseInt(line[3]));
-
-                if (!level.isValidGridPos(keyCoord) || !level.isValidGridPos(doorCoord)) {
-                    System.out.println("Error: invalid Key/Door position");
-                    return null;
-                }
-
-                try {
-                    levelBuilder.buildKeyDoor(level, keyCoord, doorCoord);
-                } catch (Exception e) {
-                    System.out.println(e.getMessage());
-                }
-
-            }
-        } catch (FileNotFoundException e) {
-            System.out.println(e.getMessage());
-        } finally {
-            if (sc != null) sc.close();
+        } catch (FileNotFoundException | NumberFormatException | InvalidMapException e) {
+            System.out.println("MapLoader Error: " + e.getMessage());
+            return null;
         }
 
         return level;
     }
 
+
     public Level loadLevel(String mapName, String path) {
         return loadLevel(mapName, path, false);
     }
+
+
+    // Extract dimensions, initialise the level
+    private Level initLevelWithDimensions(Scanner sc, String mapName, boolean isCreateMode) throws InvalidMapException {
+
+        if (!sc.hasNextLine()) throw new InvalidMapException("Empty Map");
+
+        String[] line = readLine(sc);
+        if (line.length != 2) throw new InvalidMapException("Bad map size");
+
+        int nRow = Integer.parseInt(line[0]);
+        int nCol = Integer.parseInt(line[1]);
+
+        // TODO: fixed size 30.0
+        return new Level(nRow, nCol, 30.0, mapName, isCreateMode);
+    }
+
+
+    // Extract objectives
+    private void setObjectives(Scanner sc, Level level) throws InvalidMapException {
+
+        if (!sc.hasNextLine()) throw new InvalidMapException("No objectives");
+
+        String[] line = readLine(sc);
+        if (line.length == 0) System.out.println("Warning: No objectives specified");
+
+        ArrayList<String> objectives = new ArrayList<>(Arrays.asList(line));
+        level.setObjectives(objectives);
+    }
+
+    // Extract grid entities, skip keys and doors for later
+    private void addEntities(Scanner sc, Level level, LevelBuilder builder) throws InvalidMapException {
+        String[] line;
+
+        for (int i = 0; i < level.getNRows(); i++) {
+            if (!sc.hasNextLine()) throw new InvalidMapException("Incorrect number of rows");
+
+            line = readLine(sc);
+
+            if (line.length != level.getNCols()) throw new InvalidMapException("Incorrect number of columns");
+
+            for (int j = 0; j < level.getNCols(); j++) {
+                for (char entity : line[j].toCharArray()) {
+                    builder.addEntity(entity, new Vec2i(j, i), level);
+                }
+            }
+        }
+    }
+
+    // Extract keys and doors
+    private void addKeysAndDoors(Scanner sc, Level level, LevelBuilder levelBuilder) throws InvalidMapException {
+        String[] line;
+
+        while (sc.hasNextLine()) {
+
+            line = readLine(sc);
+            if (line.length == 0) break;
+            if (line.length != 4) throw new InvalidMapException("Invalid Key-Door mapping");
+
+            Vec2i keyPos = new Vec2i(
+                    Integer.parseInt(line[0]),
+                    Integer.parseInt(line[1]));
+
+            Vec2i doorPos = new Vec2i(
+                    Integer.parseInt(line[2]),
+                    Integer.parseInt(line[3]));
+
+            if (!level.isValidGridPos(keyPos) || !level.isValidGridPos(doorPos))
+                throw new InvalidMapException("Invalid Key/Door Position");
+
+            levelBuilder.buildKeyDoor(level, keyPos, doorPos);
+        }
+    }
+
+
+    private String[] readLine(Scanner sc) {
+        return sc.nextLine().split("\\s+");
+    }
+
+
+
+
+
 
     public static void main(String[] args) {
         MapLoader mapLoader = new MapLoader();
