@@ -164,8 +164,6 @@ public class PlayMode implements Game {
         });
     }
 
-
-
     @Override
     public void onStart() {
         input.startListening();
@@ -182,6 +180,7 @@ public class PlayMode implements Game {
 
         if (!level.getEnemies().isEmpty()) {
             if (isPlayerTurn) {
+
                 onPlayerTurn();
             } else {
                 onEnemyTurn();
@@ -215,7 +214,7 @@ public class PlayMode implements Game {
     }
 
     private void onEnemyTurn() {
-        enemyManager.Update();
+        enemyManager.update();
     }
 
     private void onRoundEnd() {

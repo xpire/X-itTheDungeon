@@ -173,7 +173,7 @@ public class DraftBuilder {
     /**
      * Adds Entities to a certain position on the Level
      *
-     * Uses the LevelBuilder class
+     * Uses the LevelBuilderContext class
      * If a key/door is added, user will be prompted to give the
      * coordinates of the matching door/key
      *
@@ -182,13 +182,13 @@ public class DraftBuilder {
      * @param sc instance of a scanner if they wish to add a key/door
      */
     public void editTile(Vec2i tile, String entities, Scanner sc) {
-        LevelBuilder levelBuilder = new LevelBuilder();
+        LevelBuilder levelBuilder = new LevelBuilder(level);
 
         char[] eachEnt = entities.toCharArray();
         for (char ent : eachEnt) {
             try {
                 if (ent != 'K' && ent != '|') {
-                    levelBuilder.buildEntity(ent, tile, level);
+                    levelBuilder.makeAndAttach(tile, ent);
 
                 } else {//// if (ent == 'K') {
 
@@ -216,9 +216,9 @@ public class DraftBuilder {
                     }
 
                     if (ent == 'K') {
-                        levelBuilder.buildKeyDoor(level, tile, matchingPos);
+                        levelBuilder.addKeyDoor(tile, matchingPos);
                     } else {
-                        levelBuilder.buildKeyDoor(level, matchingPos, tile);
+                        levelBuilder.addKeyDoor(matchingPos, tile);
                     }
                 }
             } catch (Exception e) {

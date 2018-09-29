@@ -8,8 +8,6 @@ import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Font;
-import main.achivement.AllSwitchesOnAchievement;
-import main.achivement.CollectAllTreasuresAchievement;
 import main.app.engine.Game;
 import main.app.engine.GameLoop;
 import main.app.engine.Input;
@@ -17,7 +15,8 @@ import main.app.engine.UserAction;
 import main.component.ViewComponent;
 import main.entities.Avatar;
 import main.entities.Entity;
-import main.entities.enemies.*;
+import main.entities.enemies.EnemyManager;
+import main.entities.enemies.Strategist;
 import main.entities.pickup.*;
 import main.entities.prop.Boulder;
 import main.entities.terrain.*;
@@ -123,10 +122,7 @@ public class GameWorld implements Game {
         level.addTerrain(new Vec2i(14, 12), door2);
     }
     private void initObjectives() {
-        //        level.addObjectives(new ExitDungeonAchievement());
-        level.addObjectives(new AllSwitchesOnAchievement());
-        level.addObjectives(new CollectAllTreasuresAchievement());
-//        level.addObjectives(new KillAllEnemiesAchievement());
+
     }
     private void initUi() {
         Label lblNumArrows = new Label();
@@ -275,7 +271,7 @@ public class GameWorld implements Game {
     }
 
     public void onEnemyTurn() {
-        enemyManager.Update();
+        enemyManager.update();
     }
 
     public void onRoundEnd() {

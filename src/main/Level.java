@@ -3,10 +3,8 @@ package main;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
-import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.layout.GridPane;
-import main.util.Array2DIterator;
 import main.achivement.Achievement;
 import main.achivement.AchievementSystem;
 import main.component.ViewComponent;
@@ -18,13 +16,16 @@ import main.entities.prop.Prop;
 import main.entities.terrain.Ground;
 import main.entities.terrain.Terrain;
 import main.events.EventBus;
+import main.maploading.EntityLayer;
+import main.maploading.HashMapLayer;
+import main.maploading.SingletonLayer;
+import main.maploading.TerrainLayer;
 import main.math.Vec2d;
 import main.math.Vec2i;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.function.Supplier;
+import java.util.function.Consumer;
 
 /**
  * Class which represents and handles the game map, both in its grid
@@ -40,29 +41,22 @@ import java.util.function.Supplier;
  */
 public class Level {
 
-    private final Supplier<Terrain> DEFAULT_TERRAIN = () -> new Ground(this);
-
     private ViewComponent view;
     private double size;
-    private int nRows = 0;
-    private int nCols = 0;
+    private int nRows;
+    private int nCols;
 
     private String name;
-    private boolean isCreateMode = false;
+    private boolean isCreateMode;
 
     private ArrayList<String> objectives;
 
-    private Group terrainLayer  = new Group();
-    private Group propLayer     = new Group();
-    private Group pickupLayer   = new Group();
-    private Group enemyLayer    = new Group();
-    private Group avatarLayer   = new Group();
-
-    private Terrain[][] terrains;
-    private HashMap<Vec2i, Prop> props;
-    private HashMap<Vec2i, Enemy> enemies;
-    private HashMap<Vec2i, Pickup> pickups;
-    private Avatar avatar;
+    private ArrayList<EntityLayer> layers;
+    private TerrainLayer terrains;
+    private HashMapLayer<Prop> props;
+    private HashMapLayer<Pickup> pickups;
+    private HashMapLayer<Enemy> enemies;
+    private SingletonLayer<Avatar> avatarLayer;
 
     private EventBus eventBus = new EventBus();
     private AchievementSystem achievementSystem = new AchievementSystem(eventBus);
@@ -85,15 +79,33 @@ public class Level {
 
         this.objectives = new ArrayList<>();
 
-        this.terrains = new Terrain[nRows][nCols];
-        this.props = new HashMap<>();
-        this.enemies = new HashMap<>();
-        this.pickups = new HashMap<>();
-
         GridPane gridView = new GridPane();
         gridView.setMinSize(getWidth(), getHeight());
+        gridView.gridLinesVisibleProperty().set(true);
 
         view = new ViewComponent(gridView);
+
+        terrains = new TerrainLayer(nRows, nCols);
+        props    = new HashMapLayer<>();
+        pickups  = new HashMapLayer<>();
+        enemies  = new HashMapLayer<>();
+        avatarLayer = new SingletonLayer<>();
+
+        props.setOnEntityEnter(this::notifyOnEnterByProp);
+        props.setOnEntityLeave(this::notifyOnLeaveByProp);
+        enemies.setOnEntityEnter(this::notifyOnEnterByEnemy);
+        enemies.setOnEntityLeave(this::notifyOnLeaveByEnemy);
+        avatarLayer.setOnEntityEnter(this::notifyOnEnterByAvatar);
+        avatarLayer.setOnEntityLeave(this::notifyOnLeaveByAvatar);
+
+        layers = new ArrayList<>();
+        layers.add(terrains);
+        layers.add(props);
+        layers.add(pickups);
+        layers.add(enemies);
+        layers.add(avatarLayer);
+
+        layers.forEach(layer -> view.addNode(layer.getView()));
 
         for (int y = 0; y < nRows; y++) {
             for (int x = 0; x < nCols; x++) {
@@ -101,14 +113,6 @@ public class Level {
                 addTerrain(new Vec2i(x, y), ground);
             }
         }
-
-        gridView.gridLinesVisibleProperty().set(true);
-
-        view.addNode(terrainLayer);
-        view.addNode(propLayer);
-        view.addNode(pickupLayer);
-        view.addNode(enemyLayer);
-        view.addNode(avatarLayer);
     }
 
     /**
@@ -154,7 +158,7 @@ public class Level {
      * @return The Terrain entity at the given position if there is one
      */
     public Terrain getTerrain(Vec2i pos) {
-        return terrains[pos.getY()][pos.getX()];
+        return terrains.getEntity(pos);
     }
 
     /**
@@ -163,7 +167,7 @@ public class Level {
      * @return The Prop entity at the given position if there is one
      */
     public Prop getProp(Vec2i pos) {
-        return props.get(pos);
+        return props.getEntity(pos);
     }
 
     /**
@@ -172,7 +176,7 @@ public class Level {
      * @return The Pickup entity at the given position if there is one
      */
     public Pickup getPickup(Vec2i pos) {
-        return pickups.get(pos);
+        return pickups.getEntity(pos);
     }
 
     /**
@@ -181,7 +185,7 @@ public class Level {
      * @return The Enemy entity at the given position if there is one
      */
     public Enemy getEnemy(Vec2i pos) {
-        return enemies.get(pos);
+        return enemies.getEntity(pos);
     }
 
     /**
@@ -189,7 +193,7 @@ public class Level {
      * @return The Avatar entity
      */
     public Avatar getAvatar() {
-        return avatar;
+        return avatarLayer.get();
     }
 
 
@@ -205,9 +209,7 @@ public class Level {
      * @param terrain : Terrain entity to be set
      */
     public void setTerrain(Vec2i pos, Terrain terrain) {
-        removeTerrain(pos);
-        terrains[pos.getY()][pos.getX()] = terrain;
-        moveEntityTo(pos, terrain);
+        terrains.setEntity(pos, terrain);
     }
 
     /**
@@ -217,10 +219,7 @@ public class Level {
      * @param prop : Prop entity to be set
      */
     public void setProp(Vec2i pos, Prop prop) {
-        removeProp(pos);
-        props.put(new Vec2i(pos), prop);
-        moveEntityTo(pos, prop);
-
+        props.setEntity(pos, prop);
         notifyOnEnterByProp(pos, prop);
     }
 
@@ -231,9 +230,7 @@ public class Level {
      * @param pickup : Terrain entity to be set
      */
     public void setPickup(Vec2i pos, Pickup pickup) {
-        removePickup(pos);
-        pickups.put(new Vec2i(pos), pickup);
-        moveEntityTo(pos, pickup);
+        pickups.setEntity(pos, pickup);
     }
 
     /**
@@ -243,10 +240,7 @@ public class Level {
      * @param enemy : Enemy entity to be set
      */
     public void setEnemy(Vec2i pos, Enemy enemy) {
-        removeEnemy(pos);
-        enemies.put(new Vec2i(pos), enemy);
-        moveEntityTo(pos, enemy);
-
+        enemies.setEntity(pos, enemy);
         notifyOnEnterByEnemy(pos, enemy);
     }
 
@@ -257,21 +251,10 @@ public class Level {
      * @param avatar : Avatar entity to be set
      */
     public void setAvatar(Vec2i pos, Avatar avatar) {
-        removeAvatar();
-        this.avatar = avatar;
-        moveEntityTo(pos, avatar);
-
+        avatarLayer.setEntity(pos, avatar);
         notifyOnEnterByAvatar(pos, avatar);
     }
 
-    /**
-     * Moves an entity from their current position to a new on on the Level
-     * @param pos : new position
-     * @param entity : entity to be moved
-     */
-    private void moveEntityTo(Vec2i pos, Entity entity) {
-        entity.moveTo(pos);
-    }
 
 
     /*
@@ -284,8 +267,7 @@ public class Level {
      * @param terrain : Terrain entity
      */
     public void addTerrain(Vec2i pos, Terrain terrain) {
-        setTerrain(pos, terrain);
-        addEntityView(terrainLayer, terrain);
+        terrains.addEntity(pos, terrain);
     }
 
     /**
@@ -294,8 +276,7 @@ public class Level {
      * @param prop : Prop entity
      */
     public void addProp(Vec2i pos, Prop prop) {
-        setProp(pos, prop);
-        addEntityView(propLayer, prop);
+        props.addEntity(pos, prop);
     }
 
     /**
@@ -304,8 +285,7 @@ public class Level {
      * @param pickup : Pickup entity
      */
     public void addPickup(Vec2i pos, Pickup pickup) {
-        setPickup(pos, pickup);
-        addEntityView(pickupLayer, pickup);
+        pickups.addEntity(pos, pickup);
     }
 
     /**
@@ -314,8 +294,7 @@ public class Level {
      * @param enemy : Enemy entity
      */
     public void addEnemy(Vec2i pos, Enemy enemy) {
-        setEnemy(pos, enemy);
-        addEntityView(enemyLayer, enemy);
+        enemies.addEntity(pos, enemy);
     }
 
     /**
@@ -324,18 +303,9 @@ public class Level {
      * @param avatar : Avatar entity
      */
     public void addAvatar(Vec2i pos, Avatar avatar) {
-        setAvatar(pos, avatar);
-        addEntityView(avatarLayer, avatar);
+        avatarLayer.addEntity(pos, avatar);
     }
 
-    /**
-     * Adds an entity to the Game View
-     * @param layer : entity layer to be displayed
-     * @param entity : entity to be added
-     */
-    private void addEntityView(Group layer, Entity entity) {
-        layer.getChildren().add(entity.getView());
-    }
 
 
     /*
@@ -352,9 +322,9 @@ public class Level {
         removeProp(pos);
         removePickup(pos);
         removeEnemy(pos);
-        if (hasAvatar(pos)) removeAvatar();
-
+        removeAvatar();
     }
+
 
     /**
      * Removes a Terrain entity at a certain position
@@ -362,13 +332,7 @@ public class Level {
      * @return The Terrain entity just removed
      */
     public Terrain removeTerrain(Vec2i pos) {
-        Terrain terrain = terrains[pos.getY()][pos.getX()];
-        terrains[pos.getY()][pos.getX()] = null;
-
-        if (terrain != null)
-            removeEntityView(terrainLayer, terrain);
-
-        return terrain;
+        return terrains.removeEntity(pos);
     }
 
     /**
@@ -378,12 +342,7 @@ public class Level {
      * @return The Terrain entity just removed
      */
     public Terrain removeTerrain(Vec2i pos, boolean replaceWithDefault) {
-        Terrain terrain = removeTerrain(pos);
-
-        if (replaceWithDefault)
-            addTerrain(pos, DEFAULT_TERRAIN.get());
-
-        return terrain;
+        return removeTerrain(pos, replaceWithDefault);
     }
 
 
@@ -393,12 +352,9 @@ public class Level {
      * @return The Prop entity just removed
      */
     public Prop removeProp(Vec2i pos) {
-        Prop prop = props.remove(pos);
-        if (prop != null) {
-            removeEntityView(propLayer, prop);
+        Prop prop = props.removeEntity(pos);
+        if (prop != null)
             notifyOnLeaveByProp(pos, prop);
-        }
-
         return prop;
     }
 
@@ -408,10 +364,7 @@ public class Level {
      * @return The Pickup entity just removed
      */
     public Pickup removePickup(Vec2i pos) {
-        Pickup pickup = pickups.remove(pos);
-        if (pickup != null)
-            removeEntityView(pickupLayer, pickup);
-        return pickup;
+        return pickups.removeEntity(pos);
     }
 
     /**
@@ -420,12 +373,7 @@ public class Level {
      * @return The Enemy entity just removed
      */
     public Enemy removeEnemy(Vec2i pos) {
-        Enemy enemy = enemies.remove(pos);
-        if (enemy != null) {
-            removeEntityView(enemyLayer, enemy);
-            notifyOnLeaveByEnemy(pos, enemy);
-        }
-        return enemy;
+        return enemies.removeEntity(pos);
     }
 
     /**
@@ -433,21 +381,7 @@ public class Level {
      * I.e when the Avatar dies
      */
     public void removeAvatar() {
-        if (avatar != null) {
-            removeEntityView(avatarLayer, avatar);
-            notifyOnLeaveByAvatar(avatar.getGridPos(), avatar);
-        }
-        avatar = null;
-    }
-
-    /**
-     * Removes the graphical component of an entity from the Game View
-     * @param layer : layer the entity is on
-     * @param entity : the entity to be removed
-     */
-    private void removeEntityView(Group layer, Entity entity) {
-        layer.getChildren().remove(entity.getView());
-        entity.onRemovedFromLevel();
+        Avatar avatar = avatarLayer.remove();
     }
 
 
@@ -461,11 +395,7 @@ public class Level {
      * @param prop : Prop entity
      */
     public void moveProp(Vec2i pos, Prop prop) {
-        if (!hasProp(prop.getGridPos())) return;
-
-        props.remove(prop.getGridPos());
-        notifyOnLeaveByProp(prop.getGridPos(), prop);
-        setProp(pos, prop);
+        props.moveEntity(pos, prop);
     }
 
     /**
@@ -474,11 +404,7 @@ public class Level {
      * @param enemy : Enemy entity to move
      */
     public void moveEnemy(Vec2i pos, Enemy enemy) {
-        if (!hasEnemy(enemy.getGridPos())) return;
-
-        enemies.remove(enemy.getGridPos());
-        notifyOnLeaveByEnemy(enemy.getGridPos(), enemy);
-        setEnemy(pos, enemy);
+        enemies.moveEntity(pos, enemy);
     }
 
     /**
@@ -486,12 +412,7 @@ public class Level {
      * @param pos : position to move onto
      */
     public void moveAvatar(Vec2i pos) {
-        if (avatar == null) return;
-
-        Vec2i prev = avatar.getGridPos();
-        moveEntityTo(pos, avatar);
-        notifyOnLeaveByAvatar(prev, avatar); // only call after left
-        notifyOnEnterByAvatar(pos, avatar);
+        avatarLayer.moveEntity(pos, avatarLayer.get());
     }
 
 
@@ -505,13 +426,7 @@ public class Level {
      * @param prop : Prop entity which was moved
      */
     private void notifyOnEnterByProp(Vec2i pos, Prop prop) {
-        Terrain currTerrain = getTerrain(pos);
-        if (currTerrain != null) currTerrain.onEnterByProp(prop);
-
-        if (hasTerrain(pos))    getTerrain(pos).onEnterByProp(prop);
-        if (hasPickup(pos))     getPickup(pos).onEnterByProp(prop);
-        if (hasEnemy(pos))      getEnemy(pos).onEnterByProp(prop);
-        if (hasAvatar(pos))     getAvatar().onEnterByProp(prop);
+        forEachEntityAt(pos, e -> e.onEnterByProp(prop));
     }
 
     /**
@@ -520,10 +435,7 @@ public class Level {
      * @param enemy : Enemy which was moved
      */
     private void notifyOnEnterByEnemy(Vec2i pos, Enemy enemy) {
-        if (hasTerrain(pos))    getTerrain(pos).onEnterByEnemy(enemy);
-        if (hasProp(pos))       getProp(pos).onEnterByEnemy(enemy);
-        if (hasPickup(pos))     getPickup(pos).onEnterByEnemy(enemy);
-        if (hasAvatar(pos))     getAvatar().onEnterByEnemy(enemy);
+        forEachEntityAt(pos, e -> e.onEnterByEnemy(enemy));
     }
 
     /**
@@ -532,10 +444,7 @@ public class Level {
      * @param avatar : Avatar entity
      */
     private void notifyOnEnterByAvatar(Vec2i pos, Avatar avatar) {
-        if (hasTerrain(pos))    getTerrain(pos).onEnterByAvatar(avatar);
-        if (hasProp(pos))       getProp(pos).onEnterByAvatar(avatar);
-        if (hasPickup(pos))     getPickup(pos).onEnterByAvatar(avatar);
-        if (hasEnemy(pos))      getEnemy(pos).onEnterByAvatar(avatar);
+        forEachEntityAt(pos, e -> e.onEnterByAvatar(avatar));
     }
 
     /**
@@ -544,10 +453,8 @@ public class Level {
      * @param prop : Prop which was moved
      */
     private void notifyOnLeaveByProp(Vec2i pos, Prop prop) {
-        if (hasTerrain(pos))    getTerrain(pos).onLeaveByProp(prop);
-        if (hasProp(pos))       getProp(pos).onLeaveByProp(prop);
-        if (hasEnemy(pos))      getEnemy(pos).onLeaveByProp(prop);
-        if (hasAvatar(pos))     getAvatar().onLeaveByProp(prop);
+        System.out.println("Prop: " + prop);
+        forEachEntityAt(pos, e -> e.onLeaveByProp(prop));
     }
 
     /**
@@ -556,10 +463,7 @@ public class Level {
      * @param enemy : Enemy which moved
      */
     private void notifyOnLeaveByEnemy(Vec2i pos, Enemy enemy) {
-        if (hasTerrain(pos))    getTerrain(pos).onLeaveByEnemy(enemy);
-        if (hasProp(pos))       getProp(pos).onLeaveByEnemy(enemy);
-        if (hasPickup(pos))     getPickup(pos).onLeaveByEnemy(enemy);
-        if (hasAvatar(pos))     getAvatar().onLeaveByEnemy(enemy);
+        forEachEntityAt(pos, e -> e.onLeaveByEnemy(enemy));
     }
 
     /**
@@ -568,10 +472,16 @@ public class Level {
      * @param avatar : Avatar entity
      */
     private void notifyOnLeaveByAvatar(Vec2i pos, Avatar avatar) {
-        if (hasTerrain(pos))    getTerrain(pos).onLeaveByAvatar(avatar);
-        if (hasProp(pos))       getProp(pos).onLeaveByAvatar(avatar);
-        if (hasPickup(pos))     getPickup(pos).onLeaveByAvatar(avatar);
-        if (hasEnemy(pos))      getEnemy(pos).onLeaveByAvatar(avatar);
+        forEachEntityAt(pos, e -> e.onLeaveByAvatar(avatar));
+    }
+
+
+    private void forEachEntityAt(Vec2i pos, Consumer<Entity> action) {
+        layers.forEach(layer -> {
+
+            if (layer.hasEntity(pos))
+                action.accept(layer.getEntity(pos));
+        });
     }
 
     /*
@@ -584,7 +494,7 @@ public class Level {
      * @return True if the Terrain exists, False otherwise
      */
     public boolean hasTerrain(Vec2i pos) {
-        return getTerrain(pos) != null;
+        return terrains.hasEntity(pos);
     }
 
     /**
@@ -593,7 +503,7 @@ public class Level {
      * @return True if the Prop exists, False otherwise
      */
     public boolean hasProp(Vec2i pos) {
-        return props.containsKey(pos);
+        return props.hasEntity(pos);
     }
 
     /**
@@ -602,7 +512,7 @@ public class Level {
      * @return True if the Pickup exists, False otherwise
      */
     public boolean hasPickup(Vec2i pos) {
-        return pickups.containsKey(pos);
+        return pickups.hasEntity(pos);
     }
 
     /**
@@ -611,7 +521,7 @@ public class Level {
      * @return True if the Enemy exists, False otherwise
      */
     public boolean hasEnemy(Vec2i pos) {
-        return enemies.containsKey(pos);
+        return enemies.hasEntity(pos);
     }
 
     /**
@@ -620,7 +530,7 @@ public class Level {
      * @return True if the Avatar exists, False otherwise
      */
     public boolean hasAvatar(Vec2i pos) {
-        return avatar != null && avatar.getGridPos().equals(pos);
+        return avatarLayer.hasEntity(pos);
     }
 
     /*
@@ -636,7 +546,6 @@ public class Level {
      */
     public boolean canPlaceTerrain(Vec2i pos, Terrain terrain) {
         if (hasTerrain(pos)) return false;
-
         return canReplaceTerrain(pos, terrain);
     }
 
@@ -649,7 +558,6 @@ public class Level {
      */
     public boolean canPlaceProp(Vec2i pos, Prop prop) {
         if (hasProp(pos)) return false;
-
         return canReplaceProp(pos, prop);
     }
 
@@ -662,7 +570,6 @@ public class Level {
      */
     public boolean canPlacePickup(Vec2i pos, Pickup pickup) {
         if (hasPickup(pos)) return false;
-
         return canReplacePickup(pos, pickup);
     }
 
@@ -675,7 +582,6 @@ public class Level {
      */
     public boolean canPlaceEnemy(Vec2i pos, Enemy enemy) {
         if (hasEnemy(pos)) return false;
-
         return canReplaceEnemy(pos, enemy);
     }
 
@@ -688,7 +594,6 @@ public class Level {
      */
     public boolean canPlaceAvatar(Vec2i pos, Avatar avatar) {
         if (hasAvatar(pos)) return false;
-
         return canReplaceAvatar(pos, avatar);
     }
 
@@ -700,24 +605,10 @@ public class Level {
      * @return True if you can place it, false otherwise
      */
     public boolean canReplaceTerrain(Vec2i pos, Terrain terrain) {
-        if (hasProp(pos)) {
-            if (!terrain.canStackForProp(getProp(pos))) return false;
-        }
-
-        if (hasPickup(pos)) {
-            if (!terrain.canStackForPickup(getPickup(pos))) return false;
-        }
-
-        if (hasEnemy(pos)) {
-            if(!terrain.canStackForEnemy(getEnemy(pos))) {
-                return false;
-            }
-        }
-
-        if (hasAvatar(pos)) {
-            if (!terrain.canStackForAvatar(getAvatar())) return false;
-        }
-
+        if (hasProp(pos)    && !terrain.canStackForProp(getProp(pos)))      return false;
+        if (hasPickup(pos)  && !terrain.canStackForPickup(getPickup(pos)))  return false;
+        if (hasEnemy(pos)   && !terrain.canStackForEnemy(getEnemy(pos)))    return false;
+        if (hasAvatar(pos)  && !terrain.canStackForAvatar(getAvatar()))     return false;
         return true;
     }
 
@@ -729,22 +620,10 @@ public class Level {
      * @return True if you can place it, false otherwise
      */
     public boolean canReplaceProp(Vec2i pos, Prop prop) {
-        if (hasTerrain(pos)) {
-            if (!getTerrain(pos).canStackForProp(prop)) return false;
-        }
-
-        if (hasPickup(pos)) {
-            if (!prop.canStackForPickup(getPickup(pos))) return false;
-        }
-
-        if (hasEnemy(pos)) {
-            if (!prop.canStackForEnemy(getEnemy(pos))) return false;
-        }
-
-        if (hasAvatar(pos)) {
-            if (!prop.canStackForAvatar(getAvatar())) return false;
-        }
-
+        if (hasTerrain(pos) && !getTerrain(pos).canStackForProp(prop))  return false;
+        if (hasPickup(pos)  && !prop.canStackForPickup(getPickup(pos))) return false;
+        if (hasEnemy(pos)   && !prop.canStackForEnemy(getEnemy(pos)))   return false;
+        if (hasAvatar(pos)  && !prop.canStackForAvatar(getAvatar()))    return false;
         return true;
     }
 
@@ -756,22 +635,10 @@ public class Level {
      * @return True if you can place it, false otherwise
      */
     public boolean canReplacePickup(Vec2i pos, Pickup pickup) {
-        if (hasTerrain(pos)) {
-            if (!getTerrain(pos).canStackForPickup(pickup)) return false;
-        }
-
-        if (hasProp(pos)) {
-            if (!getProp(pos).canStackForPickup(pickup)) return false;
-        }
-
-        if (hasEnemy(pos)) {
-            if (!pickup.canStackForEnemy(getEnemy(pos))) return false;
-        }
-
-        if (hasAvatar(pos)) {
-            if (!pickup.canStackForAvatar(getAvatar())) return false;
-        }
-
+        if (hasTerrain(pos) && !getTerrain(pos).canStackForPickup(pickup))  return false;
+        if (hasProp(pos)    && !getProp(pos).canStackForPickup(pickup))     return false;
+        if (hasEnemy(pos)   && !pickup.canStackForEnemy(getEnemy(pos)))     return false;
+        if (hasAvatar(pos)  && !pickup.canStackForAvatar(getAvatar()))      return false;
         return true;
     }
 
@@ -783,22 +650,10 @@ public class Level {
      * @return True if you can place it, false otherwise
      */
     public boolean canReplaceEnemy(Vec2i pos, Enemy enemy) {
-        if (hasTerrain(pos)) {
-            if (!getTerrain(pos).canStackForEnemy(enemy)) return false;
-        }
-
-        if (hasProp(pos)) {
-            if (!getProp(pos).canStackForEnemy(enemy)) return false;
-        }
-
-        if (hasPickup(pos)) {
-            if (!getPickup(pos).canStackForEnemy(enemy)) return false;
-        }
-
-        if (hasAvatar(pos)) {
-            if (!enemy.canStackForAvatar(getAvatar())) return false;
-        }
-
+        if (hasTerrain(pos) && !getTerrain(pos).canStackForEnemy(enemy))    return false;
+        if (hasProp(pos)    && !getProp(pos).canStackForEnemy(enemy))       return false;
+        if (hasPickup(pos)  && !getPickup(pos).canStackForEnemy(enemy))     return false;
+        if (hasAvatar(pos)  && !enemy.canStackForAvatar(getAvatar()))       return false;
         return true;
     }
 
@@ -810,22 +665,10 @@ public class Level {
      * @return True if you can place it, false otherwise
      */
     public boolean canReplaceAvatar(Vec2i pos, Avatar avatar) {
-        if (hasTerrain(pos)) {
-            if (!getTerrain(pos).canStackForAvatar(avatar)) return false;
-        }
-
-        if (hasProp(pos)) {
-            if (!getProp(pos).canStackForAvatar(avatar)) return false;
-        }
-
-        if (hasPickup(pos)) {
-            if (!getPickup(pos).canStackForAvatar(avatar)) return false;
-        }
-
-        if (hasEnemy(pos)) {
-            if (!getEnemy(pos).canStackForAvatar(avatar)) return false;
-        }
-
+        if (hasTerrain(pos) && !getTerrain(pos).canStackForAvatar(avatar))    return false;
+        if (hasProp(pos)    && !getProp(pos).canStackForAvatar(avatar))       return false;
+        if (hasPickup(pos)  && !getPickup(pos).canStackForAvatar(avatar))     return false;
+        if (hasEnemy(pos)   && !getEnemy(pos).canStackForAvatar(avatar))      return false;
         return true;
     }
 
@@ -842,13 +685,8 @@ public class Level {
      */
     public boolean isPassableForAvatar(Vec2i pos, Avatar other) {
         if(!isValidGridPos(pos)) return false;
-
-        if (hasTerrain(pos) && !getTerrain(pos).isPassableForAvatar(other))   return false;
-        if (hasProp(pos)    && !getProp(pos).isPassableForAvatar(other))      return false;
-        if (hasPickup(pos)  && !getPickup(pos).isPassableForAvatar(other))    return false;
-        if (hasEnemy(pos)   && !getEnemy(pos).isPassableForAvatar(other))     return false;
-        if (hasAvatar(pos)  && !getAvatar().isPassableForAvatar(other))       return false;
-        return true;
+        return layers.stream()
+                .allMatch(l -> !l.hasEntity(pos) || l.getEntity(pos).isPassableForAvatar(other));
     }
 
     /**
@@ -859,13 +697,8 @@ public class Level {
      */
     public boolean isPassableForEnemy(Vec2i pos, Enemy other) {
         if(!isValidGridPos(pos)) return false;
-
-        if (hasTerrain(pos) && !getTerrain(pos).isPassableForEnemy(other))   return false;
-        if (hasProp(pos)    && !getProp(pos).isPassableForEnemy(other))      return false;
-        if (hasPickup(pos)  && !getPickup(pos).isPassableForEnemy(other))    return false;
-        if (hasEnemy(pos)   && !getEnemy(pos).isPassableForEnemy(other))     return false;
-        if (hasAvatar(pos)  && !getAvatar().isPassableForEnemy(other))       return false;
-        return true;
+        return layers.stream()
+                .allMatch(l -> !l.hasEntity(pos) || l.getEntity(pos).isPassableForEnemy(other));
     }
 
     /**
@@ -876,13 +709,8 @@ public class Level {
      */
     public boolean isPassableForProp(Vec2i pos, Prop other) {
         if(!isValidGridPos(pos)) return false;
-
-        if (hasTerrain(pos) && !getTerrain(pos).isPassableForProp(other))   return false;
-        if (hasProp(pos)    && !getProp(pos).isPassableForProp(other))      return false;
-        if (hasPickup(pos)  && !getPickup(pos).isPassableForProp(other))    return false;
-        if (hasEnemy(pos)   && !getEnemy(pos).isPassableForProp(other))     return false;
-        if (hasAvatar(pos)  && !getAvatar().isPassableForProp(other))       return false;
-        return true;
+        return layers.stream()
+                .allMatch(l -> !l.hasEntity(pos) || l.getEntity(pos).isPassableForProp(other));
     }
 
 
@@ -892,6 +720,7 @@ public class Level {
         if (hasProp(pos) && !getProp(pos).onPush(avatar)) return false;
         return true;
     }
+
 
 
     /*
@@ -979,70 +808,19 @@ public class Level {
 
     /**
      * Resizes the # of rows and cols of the Level
-     * @param newNRow : new # of rows for the Level
-     * @param newNCol : new # of cols for the Level
+     * @param newNRows : new # of rows for the Level
+     * @param newNCols : new # of cols for the Level
      */
-    public void resize(int newNRow, int newNCol) {
-        Vec2i newDim = new Vec2i(newNRow, newNCol);
-        if (!newDim.within(new Vec2i(4, 4), new Vec2i(64, 64))) {
-            System.out.println("Error: map size must be between 4x4 and 64x64");
-            return;
-        }
-
-        Terrain[][] resizedTerrain = new Terrain[newNRow][newNCol];
-        HashMap<Vec2i, Prop> resizedProps = new HashMap<>();
-        HashMap<Vec2i, Enemy> resizedEnemies = new HashMap<>();
-        HashMap<Vec2i, Pickup> resizedPickups = new HashMap<>();
-
-        int copyNRow = (nRows < newNRow) ? nRows : newNRow;
-        int copyNCol = (nCols < newNCol) ? nCols : newNCol;
-
-        Vec2i min = new Vec2i(0, 0);
-        Vec2i max = new Vec2i(newNCol - 1, newNRow - 1);
-
-        for (int i = 0; i < nRows; i++) {
-            for (int j = 0; j < nCols; j++) {
-                Vec2i pos = new Vec2i(j, i);
-
-                if (!pos.within(min, max)) removeAllAt(pos,  true);
-            }
-        }
-
-        for (int i = 0; i < copyNRow; i++) {
-            for (int j = 0; j < copyNCol; j++) {
-                Vec2i pos = new Vec2i(j, i);
-
-                resizedTerrain[i][j] = terrains[i][j];
-                if (enemies.containsKey(pos)) resizedEnemies.put(pos, enemies.get(pos));
-                if (props.containsKey(pos)) resizedProps.put(pos, props.get(pos));
-                if (pickups.containsKey(pos)) resizedPickups.put(pos, pickups.get(pos));
-            }
-        }
-
-        this.nRows = newNRow;
-        this.nCols = newNCol;
-
-        this.terrains = resizedTerrain;
-        this.props = resizedProps;
-        this.enemies = resizedEnemies;
-        this.pickups = resizedPickups;
-
-        for (int i = 0; i < newNRow; i++) {
-            for (int j = 0; j < newNCol; j++) {
-                Vec2i pos = new Vec2i(j, i);
-                Terrain ground = new Ground(this);
-                if (!hasTerrain(pos)) addTerrain(pos, ground);
-            }
-        }
+    public void resize(int newNRows, int newNCols) {
+        layers.forEach(layer -> layer.resize(newNRows, newNCols));
     }
-
 
     /**
      * Gets an iterator for the Terrain entities of the Level
      * @return an iterator of the Terrain entities
      */
     public Iterator<Terrain> getTerrainIterator() {
-        return new Array2DIterator<>(terrains);
+        return terrains.iterator();
     }
 
     /**
@@ -1050,7 +828,7 @@ public class Level {
      * @return an iterator of the Prop entities
      */
     public Iterator<Prop> getPropIterator() {
-        return new ArrayList<>(props.values()).iterator();
+        return props.iterator();
     }
 
     /**
@@ -1058,7 +836,7 @@ public class Level {
      * @return an iterator of the Pickup entities
      */
     public Iterator<Pickup> getPickupIterator() {
-        return new ArrayList<>(pickups.values()).iterator();
+        return pickups.iterator();
     }
 
     /**
@@ -1066,17 +844,12 @@ public class Level {
      * @return an iterator of the Pickup entities
      */
     public Iterator<Enemy> getEnemyIterator() {
-        return new ArrayList<>(enemies.values()).iterator();
+        return enemies.iterator();
     }
 
-    /**
-     * Gets an ArrayList of the Enemy entities of the Level
-     * @return an ArrayList of the Enemy entities
-     */
     public ArrayList<Enemy> getEnemies() {
-        return new ArrayList<>(enemies.values());
+        return enemies.getEntities();
     }
-
 
     /**
      * Gets an iterator for the entities at a certain position
@@ -1089,10 +862,11 @@ public class Level {
         if (hasProp(pos))       entities.add(getProp(pos));
         if (hasPickup(pos))     entities.add(getPickup(pos));
         if (hasEnemy(pos))      entities.add(getEnemy(pos));
-        if (hasAvatar(pos))     entities.add(avatar);
+        if (hasAvatar(pos))     entities.add(getAvatar());
 
         return entities.iterator();
     }
+
 
     /**
      * Displays the Level to the terminal in symbol format
@@ -1157,6 +931,7 @@ public class Level {
         eventBus.removeEventHandler(type, handler);
     }
 
+
     /*
         GAME ACHIEVEMENT
      */
@@ -1197,6 +972,7 @@ public class Level {
     public boolean isCreateMode() {
         return isCreateMode;
     }
+
 
     /**
      * Sets the level into Create Mode
