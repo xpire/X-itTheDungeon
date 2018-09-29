@@ -3,7 +3,7 @@ package main.app.model;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import main.GameWorld;
+import main.PlayMode;
 import main.app.controller.AppController;
 import main.app.controller.PlayLevelController;
 
@@ -14,7 +14,7 @@ public class PlayLevelScreen extends AppScreen {
         fxmlName = "main/app/view/playLevel.fxml";
     }
 
-    private GameWorld world;
+    private PlayMode world;
     private PlayLevelController controller;
 
     public PlayLevelScreen(Stage stage) {
@@ -46,7 +46,7 @@ public class PlayLevelScreen extends AppScreen {
     protected void beforeSceneDisplay(Scene scene) {
         Pane layer = controller.getDynamicLayer();
 
-        world = new GameWorld(scene);
+        world = new PlayMode(scene, "map1.1", "drafts");
         layer.getChildren().add(world.getView());
         world.startGame();
     }

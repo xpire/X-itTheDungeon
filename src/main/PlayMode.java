@@ -16,30 +16,32 @@ import main.component.ViewComponent;
 import main.entities.Avatar;
 import main.entities.Entity;
 import main.entities.enemies.EnemyManager;
-import main.entities.enemies.Strategist;
-import main.entities.pickup.*;
-import main.entities.prop.Boulder;
-import main.entities.terrain.*;
 import main.events.AvatarEvent;
-import main.math.Vec2i;
+import main.maploading.MapLoader;
 
-public class GameWorld implements Game {
+public class PlayMode implements Game {
+
+    private Level level;
 
     private GameLoop gameLoop;
     private Input input;
-    private Level level;
-    private Avatar avatar;
 
     private boolean isRunning = true;
     private boolean isPlayerTurn = true;
 
+    private Avatar avatar;
+
     private EnemyManager enemyManager;
     private ViewComponent view;
 
-    public GameWorld(Scene scene) {
-        gameLoop = new GameLoop(this, fps -> System.out.println("FPS: " + fps));
+    public PlayMode(Scene scene, String levelName, String levelPath) {
 
-        level = new Level(16, 16, 30, "GameWorld");
+        MapLoader loader = new MapLoader();
+        level = loader.loadLevel(levelName, levelPath);
+        avatar = level.getAvatar();
+
+        gameLoop = new GameLoop(this, fps -> System.out.println("FPS: " + fps));
+        input    = new Input();
 
         // View
         Group gridView = new Group();
@@ -48,9 +50,7 @@ public class GameWorld implements Game {
         gridView.getChildren().add(level.getView());
         view = new ViewComponent(gridView);
 
-        initObjectives();
         initEvents();
-        initEntities();
         initUi();
         initInput(scene);
 
@@ -59,71 +59,18 @@ public class GameWorld implements Game {
 
     public void startGame() {
         gameLoop.start();
+        input.startListening();
     }
 
     public void endGame() {
         gameLoop.stop();
     }
 
-    private void initEntities() {
-        avatar = new Avatar(level);
-
-        level.addAvatar(new Vec2i(7, 7), avatar);
-        level.addProp(new Vec2i(7, 8), new Boulder(level));
-        level.addProp(new Vec2i(4, 5), new Boulder(level));
-        level.addProp(new Vec2i(8, 9), new Boulder(level));
-
-        level.addTerrain(new Vec2i(10, 9), new Wall(level));
-
-        level.addTerrain(new Vec2i(6, 6), new Switch(level));
-        level.addTerrain(new Vec2i(5, 6), new Switch(level));
-        level.addTerrain(new Vec2i(3, 4), new Switch(level));
-
-        level.addTerrain(new Vec2i(2, 3), new Pit(level));
-        level.addTerrain(new Vec2i(1, 4), new Pit(level));
-
-        level.addPickup(new Vec2i(8, 4), new Arrow(level));
-        level.addPickup(new Vec2i(8, 6), new Arrow(level));
-
-        level.addPickup(new Vec2i(7, 12), new Sword(level));
-        level.addPickup(new Vec2i(7, 14), new Sword(level));
-
-        level.addPickup(new Vec2i(8, 13), new Bomb(level));
-        level.addPickup(new Vec2i(8, 13), new Bomb(level));
-        level.addPickup(new Vec2i(10, 13), new Bomb(level));
-        level.addPickup(new Vec2i(1, 8), new Treasure(level));
-        level.addPickup(new Vec2i(2, 5), new Treasure(level));
-        level.addPickup(new Vec2i(3, 9), new Treasure(level));
-
-        level.addPickup(new Vec2i(5, 5), new HoverPotion(level));
-        level.addPickup(new Vec2i(7, 10), new HoverPotion(level));
-
-        level.addPickup(new Vec2i(7, 11), new InvincibilityPotion(level));
-        level.addPickup(new Vec2i(8, 14), new InvincibilityPotion(level));
-
-//        level.addEnemy(new Vec2i(0, 3), new Hunter(level));
-//        level.addEnemy(new Vec2i(12, 12), new Hound(level));
-//        level.addEnemy(new Vec2i(0, 0), new Coward(level));
-        level.addEnemy(new Vec2i(12, 11), new Strategist(level));
-
-        level.addTerrain(new Vec2i(14, 14), new Exit(level));
-        level.addTerrain(new Vec2i(15, 15), new Exit(level));
-
-        Key key1 = new Key(level);
-        Key key2 = new Key(level);
-        Door door1 = new Door(level);
-        Door door2 = new Door(level);
-        key1.setMatchingDoor(door1);
-        key2.setMatchingDoor(door2);
-
-        level.addPickup(new Vec2i(11, 11), key1);
-        level.addPickup(new Vec2i(4, 14), key2);
-        level.addTerrain(new Vec2i(7, 2), door1);
-        level.addTerrain(new Vec2i(14, 12), door2);
+    private void initEvents() {
+        level.addEventHandler(AvatarEvent.AVATAR_TURN_ENDED, event -> endPlayerTurn());
+        level.addEventHandler(AvatarEvent.AVATAR_DIED, event -> gameOver());
     }
-    private void initObjectives() {
 
-    }
     private void initUi() {
         Label lblNumArrows = new Label();
         lblNumArrows.textProperty().bind(Bindings.format("Arrows: %d", avatar.getNumArrowsProperty()));
@@ -140,8 +87,8 @@ public class GameWorld implements Game {
         view.addNode(lblNumBombs);
         view.addNode(lblNumTreasures);
     }
+
     private void initInput(Scene scene) {
-        input = new Input();
         scene.addEventHandler(KeyEvent.ANY, evt -> input.onKeyEvent(evt));
         input.addBinding(KeyCode.W, new UserAction() {
             @Override
@@ -217,11 +164,6 @@ public class GameWorld implements Game {
         });
     }
 
-    private void initEvents() {
-        level.addEventHandler(AvatarEvent.AVATAR_TURN_ENDED, event -> endPlayerTurn());
-        level.addEventHandler(AvatarEvent.AVATAR_DIED, event -> gameOver());
-    }
-
     @Override
     public void onStart() {
         input.startListening();
@@ -238,6 +180,7 @@ public class GameWorld implements Game {
 
         if (!level.getEnemies().isEmpty()) {
             if (isPlayerTurn) {
+
                 onPlayerTurn();
             } else {
                 onEnemyTurn();
@@ -262,19 +205,19 @@ public class GameWorld implements Game {
 
     }
 
-    public void onPlayerTurn() {
+    private void onPlayerTurn() {
         avatar.update();
     }
 
-    public void endPlayerTurn() {
+    private void endPlayerTurn() {
         isPlayerTurn = false;
     }
 
-    public void onEnemyTurn() {
+    private void onEnemyTurn() {
         enemyManager.update();
     }
 
-    public void onRoundEnd() {
+    private void onRoundEnd() {
         isPlayerTurn = true;
         level.getTerrainIterator().forEachRemaining(Entity::onTurnUpdate);
         level.getPropIterator().forEachRemaining(Entity::onTurnUpdate);
@@ -286,7 +229,7 @@ public class GameWorld implements Game {
         }
     }
 
-    public void gameOver() {
+    private void gameOver() {
         Label lblGameOver = new Label("GAME OVER");
         lblGameOver.setTranslateX(250);
         lblGameOver.setTranslateY(220);
@@ -295,7 +238,7 @@ public class GameWorld implements Game {
         isRunning = false;
     }
 
-    public void gameWin() {
+    private void gameWin() {
         Label lblGameWin = new Label("GAME WON");
         lblGameWin.setTranslateX(250);
         lblGameWin.setTranslateY(220);

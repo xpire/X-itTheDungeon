@@ -113,7 +113,7 @@ public class HoundBehaviour extends AIBehaviour {
 
     /**
      * 90/deg rotation of the previous method
-     * Gets the horizontally opp. quadrant to a Hunter's curr postion relative to the Avatar
+     * Gets the horizontally opp. quadrant to a Hunter's curr position relative to the Avatar
      * @param increase : inc/dec flag
      * @param dist : Manhattan distance
      * @return quadrant hori. opp. to a Hunter's curr position, relative the the Avatar

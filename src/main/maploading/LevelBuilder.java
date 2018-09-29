@@ -1,142 +1,270 @@
 package main.maploading;
 
 import main.Level;
+import main.achivement.AllSwitchesOnAchievement;
+import main.achivement.CollectAllTreasuresAchievement;
+import main.achivement.ExitDungeonAchievement;
+import main.achivement.KillAllEnemiesAchievement;
 import main.entities.Avatar;
-import main.entities.enemies.Enemy;
-import main.entities.pickup.Key;
-import main.entities.pickup.Pickup;
+import main.entities.enemies.*;
+import main.entities.pickup.*;
+import main.entities.prop.Boulder;
 import main.entities.prop.Prop;
-import main.entities.terrain.Door;
-import main.entities.terrain.Terrain;
+import main.entities.terrain.*;
 import main.math.Vec2i;
+
+import java.util.ArrayList;
 
 /**
  * A Class using Factory Pattern to add entities to a Level
+ *
+ * Converts entityCode characters into Entity objects
  */
 public class LevelBuilder {
 
-    /**
-     * Adds individual entities to the a level
-     *
-     * @param entity Symbol of the entity to be added
-     * @param pos position to add that entity
-     * @param level reference to the Level the entity will be added to
-     * @throws Exception If symbol is unrecognised
-     */
-    public void buildEntity(char entity, Vec2i pos, Level level) throws Exception {
+    private Level level;
 
-        EnemyFactory enemyFactory = new EnemyFactory();
-        PickupFactory pickupFactory = new PickupFactory();
-        PropFactory propFactory = new PropFactory();
-        TerrainFactory terrainFactory = new TerrainFactory();
-        AvatarFactory avatarFactory = new AvatarFactory();
+    private LayerBuilder<Terrain>   terrainLayerBuilder;
+    private LayerBuilder<Prop>      propLayerBuilder;
+    private LayerBuilder<Pickup>    pickupLayerBuilder;
+    private LayerBuilder<Enemy>     enemyLayerBuilder;
+    private LayerBuilder<Avatar>    avatarLayerBuilder;
 
-        switch (entity) {
-            case 'X':
-            case '.':
-            case '#':
-            case '/':
-            case '*':
-                Terrain terrain = terrainFactory.getTerrain(entity, level, pos);
+    private ArrayList<LayerBuilder> builders;
 
-                if (level.canReplaceTerrain(pos, terrain)) {
-                    level.addTerrain(pos, terrain);
-                } else {
-                    level.removeAllAt(pos, true);
-                    level.addTerrain(pos, terrain);
-                }
 
-                return;
-            case 'O':
-                Prop prop = propFactory.getProp(entity, level, pos);
-
-                if (level.canReplaceProp(pos, prop)) {
-                    level.addProp(pos, prop);
-                } else {
-                    level.removeAllAt(pos, true);
-                    level.addProp(pos, prop);
-                }
-
-                return;
-            case '-':
-            case '!':
-            case '^':
-            case '>':
-            case '+':
-            case '$':
-                Pickup pickup = pickupFactory.getPickup(entity, level, pos);
-
-                if (level.canReplacePickup(pos, pickup)) {
-                    level.addPickup(pos, pickup);
-                } else {
-                    level.removeAllAt(pos, true);
-                    level.addPickup(pos, pickup);
-                }
-
-                return;
-            case '1':
-            case '2':
-            case '3':
-            case '4':
-                Enemy enemy = enemyFactory.getEnemy(entity, level, pos);
-
-                if (level.canReplaceEnemy(pos, enemy)) {
-                    level.addEnemy(pos, enemy);
-                } else {
-                    level.removeAllAt(pos, true);
-                    level.addEnemy(pos, enemy);
-                }
-
-                return;
-            case 'P':
-                Avatar avatar = avatarFactory.getAvatar(entity, level, pos);
-
-                if (level.canReplaceAvatar(pos, avatar)) {
-                    level.addAvatar(pos, avatar);
-                } else {
-                    level.removeAllAt(pos, true);
-                    level.addAvatar(pos, avatar);
-                }
-
-                return;
-            case 'K':
-            case '|':
-
-                return;
-            default:
-                System.out.println("Error: Unrecognised entity");
-                throw new Exception();
-        }
+    public LevelBuilder(int nRows, int nCols, double size, String name, boolean isCreateMode) {
+        this(new Level(nRows, nCols, size, name, isCreateMode));
     }
+
+    public LevelBuilder(Level level) {
+        this.level = level;
+        initLayerBuilders();
+    }
+
 
     /**
      * Separately adds Keys and Doors to Levels. This is so
      * keys can have their matching door set, and it enforces key-doors to be
      * placed in pairs
-     * @param level : reference to the level where entities will be added
      * @param keyPos : position of the key
      * @param doorPos : position of the door
      */
-    public void buildKeyDoor(Level level, Vec2i keyPos, Vec2i doorPos) {
+    public void addKeyDoor(Vec2i keyPos, Vec2i doorPos) throws InvalidMapException {
+        if (!level.isValidGridPos(keyPos))
+            throw new InvalidMapException("Invalid Key position: " + keyPos);
 
-        Key key = new Key(level, keyPos);
+        if (!level.isValidGridPos(doorPos))
+            throw new InvalidMapException("Invalid Door position: " + doorPos);
+
+        Key key   = new Key(level, keyPos);
         Door door = new Door(level, doorPos);
 
         key.setMatchingDoor(door);
 
-        if (level.canReplacePickup(keyPos, key)) {
-            level.addPickup(keyPos, key);
-        } else {
-            level.removeAllAt(keyPos, true);
-            level.addPickup(keyPos, key);
-        }
+        pickupLayerBuilder.attachForcefully(keyPos, key, true);
+        terrainLayerBuilder.attachForcefully(doorPos, door, true);
+    }
 
-        if (level.canReplaceTerrain(doorPos, door)) {
-            level.addTerrain(doorPos, door);
-        } else {
-            level.removeAllAt(doorPos, true);
-            level.addTerrain(doorPos, door);
-        }
 
+    /**
+     * Adds individual entities to the a level
+     *
+     * @param entityCode Symbol of the entity to be added
+     * @param pos position to add that entity
+     * @throws InvalidMapException If symbol is unrecognised
+     */
+    //TODO: may be ask deep whether parameterising type is actually a better solution, because it's more flexible
+    public void makeAndAttach(Vec2i pos, char entityCode) throws InvalidMapException {
+        if (!level.isValidGridPos(pos))
+            throw new InvalidMapException("Invalid position: " + pos);
+
+        if (entityCode == 'K' || entityCode == '|') return;
+
+        LayerBuilder builder = builders.stream()
+                .filter(b -> b.canMakeEntity(entityCode))
+                .findFirst()
+                .orElseThrow(() -> new InvalidMapException("Unrecognised entity code: " + entityCode));
+
+        builder.makeAndAttachForcefully(pos, entityCode, true);
+    }
+
+
+
+    public void setObjectives(ArrayList<String> objectives) throws InvalidMapException {
+
+        for (String objective : objectives) {
+            switch (objective) {
+                case "A":
+                    level.addObjectives(new ExitDungeonAchievement());
+                    break;
+                case "B":
+                    level.addObjectives(new AllSwitchesOnAchievement());
+                    break;
+                case "C":
+                    level.addObjectives(new CollectAllTreasuresAchievement());
+                    break;
+                case "D":
+                    level.addObjectives(new KillAllEnemiesAchievement());
+                    break;
+                default:
+                    throw new InvalidMapException("Invalid Objective Code: " + objective);
+            }
+        }
+    }
+
+
+    public int getNRows() {
+        return level.getNRows();
+    }
+
+
+    public int getNCols() {
+        return level.getNCols();
+    }
+
+
+    public Level getLevel() {
+        return level;
+    }
+
+
+    public void initLayerBuilders() {
+        initTerrainLayerBuilder();
+        initPropLayerBuilder();
+        initPickupLayerBuilder();
+        initEnemyLayerBuilder();
+        initAvatarLayerBuilder();
+
+        builders = new ArrayList<>();
+        builders.add(terrainLayerBuilder);
+        builders.add(propLayerBuilder);
+        builders.add(pickupLayerBuilder);
+        builders.add(enemyLayerBuilder);
+        builders.add(avatarLayerBuilder);
+    }
+
+
+    private void initTerrainLayerBuilder() {
+        EntityFactory<Terrain> terrainFactory = new EntityFactory<>();
+        terrainFactory.addSupplier('|', () -> new Door(level));
+        terrainFactory.addSupplier('X', () -> new Exit(level));
+        terrainFactory.addSupplier('.', () -> new Ground(level));
+        terrainFactory.addSupplier('#', () -> new Pit(level));
+        terrainFactory.addSupplier('/', () -> new Switch(level));
+        terrainFactory.addSupplier('*', () -> new Wall(level));
+
+        terrainLayerBuilder = new LayerBuilder<Terrain>(level, terrainFactory) {
+            @Override
+            protected boolean canPlaceEntity(Vec2i pos, Terrain entity) {
+                return level.canPlaceTerrain(pos, entity);
+            }
+
+            @Override
+            protected boolean canReplaceEntity(Vec2i pos, Terrain entity) {
+                return level.canReplaceTerrain(pos, entity);
+            }
+
+            @Override
+            protected void addEntity(Vec2i pos, Terrain entity) {
+                level.addTerrain(pos, entity);
+            }
+        };
+    }
+
+    private void initPropLayerBuilder() {
+        EntityFactory<Prop> propFactory = new EntityFactory<>();
+        propFactory.addSupplier('O', () -> new Boulder(level));
+
+        propLayerBuilder = new LayerBuilder<Prop>(level, propFactory) {
+            @Override
+            protected boolean canPlaceEntity(Vec2i pos, Prop entity) {
+                return level.canPlaceProp(pos, entity);
+            }
+
+            @Override
+            protected boolean canReplaceEntity(Vec2i pos, Prop entity) {
+                return level.canReplaceProp(pos, entity);
+            }
+
+            @Override
+            protected void addEntity(Vec2i pos, Prop entity) {
+                level.addProp(pos, entity);
+            }
+        };
+    }
+
+    private void initPickupLayerBuilder() {
+        EntityFactory<Pickup> pickupFactory = new EntityFactory<>();
+        pickupFactory.addSupplier('-', () -> new Arrow(level));
+        pickupFactory.addSupplier('!', () -> new Bomb(level));
+        pickupFactory.addSupplier('^', () -> new HoverPotion(level));
+        pickupFactory.addSupplier('>', () -> new InvincibilityPotion(level));
+        pickupFactory.addSupplier('+', () -> new Sword(level));
+        pickupFactory.addSupplier('$', () -> new Treasure(level));
+
+        pickupLayerBuilder = new LayerBuilder<Pickup>(level, pickupFactory) {
+            @Override
+            protected boolean canPlaceEntity(Vec2i pos, Pickup entity) {
+                return level.canPlacePickup(pos, entity);
+            }
+
+            @Override
+            protected boolean canReplaceEntity(Vec2i pos, Pickup entity) {
+                return level.canReplacePickup(pos, entity);
+            }
+
+            @Override
+            protected void addEntity(Vec2i pos, Pickup entity) {
+                level.addPickup(pos, entity);
+            }
+        };
+    }
+
+    private void initEnemyLayerBuilder() {
+        EntityFactory<Enemy> enemyFactory = new EntityFactory<>();
+        enemyFactory.addSupplier('1', () -> new Hunter(level));
+        enemyFactory.addSupplier('2', () -> new Strategist(level));
+        enemyFactory.addSupplier('3', () -> new Hound(level));
+        enemyFactory.addSupplier('4', () -> new Coward(level));
+
+        enemyLayerBuilder = new LayerBuilder<Enemy>(level, enemyFactory) {
+            @Override
+            protected boolean canPlaceEntity(Vec2i pos, Enemy entity) {
+                return level.canPlaceEnemy(pos, entity);
+            }
+
+            @Override
+            protected boolean canReplaceEntity(Vec2i pos, Enemy entity) {
+                return level.canReplaceEnemy(pos, entity);
+            }
+
+            @Override
+            protected void addEntity(Vec2i pos, Enemy entity) {
+                level.addEnemy(pos, entity);
+            }
+        };
+    }
+
+    private void initAvatarLayerBuilder() {
+        EntityFactory<Avatar> avatarFactory = new EntityFactory<>();
+        avatarFactory.addSupplier('P', () -> new Avatar(level));
+
+        avatarLayerBuilder = new LayerBuilder<Avatar>(level, avatarFactory) {
+            @Override
+            protected boolean canPlaceEntity(Vec2i pos, Avatar entity) {
+                return level.canPlaceAvatar(pos, entity);
+            }
+
+            @Override
+            protected boolean canReplaceEntity(Vec2i pos, Avatar entity) {
+                return level.canReplaceAvatar(pos, entity);
+            }
+
+            @Override
+            protected void addEntity(Vec2i pos, Avatar entity) {
+                level.addAvatar(pos, entity);
+            }
+        };
     }
 }
