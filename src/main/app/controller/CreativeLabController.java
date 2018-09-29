@@ -1,5 +1,6 @@
 package main.app.controller;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
@@ -39,21 +40,6 @@ public class CreativeLabController extends AppController {
         initialiseOptions();
     }
 
-    @FXML
-    public void onTileSelection() {
-
-    }
-
-    @FXML
-    public void onEntitySelection() {
-
-    }
-
-    @FXML
-    public void onExitBtnPressed() {
-        switchScreen(new CreateModeSelectScreen(screen.getStage()));
-    }
-
     /**
      * Initialises the Editor GridPlane on the scene
      */
@@ -64,7 +50,22 @@ public class CreativeLabController extends AppController {
 
         for (int i = 0 ; i < numCols ; i++) {
             for (int j = 0; j < numRows; j++) {
-                currDraft.add(new Pane(), i, j);
+                Pane pane = new Pane();
+                pane.setOnMouseClicked(e -> {
+                    Node source = (Node) e.getSource();
+
+                    int selectedRow = GridPane.getRowIndex(source);
+                    int selectedCol = GridPane.getColumnIndex(source);
+
+                    if (selectedEntity != null) {
+                        //edit tile w/ selectedRow, Col
+                    }
+
+
+                    System.out.println(selectedRow);
+                    System.out.println(selectedCol);
+                });
+                currDraft.add(pane, i, j);
             }
         }
     }
@@ -78,6 +79,10 @@ public class CreativeLabController extends AppController {
         initialiseGridPane(toolbox, numCols, numRows);
 
         ToggleGroup entityGroup = new ToggleGroup();
+        entityGroup.selectedToggleProperty().addListener((ov, old_toggle, new_toggle) -> {
+            if (entityGroup.getSelectedToggle() != null)
+                selectedEntity = entityGroup.getSelectedToggle().getUserData().toString();
+        });
 
         for (int i = 0; i < numCols; i++) {
             for (int j = 0; j < numRows; j++) {
@@ -104,6 +109,7 @@ public class CreativeLabController extends AppController {
 
         initialiseGridPane(optionsMenu, numCols, numRows);
 
+        //TODO : make this nicer
         Button save    = new Button();
         Button saveAs  = new Button();
         Button publish = new Button();
@@ -113,6 +119,8 @@ public class CreativeLabController extends AppController {
         saveAs.setText("Save As");
         publish.setText("Publish");
         exit.setText("Exit");
+
+        exit.setOnAction(this::onExitBtnPressed);
 
         optionsMenu.add(save, 0, 0);
         optionsMenu.add(saveAs, 0, 1);
@@ -160,5 +168,13 @@ public class CreativeLabController extends AppController {
         };
 
         return entities[y][x];
+    }
+
+    /**
+     * Goes back to the previous screen
+     * @param actionEvent : not used, here to keep the calling method happy
+     */
+    private void onExitBtnPressed(ActionEvent actionEvent) {
+        switchScreen(new CreateModeSelectScreen(screen.getStage()));
     }
 }
