@@ -111,14 +111,15 @@ public class Avatar extends Entity {
 //                BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
 
         //Passing FileInputStream object as a parameter
-        FileInputStream inputStream = null;
-        try {
-            inputStream = new FileInputStream("./src/asset/avatar.png");
-            Image image = new Image(inputStream);
-            sprite = new SpriteView(image);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+//        FileInputStream inputStream = null;
+//        try {
+//            inputStream = new FileInputStream("./src/asset/avatar.png");
+//            Image image = new Image(inputStream);
+//            sprite = new SpriteView(image);
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        }
+        sprite = setInputStream("avatar.png");
 
         sprite.addState("Face Up",
                 new Rectangle2D(0, 20, 24, 30), new Vec2d(-12, -15));
@@ -136,6 +137,21 @@ public class Avatar extends Entity {
         faceDown();
 
         view.addNode(pane);
+    }
+
+    public SpriteView setInputStream(String path) {
+        FileInputStream inputStream = null;
+        StringBuilder sb = new StringBuilder();
+        sb.append("./src/asset/");
+        sb.append(path);
+        try {
+            inputStream = new FileInputStream(sb.toString());
+            Image image = new Image(inputStream);
+            sprite = new SpriteView(image);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        return sprite;
     }
 
     @Override
