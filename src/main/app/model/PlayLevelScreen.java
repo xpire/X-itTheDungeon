@@ -6,6 +6,7 @@ import javafx.stage.Stage;
 import main.PlayMode;
 import main.app.controller.AppController;
 import main.app.controller.PlayLevelController;
+import main.maploading.MapLoader;
 
 public class PlayLevelScreen extends AppScreen {
 
@@ -23,30 +24,12 @@ public class PlayLevelScreen extends AppScreen {
     }
 
 
-//    @Override
-//    public void onStart() {
-//        input.startListening();
-//    }
-//
-//    @Override
-//    public void onUpdateBe() { input.update(); }
-//
-//    @Override
-//    public void onUpdate() {
-//        world.update();
-//    }
-//
-//    @Override
-//    public void onAfterUpdate() {}
-//
-//    @Override
-//    public void onStop() {}
-
     @Override
     protected void beforeSceneDisplay(Scene scene) {
         Pane layer = controller.getDynamicLayer();
 
-        world = new PlayMode(scene, "map1.1", "drafts");
+        MapLoader loader = new MapLoader();
+        world = new PlayMode(scene, loader.loadLevel("map1.1", "drafts"));
         layer.getChildren().add(world.getView());
         world.startGame();
     }

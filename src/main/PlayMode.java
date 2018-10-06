@@ -17,7 +17,6 @@ import main.entities.Avatar;
 import main.entities.Entity;
 import main.entities.enemies.EnemyManager;
 import main.events.AvatarEvent;
-import main.maploading.MapLoader;
 
 public class PlayMode implements Game {
 
@@ -34,10 +33,8 @@ public class PlayMode implements Game {
     private EnemyManager enemyManager;
     private ViewComponent view;
 
-    public PlayMode(Scene scene, String levelName, String levelPath) {
-
-        MapLoader loader = new MapLoader();
-        level = loader.loadLevel(levelName, levelPath);
+    public PlayMode(Scene scene, Level level) {
+        this.level = level;
         avatar = level.getAvatar();
 
         gameLoop = new GameLoop(this, fps -> System.out.println("FPS: " + fps));

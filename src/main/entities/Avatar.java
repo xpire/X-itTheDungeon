@@ -4,9 +4,13 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.geometry.Rectangle2D;
+import javafx.scene.image.Image;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.util.Duration;
 import main.Level;
 import main.entities.enemies.Enemy;
 import main.entities.pickup.*;
@@ -14,8 +18,13 @@ import main.entities.prop.FlyingArrow;
 import main.entities.prop.LitBomb;
 import main.entities.terrain.Door;
 import main.events.AvatarEvent;
+import main.math.Vec2d;
 import main.math.Vec2i;
+import main.sprite.SpriteAnimation;
+import main.sprite.SpriteView;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 public class Avatar extends Entity {
@@ -52,12 +61,14 @@ public class Avatar extends Entity {
         numBombs        = new SimpleIntegerProperty(0);
         numTreasures    = new SimpleIntegerProperty(0);
 
-        direction       = new Vec2i(1,0);
+        direction       = Vec2i.SOUTH;
         pastMoves       = new ArrayList<>();
 
         nextAction      = null;
     }
 
+
+    private SpriteView sprite;
 
     /**
      * Basic constructor
@@ -75,25 +86,57 @@ public class Avatar extends Entity {
 
     @Override
     public void onCreated() {
-        Circle circle = new Circle(10, Color.AQUA);
-        view.addNode(circle);
+//        Circle circle = new Circle(10, Color.AQUA);
+//        view.addNode(circle);
+//
+        hoverView = new Circle(8, Color.LIMEGREEN);
+        rageView  = new Circle(4, Color.TOMATO);
+        swordView = new Line(-10, 0, 10, 0);
+//
+//        view.addNode(hoverView);
+//        view.addNode(rageView);
+//        view.addNode(swordView);
 
-        hoverView   = new Circle(8, Color.LIMEGREEN);
-        rageView    = new Circle(4, Color.TOMATO);
-        swordView   = new Line(-10, 0, 10, 0);
-
-        view.addNode(hoverView);
-        view.addNode(rageView);
-        view.addNode(swordView);
-
-        isHovering  = new SimpleBooleanProperty(false);
+        isHovering = new SimpleBooleanProperty(false);
         isRaged = new SimpleBooleanProperty(false);
 
         hoverView.visibleProperty().bind(isHovering);
         rageView.visibleProperty().bind(isRaged);
         swordView.setVisible(false);
-    }
 
+
+
+        Pane pane = new Pane();
+//        pane.setBorder(new Border(new BorderStroke(Color.BLACK,
+//                BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+
+        //Passing FileInputStream object as a parameter
+        FileInputStream inputStream = null;
+        try {
+            inputStream = new FileInputStream("./src/asset/avatar.png");
+            Image image = new Image(inputStream);
+            sprite = new SpriteView(image);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        sprite.addState("Face Up",
+                new Rectangle2D(0, 20, 24, 30), new Vec2d(-12, -15));
+
+        sprite.addState("Face Down",
+                new Rectangle2D(2, 114, 24, 30), new Vec2d(-12, -15));
+
+        sprite.addState("Face Left",
+                new Rectangle2D(2, 66, 22, 30), new Vec2d(-11, -15));
+
+        sprite.addState("Face Right",
+                new Rectangle2D(2, 66, 22, 30), new Vec2d(-11, -15));
+
+        pane.getChildren().add(sprite);
+        faceDown();
+
+        view.addNode(pane);
+    }
 
     @Override
     public void onDestroyed() {
@@ -132,15 +175,19 @@ public class Avatar extends Entity {
      */
     public void moveUp() {
         tryMove(Vec2i.NORTH);
+        faceUp();
     }
     public void moveDown() {
         tryMove(Vec2i.SOUTH);
+        faceDown();
     }
     public void moveLeft() {
         tryMove(Vec2i.WEST);
+        faceLeft();
     }
     public void moveRight() {
         tryMove(Vec2i.EAST);
+        faceRight();
     }
 
     private void tryMove(Vec2i dir) {
@@ -177,15 +224,55 @@ public class Avatar extends Entity {
      */
     public void faceUp() {
         setDirection(Vec2i.NORTH);
+        sprite.setState("Face Up");
+        sprite.setScaleX(1);
     }
+
     public void faceDown() {
         setDirection(Vec2i.SOUTH);
+        sprite.setState("Face Down");
+        sprite.setScaleX(1);
     }
+
     public void faceLeft() {
         setDirection(Vec2i.WEST);
+//        sprite.setState("Face Left");
+        sprite.setScaleX(1);
+
+        SpriteAnimation animation = new SpriteAnimation(sprite, new Duration(300));
+        sprite.setX(-11);
+        sprite.setY(-15);
+        animation.addState(new Rectangle2D(2, 66, 22, 30));
+        animation.addState(new Rectangle2D(182, 66, 23, 30));
+        animation.addState(new Rectangle2D(216, 66, 27, 30));
+        animation.addState(new Rectangle2D(244, 66, 36, 30));
+        animation.addState(new Rectangle2D(282, 66, 36, 30));
+        animation.addState(new Rectangle2D(324, 66, 32, 30));
+        animation.addState(new Rectangle2D(369, 66, 27, 38));
+        animation.addState(new Rectangle2D(415, 66, 22, 38));
+        animation.addState(new Rectangle2D(2, 66, 22, 30));
+        animation.alignToRight(2);
+        animation.play();
     }
     public void faceRight() {
         setDirection(Vec2i.EAST);
+//        sprite.setState("Face Right");
+        sprite.setScaleX(-1);
+
+        SpriteAnimation animation = new SpriteAnimation(sprite, new Duration(300));
+        sprite.setX(-11);
+        sprite.setY(-15);
+        animation.addState(new Rectangle2D(2, 66, 22, 30));
+        animation.addState(new Rectangle2D(182, 66, 23, 30));
+        animation.addState(new Rectangle2D(216, 66, 27, 30));
+        animation.addState(new Rectangle2D(244, 66, 36, 30));
+        animation.addState(new Rectangle2D(282, 66, 36, 30));
+        animation.addState(new Rectangle2D(324, 66, 32, 30));
+        animation.addState(new Rectangle2D(369, 66, 27, 38));
+        animation.addState(new Rectangle2D(415, 66, 22, 38));
+        animation.addState(new Rectangle2D(2, 66, 22, 30));
+        animation.alignToLeft(2);
+        animation.play();
     }
 
     private void setDirection(Vec2i newDir) {
@@ -216,6 +303,10 @@ public class Avatar extends Entity {
     public void swingSword() {
         // cannot swing if has no sword
         if (sword == null) return;
+
+//        SpriteAnimation animation = new SpriteAnimation(sprite, new Duration(1000), 5, 1,
+//                10, 30, 25, 30);
+//        animation.play();
 
         // kill the entity in the avatar's direction
         Vec2i target = pos.add(direction);
