@@ -1,13 +1,14 @@
-package main.achivement;
+package main.trigger.objective;
 
 import javafx.event.EventHandler;
 import main.events.EnemyEvent;
 import main.events.EventBus;
+import main.trigger.Trigger;
 
 /**
  * Class which tracks the "Kill all enemies" game objective
  */
-public class KillAllEnemiesAchievement extends Achievement{
+public class KillAllEnemiesTrigger extends Trigger {
 
     private int numEnemies = 0;
     private int numKilled = 0;
@@ -27,7 +28,8 @@ public class KillAllEnemiesAchievement extends Achievement{
         bus.removeEventHandler(EnemyEvent.ENEMY_KILLED, ENEMY_KILLED);
     }
 
-    public boolean isCompleted() {
+    @Override
+    public boolean isTriggered() {
         return numEnemies == numKilled;
     }
 }

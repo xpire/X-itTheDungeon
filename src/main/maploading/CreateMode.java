@@ -124,7 +124,7 @@ public class CreateMode {
             case "obj":
             case "objective":
                 if (command.length > 4) {
-                    System.out.println("Error: too many objectives");
+                    System.out.println("Error: too many objective");
                     return true;
                 }
 
@@ -136,7 +136,7 @@ public class CreateMode {
                 if (isValidObj(levelObj)) {
                     draftBuilder.setObjective(levelObj);
                     draftBuilder.displayLevel();
-                } else System.out.println("Error: invalid set of objectives");
+                } else System.out.println("Error: invalid set of objective");
 
                 return true;
             case "play":
@@ -169,7 +169,7 @@ public class CreateMode {
                 System.out.println("edit <x-coord> <y-coord> <entities> : places 'entities' onto tile (x,y)");
                 System.out.println("addr; addc; remr; remc : appends row/col; removes row/col");
                 System.out.println("resize <newNumRows> <newNumCols> : resizes the map to newNumRows x newNumCols");
-                System.out.println("obj/objective <obj_1> (<obj_2>) (<obj_3>) : sets the levels objectives as per input");
+                System.out.println("obj/objective <obj_1> (<obj_2>) (<obj_3>) : sets the levels objective as per input");
                 System.out.println("play : test-plays the map");
                 System.out.println("publish : publishes the map");
                 System.out.println("delete : deletes the draft");
@@ -184,13 +184,13 @@ public class CreateMode {
     }
 
     /**
-     * Checks if a set of objectives the user wishes to set is valid
+     * Checks if a set of objective the user wishes to set is valid
      *
-     * @param objectives ArrayList of objectives
-     * @return true if value set of objectives, false otherwise
+     * @param objectives ArrayList of objective
+     * @return true if value set of objective, false otherwise
      */
     private boolean isValidObj(ArrayList<String> objectives) {
-        //check all objectives are a single letter between A and D
+        //check all objective are a single letter between A and D
         for (String s : objectives) {
             char[] ch = s.toCharArray();
             if (ch.length != 1) {

@@ -1,10 +1,10 @@
 package main.maploading;
 
 import main.Level;
-import main.achivement.AllSwitchesOnAchievement;
-import main.achivement.CollectAllTreasuresAchievement;
-import main.achivement.ExitDungeonAchievement;
-import main.achivement.KillAllEnemiesAchievement;
+import main.trigger.objective.AllSwitchesOnTrigger;
+import main.trigger.objective.CollectAllTreasuresTrigger;
+import main.trigger.objective.ExitDungeonTrigger;
+import main.trigger.objective.KillAllEnemiesTrigger;
 import main.entities.Avatar;
 import main.entities.enemies.*;
 import main.entities.pickup.*;
@@ -96,16 +96,16 @@ public class LevelBuilder {
         for (String objective : objectives) {
             switch (objective) {
                 case "A":
-                    level.addObjectives(new ExitDungeonAchievement());
+                    level.addObjectives(new ExitDungeonTrigger());
                     break;
                 case "B":
-                    level.addObjectives(new AllSwitchesOnAchievement());
+                    level.addObjectives(new AllSwitchesOnTrigger());
                     break;
                 case "C":
-                    level.addObjectives(new CollectAllTreasuresAchievement());
+                    level.addObjectives(new CollectAllTreasuresTrigger());
                     break;
                 case "D":
-                    level.addObjectives(new KillAllEnemiesAchievement());
+                    level.addObjectives(new KillAllEnemiesTrigger());
                     break;
                 default:
                     throw new InvalidMapException("Invalid Objective Code: " + objective);

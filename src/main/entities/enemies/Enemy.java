@@ -95,10 +95,7 @@ public abstract class Enemy extends Entity {
 
     @Override
     public void onEnterByAvatar(Avatar avatar) {
-        if (avatar.isRaged())
-            onDestroyed();
-        else
-            avatar.onDestroyed();
+        avatar.onThreatenedByEnemy(this);
     }
 
     /**

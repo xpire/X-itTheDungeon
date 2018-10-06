@@ -13,6 +13,8 @@ import main.entities.pickup.*;
 import main.entities.prop.FlyingArrow;
 import main.entities.prop.LitBomb;
 import main.entities.terrain.Door;
+import main.entities.terrain.Pit;
+import main.events.AvatarDeathEvent;
 import main.events.AvatarEvent;
 import main.math.Vec2i;
 
@@ -98,14 +100,36 @@ public class Avatar extends Entity {
     @Override
     public void onDestroyed() {
         level.removeAvatar();
-        level.postEvent(new AvatarEvent(AvatarEvent.AVATAR_DIED));
     }
+
+    public void onThreatenedByPit(Pit pit) {
+        if (!isHovering()) {
+            level.postEvent(AvatarDeathEvent.deathByFalling());
+            onDestroyed();
+        }
+    }
+
+    public void onThreatenedByBomb(Bomb bomb) {
+        if (isRaged()) return;
+
+        level.postEvent(AvatarDeathEvent.deathByExplosion());
+        onDestroyed();
+    }
+
+    public void onThreatenedByEnemy(Enemy enemy) {
+        if (isRaged()) {
+            enemy.onDestroyed();
+        }
+        else {
+            level.postEvent(AvatarDeathEvent.deathByAttack());
+            onDestroyed();
+        }
+    }
+
 
     @Override
     public void onExploded() {
-        if (!isRaged.get()) {
-            onDestroyed();
-        }
+        onThreatenedByBomb(null); // TODO
     }
 
 
@@ -509,8 +533,6 @@ public class Avatar extends Entity {
     }
 
 
-
-
     @Override
     public boolean isPassableFor(Entity entity) {
         return false;
@@ -526,9 +548,7 @@ public class Avatar extends Entity {
 
     @Override
     public void onEnterByEnemy(Enemy enemy) {
-        if (isRaged())
-            enemy.onDestroyed();
-        else
-            onDestroyed();
+        System.out.println("On Enter by Enemy");
+        onThreatenedByEnemy(enemy);
     }
 }

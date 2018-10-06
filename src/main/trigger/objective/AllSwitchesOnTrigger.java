@@ -1,13 +1,14 @@
-package main.achivement;
+package main.trigger.objective;
 
 import javafx.event.EventHandler;
 import main.events.EventBus;
 import main.events.SwitchEvent;
+import main.trigger.Trigger;
 
 /**
  * Class which tracks the "all switches activated" game objective
  */
-public class AllSwitchesOnAchievement extends Achievement{
+public class AllSwitchesOnTrigger extends Trigger {
 
     private int numSwitches = 0;
     private int numActive = 0;
@@ -34,7 +35,8 @@ public class AllSwitchesOnAchievement extends Achievement{
         bus.removeEventHandler(SwitchEvent.SWITCH_DEACTIVATED, SWITCH_DEACTIVATED);
     }
 
-    public boolean isCompleted() {
+    @Override
+    public boolean isTriggered() {
         System.out.println("Switches: " + numSwitches + " numActive: " + numActive);
         return numSwitches == numActive;
     }

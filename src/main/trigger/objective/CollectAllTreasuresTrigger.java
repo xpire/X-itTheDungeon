@@ -1,13 +1,14 @@
-package main.achivement;
+package main.trigger.objective;
 
 import javafx.event.EventHandler;
 import main.events.EventBus;
 import main.events.TreasureEvent;
+import main.trigger.Trigger;
 
 /**
- * Class which tracks the "collect all treasures" game objectives
+ * Class which tracks the "collect all treasures" game objective
  */
-public class CollectAllTreasuresAchievement extends Achievement{
+public class CollectAllTreasuresTrigger extends Trigger {
 
     private int numTreasures = 0;
     private int numCollected = 0;
@@ -27,7 +28,8 @@ public class CollectAllTreasuresAchievement extends Achievement{
         bus.removeEventHandler(TreasureEvent.TREASURE_COLLECTED,   TREASURE_COLLECTED);
     }
 
-    public boolean isCompleted() {
+    @Override
+    public boolean isTriggered() {
         return numTreasures == numCollected;
     }
 }

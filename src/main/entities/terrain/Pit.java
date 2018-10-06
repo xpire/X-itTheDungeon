@@ -2,11 +2,11 @@ package main.entities.terrain;
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import main.Level;
 import main.entities.Avatar;
 import main.entities.Entity;
 import main.entities.enemies.Enemy;
 import main.entities.prop.Prop;
-import main.Level;
 import main.math.Vec2d;
 import main.math.Vec2i;
 
@@ -64,7 +64,6 @@ public class Pit extends Terrain{
 
     @Override
     public void onEnterByAvatar(Avatar avatar) {
-        if (!avatar.isHovering())
-            avatar.onDestroyed();
+        avatar.onThreatenedByPit(this);
     }
 }

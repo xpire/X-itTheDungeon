@@ -1,17 +1,17 @@
-package main.achivement;
+package main.trigger;
 
 import main.events.EventBus;
 
 /**
  * An abstraction of game Achievements
  */
-public abstract class Achievement {
+public abstract class Trigger {
 
     /**
      * checks if an objective has been completed
      * @return true if objective is completed, false otherwise
      */
-    public abstract boolean isCompleted();
+    public abstract boolean isTriggered();
 
     /**
      * Activates event handling

@@ -29,8 +29,6 @@ public class AStar<T> {
         while (!frontier.isEmpty()) {
             Node curr = frontier.poll();
 
-            System.out.println("priority: " + curr.priority);
-
             if (isGoal.test(curr.vertex))
                 return constructPath(curr, preds);
 

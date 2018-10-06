@@ -1,13 +1,14 @@
-package main.achivement;
+package main.trigger.objective;
 
 import javafx.event.EventHandler;
 import main.events.EventBus;
 import main.events.ExitEvent;
+import main.trigger.Trigger;
 
 /**
  * Class which tracks the "Pass through the exit" achievement
  */
-public class ExitDungeonAchievement extends Achievement{
+public class ExitDungeonTrigger extends Trigger {
 
     private boolean hasExited = false;
 
@@ -23,7 +24,8 @@ public class ExitDungeonAchievement extends Achievement{
         bus.removeEventHandler(ExitEvent.EXIT_SUCCESS, EXIT_SUCCESS);
     }
 
-    public boolean isCompleted() {
+    @Override
+    public boolean isTriggered() {
         return hasExited;
     }
 }

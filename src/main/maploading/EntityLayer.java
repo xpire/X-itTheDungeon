@@ -50,8 +50,6 @@ public abstract class EntityLayer <T extends Entity> {
         if (entity == null) return false;
         setEntity(newPos, entity);
         onEntityLeave.accept(oldPos, entity);
-        onEntityEnter.accept(newPos, entity);
-
         return true;
     }
 

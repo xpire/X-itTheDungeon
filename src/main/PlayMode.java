@@ -16,6 +16,7 @@ import main.component.ViewComponent;
 import main.entities.Avatar;
 import main.entities.Entity;
 import main.entities.enemies.EnemyManager;
+import main.events.AvatarDeathEvent;
 import main.events.AvatarEvent;
 import main.maploading.MapLoader;
 
@@ -68,7 +69,7 @@ public class PlayMode implements Game {
 
     private void initEvents() {
         level.addEventHandler(AvatarEvent.AVATAR_TURN_ENDED, event -> endPlayerTurn());
-        level.addEventHandler(AvatarEvent.AVATAR_DIED, event -> gameOver());
+        level.addEventHandler(AvatarDeathEvent.AVATAR_DEATH, event -> gameOver());
     }
 
     private void initUi() {
@@ -190,7 +191,6 @@ public class PlayMode implements Game {
             onPlayerTurn();
 
             if (!isPlayerTurn) {
-                System.out.println("GOOD!");
                 onRoundEnd();
             }
         }

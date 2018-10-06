@@ -31,7 +31,6 @@ public class EnemyManager {
     public void update() {
 
         getEnemies().forEach(e -> {
-//            System.out.println("Enemy: " + e.toString());
             Vec2i target = e.decideMove();
             if (!e.getGridPos().equals(target))
                 level.moveEnemy(target, e);

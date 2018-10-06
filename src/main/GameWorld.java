@@ -20,6 +20,7 @@ import main.entities.enemies.Strategist;
 import main.entities.pickup.*;
 import main.entities.prop.Boulder;
 import main.entities.terrain.*;
+import main.events.AvatarDeathEvent;
 import main.events.AvatarEvent;
 import main.math.Vec2i;
 
@@ -219,7 +220,7 @@ public class GameWorld implements Game {
 
     private void initEvents() {
         level.addEventHandler(AvatarEvent.AVATAR_TURN_ENDED, event -> endPlayerTurn());
-        level.addEventHandler(AvatarEvent.AVATAR_DIED, event -> gameOver());
+        level.addEventHandler(AvatarDeathEvent.AVATAR_DEATH, event -> gameOver());
     }
 
     @Override

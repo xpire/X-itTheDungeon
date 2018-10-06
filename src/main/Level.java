@@ -5,8 +5,9 @@ import javafx.event.EventHandler;
 import javafx.event.EventType;
 import javafx.scene.Node;
 import javafx.scene.layout.GridPane;
-import main.achivement.Achievement;
-import main.achivement.AchievementSystem;
+import main.app.Main;
+import main.trigger.Trigger;
+import main.trigger.objective.TriggerSystem;
 import main.component.ViewComponent;
 import main.entities.Avatar;
 import main.entities.Entity;
@@ -59,7 +60,7 @@ public class Level {
     private SingletonLayer<Avatar> avatarLayer;
 
     private EventBus eventBus = new EventBus();
-    private AchievementSystem achievementSystem = new AchievementSystem(eventBus);
+    private TriggerSystem triggerSystem = new TriggerSystem(eventBus);
 
     /**
      * Constructor for the Level class
@@ -220,7 +221,6 @@ public class Level {
      */
     public void setProp(Vec2i pos, Prop prop) {
         props.setEntity(pos, prop);
-        notifyOnEnterByProp(pos, prop);
     }
 
     /**
@@ -241,7 +241,6 @@ public class Level {
      */
     public void setEnemy(Vec2i pos, Enemy enemy) {
         enemies.setEntity(pos, enemy);
-        notifyOnEnterByEnemy(pos, enemy);
     }
 
     /**
@@ -252,7 +251,6 @@ public class Level {
      */
     public void setAvatar(Vec2i pos, Avatar avatar) {
         avatarLayer.setEntity(pos, avatar);
-        notifyOnEnterByAvatar(pos, avatar);
     }
 
 
@@ -453,7 +451,6 @@ public class Level {
      * @param prop : Prop which was moved
      */
     private void notifyOnLeaveByProp(Vec2i pos, Prop prop) {
-        System.out.println("Prop: " + prop);
         forEachEntityAt(pos, e -> e.onLeaveByProp(prop));
     }
 
@@ -728,16 +725,16 @@ public class Level {
      */
 
     /**
-     * Getter for the objectives of the Level
-     * @return ArrayList of Level objectives
+     * Getter for the objective of the Level
+     * @return ArrayList of Level objective
      */
     public ArrayList<String> getObjectives() {
         return objectives;
     }
 
     /**
-     * Setter for the objectives of the Level
-     * @param objectives ArrayList of objectives
+     * Setter for the objective of the Level
+     * @param objectives ArrayList of objective
      */
     public void setObjectives(ArrayList<String> objectives) {
         this.objectives = objectives;
@@ -908,6 +905,7 @@ public class Level {
      */
     public void postEvent(Event event) {
         eventBus.postEvent(event);
+        Main.playModeBus.postEvent(event);
     }
 
     /**
@@ -945,19 +943,19 @@ public class Level {
     }
 
     /**
-     * Adds objectives to the Level
+     * Adds objective to the Level
      * @param objective the objective to add
      */
-    public void addObjectives(Achievement objective){
-        achievementSystem.addAchievement(objective);
+    public void addObjectives(Trigger objective){
+        triggerSystem.addTrigger(objective);
     }
 
     /**
-     * Checks if all objectives have been completed
+     * Checks if all objective have been completed
      * @return true if all completed, false otherwise
      */
     public boolean checkAchievedAllObjectives(){
-        return achievementSystem.checkAchievedAll();
+        return triggerSystem.checkTriggeredAll();
     }
 
 

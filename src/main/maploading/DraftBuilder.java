@@ -61,7 +61,7 @@ public class DraftBuilder {
     }
 
     /**
-     * Setter for the drafts objectives
+     * Setter for the drafts objective
      * @param objectives
      */
     public void setObjective(ArrayList<String> objectives) {
@@ -100,7 +100,7 @@ public class DraftBuilder {
      * Opens a new txt file for writing,
      * Writes the dimensions
      * Writes the Levels body
-     * Writes the objectives
+     * Writes the objective
      * Writes the key-door mapping
      *
      * @param mapName name of the draft
@@ -126,7 +126,7 @@ public class DraftBuilder {
             w.write(nRow + "\t" + nCol);
             w.append("\n");
 
-            //set the objectives
+            //set the objective
             ArrayList<String> obj = level.getObjectives();
             for (String s : obj) {
                 w.write(s + "\t");
