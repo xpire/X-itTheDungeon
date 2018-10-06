@@ -31,7 +31,7 @@ public class MapLoader {
      */
     public Level loadLevel(String mapName, String path, boolean isCreateMode) {
 
-        String mapPath = String.format("./src/main/%s/%s.txt", path, mapName);
+        String mapPath = String.format("./%s/%s.txt", path, mapName);
 
         try (Scanner sc = new Scanner(new File(mapPath))) {
             initLevelWithDimensions(sc, mapName, isCreateMode);
