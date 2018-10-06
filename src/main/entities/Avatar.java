@@ -258,6 +258,8 @@ public class Avatar extends Entity {
         // cannot shoot if no arrow
         if (numArrows.get() <= 0) return;
 
+        /* TODO: once shot, it should control its own killing logic */
+
         FlyingArrow arrow = new FlyingArrow(level);
         Vec2i arrowPos = new Vec2i(pos).add(direction);
 
@@ -267,6 +269,7 @@ public class Avatar extends Entity {
             // enemy hit
             if (level.hasEnemy(arrowPos)) {
                 level.getEnemy(arrowPos).onDestroyed();
+                break;
             }
             // non-passable entity hit
             else if (!level.isPassableForProp(arrowPos, arrow)) {

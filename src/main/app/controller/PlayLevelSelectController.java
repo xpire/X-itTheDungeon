@@ -25,11 +25,15 @@ public class PlayLevelSelectController extends AppController {
     public void initialize() {
         Button btnLevel1 = new Button("Level1");
         Button btnLevel2 = new Button("Level2");
+        Button btnLevel3 = new Button("Level3");
 
         gridLevels.add(btnLevel1, 0, 0);
         gridLevels.add(btnLevel2, 1, 0);
+        gridLevels.add(btnLevel3, 3, 0);
 
-        btnLevel1.addEventHandler(MouseEvent.MOUSE_CLICKED, evt -> this.onLevelSelected());
+        btnLevel1.addEventHandler(MouseEvent.MOUSE_CLICKED, evt -> this.onLevelSelected("level01"));
+        btnLevel2.addEventHandler(MouseEvent.MOUSE_CLICKED, evt -> this.onLevelSelected("level02"));
+        btnLevel3.addEventHandler(MouseEvent.MOUSE_CLICKED, evt -> this.onLevelSelected("level03"));
     }
 
 //    @FXML
@@ -37,8 +41,8 @@ public class PlayLevelSelectController extends AppController {
 //        System.out.println("Play Level!");
 //    }
 
-    public void onLevelSelected() {
-        switchScreen(new PlayLevelScreen(screen.getStage()));
+    public void onLevelSelected(String filename) {
+        switchScreen(new PlayLevelScreen(screen.getStage(), filename));
     }
 
 

@@ -190,6 +190,7 @@ public class PlayMode implements Game {
             onPlayerTurn();
 
             if (!isPlayerTurn) {
+                System.out.println("GOOD!");
                 onRoundEnd();
             }
         }

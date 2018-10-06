@@ -35,6 +35,7 @@ public class AllSwitchesOnAchievement extends Achievement{
     }
 
     public boolean isCompleted() {
+        System.out.println("Switches: " + numSwitches + " numActive: " + numActive);
         return numSwitches == numActive;
     }
 }
