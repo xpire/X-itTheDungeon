@@ -109,29 +109,151 @@ public class Avatar extends Entity {
         Pane pane = new Pane();
 //        pane.setBorder(new Border(new BorderStroke(Color.BLACK,
 //                BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+        sprite = new SpriteView();
+        sprite.addState("Face Up", getImage("idle/0.png"), new Vec2d(-12,-15), 1);
+        sprite.addState("Face Down", getImage("idle/2.png"), new Vec2d(-12,-15), 1);
+        sprite.addState("Face Left", getImage("idle/1.png"), new Vec2d(-11,-15), 1);
+        sprite.addState("Face Right", getImage("idle/1.png"), new Vec2d(-11,-15), -1);
 
-        //Passing FileInputStream object as a parameter
-//        FileInputStream inputStream = null;
-//        try {
-//            inputStream = new FileInputStream("./src/asset/avatar.png");
-//            Image image = new Image(inputStream);
-//            sprite = new SpriteView(image);
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        }
-        sprite = setInputStream("avatar.png");
 
-        sprite.addState("Face Up",
-                new Rectangle2D(0, 20, 24, 30), new Vec2d(-12, -15));
+        SpriteAnimation swordLeft = new SpriteAnimation(sprite, new Duration(500), new Vec2i(-11,-15),1);
+        swordLeft.addState(getImage("idle/1.png"));
+        swordLeft.addState(getImage("sword_left/0.png"));
+        swordLeft.addState(getImage("sword_left/1.png"));
+        swordLeft.addState(getImage("sword_left/2.png"));
+        swordLeft.addState(getImage("sword_left/3.png"));
+        swordLeft.addState(getImage("sword_left/4.png"));
+        swordLeft.addState(getImage("sword_left/5.png"));
+        swordLeft.addState(getImage("sword_left/6.png"));
+        swordLeft.addState(getImage("sword_left/7.png"));
+        swordLeft.addState(getImage("idle/1.png"));
 
-        sprite.addState("Face Down",
-                new Rectangle2D(2, 114, 24, 30), new Vec2d(-12, -15));
+        swordLeft.alignToLeft(2,1);
+        swordLeft.alignToRight(2,2);
+        swordLeft.alignToRight(2,3);
+        swordLeft.alignToRight(2,4);
+        swordLeft.alignToRight(2,5);
+        swordLeft.alignToRight(2,6);
+        swordLeft.alignToRight(2,7);
+        swordLeft.alignToRight(2,8);
+        swordLeft.alignToRight(2,9);
 
-        sprite.addState("Face Left",
-                new Rectangle2D(2, 66, 22, 30), new Vec2d(-11, -15));
 
-        sprite.addState("Face Right",
-                new Rectangle2D(2, 66, 22, 30), new Vec2d(-11, -15));
+        swordLeft.alignToUp(1,1);
+        swordLeft.alignToUp(1,2);
+        swordLeft.alignToUp(1,3);
+        swordLeft.alignToUp(1,4);
+        swordLeft.alignToUp(1,5);
+        swordLeft.alignToUp(1,6);
+        swordLeft.alignToDown(1,7);
+        swordLeft.alignToDown(1,8);
+        swordLeft.alignToDown(1,9);
+
+
+
+        sprite.addAnime("sword_left", swordLeft);
+
+        SpriteAnimation swordRight = new SpriteAnimation(sprite, new Duration(500), new Vec2i(-11,-15), -1);
+        swordRight.addState(getImage("idle/1.png"));
+        swordRight.addState(getImage("sword_left/0.png"));
+        swordRight.addState(getImage("sword_left/1.png"));
+        swordRight.addState(getImage("sword_left/2.png"));
+        swordRight.addState(getImage("sword_left/3.png"));
+        swordRight.addState(getImage("sword_left/4.png"));
+        swordRight.addState(getImage("sword_left/5.png"));
+        swordRight.addState(getImage("sword_left/6.png"));
+        swordRight.addState(getImage("sword_left/7.png"));
+        swordRight.addState(getImage("idle/1.png"));
+
+        swordRight.alignToRight(2,1);
+        swordRight.alignToLeft(2,2);
+        swordRight.alignToLeft(2,3);
+        swordRight.alignToLeft(2,4);
+        swordRight.alignToLeft(2,5);
+        swordRight.alignToLeft(2,6);
+        swordRight.alignToLeft(2,7);
+        swordRight.alignToLeft(2,8);
+        swordRight.alignToLeft(2,9);
+
+        swordRight.alignToUp(1,1);
+        swordRight.alignToUp(1,2);
+        swordRight.alignToUp(1,3);
+        swordRight.alignToUp(1,4);
+        swordRight.alignToUp(1,5);
+        swordRight.alignToUp(1,6);
+        swordRight.alignToDown(1,7);
+        swordRight.alignToDown(1,8);
+        swordRight.alignToDown(1,9);
+        sprite.addAnime("sword_right", swordRight);
+        
+        SpriteAnimation swordUp = new SpriteAnimation(sprite, new Duration(500), new Vec2i(-12,-15), 1);
+        swordUp.addState(getImage("idle/0.png"));
+        swordUp.addState(getImage("sword_up/0.png"));
+        swordUp.addState(getImage("sword_up/1.png"));
+        swordUp.addState(getImage("sword_up/2.png"));
+        swordUp.addState(getImage("sword_up/3.png"));
+        swordUp.addState(getImage("sword_up/4.png"));
+        swordUp.addState(getImage("sword_up/5.png"));
+        swordUp.addState(getImage("sword_up/6.png"));
+        swordUp.addState(getImage("sword_up/7.png"));
+        swordUp.addState(getImage("idle/0.png"));
+
+        swordUp.alignToUp(2,1);
+        swordUp.alignToUp(2,2);
+        swordUp.alignToDown(2,3);
+        swordUp.alignToDown(2,4);
+        swordUp.alignToDown(2,5);
+        swordUp.alignToDown(2,6);
+        swordUp.alignToDown(2,7);
+        swordUp.alignToDown(2,8);
+        swordUp.alignToDown(2,9);
+
+        swordUp.alignToRight(1,1);
+        swordUp.alignToRight(1,2);
+        swordUp.alignToRight(1,3);
+        swordUp.alignToRight(1,4);
+        swordUp.alignToRight(1,5);
+        swordUp.alignToRight(1,6);
+        swordUp.alignToLeft(1,7);
+        swordUp.alignToLeft(1,8);
+        swordUp.alignToLeft(1,9);
+        sprite.addAnime("sword_up", swordUp);
+
+        SpriteAnimation swordDown = new SpriteAnimation(sprite, new Duration(500), new Vec2i(-12,-15), 1);
+        swordDown.addState(getImage("idle/2.png"));
+        swordDown.addState(getImage("sword_down/0.png"));
+        swordDown.addState(getImage("sword_down/1.png"));
+        swordDown.addState(getImage("sword_down/2.png"));
+        swordDown.addState(getImage("sword_down/3.png"));
+        swordDown.addState(getImage("sword_down/4.png"));
+        swordDown.addState(getImage("sword_down/5.png"));
+        swordDown.addState(getImage("sword_down/6.png"));
+        swordDown.addState(getImage("sword_down/7.png"));
+        swordDown.addState(getImage("idle/2.png"));
+
+        swordDown.alignToDown(2,1);
+        swordDown.alignToDown(2,2);
+        swordDown.alignToUp(2,3);
+        swordDown.alignToUp(2,4);
+        swordDown.alignToUp(2,5);
+        swordDown.alignToUp(2,6);
+        swordDown.alignToUp(2,7);
+        swordDown.alignToUp(2,8);
+        swordDown.alignToUp(2,9);
+
+        swordDown.alignToLeft(1,1);
+        swordDown.alignToLeft(1,2);
+        swordDown.alignToLeft(1,3);
+        swordDown.alignToLeft(1,4);
+        swordDown.alignToLeft(1,5);
+        swordDown.alignToLeft(1,6);
+        swordDown.alignToRight(1,7);
+        swordDown.alignToRight(1,8);
+        swordDown.alignToRight(1,9);
+
+        sprite.addAnime("sword_down", swordDown);
+
+//        SpriteAnimation bowUp = new SpriteAnimation(sprite, new Duration(500), new Vec2i(-12,-15), 1);
 
         pane.getChildren().add(sprite);
         faceDown();
@@ -139,19 +261,32 @@ public class Avatar extends Entity {
         view.addNode(pane);
     }
 
-    public SpriteView setInputStream(String path) {
+//    public SpriteView setInputStream(String path) {
+//        FileInputStream inputStream = null;
+//        StringBuilder sb = new StringBuilder();
+//        sb.append("./src/asset/");
+//        sb.append(path);
+//        try {
+//            inputStream = new FileInputStream(sb.toString());
+//            Image image = new Image(inputStream);
+//            sprite = new SpriteView(image);
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        }
+//        return sprite;
+//    }
+
+    public Image getImage(String path) {
         FileInputStream inputStream = null;
         StringBuilder sb = new StringBuilder();
-        sb.append("./src/asset/");
-        sb.append(path);
+        sb.append("./src/asset/").append(path);
         try {
             inputStream = new FileInputStream(sb.toString());
-            Image image = new Image(inputStream);
-            sprite = new SpriteView(image);
+            return new Image(inputStream);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
+            return null;
         }
-        return sprite;
     }
 
     @Override
@@ -241,54 +376,41 @@ public class Avatar extends Entity {
     public void faceUp() {
         setDirection(Vec2i.NORTH);
         sprite.setState("Face Up");
-        sprite.setScaleX(1);
+
+//        sprite.playAnime("sword_up");
+//        sprite.setX(0);
+//        sprite.setY(0);
+//        sprite.setScaleX(1);
     }
 
     public void faceDown() {
         setDirection(Vec2i.SOUTH);
         sprite.setState("Face Down");
-        sprite.setScaleX(1);
+
+//        sprite.playAnime("sword_down");
+//        sprite.setX(0);
+//        sprite.setY(0);
+//        sprite.setScaleX(1);
     }
 
     public void faceLeft() {
         setDirection(Vec2i.WEST);
-//        sprite.setState("Face Left");
-        sprite.setScaleX(1);
+        sprite.setState("Face Left");
+//        sprite.setScaleX(1);
 
-        SpriteAnimation animation = new SpriteAnimation(sprite, new Duration(300));
-        sprite.setX(-11);
-        sprite.setY(-15);
-        animation.addState(new Rectangle2D(2, 66, 22, 30));
-        animation.addState(new Rectangle2D(182, 66, 23, 30));
-        animation.addState(new Rectangle2D(216, 66, 27, 30));
-        animation.addState(new Rectangle2D(244, 66, 36, 30));
-        animation.addState(new Rectangle2D(282, 66, 36, 30));
-        animation.addState(new Rectangle2D(324, 66, 32, 30));
-        animation.addState(new Rectangle2D(369, 66, 27, 38));
-        animation.addState(new Rectangle2D(415, 66, 22, 38));
-        animation.addState(new Rectangle2D(2, 66, 22, 30));
-        animation.alignToRight(2);
-        animation.play();
+
+//        animation.alignToRight(1);
+//        animation.play();
+//        sprite.playAnime("sword_left");
     }
     public void faceRight() {
         setDirection(Vec2i.EAST);
-//        sprite.setState("Face Right");
-        sprite.setScaleX(-1);
+        sprite.setState("Face Right");
+//        sprite.setScaleX(-1);
 
-        SpriteAnimation animation = new SpriteAnimation(sprite, new Duration(300));
-        sprite.setX(-11);
-        sprite.setY(-15);
-        animation.addState(new Rectangle2D(2, 66, 22, 30));
-        animation.addState(new Rectangle2D(182, 66, 23, 30));
-        animation.addState(new Rectangle2D(216, 66, 27, 30));
-        animation.addState(new Rectangle2D(244, 66, 36, 30));
-        animation.addState(new Rectangle2D(282, 66, 36, 30));
-        animation.addState(new Rectangle2D(324, 66, 32, 30));
-        animation.addState(new Rectangle2D(369, 66, 27, 38));
-        animation.addState(new Rectangle2D(415, 66, 22, 38));
-        animation.addState(new Rectangle2D(2, 66, 22, 30));
-        animation.alignToLeft(2);
-        animation.play();
+//        sprite.playAnime("sword_right");
+
+//        animation.play();
     }
 
     private void setDirection(Vec2i newDir) {
@@ -326,6 +448,7 @@ public class Avatar extends Entity {
 
         // kill the entity in the avatar's direction
         Vec2i target = pos.add(direction);
+        System.out.println(direction);
         if (level.isValidGridPos(target) && level.hasEnemy(target)) {
 
             // Kill the enemy

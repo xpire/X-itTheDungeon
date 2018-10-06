@@ -3,21 +3,27 @@ package main.sprite;
 import javafx.animation.Interpolator;
 import javafx.animation.Transition;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
 import main.math.Vec2d;
+import main.math.Vec2i;
 
 import java.util.ArrayList;
 
 public class SpriteAnimation extends Transition {
 
     private final ImageView imageView;
-    private ArrayList<Rectangle2D> states = new ArrayList<>();
+    private ArrayList<Image> states = new ArrayList<>();
     private ArrayList<Vec2d> offsets = new ArrayList<>();
     private int lastIndex;
+    private Vec2i initialOffset;
+    private int scale;
 
-    public SpriteAnimation(ImageView imageView, Duration duration) {
+    public SpriteAnimation(ImageView imageView, Duration duration, Vec2i coord, int setScale) {
         this.imageView = imageView;
+        this.initialOffset = coord;
+        this.scale = setScale;
         setCycleDuration(duration);
         setInterpolator(Interpolator.LINEAR);
     }
@@ -32,46 +38,111 @@ public class SpriteAnimation extends Transition {
         lastIndex = index;
     }
 
-    public void addState(Rectangle2D viewport) {
-        addState(viewport, new Vec2d(0, 0));
+    public void addState(Image image) {
+        addState(image, new Vec2d(0, 0));
     }
 
-    public void addState(Rectangle2D viewport, Vec2d offset) {
-        states.add(viewport);
+    public void addState(Image image, Vec2d offset) {
+        states.add(image);
         offsets.add(offset);
     }
 
-    public void alignToRight(double scaleFactor) {
+//    public void alignToCorner(double scaleFactor, double direction, int i) {
+//        if (states.isEmpty()) return;
+//
+//        Image image = states.get(0);
+//        double baseHeight = image.getHeight();
+//        Vec2d baseOffset = offsets.get(0);
+//
+//        double height = states.get(i).getHeight();
+//        double width = states.get(i).getWidth();
+//    }
+
+    public void alignToDown(double scaleFactor, int i) {
         if (states.isEmpty()) return;
 
-        Rectangle2D viewport = states.get(0);
-        double baseWidth = viewport.getWidth();
+        Image viewport = states.get(0);
+        double baseHeight = viewport.getHeight();
         Vec2d baseOffset = offsets.get(0);
 
-        for (int i = 1; i < states.size(); i++) {
-            double width = states.get(i).getWidth();
-            offsets.set(i, baseOffset.add(scaleFactor * (baseWidth - width), 0));
-        }
+        double height = states.get(i).getHeight();
+        offsets.get(i).setY(scaleFactor*(baseHeight-height));
+//        offsets.set(i, baseOffset.add(0,scaleFactor*(baseHeight-height)));
+        System.out.printf("%d, %f,%f Down\n", i, baseHeight, height);
+        System.out.println(offsets);
+
+
+
     }
 
-    public void alignToLeft(double scaleFactor) {
+    public void alignToRight(double scaleFactor, int i) {
         if (states.isEmpty()) return;
 
-        Rectangle2D viewport = states.get(0);
+        Image viewport = states.get(0);
         double baseWidth = viewport.getWidth();
         Vec2d baseOffset = offsets.get(0);
 
-        for (int i = 1; i < states.size(); i++) {
-            double width = states.get(i).getWidth();
-            offsets.set(i, baseOffset.add((scaleFactor - 1) * (width - baseWidth), 0));
-        }
+//        for (int i = 1; i < states.size(); i++) {
+//            double width = states.get(i).getWidth();
+//            offsets.set(i, baseOffset.add(scaleFactor * (baseWidth - width), 0));
+//        }
+        double width = states.get(i).getWidth();
+        offsets.get(i).setX(scaleFactor * (baseWidth - width));
+        System.out.printf("%d, %f,%f RIGHT\n", i, baseWidth, width);
+//        offsets.set(i, baseOffset.add(scaleFactor * (baseWidth - width),0));
+        System.out.println(offsets);
+    }
+
+    public void alignToUp(double scaleFactor, int i) {
+        if (states.isEmpty()) return;
+
+        Image viewport = states.get(0);
+        double baseHeight = viewport.getHeight();
+        Vec2d baseOffset = offsets.get(0);
+
+        double height = states.get(i).getHeight();
+        offsets.get(i).setY((scaleFactor - 1) * (height - baseHeight));
+//        baseOffset.setY((scaleFactor - 1) * (height - baseHeight));
+        System.out.printf("%d, %f,%f UP\n", i, baseHeight, height);
+//        offsets.set(i, baseOffset);
+//        offsets.set(i, offsets.get(i))
+        System.out.println(offsets);
+
+    }
+
+    public void alignToLeft(double scaleFactor, int i) {
+        if (states.isEmpty()) return;
+
+        Image viewport = states.get(0);
+        double baseWidth = viewport.getWidth();
+        Vec2d baseOffset = offsets.get(0);
+
+//        for (int i = 1; i < states.size(); i++) {
+//            double width = states.get(i).getWidth();
+//            offsets.set(i, baseOffset.add((scaleFactor - 1) * (width - baseWidth), 0));
+//        }
+        double width = states.get(i).getWidth();
+        offsets.get(i).setX((scaleFactor - 1) * (width - baseWidth));
+        System.out.printf("%d,%f,%f LEFT\n", i,baseWidth, width);
+//        baseOffset.setX((scaleFactor - 1) * (width - baseWidth));
+//        offsets.set(i, baseOffset);
+        System.out.println(offsets);
+
     }
 
     private void setState(int index) {
-        Rectangle2D viewport = states.get(index);
+        Image viewport = states.get(index);
         imageView.setTranslateX(offsets.get(index).getX());
         imageView.setTranslateY(offsets.get(index).getY());
-        imageView.setViewport(viewport);
+        imageView.setImage(viewport);
+    }
+
+    @Override
+    public void play() {
+        this.imageView.setX(initialOffset.getX());
+        this.imageView.setY(initialOffset.getY());
+        this.imageView.setScaleX(scale);
+        super.play();
     }
 }
 
