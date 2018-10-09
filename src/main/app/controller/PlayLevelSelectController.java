@@ -44,7 +44,7 @@ public class PlayLevelSelectController extends AppController {
 
             System.out.println(i + " " + level.getLevelNum());
 
-            btn.setDisable(Main.stats.getStat(IntStat.Key.MAX_LEVEL_CONQUERED).get() < i);
+//            btn.setDisable(Main.stats.getStat(IntStat.Key.MAX_LEVEL_CONQUERED).get() < i);
             btn.addEventHandler(MouseEvent.MOUSE_CLICKED, evt -> this.onLevelSelected(level.getFilename(), level.getLevelNum() + 1));
         }
 

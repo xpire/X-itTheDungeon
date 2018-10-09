@@ -1,6 +1,7 @@
 package main.maploading;
 
 import main.Level;
+import main.entities.prop.IceBlock;
 import main.trigger.objective.AllSwitchesOnTrigger;
 import main.trigger.objective.CollectAllTreasuresTrigger;
 import main.trigger.objective.ExitDungeonTrigger;
@@ -178,6 +179,7 @@ public class LevelBuilder {
     private void initPropLayerBuilder() {
         EntityFactory<Prop> propFactory = new EntityFactory<>();
         propFactory.addSupplier('O', () -> new Boulder(level));
+        propFactory.addSupplier('I', () -> new IceBlock(level));
 
         propLayerBuilder = new LayerBuilder<Prop>(level, propFactory) {
             @Override
