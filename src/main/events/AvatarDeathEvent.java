@@ -12,6 +12,8 @@ public class AvatarDeathEvent extends GameEvent {
     public static final EventType<AvatarDeathEvent> AVATAR_DEATH
             = new EventType<>(GameEvent.ANY,"AVATAR_DEATH");
 
+    // TODO: instead of death type, use DeathEventType
+
     private DeathType deathType;
 
     private AvatarDeathEvent(EventType<? extends Event> eventType, DeathType type) {

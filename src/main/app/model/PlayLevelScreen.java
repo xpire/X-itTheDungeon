@@ -11,6 +11,7 @@ public class PlayLevelScreen extends AppScreen {
 
     private final String FILEPATH = "src/asset/level";
     private String filename;
+    private int levelNum;
 
     {
         title = "X-it the Dungeon";
@@ -20,9 +21,10 @@ public class PlayLevelScreen extends AppScreen {
     private PlayMode world;
     private PlayLevelController controller;
 
-    public PlayLevelScreen(Stage stage, String filename) {
+    public PlayLevelScreen(Stage stage, String filename, int levelNum) {
         super(stage);
         this.filename = filename;
+        this.levelNum = levelNum;
         this.controller = new PlayLevelController(this);
     }
 
@@ -51,6 +53,7 @@ public class PlayLevelScreen extends AppScreen {
         Pane layer = controller.getDynamicLayer();
 
         world = new PlayMode(scene, filename, FILEPATH);
+        world.setLevelNum(levelNum);
         layer.getChildren().add(world.getView());
         world.startGame();
     }

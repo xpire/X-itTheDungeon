@@ -3,6 +3,7 @@ package main.init;
 import main.events.AvatarDeathEvent;
 import main.events.EnemyEvent;
 import main.events.EventBus;
+import main.events.LevelEvent;
 import main.stat.IntegerStat;
 import main.stat.StatisticType;
 import main.stat.Statistics;
@@ -28,6 +29,12 @@ public class StatisticsInitialiser {
         playModeBus.addEventHandler(AvatarDeathEvent.AVATAR_DEATH, e -> {
             if (e.wasPlummeted()) {
                 stats.increment(StatisticType.NUM_PIT_DEATHS);
+            }
+        });
+
+        playModeBus.addEventHandler(LevelEvent.LEVEL_PASSED, e -> {
+            if (e.getLevel() > stats.getStat(StatisticType.MAX_LEVEL_CONQUERED).get()) {
+                stats.getStat(StatisticType.MAX_LEVEL_CONQUERED).increment();
             }
         });
     }
