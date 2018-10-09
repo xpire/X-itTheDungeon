@@ -207,6 +207,7 @@ public class LevelBuilder {
         pickupFactory.addSupplier('>', () -> new InvincibilityPotion(level));
         pickupFactory.addSupplier('+', () -> new Sword(level));
         pickupFactory.addSupplier('$', () -> new Treasure(level));
+        pickupFactory.addSupplier('@', () -> new BombPotion(level));
 
         pickupLayerBuilder = new LayerBuilder<Pickup>(level, pickupFactory) {
             @Override

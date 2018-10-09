@@ -32,6 +32,7 @@ public class Avatar extends Entity {
 
     private BooleanProperty isHovering;
     private BooleanProperty isRaged;
+    private IntegerProperty bombRadius;
 
     private Vec2i direction;
     private ArrayList<Integer> pastMoves;
@@ -89,7 +90,9 @@ public class Avatar extends Entity {
         view.addNode(swordView);
 
         isHovering  = new SimpleBooleanProperty(false);
-        isRaged = new SimpleBooleanProperty(false);
+        isRaged     = new SimpleBooleanProperty(false);
+        bombRadius  = new SimpleIntegerProperty(1);
+
 
         hoverView.visibleProperty().bind(isHovering);
         rageView.visibleProperty().bind(isRaged);
@@ -315,7 +318,7 @@ public class Avatar extends Entity {
     public void placeBomb() {
         if (numBombs.get() <= 0) return;
 
-        LitBomb bomb = new LitBomb(level);
+        LitBomb bomb = new LitBomb(level, bombRadius.get());
 
         if (level.canPlaceProp(pos, bomb)) {
             level.addProp(pos, bomb);
@@ -418,6 +421,16 @@ public class Avatar extends Entity {
      */
     public boolean pickUpInvincibilityPotion(InvincibilityPotion p) {
         onRageBegin(p);
+        return true;
+    }
+
+    /**
+     * Logic when the Avatar picks up a Invinc pot
+     * @param p invinc pot being picked up
+     * @return true if pickup successful, else false
+     */
+    public boolean pickUpBombPotion(BombPotion p) {
+        bombRadius.set(bombRadius.get() + 1);
         return true;
     }
 
