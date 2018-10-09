@@ -1,12 +1,10 @@
 package main.init;
 
+import main.content.IntStat;
 import main.events.AvatarDeathEvent;
 import main.events.EnemyEvent;
 import main.events.EventBus;
 import main.events.LevelEvent;
-import main.stat.IntegerStat;
-import main.stat.StatisticType;
-import main.stat.Statistics;
 
 public class StatisticsInitialiser {
 
@@ -16,25 +14,26 @@ public class StatisticsInitialiser {
         this.playModeBus = playModeBus;
     }
 
-    public void init(Statistics stats) {
-        stats.addStat(StatisticType.NUM_ENEMIES_KILLED,     new IntegerStat()); // TODO CAN BE REFACTORED
-        stats.addStat(StatisticType.NUM_TREASURES_COLLECTED, new IntegerStat());
-        stats.addStat(StatisticType.NUM_PIT_DEATHS,         new IntegerStat());
-        stats.addStat(StatisticType.MAX_LEVEL_CONQUERED,    new IntegerStat());
-
+    public void init(IntStat stats) {
         playModeBus.addEventHandler(EnemyEvent.ENEMY_KILLED, e -> {
-            stats.increment(StatisticType.NUM_ENEMIES_KILLED);
+            stats.increment(IntStat.Key.NUM_ENEMIES_KILLED);
         });
 
         playModeBus.addEventHandler(AvatarDeathEvent.AVATAR_DEATH, e -> {
             if (e.wasPlummeted()) {
-                stats.increment(StatisticType.NUM_PIT_DEATHS);
+                stats.increment(IntStat.Key.NUM_PIT_DEATHS);
             }
         });
 
         playModeBus.addEventHandler(LevelEvent.LEVEL_PASSED, e -> {
-            if (e.getLevel() > stats.getStat(StatisticType.MAX_LEVEL_CONQUERED).get()) {
-                stats.getStat(StatisticType.MAX_LEVEL_CONQUERED).increment();
+            if (e.getLevel() > stats.get(IntStat.Key.MAX_LEVEL_CONQUERED)) {
+                stats.increment(IntStat.Key.MAX_LEVEL_CONQUERED);
+            }
+        });
+
+        playModeBus.addEventHandler(LevelEvent.LEVEL_PASSED, e -> {
+            if (e.getLevel() > stats.get(IntStat.Key.MAX_LEVEL_CONQUERED)) {
+                stats.increment(IntStat.Key.MAX_LEVEL_CONQUERED);
             }
         });
     }

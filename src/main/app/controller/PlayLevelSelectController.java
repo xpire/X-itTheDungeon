@@ -1,5 +1,6 @@
 package main.app.controller;
 
+import com.google.gson.Gson;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
@@ -8,7 +9,7 @@ import main.app.Main;
 import main.app.model.AppScreen;
 import main.app.model.PlayLevelScreen;
 import main.app.model.PlayModeSelectScreen;
-import main.stat.StatisticType;
+import main.content.IntStatKey;
 
 import java.util.ArrayList;
 
@@ -26,6 +27,10 @@ public class PlayLevelSelectController extends AppController {
     @FXML
     public void initialize() {
 
+        Gson gson = new Gson();
+
+        System.out.println(gson.toJson(Main.stats));
+
         ArrayList<LevelWrapper> levels = new ArrayList<>();
         levels.add(new LevelWrapper("Level 1", "level01"));
         levels.add(new LevelWrapper("Level 2", "level02"));
@@ -37,7 +42,7 @@ public class PlayLevelSelectController extends AppController {
             Button btn = new Button(level.levelName);
             gridLevels.add(btn, i, 0);
 
-            btn.setDisable(Main.stats.getStat(StatisticType.MAX_LEVEL_CONQUERED).get() < i);
+            btn.setDisable(Main.stats.getStat(IntStatKey.MAX_LEVEL_CONQUERED).get() < i);
             btn.addEventHandler(MouseEvent.MOUSE_CLICKED, evt -> this.onLevelSelected(level.fileName, levels.indexOf(level) + 1));
         }
     }
