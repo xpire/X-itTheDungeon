@@ -43,7 +43,7 @@ public class IntStat extends GameStat<IntStat.Key, SimpleIntegerProperty> {
         NUM_BOULDERS_BOMBED,
         NUM_ENEMIES_KILLED_WITH_BOMB,
         NUM_ENEMIES_KILLED_WITH_ARROW,
-        NUM_ENEMIES_KILLED_WHEN_INVICIBLE,
+        NUM_ENEMIES_KILLED_WHEN_INVINCIBLE,
         NUM_DOORS_UNLOCKED
     }
 }

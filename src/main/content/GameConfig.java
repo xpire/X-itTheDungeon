@@ -2,20 +2,31 @@ package main.content;
 
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 // Initialiser Class for the Whole Game
 public class GameConfig {
 
     private ArrayList<LevelConfig> levelConfigs;
-    private int maxLevelConquered = 0;
+
+    private IntStat intStat = new IntStat();
 
     public GameConfig() {
         levelConfigs = new ArrayList<>();
-        levelConfigs.add(new LevelConfig("Level 1", "level01"));
-        levelConfigs.add(new LevelConfig("Level 2", "level02"));
-        levelConfigs.add(new LevelConfig("Level 3", "level03"));
+        levelConfigs.add(new LevelConfig("Level 1", "level01", 1));
+        levelConfigs.add(new LevelConfig("Level 2", "level02", 2));
+        levelConfigs.add(new LevelConfig("Level 3", "level03", 3));
 
         levelConfigs.get(0).unlock();
+    }
+
+
+    public int getNumLevels() {
+        return levelConfigs.size();
+    }
+
+    public Iterator<LevelConfig> levels() {
+        return levelConfigs.iterator();
     }
 
     public boolean isCompleted(int level) {

@@ -153,6 +153,7 @@ public class LevelBuilder {
         terrainFactory.addSupplier('#', () -> new Pit(level));
         terrainFactory.addSupplier('/', () -> new Switch(level));
         terrainFactory.addSupplier('*', () -> new Wall(level));
+        terrainFactory.addSupplier('H', () -> new HeatPlate(level));
 
         terrainLayerBuilder = new LayerBuilder<Terrain>(level, terrainFactory) {
             @Override
@@ -171,6 +172,8 @@ public class LevelBuilder {
             }
         };
     }
+
+
 
     private void initPropLayerBuilder() {
         EntityFactory<Prop> propFactory = new EntityFactory<>();

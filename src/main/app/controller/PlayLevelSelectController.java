@@ -9,9 +9,12 @@ import main.app.Main;
 import main.app.model.AppScreen;
 import main.app.model.PlayLevelScreen;
 import main.app.model.PlayModeSelectScreen;
-import main.content.IntStatKey;
+import main.content.GameConfig;
+import main.content.IntStat;
+import main.content.LevelConfig;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class PlayLevelSelectController extends AppController {
 
@@ -27,36 +30,27 @@ public class PlayLevelSelectController extends AppController {
     @FXML
     public void initialize() {
 
-        Gson gson = new Gson();
+//        Gson gson = new Gson();
 
-        System.out.println(gson.toJson(Main.stats));
+        GameConfig config = new GameConfig();
 
-        ArrayList<LevelWrapper> levels = new ArrayList<>();
-        levels.add(new LevelWrapper("Level 1", "level01"));
-        levels.add(new LevelWrapper("Level 2", "level02"));
-        levels.add(new LevelWrapper("Level 3", "level03"));
+        Iterator<LevelConfig> it = config.levels();
 
-        for (int i = 0; i < levels.size(); i++) {
-            LevelWrapper level = levels.get(i);
+        for (int i = 0; it.hasNext(); i++) {
+            LevelConfig level = it.next();
 
-            Button btn = new Button(level.levelName);
+            Button btn = new Button(level.getName());
             gridLevels.add(btn, i, 0);
 
-            btn.setDisable(Main.stats.getStat(IntStatKey.MAX_LEVEL_CONQUERED).get() < i);
-            btn.addEventHandler(MouseEvent.MOUSE_CLICKED, evt -> this.onLevelSelected(level.fileName, levels.indexOf(level) + 1));
+            System.out.println(i + " " + level.getLevelNum());
+
+            btn.setDisable(Main.stats.getStat(IntStat.Key.MAX_LEVEL_CONQUERED).get() < i);
+            btn.addEventHandler(MouseEvent.MOUSE_CLICKED, evt -> this.onLevelSelected(level.getFilename(), level.getLevelNum() + 1));
         }
+
+        System.out.println(Main.stats.getStat(IntStat.Key.MAX_LEVEL_CONQUERED).get());
     }
 
-    private class LevelWrapper {
-
-        private String levelName;
-        private String fileName;
-
-        public LevelWrapper(String levelName, String fileName){
-            this.levelName = levelName;
-            this.fileName = fileName;
-        }
-    }
 
 //    @FXML
 //    public void onLevelBtnSelected() {

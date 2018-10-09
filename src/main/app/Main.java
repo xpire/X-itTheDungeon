@@ -25,7 +25,6 @@ Todo:
 3. stars
 4. unlocking boss level
 5. entities: fire spikes, bomb radius buff potion,
-
  */
 
 public class Main extends Application {

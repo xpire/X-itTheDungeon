@@ -30,11 +30,5 @@ public class StatisticsInitialiser {
                 stats.increment(IntStat.Key.MAX_LEVEL_CONQUERED);
             }
         });
-
-        playModeBus.addEventHandler(LevelEvent.LEVEL_PASSED, e -> {
-            if (e.getLevel() > stats.get(IntStat.Key.MAX_LEVEL_CONQUERED)) {
-                stats.increment(IntStat.Key.MAX_LEVEL_CONQUERED);
-            }
-        });
     }
 }
