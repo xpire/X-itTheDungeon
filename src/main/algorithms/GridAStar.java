@@ -17,9 +17,6 @@ public class GridAStar {
         this.level   = level;
         this.pos     = pos;
         this.targets = targets;
-
-        System.out.println("Targets: ");
-        targets.forEach(t -> System.out.println("- " + t));
     }
 
     public List<Vec2i> search() {

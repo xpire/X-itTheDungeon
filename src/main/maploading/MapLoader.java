@@ -22,7 +22,7 @@ public class MapLoader {
      * First gets the dimensions of the map and initialises the Level
      * Then loads in the body of the Level, using the LevelBuilderContext to map symbols to
      * entities
-     * Then sets the Level's objectives
+     * Then sets the Level's objective
      * Finally sets the Key-Door Mapping within the Level
      *
      * @param mapName name of the Level to load in
@@ -70,13 +70,13 @@ public class MapLoader {
     }
 
 
-    // Extract objectives
+    // Extract objective
     private void setObjectives(Scanner sc) throws InvalidMapException {
 
-        if (!sc.hasNextLine()) throw new InvalidMapException("No objectives");
+        if (!sc.hasNextLine()) throw new InvalidMapException("No objective");
 
         String[] line = readLine(sc);
-        if (line.length == 0) System.out.println("Warning: No objectives specified");
+        if (line.length == 0) System.out.println("Warning: No objective specified");
 
         builder.setObjectives(new ArrayList<>(Arrays.asList(line)));
     }

@@ -13,6 +13,8 @@ import main.entities.pickup.*;
 import main.entities.prop.FlyingArrow;
 import main.entities.prop.LitBomb;
 import main.entities.terrain.Door;
+import main.entities.terrain.Pit;
+import main.events.AvatarDeathEvent;
 import main.events.AvatarEvent;
 import main.math.Vec2i;
 
@@ -30,6 +32,7 @@ public class Avatar extends Entity {
 
     private BooleanProperty isHovering;
     private BooleanProperty isRaged;
+    private IntegerProperty bombRadius;
 
     private Vec2i direction;
     private ArrayList<Integer> pastMoves;
@@ -87,7 +90,9 @@ public class Avatar extends Entity {
         view.addNode(swordView);
 
         isHovering  = new SimpleBooleanProperty(false);
-        isRaged = new SimpleBooleanProperty(false);
+        isRaged     = new SimpleBooleanProperty(false);
+        bombRadius  = new SimpleIntegerProperty(1);
+
 
         hoverView.visibleProperty().bind(isHovering);
         rageView.visibleProperty().bind(isRaged);
@@ -98,14 +103,36 @@ public class Avatar extends Entity {
     @Override
     public void onDestroyed() {
         level.removeAvatar();
-        level.postEvent(new AvatarEvent(AvatarEvent.AVATAR_DIED));
     }
+
+    public void onThreatenedByPit(Pit pit) {
+        if (!isHovering()) {
+            level.postEvent(AvatarDeathEvent.deathByFalling());
+            onDestroyed();
+        }
+    }
+
+    public void onThreatenedByBomb(Bomb bomb) {
+        if (isRaged()) return;
+
+        level.postEvent(AvatarDeathEvent.deathByExplosion());
+        onDestroyed();
+    }
+
+    public void onThreatenedByEnemy(Enemy enemy) {
+        if (isRaged()) {
+            enemy.onDestroyed();
+        }
+        else {
+            level.postEvent(AvatarDeathEvent.deathByAttack());
+            onDestroyed();
+        }
+    }
+
 
     @Override
     public void onExploded() {
-        if (!isRaged.get()) {
-            onDestroyed();
-        }
+        onThreatenedByBomb(null); // TODO
     }
 
 
@@ -291,7 +318,7 @@ public class Avatar extends Entity {
     public void placeBomb() {
         if (numBombs.get() <= 0) return;
 
-        LitBomb bomb = new LitBomb(level);
+        LitBomb bomb = new LitBomb(level, bombRadius.get());
 
         if (level.canPlaceProp(pos, bomb)) {
             level.addProp(pos, bomb);
@@ -394,6 +421,16 @@ public class Avatar extends Entity {
      */
     public boolean pickUpInvincibilityPotion(InvincibilityPotion p) {
         onRageBegin(p);
+        return true;
+    }
+
+    /**
+     * Logic when the Avatar picks up a Invinc pot
+     * @param p invinc pot being picked up
+     * @return true if pickup successful, else false
+     */
+    public boolean pickUpBombPotion(BombPotion p) {
+        bombRadius.set(bombRadius.get() + 1);
         return true;
     }
 
@@ -509,8 +546,6 @@ public class Avatar extends Entity {
     }
 
 
-
-
     @Override
     public boolean isPassableFor(Entity entity) {
         return false;
@@ -526,9 +561,7 @@ public class Avatar extends Entity {
 
     @Override
     public void onEnterByEnemy(Enemy enemy) {
-        if (isRaged())
-            enemy.onDestroyed();
-        else
-            onDestroyed();
+        System.out.println("On Enter by Enemy");
+        onThreatenedByEnemy(enemy);
     }
 }

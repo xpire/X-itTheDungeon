@@ -16,12 +16,15 @@ import main.component.ViewComponent;
 import main.entities.Avatar;
 import main.entities.Entity;
 import main.entities.enemies.EnemyManager;
+import main.events.AvatarDeathEvent;
 import main.events.AvatarEvent;
+import main.events.LevelEvent;
 import main.maploading.MapLoader;
 
 public class PlayMode implements Game {
 
     private Level level;
+    private int levelNum = -1;
 
     private GameLoop gameLoop;
     private Input input;
@@ -68,7 +71,7 @@ public class PlayMode implements Game {
 
     private void initEvents() {
         level.addEventHandler(AvatarEvent.AVATAR_TURN_ENDED, event -> endPlayerTurn());
-        level.addEventHandler(AvatarEvent.AVATAR_DIED, event -> gameOver());
+        level.addEventHandler(AvatarDeathEvent.AVATAR_DEATH, event -> gameOver());
     }
 
     private void initUi() {
@@ -190,7 +193,6 @@ public class PlayMode implements Game {
             onPlayerTurn();
 
             if (!isPlayerTurn) {
-                System.out.println("GOOD!");
                 onRoundEnd();
             }
         }
@@ -246,9 +248,15 @@ public class PlayMode implements Game {
         lblGameWin.fontProperty().set(Font.font(40));
         view.addNode(lblGameWin);
         isRunning = false;
+
+        level.postEvent(new LevelEvent(LevelEvent.LEVEL_PASSED, levelNum));
     }
 
     public Node getView() {
         return view.getView();
+    }
+
+    public void setLevelNum(int levelNum) {
+        this.levelNum = levelNum;
     }
 }

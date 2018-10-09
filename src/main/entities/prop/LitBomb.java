@@ -17,6 +17,7 @@ public class LitBomb extends Prop{
 
     private final int MAX_FUSE_LENGTH = 5;
     private int fuseLength = MAX_FUSE_LENGTH;
+    private int radius = 1;
 
     /**
      * Basic Constructor
@@ -24,6 +25,11 @@ public class LitBomb extends Prop{
      */
     public LitBomb(Level level) {
         super(level);
+    }
+
+    public LitBomb(Level level, int radius) {
+        super(level);
+        this.radius = radius;
     }
 
     public LitBomb(Level level, Vec2i pos) {
@@ -57,10 +63,14 @@ public class LitBomb extends Prop{
      */
     public void onExplosion() {
         destroyEntity(pos);
-        destroyEntity(pos.add(-1, 0));
-        destroyEntity(pos.add(1, 0));
-        destroyEntity(pos.add(0, -1));
-        destroyEntity(pos.add(0, 1));
+
+        for (Vec2i dir : Vec2i.DIRECTIONS) {
+            Vec2i target = new Vec2i(pos);
+            for (int i = 1; i <= radius; i++) {
+                target = target.add(dir);
+                destroyEntity(target);
+            }
+        }
 
         onDestroyed();
     }
