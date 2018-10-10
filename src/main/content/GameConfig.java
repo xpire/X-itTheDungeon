@@ -1,14 +1,18 @@
 package main.content;
 
 
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+import javafx.beans.property.SimpleIntegerProperty;
+
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.Iterator;
 
 // Initialiser Class for the Whole Game
 public class GameConfig {
 
     private ArrayList<LevelConfig> levelConfigs;
-
     private IntStat intStat = new IntStat();
 
     public GameConfig() {
@@ -20,6 +24,9 @@ public class GameConfig {
         levelConfigs.get(0).unlock();
     }
 
+    public IntStat getIntStat() {
+        return intStat;
+    }
 
     public int getNumLevels() {
         return levelConfigs.size();
@@ -35,5 +42,22 @@ public class GameConfig {
 
     public boolean isLocked(int level) {
         return levelConfigs.get(level).isLocked();
+    }
+
+
+    public static final class SerialisationProxy {
+
+        private final static GsonBuilder builder;
+
+        static {
+            builder = IntStat.SerialisationProxy.getBuilder().setPrettyPrinting();
+//                    .registerTypeAdapter(
+//                            new TypeToken<ArrayList<LevelConfig>>(){}.getType(),
+//                            type -> new ArrayList<>());
+        }
+
+        public static GsonBuilder getBuilder() {
+            return builder;
+        }
     }
 }

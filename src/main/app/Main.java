@@ -2,20 +2,17 @@ package main.app;
 
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
 import javafx.application.Application;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.stage.Stage;
 import main.app.model.MainScreen;
-import main.content.EnumMapInstanceCreator;
+import main.content.GameConfig;
 import main.content.IntStat;
 import main.events.EventBus;
 import main.init.AchievementInitialiser;
 import main.init.StatisticsInitialiser;
 import main.trigger.achievement.AchievementSystem;
+import main.persistence.JsonPersistor;
 
-import java.util.EnumMap;
 
 
 /*
@@ -30,52 +27,61 @@ Todo:
 public class Main extends Application {
 
     public static EventBus playModeBus = new EventBus();
-    public static IntStat stats;
+    public static GameConfig gameConfig;
 
     @Override
-    public void start(Stage s) throws Exception{
+    public void start(Stage s){
 
         s.setWidth(960);
         s.setHeight(640);
 
+        try {
+            gameConfig = new JsonPersistor().load("src/save/localsave.json", GameConfig.class, GameConfig.SerialisationProxy.getBuilder().create());
+            if (gameConfig == null) {
+                gameConfig = new GameConfig();
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            gameConfig = new GameConfig();
+        }
+
+//        gameConfig = new JsonPersistor().load("src/save/localsave.json", GameConfig.class, GameConfig.SerialisationProxy.getBuilder().create());
+//        if (gameConfig == null) {
+//            System.out.println("NULL ERROR!");
+//            gameConfig = new GameConfig();
+//        }
+
+//        gameConfig = new GameConfig();
+//        Gson gson = GameConfig.SerialisationProxy.getBuilder().create();
+
         AchievementSystem achievementSystem = new AchievementSystem();
-        stats = new IntStat();
 
         StatisticsInitialiser statInit = new StatisticsInitialiser(playModeBus);
-        statInit.init(stats);
+        statInit.init(gameConfig.getIntStat());
 
-        AchievementInitialiser achieveInit = new AchievementInitialiser(achievementSystem, stats);
+        AchievementInitialiser achieveInit = new AchievementInitialiser(achievementSystem, gameConfig.getIntStat());
         achieveInit.init();
 
-
-
-//        IntegerStatistics<IntStatKey> z = new IntegerStatistics<>(IntStatKey.class, IntStatKey.values());
-//        z.set(IntStatKey.NUM_DEATHS, 100);
-//        z.set(IntStatKey.NUM_COLLECTED, 10);
-//        z.increment(IntStatKey.NUM_COLLECTED);
+//        System.out.println("AFTER SETUP");
+//        String data = gson.toJson(gameConfig);
+//        System.out.println(data);
 //
-//        System.out.println(z.get(IntStatKey.NUM_DEATHS));
-//        System.out.println(z.get(IntStatKey.NUM_COLLECTED));
-
-//        Type type = new TypeToken<IntStat>(){}.getType();
-
-        GsonBuilder builder = new GsonBuilder()
-                .registerTypeAdapter(
-                    new TypeToken<EnumMap<IntStat.Key, SimpleIntegerProperty>>(){}.getType(),
-                    new EnumMapInstanceCreator<IntStat.Key, SimpleIntegerProperty>(IntStat.Key.class));
-
-        IntStat stats = new IntStat();
-        Gson gson = builder.create();
-        System.out.println(gson.toJson(stats));
-        IntStat newStats = gson.fromJson(gson.toJson(stats), IntStat.class);
-        newStats.increment(IntStat.Key.NUM_PIT_DEATHS);
-
-        System.out.println(gson.toJson(newStats));
+//        GameConfig config2 = gson.fromJson(data, GameConfig.class);
+//        System.out.println(config2);
+//
+//        System.out.println(GameConfig.SerialisationProxy.getBuilder().create().toJson(gameConfig));
 
         MainScreen sc = new MainScreen(s);
         sc.start();
     }
 
+
+    @Override
+    public void stop() {
+//        System.out.println(GameConfig.SerialisationProxy.getBuilder().create().toJson(gameConfig));
+        new JsonPersistor().save("src/save/localsave.json", gameConfig, GameConfig.SerialisationProxy.getBuilder().create());
+    }
 
     public static void main(String[] args) {
         launch(args);

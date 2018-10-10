@@ -1,8 +1,13 @@
 package main.content;
 
 
+import com.google.gson.*;
+import com.google.gson.reflect.TypeToken;
+import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
+import java.lang.reflect.Type;
+import java.util.EnumMap;
 import java.util.function.Consumer;
 
 public class IntStat extends GameStat<IntStat.Key, SimpleIntegerProperty> {
@@ -45,5 +50,24 @@ public class IntStat extends GameStat<IntStat.Key, SimpleIntegerProperty> {
         NUM_ENEMIES_KILLED_WITH_ARROW,
         NUM_ENEMIES_KILLED_WHEN_INVINCIBLE,
         NUM_DOORS_UNLOCKED
+    }
+
+
+    public static final class SerialisationProxy {
+
+        private final static GsonBuilder builder = new GsonBuilder()
+                .registerTypeAdapter(
+                        new TypeToken<EnumMap<IntStat.Key, SimpleIntegerProperty>>() {
+                        }.getType(),
+                        new EnumMapInstanceCreator<IntStat.Key, SimpleIntegerProperty>(IntStat.Key.class))
+                .registerTypeAdapter(
+                        SimpleIntegerProperty.class, (JsonDeserializer<SimpleIntegerProperty>) (x, type, ctx) -> new SimpleIntegerProperty(x.getAsInt()))
+                .registerTypeAdapter(
+                        SimpleIntegerProperty.class,
+                        (JsonSerializer<SimpleIntegerProperty>) (x, type, ctx) -> new JsonPrimitive(x.get()));
+
+        public static GsonBuilder getBuilder() {
+            return builder;
+        }
     }
 }
