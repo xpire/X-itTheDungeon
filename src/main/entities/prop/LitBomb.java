@@ -43,6 +43,11 @@ public class LitBomb extends Prop{
         view.addNode(bomb);
     }
 
+    @Override
+    public void onExploded() {
+        onExplosion();
+    }
+
 
     @Override
     public void onTurnUpdate() {
@@ -69,6 +74,8 @@ public class LitBomb extends Prop{
             for (int i = 1; i <= radius; i++) {
                 target = target.add(dir);
                 destroyEntity(target);
+                // destroyEntityByExplosion(target)
+                // onDestroyedByExplosion(target);
             }
         }
 
