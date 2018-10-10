@@ -35,7 +35,7 @@ public class CreativeLabController extends AppController {
 
     @FXML
     public void initialize() {
-        initialiseEditor();
+        initialiseEditor(8, 8);
         initialiseToolBox();
         initialiseOptions();
     }
@@ -43,8 +43,7 @@ public class CreativeLabController extends AppController {
     /**
      * Initialises the Editor GridPlane on the scene
      */
-    private void initialiseEditor() {
-        int numCols = 8, numRows = 8;
+    private void initialiseEditor(int numCols, int numRows) {
 
         initialiseGridPane(currDraft, numCols, numRows);
 

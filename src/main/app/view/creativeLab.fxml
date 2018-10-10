@@ -6,37 +6,27 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-            prefHeight="653.0" prefWidth="944.0"
-            xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="653.0" prefWidth="944.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
     <children>
 
-        <Label layoutX="415.0" layoutY="14.0" text="Creative Lab">
+        <Label layoutX="415.0" layoutY="14.0" text="Creative Lab" textAlignment="CENTER" AnchorPane.topAnchor="14.0">
             <font>
-                <Font size="21.0"/>
+                <Font size="21.0" />
             </font>
         </Label>
 
-        <GridPane xmlns:fx="http://javafx.com/fxml/1" fx:id="currDraft" gridLinesVisible="true"
-                  layoutX="107.0" layoutY="45.0" prefHeight="349.0" prefWidth="637.0"
-                  AnchorPane.bottomAnchor="117.0" AnchorPane.leftAnchor="107.0" AnchorPane.rightAnchor="26.0" AnchorPane.topAnchor="45.0">
+        <GridPane fx:id="currDraft" gridLinesVisible="true" layoutX="107.0" layoutY="45.0" prefHeight="349.0" prefWidth="637.0" AnchorPane.bottomAnchor="117.0" AnchorPane.leftAnchor="107.0" AnchorPane.rightAnchor="26.0" AnchorPane.topAnchor="45.0" xmlns:fx="http://javafx.com/fxml/1">
         </GridPane>
 
-        <GridPane gridLinesVisible="true" fx:id="toolbox"
-                  layoutX="137.0" layoutY="407.0" prefHeight="90.0" prefWidth="525.0"
-                  AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="137.0" AnchorPane.rightAnchor="108.0">
+        <GridPane fx:id="toolbox" gridLinesVisible="true" layoutX="137.0" layoutY="407.0" prefHeight="90.0" prefWidth="525.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="137.0" AnchorPane.rightAnchor="108.0">
 
         </GridPane>
 
-        <GridPane layoutX="14.0" layoutY="62.0" prefHeight="336.0" prefWidth="76.0"
-                  AnchorPane.bottomAnchor="113.0" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="62.0"
-                  fx:id="optionsMenu">
+        <GridPane fx:id="optionsMenu" layoutX="14.0" layoutY="62.0" prefHeight="336.0" prefWidth="76.0" AnchorPane.bottomAnchor="113.0" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="62.0">
 
         </GridPane>
 
-        <Button layoutX="14.0" layoutY="427.0" prefHeight="50.0" prefWidth="76.0"
-                text="PLAY" mnemonicParsing="false"
-                AnchorPane.bottomAnchor="34.0" AnchorPane.leftAnchor="14.0"/>
+        <Button layoutX="14.0" layoutY="427.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="76.0" text="PLAY" AnchorPane.bottomAnchor="34.0" AnchorPane.leftAnchor="14.0" />
 
     </children>
 </AnchorPane>
