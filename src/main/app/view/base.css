@@ -1,0 +1,152 @@
+
+/*
+.push-button {
+    -fx-background-image: url('../../../asset/button/white_circle_down.png');
+    -fx-background-size: 64 64;
+    -fx-background-repeat: no-repeat no-repeat;
+    -fx-background-color: transparent;
+    -fx-pref-width: 64;
+    -fx-pref-height: 64;
+}
+
+
+.push-button:pressed {
+    -fx-background-image: url('../../../asset/button/white_circle_down.png');
+    -fx-background-position: 0 1, 0 1;
+}
+*/
+
+.root {
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+    -fx-background-color: black;
+}
+
+
+
+
+
+.lg-text {
+    -fx-font-size: 35px;
+}
+
+
+.md-text {
+    -fx-font-size: 24px;
+}
+
+
+/**
+    RICH BLUE
+**/
+.rich-blue {
+    -fx-background-color:
+        #000000,
+        linear-gradient(#7ebcea, #2f4b8f),
+        linear-gradient(#426ab7, #263e75),
+        linear-gradient(#395cab, #223768);
+    -fx-background-insets: 0,1,2,3;
+    -fx-background-radius: 3,2,2,2;
+    -fx-padding: 12 30 12 30;
+    -fx-text-fill: white;
+    -fx-font-family: Herculanum;
+}
+
+
+.rich-blue:hover {
+    -fx-background-color:
+        derive(#000000, 10%),
+        linear-gradient( derive(#7ebcea, 10%),  derive(#2f4b8f, 10%)),
+        linear-gradient( derive(#426ab7, 10%),  derive(#263e75, 10%)),
+        linear-gradient( derive(#395cab, 10%),  derive(#223768, 10%));
+}
+
+.rich-blue:hover:pressed {
+    -fx-background-color:
+        derive(#000000, -10%),
+        linear-gradient( derive(#7ebcea, -10%),  derive(#2f4b8f, -10%)),
+        linear-gradient( derive(#426ab7, -10%),  derive(#263e75, -10%)),
+        linear-gradient( derive(#395cab, -10%),  derive(#223768, -10%));
+}
+
+
+
+/**
+    RICH RED
+**/
+.rich-red {
+    -fx-background-color:
+        #000000,
+        linear-gradient(#ea7ebc, #8f2f4b),
+        linear-gradient(#b7426a, #75263e),
+        linear-gradient(#ab395c, #682237);
+    -fx-background-insets: 0,1,2,3;
+    -fx-background-radius: 3,2,2,2;
+    -fx-padding: 12 30 12 30;
+    -fx-text-fill: white;
+    -fx-font-family: Herculanum;
+}
+
+.rich-red:hover {
+    -fx-background-color:
+        derive(#000000, 10%),
+        linear-gradient( derive(#ea7ebc, 10%),  derive(#8f2f4b, 10%)),
+        linear-gradient( derive(#b7426a, 10%),  derive(#75263e, 10%)),
+        linear-gradient( derive(#ab395c, 10%),  derive(#682237, 10%));
+}
+
+.rich-red:hover:pressed {
+    -fx-background-color:
+        derive(#000000, -10%),
+        linear-gradient( derive(#ea7ebc, -10%),  derive(#8f2f4b, -10%)),
+        linear-gradient( derive(#b7426a, -10%),  derive(#75263e, -10%)),
+        linear-gradient( derive(#ab395c, -10%),  derive(#682237, -10%));
+}
+
+/*
+.rich-green {
+    -fx-background-color:
+        #000000,
+        linear-gradient(#7eeabc, #2f8f4b),
+        linear-gradient(#42b76a, #26753e),
+        linear-gradient(#39ab5c, #226837);
+    -fx-background-insets: 0,1,2,3;
+    -fx-background-radius: 3,2,2,2;
+    -fx-padding: 12 30 12 30;
+    -fx-text-fill: white;
+    -fx-font-family: Herculanum;
+}
+
+
+.rich-blue:hover {
+    -fx-background-color:
+        derive(#000000, 10%),
+        linear-gradient( derive(#7ebcea, 10%),  derive(#2f4b8f, 10%)),
+        linear-gradient( derive(#426ab7, 10%),  derive(#263e75, 10%)),
+        linear-gradient( derive(#395cab, 10%),  derive(#223768, 10%));
+}
+
+.rich-blue:hover:pressed {
+    -fx-background-color:
+        derive(#000000, -10%),
+        linear-gradient( derive(#7ebcea, -10%),  derive(#2f4b8f, -10%)),
+        linear-gradient( derive(#426ab7, -10%),  derive(#263e75, -10%)),
+        linear-gradient( derive(#395cab, -10%),  derive(#223768, -10%));
+}
+
+*/
+
+
+
+.rich-blue Text, .rich-red Text {
+    -fx-effect: dropshadow( one-pass-box , rgba(0,0,0,0.8) , 0, 0.0 , 0 , 1);
+}
+
+
+
+/**
+    ICON
+**/
+.icon-overlay {
+    -fx-blend-mode: soft-light;
+}

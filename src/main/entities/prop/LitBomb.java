@@ -89,7 +89,10 @@ public class LitBomb extends Prop{
      */
     public void destroyEntity(Vec2i pos) {
         Iterator<Entity> it = level.getEntitiesAt(pos);
-        it.forEachRemaining(Entity::onExploded);
+        it.forEachRemaining(e -> {
+            if (!e.equals(this))
+                e.onExploded();
+        });
     }
 
 
