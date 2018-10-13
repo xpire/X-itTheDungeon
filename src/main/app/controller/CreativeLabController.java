@@ -1,20 +1,28 @@
 package main.app.controller;
 
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import main.app.model.AppScreen;
 import main.app.model.CreateModeSelectScreen;
+import main.maploading.DraftBuilder;
+import main.math.Vec2i;
+
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import java.util.ArrayList;
 
 public class CreativeLabController extends AppController {
 
     private String selectedEntity;
+    private DraftBuilder draftBuilder;
 
     @FXML
     private GridPane currDraft;
@@ -24,6 +32,9 @@ public class CreativeLabController extends AppController {
 
     @FXML
     private GridPane optionsMenu;
+
+    @FXML
+    private GridPane objectivesBox;
 
     /**
      * Basic constructor for the CreativeLab Controller
@@ -38,6 +49,9 @@ public class CreativeLabController extends AppController {
         initialiseEditor(8, 8);
         initialiseToolBox();
         initialiseOptions();
+        initialiseObjectivesBox();
+
+        draftBuilder = new DraftBuilder(8, 8, "testDraft");
     }
 
     /**
@@ -57,13 +71,13 @@ public class CreativeLabController extends AppController {
                     int selectedCol = GridPane.getColumnIndex(source);
 
                     if (selectedEntity != null) {
-                        //edit tile w/ selectedRow, Col
+                        draftBuilder.editTileGUI(new Vec2i(selectedCol, selectedRow), selectedEntity);
+                        draftBuilder.displayLevel();
                     }
 
-
-                    System.out.println(selectedRow);
-                    System.out.println(selectedCol);
+                    System.out.println(selectedRow + selectedCol + selectedEntity);
                 });
+
                 currDraft.add(pane, i, j);
             }
         }
@@ -111,25 +125,92 @@ public class CreativeLabController extends AppController {
         //TODO : make this nicer
         Button save    = new Button();
         Button saveAs  = new Button();
+        Button resize  = new Button();
         Button publish = new Button();
         Button exit    = new Button();
 
+        Label rowsLabel = new Label("Rows: ");
+        TextField newRow = new TextField();
+
+        Label colsLabel = new Label("Cols: ");
+        TextField newCol = new TextField();
+
         save.setText("Save");
         saveAs.setText("Save As");
+        resize.setText("Resize");
         publish.setText("Publish");
         exit.setText("Exit");
 
         exit.setOnAction(this::onExitBtnPressed);
+        resize.setOnAction(this::onResizeBtnPressed);
+        save.setOnAction(this::onSaveBtnPressed);
+        publish.setOnAction(this::onPublishBtnPressed);
 
         optionsMenu.add(save, 0, 0);
         optionsMenu.add(saveAs, 0, 1);
+        optionsMenu.add(resize, 0, 2);
         optionsMenu.add(publish, 0, 5);
         optionsMenu.add(exit, 0, 6);
+
+        optionsMenu.add(rowsLabel, 0, 3);
+        optionsMenu.add(newRow, 0, 3);
+        optionsMenu.add(colsLabel, 0, 4);
+        optionsMenu.add(newCol, 0, 4);
+
 
         for (Node n : optionsMenu.getChildren()) {
             GridPane.setHalignment(n, HPos.CENTER);
             GridPane.setValignment(n, VPos.CENTER);
         }
+
+    }
+
+    private void initialiseObjectivesBox() {
+
+        initialiseGridPane(objectivesBox, 2, 2);
+
+        CheckBox exitCondition = new CheckBox();
+        CheckBox killCondition = new CheckBox();
+        CheckBox treasureCondition = new CheckBox();
+        CheckBox switchCondition = new CheckBox();
+
+        exitCondition.setText("A");
+        treasureCondition.setText("B");
+        killCondition.setText("C");
+        switchCondition.setText("D");
+
+        EventHandler makeMutuallyExclusive = e -> {
+            CheckBox cb = (CheckBox) e.getSource();
+            ArrayList<String> objectives = new ArrayList<>();
+
+            if (cb.getText().equals("A")) {
+                killCondition.setSelected(false);
+                treasureCondition.setSelected(false);
+                switchCondition.setSelected(false);
+
+                objectives.add(cb.getText());
+            } else {
+                exitCondition.setSelected(false);
+
+                if (treasureCondition.isSelected()) objectives.add("B");
+                if (killCondition.isSelected()) objectives.add("C");
+                if (switchCondition.isSelected()) objectives.add("D");
+            }
+
+            draftBuilder.setObjective(objectives);
+            draftBuilder.displayLevel();
+
+        };
+
+        exitCondition.setOnAction(makeMutuallyExclusive);
+        killCondition.setOnAction(makeMutuallyExclusive);
+        treasureCondition.setOnAction(makeMutuallyExclusive);
+        switchCondition.setOnAction(makeMutuallyExclusive);
+
+        objectivesBox.add(exitCondition, 0, 0);
+        objectivesBox.add(killCondition, 0, 1);
+        objectivesBox.add(treasureCondition, 1, 0);
+        objectivesBox.add(switchCondition, 1, 1);
 
     }
 
@@ -176,4 +257,19 @@ public class CreativeLabController extends AppController {
     private void onExitBtnPressed(ActionEvent actionEvent) {
         switchScreen(new CreateModeSelectScreen(screen.getStage()));
     }
+
+    private void onResizeBtnPressed(ActionEvent actionEvent) {
+        //get info from the textFields and call the resize function
+//        draftBuilder.resize();
+        //update the editor gridpane as well
+    }
+
+    private void onSaveBtnPressed(ActionEvent actionEvent) {
+        draftBuilder.saveMap(draftBuilder.getName(), "drafts");
+    }
+
+    private void onPublishBtnPressed(ActionEvent actionEvent) {
+        //when published : play then save into levels
+    }
+
 }
