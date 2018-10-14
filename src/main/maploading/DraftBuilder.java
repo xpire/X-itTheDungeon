@@ -181,7 +181,7 @@ public class DraftBuilder {
      * @param entities String of entities to add (in symbol format)
      * @param sc instance of a scanner if they wish to add a key/door
      */
-    public void editTile(Vec2i tile, String entities, Scanner sc) {
+    public void editTile(Vec2i tile, String entities, Scanner sc) { //TODO remove need for scanner
         LevelBuilder levelBuilder = new LevelBuilder(level);
 
         char[] eachEnt = entities.toCharArray();
@@ -224,6 +224,22 @@ public class DraftBuilder {
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
+        }
+    }
+
+    public void editTileGUI(Vec2i tile, String entity) {
+        LevelBuilder levelBuilder = new LevelBuilder(level);
+
+        try {
+            if (!entity.equals("K") && !entity.equals("|"))
+                levelBuilder.makeAndAttach(tile, entity.charAt(0));
+            else {
+                //TODO: fix this
+                System.out.println("this will be handled later :P");
+
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
     }
 

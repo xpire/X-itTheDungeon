@@ -11,7 +11,6 @@ import java.util.function.BiConsumer;
 
 public abstract class EntityLayer <T extends Entity> {
 
-    protected Level level;
     protected ViewComponent view;
     protected BiConsumer<Vec2i, T> onEntityEnter = (pos, entity) -> {};
     protected BiConsumer<Vec2i, T> onEntityLeave = (pos, entity) -> {};

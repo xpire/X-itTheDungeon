@@ -56,6 +56,9 @@ public class SingletonLayer<T extends Entity> extends EntityLayer<T> {
 
     @Override
     public Iterator<T> iterator() {
+        if (entity == null) {
+            return Collections.emptyIterator();
+        }
         return Collections.singletonList(entity).iterator();
     }
 }

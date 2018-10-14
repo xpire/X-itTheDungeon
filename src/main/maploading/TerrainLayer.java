@@ -11,17 +11,17 @@ import java.util.function.Supplier;
 
 public class TerrainLayer extends EntityLayer<Terrain> {
 
-    private final Supplier<Terrain> DEFAULT_TERRAIN = () -> new Ground(level);
+    private Supplier<Terrain> defaultTerrain;
 
     private int nRows;
     private int nCols;
 
     private Terrain[][] terrains;
 
-    public TerrainLayer(int nRows, int nCols) {
+    public TerrainLayer(int nRows, int nCols, Supplier<Terrain> defaultTerrain) {
         this.nRows = nRows;
         this.nCols = nCols;
-
+        this.defaultTerrain = defaultTerrain;
 
 //        GridPane gridView = new GridPane();
 //        gridView.setMinSize(nCols * size, nRows * size);
@@ -53,7 +53,7 @@ public class TerrainLayer extends EntityLayer<Terrain> {
         Terrain terrain = removeEntity(pos);
 
         if (replaceWithDefault)
-            addEntity(pos, DEFAULT_TERRAIN.get());
+            addEntity(pos, defaultTerrain.get());
 
         return terrain;
     }
@@ -87,7 +87,7 @@ public class TerrainLayer extends EntityLayer<Terrain> {
             for (int j = 0; j < newNCols; j++) {
                 Vec2i pos = new Vec2i(j, i);
                 if (!hasEntity(pos))
-                    addEntity(pos, DEFAULT_TERRAIN.get());
+                    addEntity(pos, defaultTerrain.get());
             }
         }
     }
