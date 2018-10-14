@@ -1,8 +1,6 @@
 package main.app.controller;
 
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.HPos;
@@ -15,8 +13,6 @@ import main.app.model.CreateModeSelectScreen;
 import main.maploading.DraftBuilder;
 import main.math.Vec2i;
 
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import java.util.ArrayList;
 
 public class CreativeLabController extends AppController {
@@ -75,7 +71,7 @@ public class CreativeLabController extends AppController {
                         draftBuilder.displayLevel();
                     }
 
-                    System.out.println(selectedRow + selectedCol + selectedEntity);
+                    System.out.println(selectedRow + " " + selectedCol + selectedEntity);
                 });
 
                 currDraft.add(pane, i, j);
@@ -129,11 +125,15 @@ public class CreativeLabController extends AppController {
         Button publish = new Button();
         Button exit    = new Button();
 
-        Label rowsLabel = new Label("Rows: ");
+        Label rowsLabel  = new Label("Rows: ");
+        rowsLabel.setMinWidth(15.0);
         TextField newRow = new TextField();
+        newRow.setMaxWidth(45.0);
 
-        Label colsLabel = new Label("Cols: ");
+        Label colsLabel  = new Label("Cols: ");
+        colsLabel.setMinWidth(15.0);
         TextField newCol = new TextField();
+        newCol.setMaxWidth(45.0);
 
         save.setText("Save");
         saveAs.setText("Save As");
@@ -142,7 +142,6 @@ public class CreativeLabController extends AppController {
         exit.setText("Exit");
 
         exit.setOnAction(this::onExitBtnPressed);
-        resize.setOnAction(this::onResizeBtnPressed);
         save.setOnAction(this::onSaveBtnPressed);
         publish.setOnAction(this::onPublishBtnPressed);
 
@@ -152,11 +151,22 @@ public class CreativeLabController extends AppController {
         optionsMenu.add(publish, 0, 5);
         optionsMenu.add(exit, 0, 6);
 
-        optionsMenu.add(rowsLabel, 0, 3);
-        optionsMenu.add(newRow, 0, 3);
-        optionsMenu.add(colsLabel, 0, 4);
-        optionsMenu.add(newCol, 0, 4);
+        HBox resizeRow = new HBox();
+        resizeRow.getChildren().addAll(rowsLabel, newRow);
 
+        HBox resizeCol = new HBox();
+        resizeCol.getChildren().addAll(colsLabel, newCol);
+
+        optionsMenu.add(resizeRow, 0 ,3);
+        optionsMenu.add(resizeCol, 0 , 4);
+
+        resize.setOnAction(e -> {
+            int newRowSize = Integer.parseInt(newRow.getText());
+            int newColSize = Integer.parseInt(newCol.getText());
+
+            draftBuilder.resize(newRowSize, newColSize);
+            draftBuilder.displayLevel();
+        });
 
         for (Node n : optionsMenu.getChildren()) {
             GridPane.setHalignment(n, HPos.CENTER);
@@ -258,18 +268,13 @@ public class CreativeLabController extends AppController {
         switchScreen(new CreateModeSelectScreen(screen.getStage()));
     }
 
-    private void onResizeBtnPressed(ActionEvent actionEvent) {
-        //get info from the textFields and call the resize function
-//        draftBuilder.resize();
-        //update the editor gridpane as well
-    }
-
     private void onSaveBtnPressed(ActionEvent actionEvent) {
         draftBuilder.saveMap(draftBuilder.getName(), "drafts");
     }
 
     private void onPublishBtnPressed(ActionEvent actionEvent) {
         //when published : play then save into levels
+
     }
 
 }

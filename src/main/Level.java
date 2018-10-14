@@ -86,7 +86,7 @@ public class Level {
 
         view = new ViewComponent(gridView);
 
-        terrains = new TerrainLayer(nRows, nCols);
+        terrains = new TerrainLayer(nRows, nCols, () -> new Ground(this));
         props    = new HashMapLayer<>();
         pickups  = new HashMapLayer<>();
         enemies  = new HashMapLayer<>();
@@ -340,7 +340,7 @@ public class Level {
      * @return The Terrain entity just removed
      */
     public Terrain removeTerrain(Vec2i pos, boolean replaceWithDefault) {
-        return removeTerrain(pos, replaceWithDefault);
+        return terrains.removeEntity(pos, replaceWithDefault);
     }
 
 
@@ -810,6 +810,8 @@ public class Level {
      */
     public void resize(int newNRows, int newNCols) {
         layers.forEach(layer -> layer.resize(newNRows, newNCols));
+        nRows = newNRows;
+        nCols = newNCols;
     }
 
     /**
