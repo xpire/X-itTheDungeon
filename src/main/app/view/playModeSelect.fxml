@@ -56,5 +56,6 @@
             <Font name="Herculanum" size="72.0" />
          </font>
       </Label>
+      <Button fx:id="btnStory" layoutX="151.0" layoutY="154.0" mnemonicParsing="false" onAction="#onStoryBtnPressed" text="Button" />
    </children>
 </AnchorPane>
