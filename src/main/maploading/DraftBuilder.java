@@ -45,6 +45,14 @@ public class DraftBuilder {
     }
 
     /**
+     * Gets the level associated with the current DraftBuilder
+     * @return the level
+     */
+    public Level getLevel() {
+        return level;
+    }
+
+    /**
      * Displays the current state of the draft, in symbol format
      */
     public void displayLevel() {
@@ -53,8 +61,8 @@ public class DraftBuilder {
 
     /**
      * Checks if a coordinate is a valid tile on the draft
-     * @param tile
-     * @return
+     * @param tile the coordinate to be checked
+     * @return true if valid, false otherwise
      */
     public boolean isValidGridPos(Vec2i tile) {
         return level.isValidGridPos(tile);
@@ -62,7 +70,7 @@ public class DraftBuilder {
 
     /**
      * Setter for the drafts objective
-     * @param objectives
+     * @param objectives list of objectives to be set
      */
     public void setObjective(ArrayList<String> objectives) {
         level.setObjectives(objectives);
@@ -249,10 +257,8 @@ public class DraftBuilder {
      * @return true if draft was deleted, false otherwise
      */
     public boolean deleteDraft(String draftName) {
-        StringBuilder draftPath = new StringBuilder("./src/main/drafts/");
-        draftPath.append(draftName).append(".txt");
 
-        File draft = new File(draftPath.toString());
+        File draft = new File("./src/main/drafts/" + draftName + ".txt");
 
         return draft.delete();
     }

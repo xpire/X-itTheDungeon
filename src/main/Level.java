@@ -809,6 +809,16 @@ public class Level {
      * @param newNCols : new # of cols for the Level
      */
     public void resize(int newNRows, int newNCols) {
+        Vec2i min = new Vec2i(4, 4);
+        Vec2i max = new Vec2i(24, 24);
+
+        Vec2i req = new Vec2i(newNCols, newNRows);
+
+        if (!req.within(min, max)) {
+            System.out.println("Map must be between 4x4 and 24x24");
+            return;
+        }
+
         layers.forEach(layer -> layer.resize(newNRows, newNCols));
         nRows = newNRows;
         nCols = newNCols;
