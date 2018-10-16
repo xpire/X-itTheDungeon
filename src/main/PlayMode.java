@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
 import main.app.controller.PlayLevelController;
 import main.app.engine.Game;
@@ -38,7 +39,10 @@ public class PlayMode implements Game {
     private EnemyManager enemyManager;
     private ViewComponent view;
 
+    private StackPane pane = new StackPane();
 
+
+    // TAKE SCENE OUT!
     public PlayMode(Scene scene, String levelName, String levelPath) {
 
         MapLoader loader = new MapLoader();
@@ -48,12 +52,8 @@ public class PlayMode implements Game {
         gameLoop = new GameLoop(this, fps -> System.out.println("FPS: " + fps));
         input    = new Input();
 
-        // View
-        Group gridView = new Group();
-        gridView.setTranslateX(120);
-        gridView.setTranslateY(20);
-        gridView.getChildren().add(level.getView());
-        view = new ViewComponent(gridView);
+        pane.getChildren().add(level.getView());
+        view     = new ViewComponent(pane);
 
         initEvents();
         initUi();
@@ -65,6 +65,11 @@ public class PlayMode implements Game {
     public void startGame() {
         gameLoop.start();
         input.startListening();
+    }
+
+    public void pauseGame() {
+        gameLoop.stop();
+        input.stopListening();
     }
 
     public void endGame() {
@@ -102,76 +107,27 @@ public class PlayMode implements Game {
 
     private void initInput(Scene scene) {
         scene.addEventHandler(KeyEvent.ANY, evt -> input.onKeyEvent(evt));
-        input.addBinding(KeyCode.W, new UserAction() {
+
+        addAvatarActionBinding(KeyCode.W,       () -> avatar.faceUp());
+        addAvatarActionBinding(KeyCode.S,       () -> avatar.faceDown());
+        addAvatarActionBinding(KeyCode.A,       () -> avatar.faceLeft());
+        addAvatarActionBinding(KeyCode.D,       () -> avatar.faceRight());
+        addAvatarActionBinding(KeyCode.UP,      () -> avatar.moveUp());
+        addAvatarActionBinding(KeyCode.DOWN,    () -> avatar.moveDown());
+        addAvatarActionBinding(KeyCode.LEFT,    () -> avatar.moveLeft());
+        addAvatarActionBinding(KeyCode.RIGHT,   () -> avatar.moveRight());
+        addAvatarActionBinding(KeyCode.Z,       () -> avatar.dropKey());
+        addAvatarActionBinding(KeyCode.X,       () -> avatar.placeBomb());
+        addAvatarActionBinding(KeyCode.C,       () -> avatar.shootArrow());
+        addAvatarActionBinding(KeyCode.V,       () -> avatar.swingSword());
+    }
+
+
+    private void addAvatarActionBinding(KeyCode code, Runnable action) {
+        input.addBinding(code, new UserAction() {
             @Override
             protected void onActionBegin() {
-                avatar.setNextAction(() -> avatar.faceUp());
-            }
-        });
-        input.addBinding(KeyCode.S, new UserAction() {
-            @Override
-            protected void onActionBegin() {
-                avatar.setNextAction(() -> avatar.faceDown());
-            }
-        });
-        input.addBinding(KeyCode.A, new UserAction() {
-            @Override
-            protected void onActionBegin() {
-                avatar.setNextAction(() -> avatar.faceLeft());
-            }
-        });
-        input.addBinding(KeyCode.D, new UserAction() {
-            @Override
-            protected void onActionBegin() {
-                avatar.setNextAction(() -> avatar.faceRight());
-            }
-        });
-        input.addBinding(KeyCode.UP, new UserAction() {
-            @Override
-            protected void onActionBegin() {
-                avatar.setNextAction(() -> avatar.moveUp());
-            }
-        });
-        input.addBinding(KeyCode.DOWN, new UserAction() {
-            @Override
-            protected void onActionBegin() {
-                avatar.setNextAction(() -> avatar.moveDown());
-            }
-        });
-        input.addBinding(KeyCode.LEFT, new UserAction() {
-            @Override
-            protected void onActionBegin() {
-                avatar.setNextAction(() -> avatar.moveLeft());
-            }
-        });
-        input.addBinding(KeyCode.RIGHT, new UserAction() {
-            @Override
-            protected void onActionBegin() {
-                avatar.setNextAction(() -> avatar.moveRight());
-            }
-        });
-        input.addBinding(KeyCode.Z, new UserAction() {
-            @Override
-            protected void onActionBegin() {
-                avatar.setNextAction(() -> avatar.dropKey());
-            }
-        });
-        input.addBinding(KeyCode.X, new UserAction() {
-            @Override
-            protected void onActionBegin() {
-                avatar.setNextAction(() -> avatar.placeBomb());
-            }
-        });
-        input.addBinding(KeyCode.C, new UserAction() {
-            @Override
-            protected void onActionBegin() {
-                avatar.setNextAction(() -> avatar.shootArrow());
-            }
-        });
-        input.addBinding(KeyCode.V, new UserAction() {
-            @Override
-            protected void onActionBegin() {
-                avatar.setNextAction(() -> avatar.swingSword());
+                avatar.setNextAction(action);
             }
         });
     }
@@ -243,19 +199,15 @@ public class PlayMode implements Game {
 
     private void gameOver() {
         Label lblGameOver = new Label("GAME OVER");
-        lblGameOver.setTranslateX(250);
-        lblGameOver.setTranslateY(220);
         lblGameOver.fontProperty().set(Font.font(40));
-        view.addNode(lblGameOver);
+        pane.getChildren().add(lblGameOver);
         isRunning = false;
     }
 
     private void gameWin() {
         Label lblGameWin = new Label("GAME WON");
-        lblGameWin.setTranslateX(250);
-        lblGameWin.setTranslateY(220);
         lblGameWin.fontProperty().set(Font.font(40));
-        view.addNode(lblGameWin);
+        pane.getChildren().add(lblGameWin);
         isRunning = false;
 
         level.postEvent(new LevelEvent(LevelEvent.LEVEL_PASSED, levelNum));

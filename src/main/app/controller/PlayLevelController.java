@@ -8,9 +8,10 @@ import javafx.scene.layout.StackPane;
 import main.PlayMode;
 import main.PlayModeUILocator;
 import main.app.model.AppScreen;
+import main.app.model.PlayLevelScreen;
 import main.app.model.PlayModeSelectScreen;
 
-public class PlayLevelController extends AppController {
+public class PlayLevelController extends AppController<PlayLevelScreen> {
 
     public static PlayModeUILocator locator;
 
@@ -33,7 +34,7 @@ public class PlayLevelController extends AppController {
     @FXML
     private Group invGold;
 
-    public PlayLevelController(AppScreen screen) {
+    public PlayLevelController(PlayLevelScreen screen) {
         super(screen);
     }
 
@@ -53,6 +54,23 @@ public class PlayLevelController extends AppController {
     public void onBackBtnPressed() {
         switchScreen(new PlayModeSelectScreen(screen.getStage()));
     }
+
+
+    @FXML
+    public void onRestartBtnPressed() {
+        screen.restart();
+    }
+
+    @FXML
+    public void onHelpBtnPressed() {
+
+    }
+
+    @FXML
+    public void onSettingsBtnPressed() {
+
+    }
+
 
     public StackPane getDynamicLayer() {
         return dynamicLayer;

@@ -25,6 +25,13 @@ import java.util.function.Function;
 
 public class Avatar extends Entity {
 
+    /*
+    - refactor: exposing property is unsafe
+    - restart button should work
+    - image display also
+    - buff?
+     */
+
     private Key key;
     private Sword sword;
     private InvincibilityPotion ragePotion;
