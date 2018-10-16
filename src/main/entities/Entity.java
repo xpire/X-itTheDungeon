@@ -1,6 +1,7 @@
 package main.entities;
 
 import javafx.scene.Node;
+import javafx.scene.image.Image;
 import main.component.ViewComponent;
 import main.entities.enemies.Enemy;
 import main.entities.pickup.Pickup;
@@ -9,6 +10,10 @@ import main.entities.terrain.Terrain;
 import main.Level;
 import main.math.Vec2d;
 import main.math.Vec2i;
+import main.sprite.SpriteView;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 
 
 /*
@@ -31,6 +36,8 @@ public abstract class Entity {
     protected Vec2i pos;
     protected Level level;
     protected ViewComponent view;
+    public SpriteView sprite;
+
 
     /**
      * Basic constructor
@@ -249,4 +256,17 @@ public abstract class Entity {
     public void onLeaveByProp(Prop prop) {}
     public void onLeaveByEnemy(Enemy enemy) {}
     public void onLeaveByAvatar(Avatar avatar) {}
+
+    public Image getImage(String path) {
+        FileInputStream inputStream = null;
+        StringBuilder sb = new StringBuilder();
+        sb.append("./src/asset/").append(path);
+        try {
+            inputStream = new FileInputStream(sb.toString());
+            return new Image(inputStream);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }

@@ -1,11 +1,14 @@
 package main.entities.prop;
 
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import main.entities.Avatar;
 import main.entities.Entity;
 import main.Level;
+import main.math.Vec2d;
 import main.math.Vec2i;
+import main.sprite.SpriteView;
 
 /**
  * Class describing the Boulder entity
@@ -32,8 +35,12 @@ public class Boulder extends Prop {
 
     @Override
     public void onCreated(){
-        Circle circle = new Circle(12, Color.HONEYDEW);
-        view.addNode(circle);
+//        Circle circle = new Circle(12, Color.HONEYDEW);
+//        view.addNode(circle);
+        Pane pane = new Pane();
+        sprite = new SpriteView(getImage("sprite/prop/boulder/0.png"),new Vec2d(-7,-7), 1.5,1.5);
+        pane.getChildren().add(sprite);
+        view.addNode(pane);
     }
 
 
