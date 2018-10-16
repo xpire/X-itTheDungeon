@@ -17,10 +17,10 @@ import main.entities.prop.Prop;
 import main.entities.terrain.Ground;
 import main.entities.terrain.Terrain;
 import main.events.EventBus;
-import main.maploading.EntityLayer;
-import main.maploading.HashMapLayer;
-import main.maploading.SingletonLayer;
-import main.maploading.TerrainLayer;
+import main.maploading.layer.EntityLayer;
+import main.maploading.layer.HashMapLayer;
+import main.maploading.layer.SingletonLayer;
+import main.maploading.layer.TerrainLayer;
 import main.math.Vec2d;
 import main.math.Vec2i;
 

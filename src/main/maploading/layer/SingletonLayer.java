@@ -1,4 +1,4 @@
-package main.maploading;
+package main.maploading.layer;
 
 import main.component.ViewComponent;
 import main.entities.Entity;

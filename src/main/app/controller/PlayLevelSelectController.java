@@ -30,8 +30,6 @@ public class PlayLevelSelectController extends AppController {
     @FXML
     public void initialize() {
 
-//        Gson gson = new Gson();
-
         GameConfig config = new GameConfig();
 
         Iterator<LevelConfig> it = config.levels();

@@ -57,6 +57,11 @@ public class Sword extends Pickup {
     }
 
 
+    public int getDurability() {
+        return durability;
+    }
+
+
     @Override
     public boolean onPickupBy(Avatar avatar) {
         return avatar.pickUpSword(this);

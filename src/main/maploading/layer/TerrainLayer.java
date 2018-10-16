@@ -1,7 +1,6 @@
-package main.maploading;
+package main.maploading.layer;
 
 import main.component.ViewComponent;
-import main.entities.terrain.Ground;
 import main.entities.terrain.Terrain;
 import main.math.Vec2i;
 import main.util.Array2DIterator;

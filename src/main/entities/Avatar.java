@@ -19,6 +19,9 @@ import main.events.AvatarEvent;
 import main.math.Vec2i;
 
 import java.util.ArrayList;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 public class Avatar extends Entity {
 
@@ -26,6 +29,8 @@ public class Avatar extends Entity {
     private Sword sword;
     private InvincibilityPotion ragePotion;
 
+    private IntegerProperty swordDurability;
+    private BooleanProperty hasKeyProperty;
     private IntegerProperty numArrows;
     private IntegerProperty numBombs;
     private IntegerProperty numTreasures;
@@ -51,6 +56,8 @@ public class Avatar extends Entity {
         sword           = null;
         ragePotion      = null;
 
+        hasKeyProperty  = new SimpleBooleanProperty(false);
+        swordDurability = new SimpleIntegerProperty(0);
         numArrows       = new SimpleIntegerProperty(0);
         numBombs        = new SimpleIntegerProperty(0);
         numTreasures    = new SimpleIntegerProperty(0);
@@ -233,7 +240,7 @@ public class Avatar extends Entity {
         ragePotion.reduceDuration();
 
         if (ragePotion.hasExpired())
-            onRageEnd();
+            isRaged.set(false);
     }
 
 
@@ -251,32 +258,17 @@ public class Avatar extends Entity {
             // Kill the enemy
             level.getEnemy(target).onDestroyed();
             sword.reduceDurability();
+            swordDurability.set(sword.getDurability());
 
             // check durability and destroy
-            if (sword.isBroken())
-                onSwordUnequipped();
+            if (sword.isBroken()) {
+                sword = null;
+                swordView.setVisible(false);
+            }
 
             endTurn();
         }
     }
-
-    /**
-     * when the player picks up a sword
-     * @param s
-     */
-    public void onSwordEquipped(Sword s) {
-        sword = s;
-        swordView.setVisible(true);
-    }
-
-    /**
-     * when the player loses their sword
-     */
-    public void onSwordUnequipped() {
-        sword = null;
-        swordView.setVisible(false);
-    }
-
 
     /**
      * The player requested to shoot an arrow
@@ -332,7 +324,7 @@ public class Avatar extends Entity {
      * @return true if has key
      */
     public boolean hasKey() {
-        return (key != null);
+        return key != null;
     }
 
     /**
@@ -340,7 +332,7 @@ public class Avatar extends Entity {
      * @return true if has sword
      */
     public boolean hasSword() {
-        return (sword != null);
+        return sword != null;
     }
 
     /**
@@ -352,6 +344,7 @@ public class Avatar extends Entity {
         if (level.canPlacePickup(pos, key)) {
             level.addPickup(pos, key);
             key = null;
+            hasKeyProperty.set(false);
             endTurn();
         }
     }
@@ -371,6 +364,7 @@ public class Avatar extends Entity {
      */
     public void useKey() {
         key = null;
+        hasKeyProperty.set(false);
     }
 
 
@@ -388,6 +382,7 @@ public class Avatar extends Entity {
         if (key != null) return false;
 
         key = k;
+        hasKeyProperty.set(true);
         return true;
     }
 
@@ -399,7 +394,11 @@ public class Avatar extends Entity {
     public boolean pickUpSword(Sword s) {
         if (sword != null) return false;
 
-        onSwordEquipped(s);
+        sword = s;
+        swordView.setVisible(true);
+
+        swordDurability.set(sword.getDurability());
+
         return true;
     }
 
@@ -410,7 +409,7 @@ public class Avatar extends Entity {
      * @return true if pickup successful, else false
      */
     public boolean pickUpHoverPotion(HoverPotion p) {
-        onHoverBegin();
+        isHovering.set(true);
         return true;
     }
 
@@ -420,7 +419,8 @@ public class Avatar extends Entity {
      * @return true if pickup successful, else false
      */
     public boolean pickUpInvincibilityPotion(InvincibilityPotion p) {
-        onRageBegin(p);
+        ragePotion = p;
+        isRaged.set(true);
         return true;
     }
 
@@ -465,36 +465,10 @@ public class Avatar extends Entity {
     }
 
 
-    /**
-     * logic when hover pot is picked up
-     */
-    public void onHoverBegin() {
-        isHovering.set(true);
-    }
 
-    /**
-     * logic when hover pot ends
-     */
-    public void onHoverEnd() {
-        isHovering.set(false);
-    }
+    // Inventory Observer
 
-    /**
-     * logic when invinc pot is picked up
-     * @param p invinc pot picked up
-     */
-    public void onRageBegin(InvincibilityPotion p) {
-        ragePotion = p;
-        isRaged.set(true);
-    }
-
-    /**
-     * logic when invinc pot ends
-     */
-    public void onRageEnd() {
-        isRaged.set(false);
-    }
-
+    public IntegerProperty getSwordDurability() { return swordDurability; }
 
     /**
      * Getter for curr # arrows
@@ -520,6 +494,15 @@ public class Avatar extends Entity {
         return numTreasures;
     }
 
+    public BooleanProperty hasKeyProperty() {
+        return hasKeyProperty;
+    }
+
+
+
+
+
+    // Avatar Buff Status
 
     /**
      * Check if hovering
@@ -537,6 +520,10 @@ public class Avatar extends Entity {
         return isRaged.get();
     }
 
+
+
+    // Statistics
+
     /**
      * Getter for Avatars past moves
      * @return
@@ -545,6 +532,11 @@ public class Avatar extends Entity {
         return new ArrayList<>(pastMoves); // TODO unmodifiable?
     }
 
+
+
+
+
+    // Entity methods
 
     @Override
     public boolean isPassableFor(Entity entity) {

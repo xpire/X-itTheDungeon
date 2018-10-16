@@ -8,6 +8,7 @@ import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Font;
+import main.app.controller.PlayLevelController;
 import main.app.engine.Game;
 import main.app.engine.GameLoop;
 import main.app.engine.Input;
@@ -36,6 +37,7 @@ public class PlayMode implements Game {
 
     private EnemyManager enemyManager;
     private ViewComponent view;
+
 
     public PlayMode(Scene scene, String levelName, String levelPath) {
 
@@ -75,21 +77,28 @@ public class PlayMode implements Game {
     }
 
     private void initUi() {
+
         Label lblNumArrows = new Label();
-        lblNumArrows.textProperty().bind(Bindings.format("Arrows: %d", avatar.getNumArrowsProperty()));
+        PlayLevelController.locator.getInvArrow().getChildren().add(lblNumArrows);
+        lblNumArrows.textProperty().bind(Bindings.format("%d", avatar.getNumArrowsProperty()));
 
         Label lblNumBombs = new Label();
-        lblNumBombs.textProperty().bind(Bindings.format("Bombs: %d", avatar.getNumBombsProperty()));
-        lblNumBombs.setTranslateY(15);
+        PlayLevelController.locator.getInvBomb().getChildren().add(lblNumBombs);
+        lblNumBombs.textProperty().bind(Bindings.format("%d", avatar.getNumBombsProperty()));
+
+        Label lblSwordDurability = new Label();
+        PlayLevelController.locator.getInvSword().getChildren().add(lblSwordDurability);
+        lblSwordDurability.textProperty().bind(Bindings.format("%d", avatar.getSwordDurability()));
 
         Label lblNumTreasures = new Label();
-        lblNumTreasures.textProperty().bind(Bindings.format("Treasures: %d", avatar.getNumTreasuresProperty()));
-        lblNumTreasures.setTranslateY(30);
+        PlayLevelController.locator.getInvGold().getChildren().add(lblNumTreasures);
+        lblNumTreasures.textProperty().bind(Bindings.format("%d", avatar.getNumTreasuresProperty()));
 
-        view.addNode(lblNumArrows);
-        view.addNode(lblNumBombs);
-        view.addNode(lblNumTreasures);
+        Label lblHasKey = new Label();
+        PlayLevelController.locator.getInvKey().getChildren().add(lblHasKey);
+        lblHasKey.textProperty().bind(Bindings.format("%s", avatar.hasKeyProperty()));
     }
+
 
     private void initInput(Scene scene) {
         scene.addEventHandler(KeyEvent.ANY, evt -> input.onKeyEvent(evt));

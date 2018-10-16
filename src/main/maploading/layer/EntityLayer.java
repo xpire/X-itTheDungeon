@@ -1,4 +1,4 @@
-package main.maploading;
+package main.maploading.layer;
 
 import javafx.scene.Node;
 import main.Level;

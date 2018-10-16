@@ -43,10 +43,10 @@ public class LitBomb extends Prop{
         view.addNode(bomb);
     }
 
-    @Override
-    public void onExploded() {
-        onExplosion();
-    }
+//    @Override
+//    public void onExploded() {
+//        onExplosion();
+//    }
 
 
     @Override

@@ -1,7 +1,9 @@
 package main.app.model;
 
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import main.PlayMode;
 import main.app.controller.AppController;
@@ -15,7 +17,7 @@ public class PlayLevelScreen extends AppScreen {
 
     {
         title = "X-it the Dungeon";
-        fxmlName = "main/app/view/playLevel.fxml";
+        fxmlName = "main/app/view/playLevelRightAligned.fxml";
     }
 
     private PlayMode world;
@@ -55,6 +57,7 @@ public class PlayLevelScreen extends AppScreen {
         world = new PlayMode(scene, filename, FILEPATH);
         world.setLevelNum(levelNum);
         layer.getChildren().add(world.getView());
+        StackPane.setAlignment(world.getView(), Pos.CENTER);
         world.startGame();
     }
 

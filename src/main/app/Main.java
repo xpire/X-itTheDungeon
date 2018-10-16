@@ -46,15 +46,6 @@ public class Main extends Application {
             gameConfig = new GameConfig();
         }
 
-//        gameConfig = new JsonPersistor().load("src/save/localsave.json", GameConfig.class, GameConfig.SerialisationProxy.getBuilder().create());
-//        if (gameConfig == null) {
-//            System.out.println("NULL ERROR!");
-//            gameConfig = new GameConfig();
-//        }
-
-//        gameConfig = new GameConfig();
-//        Gson gson = GameConfig.SerialisationProxy.getBuilder().create();
-
         AchievementSystem achievementSystem = new AchievementSystem();
 
         StatisticsInitialiser statInit = new StatisticsInitialiser(playModeBus);
@@ -63,15 +54,6 @@ public class Main extends Application {
         AchievementInitialiser achieveInit = new AchievementInitialiser(achievementSystem, gameConfig.getIntStat());
         achieveInit.init();
 
-//        System.out.println("AFTER SETUP");
-//        String data = gson.toJson(gameConfig);
-//        System.out.println(data);
-//
-//        GameConfig config2 = gson.fromJson(data, GameConfig.class);
-//        System.out.println(config2);
-//
-//        System.out.println(GameConfig.SerialisationProxy.getBuilder().create().toJson(gameConfig));
-
         MainScreen sc = new MainScreen(s);
         sc.start();
     }
@@ -79,7 +61,6 @@ public class Main extends Application {
 
     @Override
     public void stop() {
-//        System.out.println(GameConfig.SerialisationProxy.getBuilder().create().toJson(gameConfig));
         new JsonPersistor().save("src/save/localsave.json", gameConfig, GameConfig.SerialisationProxy.getBuilder().create());
     }
 
