@@ -130,12 +130,25 @@ public class SpriteAnimation extends Transition {
 
     }
 
+    public void alignManual(Vec2d coord, int i) {
+        if (states.isEmpty()) return;
+
+        Image viewport = states.get(0);
+        Vec2d baseOffset = offsets.get(0);
+        offsets.get(i).setX((baseOffset.getX()+coord.getX()));
+        offsets.get(i).setY(baseOffset.getY()+coord.getY());
+        System.out.printf("%d %f %f MANUAL\n",i, coord.getX(), coord.getY());
+        System.out.println(offsets);
+    }
+
     private void setState(int index) {
         Image viewport = states.get(index);
         imageView.setTranslateX(offsets.get(index).getX());
         imageView.setTranslateY(offsets.get(index).getY());
         imageView.setImage(viewport);
     }
+
+
 
     @Override
     public void play() {
