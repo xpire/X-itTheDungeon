@@ -1,6 +1,9 @@
 
 # Created by https://www.gitignore.io/api/java,macos,gradle,windows,eclipse,intellij
 
+## removes the built server source code 
+server/build/
+
 ### Eclipse ###
 
 .metadata
