@@ -45,15 +45,14 @@ public class PlayMode implements Game {
     // TAKE SCENE OUT!
     public PlayMode(Scene scene, String levelName, String levelPath) {
 
-        MapLoader loader = new MapLoader();
-        level = loader.loadLevel(levelName, levelPath);
+        level = new MapLoader().loadLevel(levelName, levelPath);
         avatar = level.getAvatar();
 
         gameLoop = new GameLoop(this, fps -> System.out.println("FPS: " + fps));
-        input    = new Input();
+        input = new Input();
 
         pane.getChildren().add(level.getView());
-        view     = new ViewComponent(pane);
+        view = new ViewComponent(pane);
 
         initEvents();
         initUi();

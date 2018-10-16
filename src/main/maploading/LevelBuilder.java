@@ -2,10 +2,10 @@ package main.maploading;
 
 import main.Level;
 import main.entities.prop.IceBlock;
-import main.trigger.objective.AllSwitchesOnTrigger;
-import main.trigger.objective.CollectAllTreasuresTrigger;
-import main.trigger.objective.ExitDungeonTrigger;
-import main.trigger.objective.KillAllEnemiesTrigger;
+import main.trigger.objective.archive.AllSwitchesOnTrigger;
+import main.trigger.objective.archive.CollectAllTreasuresTrigger;
+import main.trigger.objective.archive.ExitDungeonTrigger;
+import main.trigger.objective.archive.KillAllEnemiesTrigger;
 import main.entities.Avatar;
 import main.entities.enemies.*;
 import main.entities.pickup.*;

@@ -6,6 +6,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import main.app.engine.Game;
 import main.app.engine.GameLoop;
@@ -21,7 +22,6 @@ import main.events.LevelEvent;
 import main.maploading.MapLoader;
 
 public class PlayModeUILocator {
-
 
     // Inventory
     private Group invSword;
