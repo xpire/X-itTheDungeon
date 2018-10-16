@@ -1,5 +1,6 @@
 package main.entities.enemies;
 
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import main.Level;
@@ -7,7 +8,9 @@ import main.behaviour.AIBehaviour;
 import main.behaviour.CowardBehaviour;
 import main.behaviour.HoundBehaviour;
 import main.behaviour.HunterBehaviour;
+import main.math.Vec2d;
 import main.math.Vec2i;
+import main.sprite.SpriteView;
 
 /**
  * The Hound enemy entity
@@ -36,7 +39,11 @@ public class Hound extends Enemy { //TODO remove test codes
     @Override
     public void onCreated(){
         super.onCreated();
-        view.addNode(new Circle(10, Color.YELLOW));
+//        view.addNode(new Circle(10, Color.YELLOW));
+        Pane pane = new Pane();
+        sprite = new SpriteView(getImage("sprite/enemies/hound/0.png"),new Vec2d(-6,-8), 1,1);
+        pane.getChildren().add(sprite);
+        view.addNode(pane);
     }
 
     @Override

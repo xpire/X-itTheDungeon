@@ -1,12 +1,15 @@
 package main.entities.enemies;
 
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import main.Level;
 import main.behaviour.AIBehaviour;
 import main.behaviour.CowardBehaviour;
 import main.behaviour.HunterBehaviour;
+import main.math.Vec2d;
 import main.math.Vec2i;
+import main.sprite.SpriteView;
 
 /**
  * The Coward enemy entity
@@ -39,7 +42,11 @@ public class Coward extends Enemy {
     @Override
     public void onCreated(){
         super.onCreated();
-        view.addNode(new Circle(10, Color.GREEN));
+//        view.addNode(new Circle(10, Color.GREEN));
+        Pane pane = new Pane();
+        sprite = new SpriteView(getImage("sprite/enemies/coward/0.png"),new Vec2d(-6,-8), 1,1);
+        pane.getChildren().add(sprite);
+        view.addNode(pane);
     }
 
 
