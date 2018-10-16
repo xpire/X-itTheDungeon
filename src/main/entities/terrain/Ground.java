@@ -38,7 +38,7 @@ public class Ground extends Terrain {
 //        view.addNode(tile);
 //        view.setCentre(new Vec2d(15, 15));
         Pane pane = new Pane();
-        sprite = new SpriteView(getImage("sprite/terrain/ground/0.png"),new Vec2d(-8,-8), 1.875,1.875);
+        sprite = new SpriteView(getImage("sprite/terrain/ground/0.png"),new Vec2d(-8,-8), 2,2);
         pane.getChildren().add(sprite);
         view.addNode(pane);
     }
