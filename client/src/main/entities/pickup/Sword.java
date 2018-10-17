@@ -41,7 +41,7 @@ public class Sword extends Pickup {
 //        view.addNode(stick);
 //        view.setCentre(new Vec2d(8, 2));
 
-        sprite = new SpriteView(getImage("sprite/pickup/sword/1.png"),new Vec2d(-8,-8), 1,1);
+        sprite = new SpriteView(getImage("sprite/pickup/sword/0.png"),new Vec2d(-8,-8), 1,1);
         view.addNode(sprite);
     }
 
