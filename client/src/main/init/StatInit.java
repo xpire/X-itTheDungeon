@@ -6,11 +6,11 @@ import main.events.EnemyEvent;
 import main.events.EventBus;
 import main.events.LevelEvent;
 
-public class StatisticsInitialiser {
+public class StatInit {
 
     EventBus playModeBus;
 
-    public StatisticsInitialiser(EventBus playModeBus) {
+    public StatInit(EventBus playModeBus) {
         this.playModeBus = playModeBus;
     }
 

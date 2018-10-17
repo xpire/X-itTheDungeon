@@ -1,4 +1,4 @@
-package main.trigger.objective;
+package main.trigger.objective.archive;
 
 import javafx.event.EventHandler;
 import main.events.EventBus;

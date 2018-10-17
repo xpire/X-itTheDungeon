@@ -1,15 +1,13 @@
 package main.app;
 
 
-import com.google.gson.Gson;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import main.app.model.MainScreen;
 import main.content.GameConfig;
-import main.content.IntStat;
 import main.events.EventBus;
-import main.init.AchievementInitialiser;
-import main.init.StatisticsInitialiser;
+import main.init.AchievementInit;
+import main.init.StatInit;
 import main.trigger.achievement.AchievementSystem;
 import main.persistence.JsonPersistor;
 
@@ -57,10 +55,10 @@ public class Main extends Application {
 
         AchievementSystem achievementSystem = new AchievementSystem();
 
-        StatisticsInitialiser statInit = new StatisticsInitialiser(playModeBus);
+        StatInit statInit = new StatInit(playModeBus);
         statInit.init(gameConfig.getIntStat());
 
-        AchievementInitialiser achieveInit = new AchievementInitialiser(achievementSystem, gameConfig.getIntStat());
+        AchievementInit achieveInit = new AchievementInit(achievementSystem, gameConfig.getIntStat());
         achieveInit.init();
 
 //        System.out.println("AFTER SETUP");

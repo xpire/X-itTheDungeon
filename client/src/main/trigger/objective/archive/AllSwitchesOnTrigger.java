@@ -1,4 +1,4 @@
-package main.trigger.objective;
+package main.trigger.objective.archive;
 
 import javafx.event.EventHandler;
 import main.events.EventBus;
@@ -37,7 +37,6 @@ public class AllSwitchesOnTrigger extends Trigger {
 
     @Override
     public boolean isTriggered() {
-        System.out.println("Switches: " + numSwitches + " numActive: " + numActive);
         return numSwitches == numActive;
     }
 }

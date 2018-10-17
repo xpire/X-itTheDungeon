@@ -2,16 +2,13 @@ package main.maploading;
 
 import main.Level;
 import main.entities.prop.IceBlock;
-import main.trigger.objective.AllSwitchesOnTrigger;
-import main.trigger.objective.CollectAllTreasuresTrigger;
-import main.trigger.objective.ExitDungeonTrigger;
-import main.trigger.objective.KillAllEnemiesTrigger;
 import main.entities.Avatar;
 import main.entities.enemies.*;
 import main.entities.pickup.*;
 import main.entities.prop.Boulder;
 import main.entities.prop.Prop;
 import main.entities.terrain.*;
+import main.init.ObjectiveFactory;
 import main.math.Vec2i;
 
 import java.util.ArrayList;
@@ -97,16 +94,16 @@ public class LevelBuilder {
         for (String objective : objectives) {
             switch (objective) {
                 case "A":
-                    level.addObjectives(new ExitDungeonTrigger());
+                    level.addObjectives(ObjectiveFactory.makeObjective(ObjectiveFactory.Type.EXIT));
                     break;
                 case "B":
-                    level.addObjectives(new AllSwitchesOnTrigger());
+                    level.addObjectives(ObjectiveFactory.makeObjective(ObjectiveFactory.Type.ACTIVATE_ALL_SWITCHES));
                     break;
                 case "C":
-                    level.addObjectives(new CollectAllTreasuresTrigger());
+                    level.addObjectives(ObjectiveFactory.makeObjective(ObjectiveFactory.Type.COLLECT_ALL_TREASURES));
                     break;
                 case "D":
-                    level.addObjectives(new KillAllEnemiesTrigger());
+                    level.addObjectives(ObjectiveFactory.makeObjective(ObjectiveFactory.Type.KILL_ALL_ENEMIES));
                     break;
                 default:
                     throw new InvalidMapException("Invalid Objective Code: " + objective);
