@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<?import javafx.scene.control.PasswordField?>
+<AnchorPane prefHeight="350.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Label layoutX="208.0" layoutY="14.0" prefHeight="40.0" prefWidth="185.0" text="Register into xD">
+         <font>
+            <Font size="25.0" />
+         </font>
+      </Label>
+      <Button fx:id="btnRegister" layoutX="228.0" layoutY="230.0" mnemonicParsing="false" onAction="#onRegisterBtnPressed" prefHeight="25.0" prefWidth="154.0" text="Register" />
+       <Button fx:id="btnBack" layoutX="14.0" layoutY="311.0" mnemonicParsing="false" onAction="#onBackBtnPressed" prefHeight="25.0" prefWidth="104.0" text="Back to main" />
+       <TextField fx:id="InputName" layoutX="250.0" layoutY="95.0" prefWidth="170.0" promptText=" " />
+      <Label layoutX="182.0" layoutY="97.0" prefHeight="21.0" prefWidth="63.0" text="Username: " />
+      <PasswordField fx:id="InputPassword" layoutX="250.0" layoutY="165.0" prefHeight="25.0" prefWidth="170.0" />
+
+      <Label layoutX="184.0" layoutY="166.0" prefHeight="21.0" prefWidth="54.0" text="Pasword: " />
+      <Label fx:id="response" layoutX="163.0" layoutY="271.0" prefHeight="17.0" prefWidth="284.0" textAlignment="CENTER" />
+   </children>
+</AnchorPane>

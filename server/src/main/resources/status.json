@@ -3,3 +3,6 @@
 {"username":"User3","enemyKilled":0,"treasureCollected":0,"maxLevel":0,"bombsKilled":0,"levelStar":[0,0,0,0,0,0,0,0,0]}
 {"username":"User4","enemyKilled":0,"treasureCollected":0,"maxLevel":0,"bombsKilled":0,"levelStar":[0,0,0,0,0,0,0,0,0]}
 {"username":"User5","enemyKilled":0,"treasureCollected":0,"maxLevel":0,"bombsKilled":0,"levelStar":[0,0,0,0,0,0,0,0,0]}
+{"username":"TextField[id\u003dInputName, styleClass\u003dtext-input text-field]","enemyKilled":0,"treasureCollected":0,"maxLevel":0,"bombsKilled":0,"levelStar":[0,0,0,0,0,0,0,0,0]}
+{"username":"Song","enemyKilled":0,"treasureCollected":0,"maxLevel":0,"bombsKilled":0,"levelStar":[0,0,0,0,0,0,0,0,0]}
+{"username":"thisisauser","enemyKilled":0,"treasureCollected":0,"maxLevel":0,"bombsKilled":0,"levelStar":[0,0,0,0,0,0,0,0,0]}

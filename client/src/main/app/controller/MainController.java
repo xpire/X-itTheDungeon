@@ -3,6 +3,7 @@ package main.app.controller;
 import javafx.fxml.FXML;
 import main.app.model.CreateModeSelectScreen;
 import main.app.model.MainScreen;
+import main.app.model.LoginScreen;
 import main.app.model.PlayModeSelectScreen;
 import main.app.model.TrophyScreen;
 import main.sound.SoundManager;
@@ -40,4 +41,7 @@ public class MainController extends AppController<MainScreen> {
     public void onTrophyBtnPressed() {
         switchScreen(new TrophyScreen(screen.getStage()));
     }
+
+    @FXML
+    public void onLoginBtnPressed() { switchScreen(new LoginScreen(screen.getStage())); }
 }
