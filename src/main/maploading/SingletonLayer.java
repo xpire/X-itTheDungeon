@@ -20,11 +20,15 @@ public class SingletonLayer<T extends Entity> extends EntityLayer<T> {
     }
 
     public T remove() {
+        System.out.println("Avatar Removed?: " + entity);
         if (entity != null) {
             view.removeNode(entity.getView());  // remove entity view
             entity.onRemovedFromLevel();        // notify entity
         }
-        return entity;
+
+        T temp = entity;
+        entity = null;
+        return temp;
     }
 
     public void move(Vec2i pos) {
@@ -41,6 +45,7 @@ public class SingletonLayer<T extends Entity> extends EntityLayer<T> {
     /* TODO: could violate the Liskov principle */
     @Override
     public void setEntityRaw(Vec2i pos, T entity) {
+        remove();
         this.entity = entity;
     }
 

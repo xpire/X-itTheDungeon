@@ -103,12 +103,12 @@ public class Avatar extends Entity {
         rageView.visibleProperty().bind(isRaged);
         swordView.setVisible(false);
 
-        Pane pane = new Pane();
         sprite = new SpriteView(getImage("sprite/idle/0.png"), new Vec2d(-12,-15), 1,1);
         sprite.addState("Face Up", getImage("sprite/idle/0.png"), new Vec2d(-12,-15), 1,1);
         sprite.addState("Face Down", getImage("sprite/idle/2.png"), new Vec2d(-12,-15), 1,1);
         sprite.addState("Face Left", getImage("sprite/idle/1.png"), new Vec2d(-11,-15), 1,1);
         sprite.addState("Face Right", getImage("sprite/idle/1.png"), new Vec2d(-11,-15), -1,1);
+        sprite.addState("Debugging", getImage("sprite/killmenow.png"), new Vec2d(-11,-15), -1,1);
 
 
         SpriteAnimation swordLeft = new SpriteAnimation(sprite, new Duration(500), new Vec2i(-11,-15),1);
@@ -348,15 +348,17 @@ public class Avatar extends Entity {
         sprite.addAnime("Bow Right", bowRight);
 
 
-        pane.getChildren().add(sprite);
+//        pane.getChildren().add(sprite);
         faceDown();
+//        sprite.setState("Debugging");
 
-        view.addNode(pane);
+        view.addNode(sprite);
     }
 
 
     @Override
     public void onDestroyed() {
+        System.out.println("I AM GETTING REKT");
         level.removeAvatar();
     }
 

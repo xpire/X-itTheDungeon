@@ -379,7 +379,8 @@ public class Level {
      * I.e when the Avatar dies
      */
     public void removeAvatar() {
-        Avatar avatar = avatarLayer.remove();
+        System.out.println("Avatar Removed");
+        avatarLayer.remove();
     }
 
 
