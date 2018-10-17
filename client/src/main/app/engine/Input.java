@@ -23,6 +23,7 @@ public class Input {
 
     public void stopListening() {
         isListening = false;
+        bindings.values().forEach(UserAction::stopAction);
     }
 //    public void startProcessing() {
 //        isProcessing = true;
