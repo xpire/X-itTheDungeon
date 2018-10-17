@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="653.0" prefWidth="944.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+      <BorderPane prefHeight="653.0" prefWidth="944.0">
+         <left>
+      
+              <GridPane fx:id="optionsMenu" prefHeight="508.0" prefWidth="116.0" BorderPane.alignment="CENTER">
+        </GridPane>
+         </left>
+         <top>
+      
+              <Label text="Creative Lab" textAlignment="CENTER" BorderPane.alignment="CENTER">
+                  <font>
+                      <Font size="21.0" />
+                  </font>
+              </Label>
+         </top>
+         <center>
+            <StackPane fx:id="viewPane" BorderPane.alignment="CENTER">
+               <children>
+            
+                                                  <GridPane fx:id="currDraft" alignment="CENTER" gridLinesVisible="true" prefHeight="510.0" prefWidth="829.0">
+        </GridPane>
+               </children>
+            </StackPane>
+         </center>
+         <bottom>
+            <Pane prefHeight="114.0" prefWidth="944.0" BorderPane.alignment="CENTER">
+               <children>
+            
+                          <GridPane fx:id="toolbox" gridLinesVisible="true" layoutX="82.0" layoutY="11.0" prefHeight="100.0" prefWidth="713.0">
+        </GridPane>
+            
+                                <Button layoutX="14.0" layoutY="32.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="76.0" text="PLAY" />
+            
+                    <GridPane fx:id="objectivesBox" gridLinesVisible="true" layoutX="801.0" layoutY="11.0" prefHeight="95.0" prefWidth="128.0" />
+               </children>
+            </Pane>
+         </bottom>
+      </BorderPane>
+
+    </children>
+</AnchorPane>
