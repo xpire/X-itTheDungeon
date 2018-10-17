@@ -5,7 +5,9 @@ import javafx.scene.shape.Circle;
 import main.Level;
 import main.entities.Avatar;
 import main.entities.Entity;
+import main.math.Vec2d;
 import main.math.Vec2i;
+import main.sprite.SpriteView;
 
 /**
  * Class describing the Boulder entity
@@ -34,8 +36,10 @@ public class IceBlock extends Prop {
 
     @Override
     public void onCreated(){
-        Circle circle = new Circle(12, Color.LIGHTBLUE);
-        view.addNode(circle);
+//        Circle circle = new Circle(12, Color.LIGHTBLUE);
+//        view.addNode(circle);
+        sprite = new SpriteView(getImage("sprite/prop/boulder/0.png"),new Vec2d(-8,-8), 1.875,1.875);
+        view.addNode(sprite);
     }
 
 

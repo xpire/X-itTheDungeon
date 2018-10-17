@@ -1,6 +1,7 @@
 package main.entities.terrain;
 
 
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import main.entities.Avatar;
@@ -12,6 +13,7 @@ import main.events.KeyEvent;
 import main.Level;
 import main.math.Vec2d;
 import main.math.Vec2i;
+import main.sprite.SpriteView;
 
 /**
  * Class describing the Door entity
@@ -43,9 +45,12 @@ public class Door extends Terrain {
 
     @Override
     public void onCreated(){
-        doorFrame = new Rectangle(6, 30, Color.BLACK);
-        view.addNode(doorFrame);
-        view.setCentre(new Vec2d(3, 15));
+//        doorFrame = new Rectangle(6, 30, Color.BLACK);
+//        view.addNode(doorFrame);
+//        view.setCentre(new Vec2d(3, 15));
+        sprite = new SpriteView(getImage("sprite/terrain/door/0.png"),new Vec2d(-8,-8), 1.875,1.875);
+        sprite.addState("Open", getImage("sprite/terrain/door/1.png"), new Vec2d(-8,-15),1.875,1.875);
+        view.addNode(sprite);
 
         // Enforce Key-Door coupling in creative mode
         level.addEventHandler(KeyEvent.KEY_REMOVED, e -> {
@@ -67,7 +72,8 @@ public class Door extends Terrain {
      */
     public void onOpen() {
         isOpen = true;
-        doorFrame.setFill(Color.SILVER);
+//        doorFrame.setFill(Color.SILVER);
+        sprite.setState("Open");
     }
 
 

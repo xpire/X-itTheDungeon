@@ -8,6 +8,7 @@ import main.events.ExitEvent;
 import main.Level;
 import main.math.Vec2d;
 import main.math.Vec2i;
+import main.sprite.SpriteView;
 
 /**
  * Class describing the Exit entity
@@ -32,9 +33,11 @@ public class Exit extends Terrain{
 
     @Override
     public void onCreated() {
-        Rectangle exit = new Rectangle(30, 30, Color.GOLD);
-        view.addNode(exit);
-        view.setCentre(new Vec2d(15, 15));
+//        Rectangle exit = new Rectangle(30, 30, Color.GOLD);
+//        view.addNode(exit);
+//        view.setCentre(new Vec2d(15, 15));
+        sprite = new SpriteView(getImage("sprite/terrain/exit/5.png"),new Vec2d(-8,-8), 1.875,1.875);
+        view.addNode(sprite);
     }
 
     @Override

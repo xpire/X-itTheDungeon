@@ -6,6 +6,7 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
+import main.PlayMode;
 import main.math.Vec2d;
 import main.math.Vec2i;
 
@@ -68,8 +69,8 @@ public class SpriteAnimation extends Transition {
         double height = states.get(i).getHeight();
         offsets.get(i).setY(scaleFactor*(baseHeight-height));
 //        offsets.set(i, baseOffset.add(0,scaleFactor*(baseHeight-height)));
-        System.out.printf("%d, %f,%f Down\n", i, baseHeight, height);
-        System.out.println(offsets);
+//        System.out.printf("%d, %f,%f Down\n", i, baseHeight, height);
+//        System.out.println(offsets);
 
 
 
@@ -88,9 +89,9 @@ public class SpriteAnimation extends Transition {
 //        }
         double width = states.get(i).getWidth();
         offsets.get(i).setX(scaleFactor * (baseWidth - width));
-        System.out.printf("%d, %f,%f RIGHT\n", i, baseWidth, width);
+//        System.out.printf("%d, %f,%f RIGHT\n", i, baseWidth, width);
 //        offsets.set(i, baseOffset.add(scaleFactor * (baseWidth - width),0));
-        System.out.println(offsets);
+//        System.out.println(offsets);
     }
 
     public void alignToUp(double scaleFactor, int i) {
@@ -103,10 +104,10 @@ public class SpriteAnimation extends Transition {
         double height = states.get(i).getHeight();
         offsets.get(i).setY((scaleFactor - 1) * (height - baseHeight));
 //        baseOffset.setY((scaleFactor - 1) * (height - baseHeight));
-        System.out.printf("%d, %f,%f UP\n", i, baseHeight, height);
+//        System.out.printf("%d, %f,%f UP\n", i, baseHeight, height);
 //        offsets.set(i, baseOffset);
 //        offsets.set(i, offsets.get(i))
-        System.out.println(offsets);
+//        System.out.println(offsets);
 
     }
 
@@ -123,10 +124,10 @@ public class SpriteAnimation extends Transition {
 //        }
         double width = states.get(i).getWidth();
         offsets.get(i).setX((scaleFactor - 1) * (width - baseWidth));
-        System.out.printf("%d,%f,%f LEFT\n", i,baseWidth, width);
+//        System.out.printf("%d,%f,%f LEFT\n", i,baseWidth, width);
 //        baseOffset.setX((scaleFactor - 1) * (width - baseWidth));
 //        offsets.set(i, baseOffset);
-        System.out.println(offsets);
+//        System.out.println(offsets);
 
     }
 
@@ -137,8 +138,8 @@ public class SpriteAnimation extends Transition {
         Vec2d baseOffset = offsets.get(0);
         offsets.get(i).setX((baseOffset.getX()+coord.getX()));
         offsets.get(i).setY(baseOffset.getY()+coord.getY());
-        System.out.printf("%d %f %f MANUAL\n",i, coord.getX(), coord.getY());
-        System.out.println(offsets);
+//        System.out.printf("%d %f %f MANUAL\n",i, coord.getX(), coord.getY());
+//        System.out.println(offsets);
     }
 
     private void setState(int index) {
@@ -155,6 +156,13 @@ public class SpriteAnimation extends Transition {
         this.imageView.setX(initialOffset.getX());
         this.imageView.setY(initialOffset.getY());
         this.imageView.setScaleX(scale);
+//TODO: turn off input when animation plays
+        PlayMode.input.stopListening();
+        System.out.println("STOP INPUT");
+        this.setOnFinished(e -> {
+            PlayMode.input.startListening();
+            System.out.println("START INPUT");
+        });
         super.play();
     }
 }
