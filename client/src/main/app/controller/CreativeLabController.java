@@ -8,11 +8,25 @@ import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.effect.InnerShadow;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import main.Level;
 import main.app.model.AppScreen;
 import main.app.model.CreateModeSelectScreen;
+import main.entities.Avatar;
+import main.entities.Entity;
+import main.entities.enemies.*;
+import main.entities.pickup.*;
+import main.entities.prop.Boulder;
+import main.entities.prop.IceBlock;
+import main.entities.terrain.*;
 import main.maploading.DraftBuilder;
+import main.maploading.MapLoader;
+import main.math.Vec2d;
 import main.math.Vec2i;
+import main.sprite.SpriteView;
 
 import java.util.ArrayList;
 
@@ -21,6 +35,7 @@ import java.util.ArrayList;
 //fix resize issues
 //hover w/ key-door
 //creative select screen
+//make replacing things more intuitive?
 //move options box to the right for consistency w/ play
 //add toolbox sprites + imageview rather than radio buttons
 //UNDO function - command pattern + memento pattern
@@ -45,6 +60,7 @@ public class CreativeLabController extends AppController {
     @FXML
     private GridPane objectivesBox;
 
+
     /**
      * Basic constructor for the CreativeLab Controller
      * @param screen : the corresponding screen
@@ -67,6 +83,8 @@ public class CreativeLabController extends AppController {
 
         StackPane.setAlignment(view, Pos.CENTER);
         StackPane.setAlignment(currDraft, Pos.CENTER);
+
+        StackPane.setAlignment(toolbox, Pos.CENTER);
     }
 
     /**
@@ -76,11 +94,8 @@ public class CreativeLabController extends AppController {
 
         initialiseGridPane(currDraft, numCols, numRows, false);
 
-//        currDraft.setPrefSize(numCols*40.0, numRows*30.0);
-
         for (int i = 0 ; i < numCols ; i++) {
             for (int j = 0; j < numRows; j++) {
-                //TODO: is the StackPane necessary?
                 Pane pane = new Pane();
                 pane.setPrefSize(30, 30);
 
@@ -92,8 +107,10 @@ public class CreativeLabController extends AppController {
 
                     if (selectedEntity != null) {
                         Vec2i pos = new Vec2i(selectedCol, selectedRow);
-                        draftBuilder.editTileGUI(pos, selectedEntity);
 
+                        if (selectedEntity.equals("E")) draftBuilder.eraseEntitiesAt(pos);
+
+                        draftBuilder.editTileGUI(pos, selectedEntity);
                         draftBuilder.displayLevel();
                     }
 
@@ -109,26 +126,33 @@ public class CreativeLabController extends AppController {
      * Initialises the ToolBox GridPlane on the scene
      */
     private void initialiseToolBox() {
-        int numCols = 7, numRows = 3;
+        int numCols = 11, numRows = 2;
 
         initialiseGridPane(toolbox, numCols, numRows, true);
+        ArrayList<SpriteView> spriteViews = new ArrayList<>();
 
-        ToggleGroup entityGroup = new ToggleGroup();
-        entityGroup.selectedToggleProperty().addListener((ov, old_toggle, new_toggle) -> {
-            if (entityGroup.getSelectedToggle() != null)
-                selectedEntity = entityGroup.getSelectedToggle().getUserData().toString();
-        });
-
-        for (int i = 0; i < numCols; i++) {
-            for (int j = 0; j < numRows; j++) {
-                RadioButton rb = new RadioButton(getEntitySymbol(i, j));
-
-                rb.setToggleGroup(entityGroup);
-                rb.setUserData(getEntitySymbol(i, j));
-
-                toolbox.add(rb, i, j);
-            }
-        }
+        addSelectHandler(spriteViews, new Ground(draftBuilder.getLevel()), 0, 0);
+        addSelectHandler(spriteViews, new Wall(draftBuilder.getLevel()), 1, 0);
+        addSelectHandler(spriteViews, new Door(draftBuilder.getLevel()), 2, 0);
+        addSelectHandler(spriteViews, new Pit(draftBuilder.getLevel()), 3, 0);
+        addSelectHandler(spriteViews, new Switch(draftBuilder.getLevel()), 4, 0);
+        addSelectHandler(spriteViews, new Exit(draftBuilder.getLevel()), 5, 0);
+        addSelectHandler(spriteViews, new Boulder(draftBuilder.getLevel()), 6, 0, 1.5, 1.5);
+        addSelectHandler(spriteViews, new IceBlock(draftBuilder.getLevel()), 7, 0);
+//        addSelectHandler(spriteViews, new HeatPlate(draftBuilder.getLevel()), 8, 0);
+        addSelectHandler(spriteViews, new Hunter(draftBuilder.getLevel()), 9, 0);
+        addSelectHandler(spriteViews, new Strategist(draftBuilder.getLevel()), 10, 0);
+        addSelectHandler(spriteViews, new Arrow(draftBuilder.getLevel()), 0, 1, 1.5, 1.5);
+        addSelectHandler(spriteViews, new Sword(draftBuilder.getLevel()), 1, 1, 2, 2);
+        addSelectHandler(spriteViews, new Key(draftBuilder.getLevel()), 2, 1, 2.5, 2.5);
+        addSelectHandler(spriteViews, new Treasure(draftBuilder.getLevel()), 3, 1, 2,2);
+        addSelectHandler(spriteViews, new Bomb(draftBuilder.getLevel()), 4, 1, 2, 2);
+        addSelectHandler(spriteViews, new InvincibilityPotion(draftBuilder.getLevel()), 5, 1, 2.5, 2.5);
+        addSelectHandler(spriteViews, new HoverPotion(draftBuilder.getLevel()), 6, 1, 2.5,2.5);
+        addSelectHandler(spriteViews, new BombPotion(draftBuilder.getLevel()), 7, 1, 2.5, 2.5);
+        addSelectHandler(spriteViews, new Avatar(draftBuilder.getLevel()), 8, 1, 1.5, 1.5);
+        addSelectHandler(spriteViews, new Hound(draftBuilder.getLevel()), 9, 1);
+        addSelectHandler(spriteViews, new Coward(draftBuilder.getLevel()), 10, 1);
 
         for (Node n : toolbox.getChildren()) {
             GridPane.setHalignment(n, HPos.CENTER);
@@ -290,28 +314,12 @@ public class CreativeLabController extends AppController {
     }
 
     /**
-     * Hard coded method to name radio buttons in the Toolbox GridPlane
-     * @param x : x - coord of the radio button
-     * @param y : y - coord of the radio button
-     * @return the corresponding string to the radio buttons location
-     */
-    private String getEntitySymbol(int x, int y) {
-        String[][] entities = {
-                {".", "*", "|", "#", "/", "X", "O"},
-                {"-", "+", "K", "$", "!", ">", "^"},
-                {"P", "1", "2", "3", "4", " ", " "}
-        };
-
-        return entities[y][x];
-    }
-
-    /**
      * Updates the GridPane to represent the resized level
      * @param newRow : new number of rows
      * @param newCol : new number of cols
      */
     private void updateEditorGridPane(int newRow, int newCol) {
-
+        System.out.println("testing" + newCol + " " + newCol);
         for (int currRow = currDraft.getRowConstraints().size() - 1; currRow >= newRow; currRow--)
             currDraft.getRowConstraints().remove(currRow);
 
@@ -330,6 +338,35 @@ public class CreativeLabController extends AppController {
             columnConstraints.setHgrow(Priority.SOMETIMES);
             currDraft.getColumnConstraints().add(columnConstraints);
         }
+    }
+
+    private void setSelectedGlow(ArrayList<SpriteView> sv, SpriteView spriteView) {
+        for (SpriteView spv : sv) spv.setEffect(null);
+
+        DropShadow dropShadow = new DropShadow();
+        dropShadow.setHeight(30);
+        dropShadow.setWidth(30);
+        dropShadow.setColor(Color.BLACK);
+
+        spriteView.setEffect(dropShadow);
+    }
+
+    private void addSelectHandler(ArrayList<SpriteView> views, Entity entity, int x, int y) {
+        addSelectHandler(views, entity, x, y, 1, 1);
+    }
+
+    private void addSelectHandler(ArrayList<SpriteView> views, Entity entity, int x, int y, double scaleX, double scaleY) {
+        SpriteView s = entity.getSprite();
+
+        s.magnifyScales(scaleX, scaleY);
+
+        s.setOnMouseClicked(e -> {
+            selectedEntity = String.valueOf(entity.getSymbol());
+            setSelectedGlow(views, s);
+        });
+
+        views.add(s);
+        toolbox.add(s, x, y);
     }
 
 }

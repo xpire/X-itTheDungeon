@@ -38,8 +38,8 @@
                 <Pane prefHeight="114.0" prefWidth="944.0" BorderPane.alignment="CENTER">
                     <children>
 
-                        <GridPane fx:id="toolbox" gridLinesVisible="true" layoutX="82.0" layoutY="11.0" prefHeight="100.0" prefWidth="713.0">
-                        </GridPane>
+                          <GridPane fx:id="toolbox" alignment="CENTER" layoutX="119.0" layoutY="12.0" prefHeight="98.0" prefWidth="624.0">
+                                </GridPane>
 
                         <Button layoutX="14.0" layoutY="32.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="76.0" text="PLAY" />
 

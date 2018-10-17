@@ -26,7 +26,7 @@ public class MapLoader {
      * Finally sets the Key-Door Mapping within the Level
      *
      * @param mapName name of the Level to load in
-     * @param path Path where the Level is saved, root at main
+     * @param path    Path where the Level is saved, root at main
      * @return The Level which was just loaded
      */
     public Level loadLevel(String mapName, String path, boolean isCreateMode) {
@@ -76,7 +76,10 @@ public class MapLoader {
         if (!sc.hasNextLine()) throw new InvalidMapException("No objective");
 
         String[] line = readLine(sc);
-        if (line.length == 0) System.out.println("Warning: No objective specified");
+        if (line.length == 0 || (line.length == 1) && line[0].length() == 0) {
+            System.out.println("Warning: No objective specified");
+            return;
+        }
 
         builder.setObjectives(new ArrayList<>(Arrays.asList(line)));
     }
@@ -128,31 +131,4 @@ public class MapLoader {
         return sc.nextLine().split("\\s+");
     }
 
-
-
-
-
-
-    public static void main(String[] args) {
-        MapLoader mapLoader = new MapLoader();
-
-        Level level = mapLoader.loadLevel("map1", "levels", false);
-
-        level.displayLevel();
-
-        //testing meta data
-        for (int i = 0; i < level.getNRows(); i++) {
-            for (int j = 0; j < level.getNCols(); j++) {
-                Iterator<Entity> it = level.getEntitiesAt(new Vec2i(j, i));
-                while (it.hasNext()) {
-                    Entity e = it.next();
-
-                    if (e.getMetaData() != null) {
-                        System.out.println(e.getMetaData());
-                    }
-
-                }
-            }
-        }
-    }
 }
