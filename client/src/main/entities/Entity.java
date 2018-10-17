@@ -194,10 +194,18 @@ public abstract class Entity {
 
     /**
      * Getter for the entities unique symbol
-     * @return
+     * @return the unique symbol associated with the entity
      */
     public char getSymbol() {
         return symbol;
+    }
+
+    /**
+     * Getter for an entities sprite
+     * @return the sprite associated with the entity
+     */
+    public SpriteView getSprite() {
+        return sprite;
     }
 
 

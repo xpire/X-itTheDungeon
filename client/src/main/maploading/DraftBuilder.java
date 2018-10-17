@@ -260,4 +260,8 @@ public class DraftBuilder {
     public Level getLevel() {
         return level;
     }
+
+    public void eraseEntitiesAt(Vec2i pos) {
+        level.removeAllAt(pos, true);
+    }
 }

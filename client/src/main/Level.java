@@ -320,7 +320,7 @@ public class Level {
         removeProp(pos);
         removePickup(pos);
         removeEnemy(pos);
-        removeAvatar();
+        removeAvatar(pos);
     }
 
 
@@ -379,7 +379,11 @@ public class Level {
      * I.e when the Avatar dies
      */
     public void removeAvatar() {
-        Avatar avatar = avatarLayer.remove();
+        avatarLayer.remove();
+    }
+
+    public void removeAvatar(Vec2i pos) {
+        avatarLayer.removeEntity(pos);
     }
 
 

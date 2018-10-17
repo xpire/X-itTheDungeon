@@ -81,8 +81,16 @@ public class SpriteView extends ImageView{
         playAnime(sb.toString());
     }
 
+    public void magnifyScales(double newScaleX, double newScaleY) {
+        scaleX.put("Default", scaleX.get("Default") * newScaleX);
+        scaleY.put("Default", scaleY.get("Default") * newScaleY);
+
+        setState("Default");
+    }
+
     public class SpriteState {
         private Rectangle2D viewport;
         private Vec2d offset;
     }
+
 }
