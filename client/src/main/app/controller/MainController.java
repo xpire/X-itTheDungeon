@@ -1,12 +1,16 @@
 package main.app.controller;
 
 import javafx.fxml.FXML;
+import main.app.Main;
+import main.app.engine.AlertHelper;
 import main.app.model.CreateModeSelectScreen;
 import main.app.model.MainScreen;
 import main.app.model.LoginScreen;
 import main.app.model.PlayModeSelectScreen;
 import main.app.model.TrophyScreen;
 import main.sound.SoundManager;
+import javafx.scene.control.Alert;
+
 
 public class MainController extends AppController<MainScreen> {
 
@@ -44,4 +48,7 @@ public class MainController extends AppController<MainScreen> {
 
     @FXML
     public void onLoginBtnPressed() { switchScreen(new LoginScreen(screen.getStage())); }
+
+    @FXML
+    public void onLogoutBtnPressed() { AlertHelper.showAlert(Alert.AlertType.ERROR,"Hello!!!", Main.currClient.attemptLogout()); }
 }
