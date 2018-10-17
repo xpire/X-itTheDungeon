@@ -103,7 +103,6 @@ public class Avatar extends Entity {
         rageView.visibleProperty().bind(isRaged);
         swordView.setVisible(false);
 
-        Pane pane = new Pane();
         sprite = new SpriteView(getImage("sprite/idle/0.png"), new Vec2d(-12,-15), 1,1);
         sprite.addState("Face Up", getImage("sprite/idle/0.png"), new Vec2d(-12,-15), 1,1);
         sprite.addState("Face Down", getImage("sprite/idle/2.png"), new Vec2d(-12,-15), 1,1);
@@ -348,10 +347,10 @@ public class Avatar extends Entity {
         sprite.addAnime("Bow Right", bowRight);
 
 
-        pane.getChildren().add(sprite);
+//        pane.getChildren().add(sprite);
         faceDown();
 
-        view.addNode(pane);
+        view.addNode(sprite);
     }
 
 
