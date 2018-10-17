@@ -2,386 +2,16 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="df7ee700-d6d7-407e-af86-41a89e0b892f" name="Default" comment="debugging commit">
-      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_google_code_gson_gson_2_8_5.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_google_guava_guava_19_0.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_mashape_unirest_unirest_java_1_4_9.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__commons_codec_commons_codec_1_6.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__commons_logging_commons_logging_1_1_3.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_httpcomponents_httpasyncclient_4_0_2.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_httpcomponents_httpclient_4_3_6.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_httpcomponents_httpcore_4_3_3.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_httpcomponents_httpcore_nio_4_3_2.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_httpcomponents_httpmime_4_3_6.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_json_json_20140107.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/level/level01.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/level/level02.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/level/level03.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/avatar.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/avatar_new.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/bow_down/0.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/bow_down/1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/bow_down/2.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/bow_down/3.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/bow_down/4.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/bow_down/5.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/bow_left/0.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/bow_left/1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/bow_left/2.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/bow_left/3.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/bow_left/4.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/bow_left/5.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/bow_up/0.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/bow_up/1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/bow_up/2.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/bow_up/3.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/bow_up/4.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/bow_up/5.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/enemies/bosses/0.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/enemies/bosses/1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/enemies/bosses/2.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/enemies/bosses/3.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/enemies/coward/0.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/enemies/coward/1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/enemies/coward/2.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/enemies/coward/3.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/enemies/coward/4.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/enemies/hound/0.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/enemies/hound/1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/enemies/hound/2.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/enemies/hound/3.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/enemies/hunter/0.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/enemies/hunter/1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/enemies/hunter/2.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/enemies/hunter/3.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/enemies/hunter/4.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/enemies/strategist/0.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/enemies/strategist/1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/enemies/strategist/2.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/idle/0.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/idle/1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/idle/2.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/killmenow.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/link.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/pickup/arrow/15.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/pickup/bomb/0.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/pickup/bomb/1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/pickup/key/0.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/pickup/key/1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/pickup/potion/0.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/pickup/potion/1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/pickup/potion/2.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/pickup/potion/3.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/pickup/sword/0.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/pickup/treasure/0.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/pickup/treasure/1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/pickup/treasure/2.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/pickup/treasure/3.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/pickup/treasure/4.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/pickup/treasure/5.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/pickup/treasure/6.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/pickup/treasure/7.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/pickup/treasure/8.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/pickup/treasure/9.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/prop/boulder/0.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/prop/boulder/1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/prop/boulder/2.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/prop/flyingarrow/0.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/prop/flyingarrow/1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/prop/flyingarrow/10.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/prop/flyingarrow/11.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/prop/flyingarrow/12.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/prop/flyingarrow/13.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/prop/flyingarrow/14.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/prop/flyingarrow/2.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/prop/flyingarrow/3.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/prop/flyingarrow/4.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/prop/flyingarrow/5.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/prop/flyingarrow/6.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/prop/flyingarrow/7.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/prop/flyingarrow/8.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/prop/flyingarrow/9.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/prop/litbomb/0.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/prop/litbomb/1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/prop/litbomb/2.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/prop/litbomb/3.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/prop/litbomb/4.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/prop/litbomb/5.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/prop/litbomb/6.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/prop/litbomb/7.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/prop/litbomb/8.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/prop/litbomb/bomb.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/push_down/0.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/push_down/1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/push_down/2.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/push_down/3.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/push_down/4.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/push_down/5.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/push_down/6.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/push_left/0.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/push_left/1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/push_left/2.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/push_left/3.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/push_left/4.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/push_up/0.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/push_up/1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/push_up/2.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/push_up/3.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/push_up/4.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/push_up/5.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/push_up/6.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/sword_down/0.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/sword_down/1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/sword_down/2.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/sword_down/3.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/sword_down/4.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/sword_down/5.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/sword_down/6.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/sword_down/7.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/sword_left/0.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/sword_left/1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/sword_left/2.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/sword_left/3.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/sword_left/4.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/sword_left/5.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/sword_left/6.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/sword_left/7.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/sword_up/0.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/sword_up/1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/sword_up/2.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/sword_up/3.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/sword_up/4.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/sword_up/5.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/sword_up/6.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/sword_up/7.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/terrain/door/0.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/terrain/door/1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/terrain/door/2.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/terrain/door/3.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/terrain/ground/0.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/terrain/ground/1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/terrain/ground/2.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/terrain/switch/notpressed1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/terrain/switch/notpressed2.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/terrain/switch/pressed1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/terrain/switch/pressed2.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/terrain/wall/0.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/terrain/wall/1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/terrain/wall/2.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/walk_down/0.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/walk_down/1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/walk_down/2.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/walk_down/3.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/walk_down/4.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/walk_down/5.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/walk_left/0.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/walk_left/1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/walk_left/2.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/walk_left/3.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/walk_left/4.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/walk_left/5.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/walk_up/0.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/walk_up/1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/walk_up/2.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/walk_up/3.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/walk_up/4.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/asset/sprite/walk_up/5.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/GameWorld.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/Level.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/PlayMode.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/algorithms/AStar.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/algorithms/GridAStar.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/algorithms/PageRank.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/app/Main.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/app/controller/AppController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/app/controller/CreateModeSelectController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/app/controller/CreativeLabController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/app/controller/MainController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/app/controller/PlayLevelController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/app/controller/PlayLevelSelectController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/app/controller/PlayModeSelectController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/app/engine/Game.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/app/engine/GameLoop.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/app/engine/Input.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/app/engine/UserAction.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/app/model/AppScreen.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/app/model/CreateModeSelectScreen.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/app/model/CreativeLabScreen.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/app/model/MainScreen.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/app/model/PlayLevelScreen.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/app/model/PlayLevelSelectScreen.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/app/model/PlayModeSelectScreen.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/app/view/createModeSelect.fxml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/app/view/creativeLab.fxml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/app/view/main.fxml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/app/view/mainMenu.fxml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/app/view/playLevel.fxml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/app/view/playLevelSelect.fxml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/app/view/playModeSelect.fxml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/behaviour/AIBehaviour.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/behaviour/CowardBehaviour.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/behaviour/HoundBehaviour.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/behaviour/HunterBehaviour.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/behaviour/StrategistBehaviour.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/component/ViewComponent.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/content/EnumMapInstanceCreator.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/content/GameConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/content/GameStat.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/content/IntStat.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/content/IntStatInstanceCreator.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/content/LevelConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/drafts/draft1.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/drafts/draft3.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/drafts/map1.1.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/entities/Avatar.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/entities/Entity.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/entities/enemies/Coward.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/entities/enemies/Enemy.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/entities/enemies/EnemyManager.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/entities/enemies/Hound.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/entities/enemies/Hunter.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/entities/enemies/Strategist.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/entities/pickup/Arrow.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/entities/pickup/Bomb.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/entities/pickup/BombPotion.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/entities/pickup/HoverPotion.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/entities/pickup/InvincibilityPotion.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/entities/pickup/Key.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/entities/pickup/Pickup.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/entities/pickup/Sword.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/entities/pickup/Treasure.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/entities/prop/Boulder.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/entities/prop/FlyingArrow.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/entities/prop/IceBlock.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/entities/prop/LitBomb.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/entities/prop/Prop.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/entities/terrain/Door.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/entities/terrain/Exit.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/entities/terrain/Ground.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/entities/terrain/HeatPlate.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/entities/terrain/Pit.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/entities/terrain/Switch.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/entities/terrain/Terrain.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/entities/terrain/Wall.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/events/AchievementEvent.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/events/AvatarDeathEvent.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/events/AvatarEvent.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/events/DoorEvent.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/events/EnemyEvent.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/events/EventBus.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/events/ExitEvent.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/events/GameEvent.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/events/KeyEvent.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/events/LevelEvent.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/events/StatisticEvent.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/events/SwitchEvent.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/events/TreasureEvent.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/init/AchievementInitialiser.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/init/StatisticsInitialiser.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/levels/map1.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/levels/map2.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/maploading/CreateMode.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/maploading/DraftBuilder.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/maploading/EntityFactory.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/maploading/EntityLayer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/maploading/HashMapLayer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/maploading/InvalidMapException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/maploading/LayerBuilder.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/maploading/LevelBuilder.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/maploading/MapLoader.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/maploading/SingletonLayer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/maploading/TerrainLayer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/math/Direction.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/math/Tuple.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/math/Vec2d.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/math/Vec2i.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/persistence/JsonPersistor.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/sprite/SpriteAnimation.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/sprite/SpriteView.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/trigger/Trigger.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/trigger/achievement/Achievement.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/trigger/achievement/AchievementSystem.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/trigger/objective/AllSwitchesOnTrigger.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/trigger/objective/CollectAllTreasuresTrigger.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/trigger/objective/ExitDungeonTrigger.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/trigger/objective/KillAllEnemiesTrigger.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/trigger/objective/TriggerSystem.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/util/Array2DIterator.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/save/localsave.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/AStarSearchTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/ArrowTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/BombTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/BoulderTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/CowardTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/DoorTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/ExitTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/GroundTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/HoundTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/HoverPotionTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/HunterTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/InvincibilityPotionTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/KeyTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/PitTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/StrategistTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/SwitchTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/SwordTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/TestGeneric.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/TreasureTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/testdata/TestArrow1.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/testdata/TestAstar1.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/testdata/TestAstar2.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/testdata/TestAstar3.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/testdata/TestAstar4.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/testdata/TestAstar5.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/testdata/TestBomb1.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/testdata/TestBoulder" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/testdata/TestCoward1.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/testdata/TestHound1.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/testdata/TestHoverPotion.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/testdata/TestInvincibilityPotion.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/testdata/TestKey1.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/testdata/TestStrategist1.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/testdata/TestSword1.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/testdata/TestTreasure1.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/spark-basic-structure.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../.idea/ecksDee.iml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../.idea/group-ecksDee.iml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../.idea/misc.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../.idea/modules.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/save/localsave.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/save/localsave.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../ecksdee.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../out/production/group-ecksDee/asset/level/level01.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../out/production/group-ecksDee/asset/level/level02.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../out/production/group-ecksDee/asset/level/level03.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../out/production/group-ecksDee/main/app/view/main.fxml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../out/production/group-ecksDee/main/app/view/mainMenu.fxml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../out/production/group-ecksDee/main/app/view/playLevel.fxml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../out/production/group-ecksDee/main/app/view/playLevelSelect.fxml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../out/production/group-ecksDee/main/app/view/playModeSelect.fxml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../out/production/group-ecksDee/main/drafts/draft1.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../out/production/group-ecksDee/main/drafts/draft3.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../out/production/group-ecksDee/main/drafts/map1.1.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../out/production/group-ecksDee/main/levels/map1.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../out/production/group-ecksDee/main/levels/map2.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../out/production/group-ecksDee/testdata/TestArrow1.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../out/production/group-ecksDee/testdata/TestAstar1.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../out/production/group-ecksDee/testdata/TestAstar2.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../out/production/group-ecksDee/testdata/TestAstar3.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../out/production/group-ecksDee/testdata/TestAstar4.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../out/production/group-ecksDee/testdata/TestAstar5.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../out/production/group-ecksDee/testdata/TestBomb1.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../out/production/group-ecksDee/testdata/TestBoulder" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../out/production/group-ecksDee/testdata/TestCoward1.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../out/production/group-ecksDee/testdata/TestHound1.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../out/production/group-ecksDee/testdata/TestHoverPotion.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../out/production/group-ecksDee/testdata/TestInvincibilityPotion.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../out/production/group-ecksDee/testdata/TestKey1.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../out/production/group-ecksDee/testdata/TestStrategist1.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../out/production/group-ecksDee/testdata/TestSword1.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../out/production/group-ecksDee/testdata/TestTreasure1.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../src/asset/level/level01.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../src/asset/level/level02.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../src/asset/level/level03.txt" beforeDir="false" />
@@ -743,8 +373,8 @@
       <file leaf-file-name="EnumMapInstanceCreator.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/content/EnumMapInstanceCreator.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="260">
-              <caret line="13" column="16" lean-forward="true" selection-start-line="13" selection-start-column="16" selection-end-line="13" selection-end-column="16" />
+            <state relative-caret-position="360">
+              <caret line="19" column="19" selection-start-line="19" selection-start-column="19" selection-end-line="19" selection-end-column="19" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -774,24 +404,6 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="modules.xml" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/.idea/modules.xml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="80">
-              <caret line="4" column="50" selection-start-line="4" selection-start-column="44" selection-end-line="4" selection-end-column="50" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="client.iml" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/client.iml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="180">
-              <caret line="9" column="52" selection-start-line="9" selection-start-column="52" selection-end-line="9" selection-end-column="52" />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="Level.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/Level.java">
           <provider selected="true" editor-type-id="text-editor">
@@ -799,16 +411,6 @@
               <caret line="377" column="32" selection-start-line="377" selection-start-column="32" selection-end-line="377" selection-end-column="32" />
             </state>
           </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="workspace.xml" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/.idea/workspace.xml">
-          <provider selected="true" editor-type-id="text-editor" />
-        </entry>
-      </file>
-      <file leaf-file-name="vcs.xml" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/.idea/vcs.xml">
-          <provider selected="true" editor-type-id="text-editor" />
         </entry>
       </file>
     </leaf>
@@ -1050,7 +652,7 @@
       <workItem from="1539744072341" duration="5898000" />
       <workItem from="1539751106968" duration="195000" />
       <workItem from="1539751324631" duration="204000" />
-      <workItem from="1539751550054" duration="1575000" />
+      <workItem from="1539751550054" duration="1849000" />
     </task>
     <task id="LOCAL-00001" summary="initial commit to bring over previous changes">
       <created>1539323716115</created>
@@ -1091,15 +693,14 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="75831000" />
+    <option name="totallyTimeSpent" value="76105000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info anchor="right" id="Palette" order="3" />
       <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info active="true" anchor="bottom" id="Messages" order="7" sideWeight="0.4986577" visible="true" weight="0.36894587" />
+      <window_info anchor="bottom" id="Messages" order="7" sideWeight="0.4986577" weight="0.36894587" />
       <window_info anchor="right" id="Palette&#9;" order="3" />
       <window_info id="Image Layers" order="2" />
       <window_info anchor="right" id="Capture Analysis" order="3" />
@@ -1108,7 +709,7 @@
       <window_info anchor="bottom" id="Database Changes" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="7" />
       <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49932885" weight="0.23504274" />
-      <window_info anchor="bottom" id="Terminal" order="7" weight="0.35327634" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="7" visible="true" weight="0.35185185" />
       <window_info id="Capture Tool" order="2" />
       <window_info id="Designer" order="2" />
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.16375838" />
@@ -1605,8 +1206,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/content/EnumMapInstanceCreator.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="260">
-          <caret line="13" column="16" lean-forward="true" selection-start-line="13" selection-start-column="16" selection-end-line="13" selection-end-column="16" />
+        <state relative-caret-position="360">
+          <caret line="19" column="19" selection-start-line="19" selection-start-column="19" selection-end-line="19" selection-end-column="19" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
