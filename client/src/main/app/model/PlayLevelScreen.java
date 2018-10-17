@@ -1,9 +1,7 @@
 package main.app.model;
 
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import main.PlayMode;
 import main.app.controller.AppController;
@@ -30,28 +28,33 @@ public class PlayLevelScreen extends AppScreen {
         this.controller = new PlayLevelController(this);
     }
 
-    private Scene scene;
 
-    public void restart() {
-        Pane layer = controller.getDynamicLayer();
-        layer.getChildren().remove(world.getView());
-        world = new PlayMode(scene, filename, FILEPATH);
-        world.setLevelNum(levelNum);
-        layer.getChildren().add(world.getView());
-        StackPane.setAlignment(world.getView(), Pos.CENTER);
-        world.startGame();
-    }
+//    @Override
+//    public void onStart() {
+//        input.startListening();
+//    }
+//
+//    @Override
+//    public void onUpdateBe() { input.update(); }
+//
+//    @Override
+//    public void onUpdate() {
+//        world.update();
+//    }
+//
+//    @Override
+//    public void onAfterUpdate() {}
+//
+//    @Override
+//    public void onStop() {}
 
     @Override
     protected void beforeSceneDisplay(Scene scene) {
-        this.scene = scene;
-
         Pane layer = controller.getDynamicLayer();
 
         world = new PlayMode(scene, filename, FILEPATH);
         world.setLevelNum(levelNum);
         layer.getChildren().add(world.getView());
-        StackPane.setAlignment(world.getView(), Pos.CENTER);
         world.startGame();
     }
 
