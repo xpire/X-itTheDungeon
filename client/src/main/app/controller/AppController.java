@@ -2,11 +2,11 @@ package main.app.controller;
 
 import main.app.model.AppScreen;
 
-public abstract class AppController {
+public abstract class AppController<T extends AppScreen> {
 
-    protected AppScreen screen;
+    protected T screen;
 
-    public AppController(AppScreen screen) {
+    public AppController(T screen) {
         this.screen = screen;
     }
 
