@@ -43,11 +43,6 @@ public class LitBomb extends Prop{
         view.addNode(bomb);
     }
 
-    @Override
-    public void onExploded() {
-        onExplosion();
-    }
-
 
     @Override
     public void onTurnUpdate() {
@@ -63,7 +58,7 @@ public class LitBomb extends Prop{
 
 
     /**
-     * Logic when the bomb expodes, killing everything in the
+     * Logic when the bomb explodes, killing everything in the
      * plus shape around the bomb
      */
     public void onExplosion() {
@@ -74,8 +69,6 @@ public class LitBomb extends Prop{
             for (int i = 1; i <= radius; i++) {
                 target = target.add(dir);
                 destroyEntity(target);
-                // destroyEntityByExplosion(target)
-                // onDestroyedByExplosion(target);
             }
         }
 

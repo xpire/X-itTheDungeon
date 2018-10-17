@@ -1,8 +1,10 @@
 
 # Created by https://www.gitignore.io/api/java,macos,gradle,windows,eclipse,intellij
 
-## removes the built server source code 
+## removes build and production files
 server/build/
+client/target/
+server/target/
 
 ### Eclipse ###
 
@@ -250,4 +252,5 @@ gradle-app.setting
 
 # End of https://www.gitignore.io/api/java,macos,gradle,windows,eclipse,intellij
 
-*/.idea/
+client/.idea/
+server/.idea/
