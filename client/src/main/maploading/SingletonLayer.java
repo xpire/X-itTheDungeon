@@ -24,7 +24,10 @@ public class SingletonLayer<T extends Entity> extends EntityLayer<T> {
             view.removeNode(entity.getView());  // remove entity view
             entity.onRemovedFromLevel();        // notify entity
         }
-        return entity;
+
+        T copy = entity;
+        entity = null;
+        return copy;
     }
 
     public void move(Vec2i pos) {
@@ -41,6 +44,7 @@ public class SingletonLayer<T extends Entity> extends EntityLayer<T> {
     /* TODO: could violate the Liskov principle */
     @Override
     public void setEntityRaw(Vec2i pos, T entity) {
+        remove();
         this.entity = entity;
     }
 

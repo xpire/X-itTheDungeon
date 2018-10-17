@@ -4,6 +4,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.HPos;
+import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
@@ -15,10 +16,22 @@ import main.math.Vec2i;
 
 import java.util.ArrayList;
 
+//TODO :
+//Key-door mapping
+//fix resize issues
+//hover w/ key-door
+//creative select screen
+//move options box to the right for consistency w/ play
+//add toolbox sprites + imageview rather than radio buttons
+//UNDO function - command pattern + memento pattern
+
 public class CreativeLabController extends AppController {
 
     private String selectedEntity;
     private DraftBuilder draftBuilder;
+
+    @FXML
+    private StackPane viewPane;
 
     @FXML
     private GridPane currDraft;
@@ -42,12 +55,18 @@ public class CreativeLabController extends AppController {
 
     @FXML
     public void initialize() {
+        draftBuilder = new DraftBuilder(8, 8, "testDraft");
+
         initialiseEditor(8, 8);
         initialiseToolBox();
         initialiseOptions();
         initialiseObjectivesBox();
 
-        draftBuilder = new DraftBuilder(8, 8, "testDraft");
+        Node view = draftBuilder.getLevel().getView();
+        viewPane.getChildren().add(0, view);
+
+        StackPane.setAlignment(view, Pos.CENTER);
+        StackPane.setAlignment(currDraft, Pos.CENTER);
     }
 
     /**
@@ -55,11 +74,16 @@ public class CreativeLabController extends AppController {
      */
     private void initialiseEditor(int numCols, int numRows) {
 
-        initialiseGridPane(currDraft, numCols, numRows);
+        initialiseGridPane(currDraft, numCols, numRows, false);
+
+//        currDraft.setPrefSize(numCols*40.0, numRows*30.0);
 
         for (int i = 0 ; i < numCols ; i++) {
             for (int j = 0; j < numRows; j++) {
+                //TODO: is the StackPane necessary?
                 Pane pane = new Pane();
+                pane.setPrefSize(30, 30);
+
                 pane.setOnMouseClicked(e -> {
                     Node source = (Node) e.getSource();
 
@@ -67,7 +91,9 @@ public class CreativeLabController extends AppController {
                     int selectedCol = GridPane.getColumnIndex(source);
 
                     if (selectedEntity != null) {
-                        draftBuilder.editTileGUI(new Vec2i(selectedCol, selectedRow), selectedEntity);
+                        Vec2i pos = new Vec2i(selectedCol, selectedRow);
+                        draftBuilder.editTileGUI(pos, selectedEntity);
+
                         draftBuilder.displayLevel();
                     }
 
@@ -85,7 +111,7 @@ public class CreativeLabController extends AppController {
     private void initialiseToolBox() {
         int numCols = 7, numRows = 3;
 
-        initialiseGridPane(toolbox, numCols, numRows);
+        initialiseGridPane(toolbox, numCols, numRows, true);
 
         ToggleGroup entityGroup = new ToggleGroup();
         entityGroup.selectedToggleProperty().addListener((ov, old_toggle, new_toggle) -> {
@@ -116,9 +142,8 @@ public class CreativeLabController extends AppController {
     private void initialiseOptions() {
         int numCols = 1, numRows = 7;
 
-        initialiseGridPane(optionsMenu, numCols, numRows);
+        initialiseGridPane(optionsMenu, numCols, numRows, true);
 
-        //TODO : make this nicer
         Button save    = new Button();
         Button saveAs  = new Button();
         Button resize  = new Button();
@@ -141,9 +166,9 @@ public class CreativeLabController extends AppController {
         publish.setText("Publish");
         exit.setText("Exit");
 
-        exit.setOnAction(this::onExitBtnPressed);
-        save.setOnAction(this::onSaveBtnPressed);
-        publish.setOnAction(this::onPublishBtnPressed);
+        exit.setOnAction(e -> switchScreen(new CreateModeSelectScreen(screen.getStage())));
+
+        save.setOnAction(e -> draftBuilder.saveMap(draftBuilder.getName(), "drafts"));
 
         optionsMenu.add(save, 0, 0);
         optionsMenu.add(saveAs, 0, 1);
@@ -161,11 +186,26 @@ public class CreativeLabController extends AppController {
         optionsMenu.add(resizeCol, 0 , 4);
 
         resize.setOnAction(e -> {
-            int newRowSize = Integer.parseInt(newRow.getText());
-            int newColSize = Integer.parseInt(newCol.getText());
+            try {
+                int newRowSize = Integer.parseInt(newRow.getText());
+                int newColSize = Integer.parseInt(newCol.getText());
 
-            draftBuilder.resize(newRowSize, newColSize);
-            draftBuilder.displayLevel();
+                if (newRowSize < 0 || newColSize < 0) {
+                    System.out.println("Positive numbers please");
+                    newRow.clear();
+                    newCol.clear();
+                    return;
+                }
+
+                draftBuilder.resize(newRowSize, newColSize);
+                updateEditorGridPane(newRowSize, newColSize);
+
+                draftBuilder.displayLevel();
+            } catch (NumberFormatException nfe) {
+                System.out.println(nfe.getMessage());
+                newRow.clear();
+                newCol.clear();
+            }
         });
 
         for (Node n : optionsMenu.getChildren()) {
@@ -175,9 +215,12 @@ public class CreativeLabController extends AppController {
 
     }
 
+    /**
+     * Initialises the Objectives GridPane on the scene
+     */
     private void initialiseObjectivesBox() {
 
-        initialiseGridPane(objectivesBox, 2, 2);
+        initialiseGridPane(objectivesBox, 2, 2, true);
 
         CheckBox exitCondition = new CheckBox();
         CheckBox killCondition = new CheckBox();
@@ -189,7 +232,7 @@ public class CreativeLabController extends AppController {
         killCondition.setText("C");
         switchCondition.setText("D");
 
-        EventHandler makeMutuallyExclusive = e -> {
+        EventHandler<ActionEvent> makeMutuallyExclusive = e -> {
             CheckBox cb = (CheckBox) e.getSource();
             ArrayList<String> objectives = new ArrayList<>();
 
@@ -230,16 +273,18 @@ public class CreativeLabController extends AppController {
      * @param numCols : number of rows required
      * @param numRows : number of cols required
      */
-    private void initialiseGridPane(GridPane gp, int numCols, int numRows) {
+    private void initialiseGridPane(GridPane gp, int numCols, int numRows, boolean setGrow) {
         for (int i = 0; i < numCols; i++) {
             ColumnConstraints colConstraints = new ColumnConstraints();
-            colConstraints.setHgrow(Priority.SOMETIMES);
+            if (setGrow) colConstraints.setHgrow(Priority.SOMETIMES);
+
             gp.getColumnConstraints().add(colConstraints);
         }
 
         for (int i = 0 ; i < numRows ; i++) {
             RowConstraints rowConstraints = new RowConstraints();
-            rowConstraints.setVgrow(Priority.SOMETIMES);
+            if (setGrow) rowConstraints.setVgrow(Priority.SOMETIMES);
+
             gp.getRowConstraints().add(rowConstraints);
         }
     }
@@ -261,20 +306,30 @@ public class CreativeLabController extends AppController {
     }
 
     /**
-     * Goes back to the previous screen
-     * @param actionEvent : not used, here to keep the calling method happy
+     * Updates the GridPane to represent the resized level
+     * @param newRow : new number of rows
+     * @param newCol : new number of cols
      */
-    private void onExitBtnPressed(ActionEvent actionEvent) {
-        switchScreen(new CreateModeSelectScreen(screen.getStage()));
-    }
+    private void updateEditorGridPane(int newRow, int newCol) {
 
-    private void onSaveBtnPressed(ActionEvent actionEvent) {
-        draftBuilder.saveMap(draftBuilder.getName(), "drafts");
-    }
+        for (int currRow = currDraft.getRowConstraints().size() - 1; currRow >= newRow; currRow--)
+            currDraft.getRowConstraints().remove(currRow);
 
-    private void onPublishBtnPressed(ActionEvent actionEvent) {
-        //when published : play then save into levels
+        for (int currCol = currDraft.getColumnConstraints().size() - 1; currCol >= newCol; currCol--)
+            currDraft.getColumnConstraints().remove(currCol);
 
+
+        for (int currRow = currDraft.getRowConstraints().size(); currRow < newRow; currRow++) {
+            RowConstraints rowConstraints = new RowConstraints();
+            rowConstraints.setVgrow(Priority.SOMETIMES);
+            currDraft.getRowConstraints().add(rowConstraints);
+        }
+
+        for (int currCol = currDraft.getColumnConstraints().size(); currCol < newCol; currCol++) {
+            ColumnConstraints columnConstraints = new ColumnConstraints();
+            columnConstraints.setHgrow(Priority.SOMETIMES);
+            currDraft.getColumnConstraints().add(columnConstraints);
+        }
     }
 
 }

@@ -256,4 +256,8 @@ public class DraftBuilder {
 
         return draft.delete();
     }
+
+    public Level getLevel() {
+        return level;
+    }
 }

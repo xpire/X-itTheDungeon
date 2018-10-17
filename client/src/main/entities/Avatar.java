@@ -7,6 +7,7 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.util.Duration;
 import main.Level;
 import main.entities.enemies.Enemy;
 import main.entities.pickup.*;
@@ -16,7 +17,10 @@ import main.entities.terrain.Door;
 import main.entities.terrain.Pit;
 import main.events.AvatarDeathEvent;
 import main.events.AvatarEvent;
+import main.math.Vec2d;
 import main.math.Vec2i;
+import main.sprite.SpriteAnimation;
+import main.sprite.SpriteView;
 
 import java.util.ArrayList;
 import java.util.function.BiConsumer;
@@ -111,6 +115,254 @@ public class Avatar extends Entity {
         hoverView.visibleProperty().bind(isHovering);
         rageView.visibleProperty().bind(isRaged);
         swordView.setVisible(false);
+
+
+        sprite = new SpriteView(getImage("sprite/idle/0.png"), new Vec2d(-12,-15), 1,1);
+        sprite.addState("Face Up", getImage("sprite/idle/0.png"), new Vec2d(-12,-15), 1,1);
+        sprite.addState("Face Down", getImage("sprite/idle/2.png"), new Vec2d(-12,-15), 1,1);
+        sprite.addState("Face Left", getImage("sprite/idle/1.png"), new Vec2d(-11,-15), 1,1);
+        sprite.addState("Face Right", getImage("sprite/idle/1.png"), new Vec2d(-11,-15), -1,1);
+
+
+        SpriteAnimation swordLeft = new SpriteAnimation(sprite, new Duration(500), new Vec2i(-11,-15),1);
+        swordLeft.addState(getImage("sprite/idle/1.png"));
+        swordLeft.addState(getImage("sprite/sword_left/0.png"));
+        swordLeft.addState(getImage("sprite/sword_left/1.png"));
+        swordLeft.addState(getImage("sprite/sword_left/2.png"));
+        swordLeft.addState(getImage("sprite/sword_left/3.png"));
+        swordLeft.addState(getImage("sprite/sword_left/4.png"));
+        swordLeft.addState(getImage("sprite/sword_left/5.png"));
+        swordLeft.addState(getImage("sprite/sword_left/6.png"));
+        swordLeft.addState(getImage("sprite/sword_left/7.png"));
+        swordLeft.addState(getImage("sprite/idle/1.png"));
+
+        swordLeft.alignToLeft(2,1);
+        swordLeft.alignToRight(2,2);
+        swordLeft.alignToRight(2,3);
+        swordLeft.alignToRight(2,4);
+        swordLeft.alignToRight(2,5);
+        swordLeft.alignToRight(2,6);
+        swordLeft.alignToRight(2,7);
+        swordLeft.alignToRight(2,8);
+        swordLeft.alignToRight(2,9);
+
+
+        swordLeft.alignToUp(1,1);
+        swordLeft.alignToUp(1,2);
+        swordLeft.alignToUp(1,3);
+        swordLeft.alignToUp(1,4);
+        swordLeft.alignToUp(1,5);
+        swordLeft.alignToUp(1,6);
+        swordLeft.alignToDown(1,7);
+        swordLeft.alignToDown(1,8);
+        swordLeft.alignToDown(1,9);
+
+
+
+        sprite.addAnime("Sword Left", swordLeft);
+
+        SpriteAnimation swordRight = new SpriteAnimation(sprite, new Duration(500), new Vec2i(-11,-15), -1);
+        swordRight.addState(getImage("sprite/idle/1.png"));
+        swordRight.addState(getImage("sprite/sword_left/0.png"));
+        swordRight.addState(getImage("sprite/sword_left/1.png"));
+        swordRight.addState(getImage("sprite/sword_left/2.png"));
+        swordRight.addState(getImage("sprite/sword_left/3.png"));
+        swordRight.addState(getImage("sprite/sword_left/4.png"));
+        swordRight.addState(getImage("sprite/sword_left/5.png"));
+        swordRight.addState(getImage("sprite/sword_left/6.png"));
+        swordRight.addState(getImage("sprite/sword_left/7.png"));
+        swordRight.addState(getImage("sprite/idle/1.png"));
+
+        swordRight.alignToRight(2,1);
+        swordRight.alignToLeft(2,2);
+        swordRight.alignToLeft(2,3);
+        swordRight.alignToLeft(2,4);
+        swordRight.alignToLeft(2,5);
+        swordRight.alignToLeft(2,6);
+        swordRight.alignToLeft(2,7);
+        swordRight.alignToLeft(2,8);
+        swordRight.alignToLeft(2,9);
+
+        swordRight.alignToUp(1,1);
+        swordRight.alignToUp(1,2);
+        swordRight.alignToUp(1,3);
+        swordRight.alignToUp(1,4);
+        swordRight.alignToUp(1,5);
+        swordRight.alignToUp(1,6);
+        swordRight.alignToDown(1,7);
+        swordRight.alignToDown(1,8);
+        swordRight.alignToDown(1,9);
+        sprite.addAnime("Sword Right", swordRight);
+
+        SpriteAnimation swordUp = new SpriteAnimation(sprite, new Duration(500), new Vec2i(-12,-15), 1);
+        swordUp.addState(getImage("sprite/idle/0.png"));
+        swordUp.addState(getImage("sprite/sword_up/0.png"));
+        swordUp.addState(getImage("sprite/sword_up/1.png"));
+        swordUp.addState(getImage("sprite/sword_up/2.png"));
+        swordUp.addState(getImage("sprite/sword_up/3.png"));
+        swordUp.addState(getImage("sprite/sword_up/4.png"));
+        swordUp.addState(getImage("sprite/sword_up/5.png"));
+        swordUp.addState(getImage("sprite/sword_up/6.png"));
+        swordUp.addState(getImage("sprite/sword_up/7.png"));
+        swordUp.addState(getImage("sprite/idle/0.png"));
+
+        swordUp.alignToUp(2,1);
+        swordUp.alignToUp(2,2);
+        swordUp.alignToDown(2,3);
+        swordUp.alignToDown(2,4);
+        swordUp.alignToDown(2,5);
+        swordUp.alignToDown(2,6);
+        swordUp.alignToDown(2,7);
+        swordUp.alignToDown(2,8);
+        swordUp.alignToDown(2,9);
+
+        swordUp.alignToRight(1,1);
+        swordUp.alignToRight(1,2);
+        swordUp.alignToRight(1,3);
+        swordUp.alignToRight(1,4);
+        swordUp.alignToRight(1,5);
+        swordUp.alignToRight(1,6);
+        swordUp.alignToLeft(1,7);
+        swordUp.alignToLeft(1,8);
+        swordUp.alignToLeft(1,9);
+        sprite.addAnime("Sword Up", swordUp);
+
+        SpriteAnimation swordDown = new SpriteAnimation(sprite, new Duration(500), new Vec2i(-12,-15), 1);
+        swordDown.addState(getImage("sprite/idle/2.png"));
+        swordDown.addState(getImage("sprite/sword_down/0.png"));
+        swordDown.addState(getImage("sprite/sword_down/1.png"));
+        swordDown.addState(getImage("sprite/sword_down/2.png"));
+        swordDown.addState(getImage("sprite/sword_down/3.png"));
+        swordDown.addState(getImage("sprite/sword_down/4.png"));
+        swordDown.addState(getImage("sprite/sword_down/5.png"));
+        swordDown.addState(getImage("sprite/sword_down/6.png"));
+        swordDown.addState(getImage("sprite/sword_down/7.png"));
+        swordDown.addState(getImage("sprite/idle/2.png"));
+
+        swordDown.alignToDown(2,1);
+        swordDown.alignToDown(2,2);
+        swordDown.alignToUp(2,3);
+        swordDown.alignToUp(2,4);
+        swordDown.alignToUp(2,5);
+        swordDown.alignToUp(2,6);
+        swordDown.alignToUp(2,7);
+        swordDown.alignToUp(2,8);
+        swordDown.alignToUp(2,9);
+
+        swordDown.alignToLeft(1,1);
+        swordDown.alignToLeft(1,2);
+        swordDown.alignToLeft(1,3);
+        swordDown.alignToLeft(1,4);
+        swordDown.alignToLeft(1,5);
+        swordDown.alignToLeft(1,6);
+        swordDown.alignToRight(1,7);
+        swordDown.alignToRight(1,8);
+        swordDown.alignToRight(1,9);
+
+        sprite.addAnime("Sword Down", swordDown);
+
+        SpriteAnimation bowUp = new SpriteAnimation(sprite, new Duration(500), new Vec2i(-12,-15), 1);
+        bowUp.addState(getImage("sprite/idle/0.png"));
+        bowUp.addState(getImage("sprite/bow_up/0.png"));
+        bowUp.addState(getImage("sprite/bow_up/1.png"));
+        bowUp.addState(getImage("sprite/bow_up/2.png"));
+        bowUp.addState(getImage("sprite/bow_up/3.png"));
+        bowUp.addState(getImage("sprite/bow_up/4.png"));
+        bowUp.addState(getImage("sprite/bow_up/5.png"));
+        bowUp.addState(getImage("sprite/idle/0.png"));
+
+        bowUp.alignToDown(1,1);
+        bowUp.alignToDown(1,2);
+        bowUp.alignToDown(1,3);
+        bowUp.alignToDown(1,4);
+        bowUp.alignToDown(1,5);
+        bowUp.alignToDown(1,6);
+        bowUp.alignToDown(1,7);
+
+        bowUp.alignToRight(1,1);
+        bowUp.alignToRight(1,2);
+        bowUp.alignToRight(1,3);
+        bowUp.alignToRight(1,4);
+        bowUp.alignToRight(1,5);
+        bowUp.alignToRight(1,6);
+        bowUp.alignToRight(1,7);
+
+        sprite.addAnime("Bow Up", bowUp);
+
+        SpriteAnimation bowDown = new SpriteAnimation(sprite, new Duration(500), new Vec2i(-12,-15), 1);
+        bowDown.addState(getImage("sprite/idle/2.png"));
+        bowDown.addState(getImage("sprite/bow_down/0.png"));
+        bowDown.addState(getImage("sprite/bow_down/1.png"));
+        bowDown.addState(getImage("sprite/bow_down/2.png"));
+        bowDown.addState(getImage("sprite/bow_down/3.png"));
+        bowDown.addState(getImage("sprite/bow_down/4.png"));
+        bowDown.addState(getImage("sprite/bow_down/5.png"));
+        bowDown.addState(getImage("sprite/idle/2.png"));
+
+        bowDown.alignToUp(1,1);
+        bowDown.alignToUp(1,2);
+        bowDown.alignToUp(1,3);
+        bowDown.alignToUp(1,4);
+        bowDown.alignToUp(1,5);
+        bowDown.alignToUp(1,6);
+        bowDown.alignToUp(1,7);
+
+        bowDown.alignToRight(1,1);
+        bowDown.alignToRight(1,2);
+        bowDown.alignToRight(1,3);
+        bowDown.alignToRight(1,4);
+        bowDown.alignToRight(1,5);
+        bowDown.alignToRight(1,6);
+        bowDown.alignToRight(1,7);
+        sprite.addAnime("Bow Down", bowDown);
+
+        SpriteAnimation bowLeft = new SpriteAnimation(sprite, new Duration(500), new Vec2i(-12,-15), 1);
+        bowLeft.addState(getImage("sprite/idle/1.png"));
+        bowLeft.addState(getImage("sprite/bow_left/0.png"));
+        bowLeft.addState(getImage("sprite/bow_left/1.png"));
+        bowLeft.addState(getImage("sprite/bow_left/2.png"));
+        bowLeft.addState(getImage("sprite/bow_left/3.png"));
+        bowLeft.addState(getImage("sprite/bow_left/4.png"));
+        bowLeft.addState(getImage("sprite/bow_left/5.png"));
+        bowLeft.addState(getImage("sprite/idle/1.png"));
+
+        bowLeft.alignToUp(1,1);
+        bowLeft.alignToUp(1,2);
+        bowLeft.alignToUp(1,3);
+        bowLeft.alignToUp(1,4);
+        bowLeft.alignToUp(1,5);
+        bowLeft.alignToUp(1,6);
+        bowLeft.alignToUp(1,7);
+
+//        bowLeft.alignToLeft(1,1);
+//        bowLeft.alignToLeft(1,2);
+        sprite.addAnime("Bow Left", bowLeft);
+
+        SpriteAnimation bowRight = new SpriteAnimation(sprite, new Duration(500), new Vec2i(-12,-15), -1);
+        bowRight.addState(getImage("sprite/idle/1.png"));
+        bowRight.addState(getImage("sprite/bow_left/0.png"));
+        bowRight.addState(getImage("sprite/bow_left/1.png"));
+        bowRight.addState(getImage("sprite/bow_left/2.png"));
+        bowRight.addState(getImage("sprite/bow_left/3.png"));
+        bowRight.addState(getImage("sprite/bow_left/4.png"));
+        bowRight.addState(getImage("sprite/bow_left/5.png"));
+        bowRight.addState(getImage("sprite/idle/1.png"));
+
+        bowRight.alignToUp(1,1);
+        bowRight.alignToUp(1,2);
+        bowRight.alignToUp(1,3);
+        bowRight.alignToUp(1,4);
+        bowRight.alignToUp(1,5);
+        bowRight.alignToUp(1,6);
+        bowRight.alignToUp(1,7);
+
+//        bowRight.alignToLeft(1,1);
+//        bowRight.alignToLeft(1,2);
+        sprite.addAnime("Bow Right", bowRight);
+
+        faceDown();
+
+        view.addNode(sprite);
     }
 
 
