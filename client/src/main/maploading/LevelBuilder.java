@@ -9,7 +9,6 @@ import main.entities.pickup.*;
 import main.entities.prop.Boulder;
 import main.entities.prop.Prop;
 import main.entities.terrain.*;
-import main.init.ObjectiveFactory;
 import main.math.Vec2i;
 
 import java.util.ArrayList;
