@@ -4,12 +4,11 @@ import main.events.EnemyEvent;
 import main.events.ExitEvent;
 import main.events.SwitchEvent;
 import main.events.TreasureEvent;
-import main.trigger.Trigger;
 import main.trigger.objective.*;
 
-import java.lang.annotation.Target;
 import java.util.EnumMap;
 import java.util.function.Function;
+
 import java.util.function.Supplier;
 
 
@@ -54,12 +53,6 @@ public class ObjectiveFactory {
     public static Objective makeObjective(Type type) {
         return OBJECTIVES.get(type).get();
     }
-
-
-
-
-
-
 
     private static <T extends TargetCountTrigger> void registerObjective(
             Type type, Supplier<T> triggerSupplier, Function<T, String> labelText) {

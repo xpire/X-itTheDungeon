@@ -11,7 +11,6 @@ import main.trigger.Trigger;
  */
 public class FixedCountTrigger<T extends Event> extends TargetCountTrigger {
 
-
     private final EventHandler<T>  COUNT_UP    = e -> count++;
     private final EventHandler<T>  COUNT_DOWN  = e -> count--;
 
