@@ -254,3 +254,5 @@ gradle-app.setting
 
 client/.idea/
 server/.idea/
+client/*.iml
+server/*.iml
