@@ -30,12 +30,15 @@ public class PlayModeUILocator {
     private Group invKey;
     private Group invGold;
 
+    private VBox objectivesPanel;
+
     private PlayModeUILocator(Builder builder) {
         invSword    = builder.invSword;
         invArrow    = builder.invArrow;
         invBomb     = builder.invBomb;
         invKey      = builder.invKey;
         invGold     = builder.invGold;
+        objectivesPanel = builder.objectivesPanel;
     }
 
     public Group getInvSword() {
@@ -58,6 +61,10 @@ public class PlayModeUILocator {
         return invGold;
     }
 
+    public VBox getObjectivesPanel() {
+        return objectivesPanel;
+    }
+
     public static class Builder {
 
         private Group invSword;
@@ -65,6 +72,8 @@ public class PlayModeUILocator {
         private Group invBomb;
         private Group invKey;
         private Group invGold;
+
+        private VBox objectivesPanel;
 
         public Builder sword(Group sword) {
             invSword = sword;
@@ -88,6 +97,11 @@ public class PlayModeUILocator {
 
         public Builder gold(Group gold) {
             invGold = gold;
+            return this;
+        }
+
+        public Builder objectives(VBox objectivesPanel) {
+            this.objectivesPanel = objectivesPanel;
             return this;
         }
 

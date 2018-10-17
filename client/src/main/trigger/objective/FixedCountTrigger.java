@@ -9,13 +9,8 @@ import main.trigger.Trigger;
 /**
  * Class which tracks the "all switches activated" game objective
  */
-public class FixedCountTrigger<T extends Event> extends Trigger {
+public class FixedCountTrigger<T extends Event> extends TargetCountTrigger {
 
-    /**
-    TODO type change required
-    **/
-    private int target;
-    private int count;
 
     private final EventHandler<T>  COUNT_UP    = e -> count++;
     private final EventHandler<T>  COUNT_DOWN  = e -> count--;
@@ -32,18 +27,13 @@ public class FixedCountTrigger<T extends Event> extends Trigger {
 
     @Override
     public void activate(EventBus bus) {
-        if (countUpEvent   != null) bus.addEventHandler(countUpEvent,   COUNT_UP);
-        if (countDownEvent != null) bus.addEventHandler(countDownEvent, COUNT_DOWN);
+        if (countUpEvent   != null) addEventHandler(bus, countUpEvent,   COUNT_UP);
+        if (countDownEvent != null) addEventHandler(bus, countDownEvent, COUNT_DOWN);
     }
 
     @Override
     public void deactivate(EventBus bus) {
-        if (countUpEvent   != null) bus.removeEventHandler(countUpEvent,   COUNT_UP);
-        if (countDownEvent != null) bus.removeEventHandler(countDownEvent, COUNT_DOWN);
-    }
-
-    @Override
-    public boolean isTriggered() {
-        return count >= target;
+        if (countUpEvent   != null) removeEventHandler(bus, countUpEvent,   COUNT_UP);
+        if (countDownEvent != null) removeEventHandler(bus, countDownEvent, COUNT_DOWN);
     }
 }

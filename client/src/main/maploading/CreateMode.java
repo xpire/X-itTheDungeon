@@ -134,7 +134,7 @@ public class CreateMode {
                     levelObj.add(command[i]);
 
                 if (isValidObj(levelObj)) {
-                    draftBuilder.setObjective(levelObj);
+//                    draftBuilder.setObjective(levelObj);
                     draftBuilder.displayLevel();
                 } else System.out.println("Error: invalid set of objective");
 

@@ -274,7 +274,7 @@ public class CreativeLabController extends AppController {
                 if (switchCondition.isSelected()) objectives.add("D");
             }
 
-            draftBuilder.setObjective(objectives);
+//            draftBuilder.setObjective(objectives);
             draftBuilder.displayLevel();
 
         };

@@ -1,11 +1,20 @@
 package main.trigger;
 
+import javafx.event.Event;
+import javafx.event.EventHandler;
+import javafx.event.EventType;
 import main.events.EventBus;
+
+import java.util.ArrayList;
+import java.util.function.Consumer;
 
 /**
  * An abstraction of game Achievements
  */
 public abstract class Trigger {
+
+    private final EventHandler<? super Event> POST = e -> this.post();
+    private ArrayList<Runnable> listeners = new ArrayList<>();
 
     /**
      * checks if an objective has been completed
@@ -17,11 +26,40 @@ public abstract class Trigger {
      * Activates event handling
      * @param bus Event bus to dispatch events
      */
-    public void activate(EventBus bus){};
+    public abstract void activate(EventBus bus);
 
     /**
      * Removes event handlers
      * @param bus Event bus to dispatch events
      */
-    public void deactivate(EventBus bus){};
+    public abstract void deactivate(EventBus bus);
+
+
+//    public <T extends Event> void addEventHandler(EventType<T> type, EventHandler<? super T> handler) {
+//        eventHandlers.addEventHandler(type, handler);
+//    }
+    protected <T extends Event> void addEventHandler(EventBus bus, EventType<T> type, EventHandler<? super T> handler) {
+        bus.addEventHandler(type, handler);
+        bus.addEventHandler(type, POST);
+    }
+
+    protected <T extends Event> void removeEventHandler(EventBus bus, EventType<T> type, EventHandler<? super T> handler) {
+        bus.removeEventHandler(type, handler);
+        bus.removeEventHandler(type, POST);
+    }
+
+    /**
+     * subscribes to the trigger
+     */
+    public void subscribe(Runnable callback) {
+        listeners.add(callback);
+    }
+
+    public void unsubscribe(Runnable callback) {
+        listeners.remove(callback);
+    }
+
+    private void post() {
+        listeners.forEach(Runnable::run);
+    }
 }

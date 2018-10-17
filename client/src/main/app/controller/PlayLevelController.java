@@ -5,6 +5,7 @@ import javafx.scene.Group;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import main.PlayMode;
 import main.PlayModeUILocator;
 import main.app.model.AppScreen;
@@ -34,6 +35,9 @@ public class PlayLevelController extends AppController<PlayLevelScreen> {
     @FXML
     private Group invGold;
 
+    @FXML
+    private VBox vbxObjectives;
+
     public PlayLevelController(PlayLevelScreen screen) {
         super(screen);
     }
@@ -41,12 +45,15 @@ public class PlayLevelController extends AppController<PlayLevelScreen> {
 
     @FXML
     public void initialize() {
+        vbxObjectives.getChildren().clear();
+
         locator = new PlayModeUILocator.Builder()
                 .sword(invSword)
                 .arrow(invArrow)
                 .bomb(invBomb)
                 .key(invKey)
                 .gold(invGold)
+                .objectives(vbxObjectives)
                 .build();
     }
 

@@ -7,7 +7,8 @@ import javafx.scene.Node;
 import javafx.scene.layout.GridPane;
 import main.app.Main;
 import main.trigger.Trigger;
-import main.trigger.objective.TriggerSystem;
+import main.trigger.objective.Objective;
+import main.trigger.objective.ObjectiveSystem;
 import main.component.ViewComponent;
 import main.entities.Avatar;
 import main.entities.Entity;
@@ -23,6 +24,8 @@ import main.maploading.SingletonLayer;
 import main.maploading.TerrainLayer;
 import main.math.Vec2d;
 import main.math.Vec2i;
+import main.trigger.objective.ObjectiveView;
+import main.trigger.objective.TargetCountTrigger;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -50,8 +53,6 @@ public class Level {
     private String name;
     private boolean isCreateMode;
 
-    private ArrayList<String> objectives;
-
     private ArrayList<EntityLayer> layers;
     private TerrainLayer terrains;
     private HashMapLayer<Prop> props;
@@ -60,7 +61,8 @@ public class Level {
     private SingletonLayer<Avatar> avatarLayer;
 
     private EventBus eventBus = new EventBus();
-    private TriggerSystem triggerSystem = new TriggerSystem(eventBus);
+    private ObjectiveSystem objectiveSystem = new ObjectiveSystem(eventBus);
+
 
     /**
      * Constructor for the Level class
@@ -77,8 +79,6 @@ public class Level {
         this.size  = size;
         this.name = name;
         this.isCreateMode = isCreateMode;
-
-        this.objectives = new ArrayList<>();
 
         GridPane gridView = new GridPane();
         gridView.setMinSize(getWidth(), getHeight());
@@ -723,27 +723,6 @@ public class Level {
     }
 
 
-
-    /*
-        Objective tools
-     */
-
-    /**
-     * Getter for the objective of the Level
-     * @return ArrayList of Level objective
-     */
-    public ArrayList<String> getObjectives() {
-        return objectives;
-    }
-
-    /**
-     * Setter for the objective of the Level
-     * @param objectives ArrayList of objective
-     */
-    public void setObjectives(ArrayList<String> objectives) {
-        this.objectives = objectives;
-    }
-
     /*
         Dimensions and View
      */
@@ -890,13 +869,6 @@ public class Level {
             }
             System.out.println();
         }
-
-        ArrayList<String> objectives = getObjectives();
-        System.out.print("Objectives are: ");
-        for (String s : objectives) {
-            System.out.print(" " + s);
-        }
-        System.out.println();
     }
 
 
@@ -948,12 +920,12 @@ public class Level {
         return eventBus;
     }
 
-    /**
-     * Adds objective to the Level
-     * @param objective the objective to add
-     */
-    public void addObjectives(Trigger objective){
-        triggerSystem.addTrigger(objective);
+    public void addObjective(Objective objective) {
+        objectiveSystem.addObjective(objective);
+    }
+
+    public Iterator<ObjectiveView> getObjectiveViews() {
+        return objectiveSystem.getObjectiveViews();
     }
 
     /**
@@ -961,8 +933,9 @@ public class Level {
      * @return true if all completed, false otherwise
      */
     public boolean checkAchievedAllObjectives(){
-        return triggerSystem.checkTriggeredAll();
+        return objectiveSystem.checkTriggeredAll();
     }
+
 
 
     /*
