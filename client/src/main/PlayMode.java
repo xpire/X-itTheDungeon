@@ -27,7 +27,7 @@ public class PlayMode implements Game {
     private int levelNum = -1;
 
     private GameLoop gameLoop;
-    private Input input;
+    public static Input input;
 
     private boolean isRunning = true;
     private boolean isPlayerTurn = true;

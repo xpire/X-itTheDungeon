@@ -1,5 +1,6 @@
 package main.entities.terrain;
 
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import main.Level;
@@ -9,6 +10,7 @@ import main.entities.enemies.Enemy;
 import main.entities.prop.Prop;
 import main.math.Vec2d;
 import main.math.Vec2i;
+import main.sprite.SpriteView;
 
 /**
  * Class describing the Pit entity
@@ -36,9 +38,11 @@ public class Pit extends Terrain{
 
     @Override
     public void onCreated(){
-        hole = new Rectangle(30, 30, Color.BLACK);
-        view.addNode(hole);
-        view.setCentre(new Vec2d(15, 15));
+//        hole = new Rectangle(30, 30, Color.BLACK);
+//        view.addNode(hole);
+//        view.setCentre(new Vec2d(15, 15));
+        sprite = new SpriteView(getImage("sprite/terrain/pit/0.png"),new Vec2d(-8,-8), 1.875,1.875);
+        view.addNode(sprite);
     }
 
 

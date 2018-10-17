@@ -62,12 +62,10 @@ public class Switch extends Terrain{
 //        floorSwitch = new Rectangle(30, 30);
 //        view.addNode(floorSwitch);
 //        view.setCentre(new Vec2d(15, 15));
-        Pane pane = new Pane();
         sprite = new SpriteView(getImage("sprite/terrain/switch/notpressed2.png"),new Vec2d(-8,-8), 1.875,1.875);
         sprite.addState("Not Pressed", getImage("sprite/terrain/switch/notpressed2.png"),new Vec2d(-8,-8), 1.875,1.875);
         sprite.addState("Pressed", getImage("sprite/terrain/switch/pressed2.png"),new Vec2d(-8,-8), 1.875,1.875);
-        pane.getChildren().add(sprite);
-        view.addNode(pane);
+        view.addNode(sprite);
         onDeactivated();
         level.postEvent(new SwitchEvent(SwitchEvent.SWITCH_CREATED));
     }

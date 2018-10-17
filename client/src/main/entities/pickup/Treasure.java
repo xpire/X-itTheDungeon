@@ -1,11 +1,14 @@
 package main.entities.pickup;
 
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import main.entities.Avatar;
 import main.events.TreasureEvent;
 import main.Level;
+import main.math.Vec2d;
 import main.math.Vec2i;
+import main.sprite.SpriteView;
 
 /**
  * Class describing the Treasure entity
@@ -34,8 +37,10 @@ public class Treasure extends Pickup{
     public void onCreated(){
         super.onCreated(); //TODO: do this for all
 
-        coin = new Circle(5, Color.GOLD);
-        view.addNode(coin);
+//        coin = new Circle(5, Color.GOLD);
+//        view.addNode(coin);
+        sprite = new SpriteView(getImage("sprite/pickup/treasure/5.png"),new Vec2d(-8,-8), 1,1);
+        view.addNode(sprite);
 
         level.postEvent(new TreasureEvent(TreasureEvent.TREASURE_CREATED));
     }
