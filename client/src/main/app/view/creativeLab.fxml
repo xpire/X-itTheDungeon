@@ -3,30 +3,51 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="653.0" prefWidth="944.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
     <children>
+        <BorderPane prefHeight="653.0" prefWidth="944.0">
+            <left>
 
-        <Label layoutX="415.0" layoutY="14.0" text="Creative Lab" textAlignment="CENTER" AnchorPane.topAnchor="14.0">
-            <font>
-                <Font size="21.0" />
-            </font>
-        </Label>
+                <GridPane fx:id="optionsMenu" prefHeight="508.0" prefWidth="116.0" BorderPane.alignment="CENTER">
+                </GridPane>
+            </left>
+            <top>
 
-        <GridPane fx:id="currDraft" gridLinesVisible="true" layoutX="113.0" layoutY="45.0" prefHeight="491.0" prefWidth="805.0" AnchorPane.bottomAnchor="117.0" AnchorPane.leftAnchor="113.0" AnchorPane.rightAnchor="26.0" AnchorPane.topAnchor="45.0" xmlns:fx="http://javafx.com/fxml/1">
-        </GridPane>
+                <Label text="Creative Lab" textAlignment="CENTER" BorderPane.alignment="CENTER">
+                    <font>
+                        <Font size="21.0" />
+                    </font>
+                </Label>
+            </top>
+            <center>
+                <StackPane fx:id="viewPane" BorderPane.alignment="CENTER">
+                    <children>
 
-        <GridPane fx:id="toolbox" gridLinesVisible="true" layoutX="113.0" layoutY="549.0" prefHeight="90.0" prefWidth="679.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="113.0" AnchorPane.rightAnchor="152.0">
-        </GridPane>
+                        <GridPane fx:id="currDraft" alignment="CENTER" gridLinesVisible="true" prefHeight="510.0" prefWidth="829.0">
+                        </GridPane>
+                    </children>
+                </StackPane>
+            </center>
+            <bottom>
+                <Pane prefHeight="114.0" prefWidth="944.0" BorderPane.alignment="CENTER">
+                    <children>
 
-        <GridPane fx:id="optionsMenu" layoutX="14.0" layoutY="49.0" prefHeight="491.0" prefWidth="92.0" AnchorPane.bottomAnchor="113.0" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="49.0">
-        </GridPane>
+                        <GridPane fx:id="toolbox" gridLinesVisible="true" layoutX="82.0" layoutY="11.0" prefHeight="100.0" prefWidth="713.0">
+                        </GridPane>
 
-        <GridPane fx:id="objectivesBox" gridLinesVisible="true" layoutX="804.0" layoutY="549.0" prefHeight="90.0" prefWidth="114.0" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="26.0" />
+                        <Button layoutX="14.0" layoutY="32.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="76.0" text="PLAY" />
 
-        <Button layoutX="22.0" layoutY="569.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="76.0" text="PLAY" AnchorPane.bottomAnchor="34.0" AnchorPane.leftAnchor="22.0" />
+                        <GridPane fx:id="objectivesBox" gridLinesVisible="true" layoutX="801.0" layoutY="11.0" prefHeight="95.0" prefWidth="128.0" />
+                    </children>
+                </Pane>
+            </bottom>
+        </BorderPane>
 
     </children>
 </AnchorPane>
