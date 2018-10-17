@@ -1,6 +1,11 @@
 
 # Created by https://www.gitignore.io/api/java,macos,gradle,windows,eclipse,intellij
 
+## removes build and production files
+server/build/
+client/target/
+server/target/
+
 ### Eclipse ###
 
 .metadata
@@ -246,3 +251,10 @@ gradle-app.setting
 
 
 # End of https://www.gitignore.io/api/java,macos,gradle,windows,eclipse,intellij
+
+client/.idea/
+server/.idea/
+client/*.iml
+server/*.iml
+
+*/localsave.json
