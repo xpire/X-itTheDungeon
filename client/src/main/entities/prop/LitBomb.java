@@ -58,7 +58,7 @@ public class LitBomb extends Prop{
 
 
     /**
-     * Logic when the bomb explodes, killing everything in the
+     * Logic when the bomb explodes, killing everythings in the
      * plus shape around the bomb
      */
     public void onExplosion() {
