@@ -256,3 +256,5 @@ client/.idea/
 server/.idea/
 client/*.iml
 server/*.iml
+
+*/localsave.json
