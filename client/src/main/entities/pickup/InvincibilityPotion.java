@@ -51,7 +51,7 @@ public class InvincibilityPotion extends Pickup{
 //        pot.setTranslateY(3);
 //
 //        view.addNode(pot);
-        sprite = new SpriteView(getImage("sprite/pickup/potion/3.png"),new Vec2d(-8,-8), 1,1);
+        sprite = new SpriteView(getImage("sprite/pickup/potion/2.png"),new Vec2d(-8,-8), 1,1);
         view.addNode(sprite);
     }
 

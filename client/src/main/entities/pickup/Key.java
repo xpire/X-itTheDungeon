@@ -39,7 +39,7 @@ public class Key extends Pickup {
     @Override
     public void onCreated(){
 //        view.addNode(new Circle(5, Color.HOTPINK));
-        sprite = new SpriteView(getImage("sprite/pickup/arrow/0.png"),new Vec2d(-8,-8), 1,1);
+        sprite = new SpriteView(getImage("sprite/pickup/key/1.png"),new Vec2d(-8,-8), 1,1);
         view.addNode(sprite);
 
         // TODO: extract out isCreateMode
