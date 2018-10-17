@@ -33,8 +33,6 @@ public class ObjectiveSystem {
     }
 
     public boolean checkTriggeredAll() {
-        return objectives.stream()
-                .map(o -> o.getTrigger())
-                .allMatch(Trigger::isTriggered);
+        return objectives.stream().allMatch(Objective::isTriggered);
     }
 }

@@ -5,16 +5,20 @@ import main.trigger.Trigger;
 
 public class Objective<T extends TargetCountTrigger> {
 
-    private T model;
+    private T trigger;
     private ObjectiveView<T> view;
 
-    public Objective(T model, ObjectiveView<T> view) {
-        this.model = model;
+    public Objective(T trigger, ObjectiveView<T> view) {
+        this.trigger = trigger;
         this.view = view;
     }
 
     public T getTrigger() {
-        return model;
+        return trigger;
+    }
+
+    public boolean isTriggered() {
+        return trigger.isTriggered();
     }
 
     public ObjectiveView<T> getView() {
