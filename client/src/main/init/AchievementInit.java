@@ -1,8 +1,5 @@
 package main.init;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import main.Notifier;
 import main.Toast;
 import main.app.Main;
 import main.content.IntStat;
@@ -30,8 +27,7 @@ public class AchievementInit {
         Achievement a = new Achievement(name, desc, target, stats.get(statType));
         a.isAchieved().addListener((observable, oldValue, newValue) -> {
             if (newValue) {
-//                Notifier.showPopupMessage("Achievement!", Main.primaryStage);
-                Toast.makeText(Main.primaryStage, "Achievement!", 1000, 3000, 2000);
+                Toast.makeText(Main.primaryStage, "Achievement Unlocked: " + a.getName(), 1000, 500, 1000);
             }
         });
 
