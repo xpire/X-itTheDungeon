@@ -80,11 +80,12 @@ public class Level {
 
         this.objectives = new ArrayList<>();
 
-        GridPane gridView = new GridPane();
-        gridView.setMinSize(getWidth(), getHeight());
-        gridView.gridLinesVisibleProperty().set(true);
+//        GridPane gridView = new GridPane();
+//        gridView.setMinSize(getWidth(), getHeight());
+//        gridView.gridLinesVisibleProperty().set(true);
 
-        view = new ViewComponent(gridView);
+//        view = new ViewComponent(gridView);
+        view = new ViewComponent();
 
         terrains = new TerrainLayer(nRows, nCols, () -> new Ground(this));
         props    = new HashMapLayer<>();
