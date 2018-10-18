@@ -163,6 +163,8 @@ public class DraftBuilder {
         }
     }
 
+    //TODO: this method is now redundant - only used in terminal creative mode
+    //TODO: remove before submission
     /**
      * Adds Entities to a certain position on the Level
      *
@@ -224,14 +226,19 @@ public class DraftBuilder {
         LevelBuilder levelBuilder = new LevelBuilder(level);
 
         try {
-            if (!entity.equals("K") && !entity.equals("|"))
-                levelBuilder.makeAndAttach(tile, entity.charAt(0));
-            else {
-                //TODO: fix this
-                System.out.println("this will be handled later :P");
-
-            }
+            levelBuilder.makeAndAttach(tile, entity.charAt(0));
         } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void editTileKeyDoorGUI(Vec2i key, Vec2i door) {
+        LevelBuilder levelBuilder = new LevelBuilder(level);
+
+        try {
+            levelBuilder.addKeyDoor(key, door);
+        } catch (Exception e) {
+            e.printStackTrace();
             System.out.println(e.getMessage());
         }
     }
@@ -242,10 +249,8 @@ public class DraftBuilder {
      * @return true if draft was deleted, false otherwise
      */
     public boolean deleteDraft(String draftName) {
-        StringBuilder draftPath = new StringBuilder("./src/main/drafts/");
-        draftPath.append(draftName).append(".txt");
-
-        File draft = new File(draftPath.toString());
+        String draftPath = String.format("./src/main/drafts/%s.txt", draftName);
+        File draft = new File(draftPath);
 
         return draft.delete();
     }

@@ -18,8 +18,6 @@ import main.app.model.CreativeLabScreen;
 
 public class CreativeLabController extends AppController<CreativeLabScreen> {
 
-    private String selectedEntity;
-
     @FXML
     private StackPane viewPane;
 
@@ -76,5 +74,6 @@ public class CreativeLabController extends AppController<CreativeLabScreen> {
     public GridPane getToolbox() {
         return toolbox;
     }
+
 
 }
