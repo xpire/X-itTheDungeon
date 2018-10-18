@@ -2,12 +2,15 @@ package main.maploading;
 
 import main.Level;
 import main.entities.Entity;
+import main.init.ObjectiveFactory;
 import main.math.Vec2i;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Scanner;
+
+import static main.init.ObjectiveFactory.makeObjective;
 
 /**
  * Class which contains the logic of the CreateMode class
@@ -60,6 +63,27 @@ public class DraftBuilder {
         return level.isValidGridPos(tile);
     }
 
+    //TODO : fix this with Ian's level builder code as well
+    public void setObjective(ArrayList<String> objectives) throws InvalidMapException{
+        for (String objective : objectives) {
+            switch (objective) {
+                case "A":
+                    level.addObjective(makeObjective(ObjectiveFactory.Type.EXIT));
+                    break;
+                case "B":
+                    level.addObjective(makeObjective(ObjectiveFactory.Type.ACTIVATE_ALL_SWITCHES));
+                    break;
+                case "C":
+                    level.addObjective(makeObjective(ObjectiveFactory.Type.COLLECT_ALL_TREASURES));
+                    break;
+                case "D":
+                    level.addObjective(makeObjective(ObjectiveFactory.Type.KILL_ALL_ENEMIES));
+                    break;
+                default:
+                    throw new InvalidMapException("Invalid Objective Code: " + objective);
+            }
+        }
+    }
 
     /**
      * Resizes the dimensions of the draft
