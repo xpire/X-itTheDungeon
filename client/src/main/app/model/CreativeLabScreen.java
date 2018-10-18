@@ -24,6 +24,7 @@ import main.entities.pickup.*;
 import main.entities.prop.*;
 import main.entities.terrain.*;
 import main.maploading.DraftBuilder;
+import main.maploading.InvalidMapException;
 import main.maploading.MapLoader;
 import main.math.Vec2i;
 import main.sprite.SpriteView;
@@ -236,7 +237,12 @@ public class CreativeLabScreen extends AppScreen {
                 if (switchCondition.isSelected()) objectives.add("D");
             }
 
-            draftBuilder.setObjective(objectives);
+            try {
+                draftBuilder.setObjective(objectives);
+            } catch (InvalidMapException ex) {
+                ex.printStackTrace();
+            }
+
             draftBuilder.displayLevel();
         };
 
