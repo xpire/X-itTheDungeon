@@ -1,12 +1,9 @@
 package main.entities.terrain;
 
-import javafx.scene.layout.Pane;
+import main.Level;
 import main.entities.Avatar;
 import main.entities.Entity;
-import main.Level;
-import main.math.Vec2d;
 import main.math.Vec2i;
-import main.sprite.SpriteView;
 
 /**
  * Abstracts the Terrain entities of the Level

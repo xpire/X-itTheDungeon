@@ -14,6 +14,7 @@ import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import main.Level;
 import main.app.controller.AppController;
 import main.app.controller.CreativeLabController;
 import main.entities.Avatar;
@@ -41,6 +42,10 @@ public class CreativeLabScreen extends AppScreen {
     private CreativeLabController controller;
     private DraftBuilder draftBuilder;
     private String selectedEntity;
+
+    private boolean isKeyDoorMatching = false;
+    private boolean wasKey = false;
+    private Vec2i originalPos;
 
     public CreativeLabScreen(Stage stage, String draftName) {
         super(stage);
@@ -82,28 +87,30 @@ public class CreativeLabScreen extends AppScreen {
         initialiseGridPane(toolbox, numCols, numRows, true);
         ArrayList<SpriteView> spriteViews = new ArrayList<>();
 
-        addSelectHandler(spriteViews, new Ground(draftBuilder.getLevel()), 0, 0);
-        addSelectHandler(spriteViews, new Wall(draftBuilder.getLevel()), 1, 0);
-        addSelectHandler(spriteViews, new Door(draftBuilder.getLevel()), 2, 0);
-        addSelectHandler(spriteViews, new Pit(draftBuilder.getLevel()), 3, 0);
-        addSelectHandler(spriteViews, new Switch(draftBuilder.getLevel()), 4, 0);
-        addSelectHandler(spriteViews, new Exit(draftBuilder.getLevel()), 5, 0);
-        addSelectHandler(spriteViews, new Boulder(draftBuilder.getLevel()), 6, 0, 1.5, 1.5);
-        addSelectHandler(spriteViews, new IceBlock(draftBuilder.getLevel()), 7, 0);
-//        addSelectHandler(spriteViews, new HeatPlate(draftBuilder.getLevel()), 8, 0);
-        addSelectHandler(spriteViews, new Hunter(draftBuilder.getLevel()), 9, 0);
-        addSelectHandler(spriteViews, new Strategist(draftBuilder.getLevel()), 10, 0);
-        addSelectHandler(spriteViews, new Arrow(draftBuilder.getLevel()), 0, 1, 1.5, 1.5);
-        addSelectHandler(spriteViews, new Sword(draftBuilder.getLevel()), 1, 1, 2, 2);
-        addSelectHandler(spriteViews, new Key(draftBuilder.getLevel()), 2, 1, 2.5, 2.5);
-        addSelectHandler(spriteViews, new Treasure(draftBuilder.getLevel()), 3, 1, 2,2);
-        addSelectHandler(spriteViews, new Bomb(draftBuilder.getLevel()), 4, 1, 2, 2);
-        addSelectHandler(spriteViews, new InvincibilityPotion(draftBuilder.getLevel()), 5, 1, 2.5, 2.5);
-        addSelectHandler(spriteViews, new HoverPotion(draftBuilder.getLevel()), 6, 1, 2.5,2.5);
-        addSelectHandler(spriteViews, new BombPotion(draftBuilder.getLevel()), 7, 1, 2.5, 2.5);
-        addSelectHandler(spriteViews, new Avatar(draftBuilder.getLevel()), 8, 1, 1.5, 1.5);
-        addSelectHandler(spriteViews, new Hound(draftBuilder.getLevel()), 9, 1);
-        addSelectHandler(spriteViews, new Coward(draftBuilder.getLevel()), 10, 1);
+        Level temp = new Level(8, 8, 8, "eight");
+
+        addSelectHandler(spriteViews, new Ground(temp), 0, 0);
+        addSelectHandler(spriteViews, new Wall(temp), 1, 0);
+        addSelectHandler(spriteViews, new Door(temp), 2, 0);
+        addSelectHandler(spriteViews, new Pit(temp), 3, 0);
+        addSelectHandler(spriteViews, new Switch(temp), 4, 0);
+        addSelectHandler(spriteViews, new Exit(temp), 5, 0);
+        addSelectHandler(spriteViews, new Boulder(temp), 6, 0, 1.5, 1.5);
+        addSelectHandler(spriteViews, new IceBlock(temp), 7, 0);
+//        addSelectHandler(spriteViews, new HeatPlate(temp), 8, 0);
+        addSelectHandler(spriteViews, new Hunter(temp), 9, 0);
+        addSelectHandler(spriteViews, new Strategist(temp), 10, 0);
+        addSelectHandler(spriteViews, new Arrow(temp), 0, 1, 1.5, 1.5);
+        addSelectHandler(spriteViews, new Sword(temp), 1, 1, 2, 2);
+        addSelectHandler(spriteViews, new Key(temp), 2, 1, 2.5, 2.5);
+        addSelectHandler(spriteViews, new Treasure(temp), 3, 1, 2,2);
+        addSelectHandler(spriteViews, new Bomb(temp), 4, 1, 2, 2);
+        addSelectHandler(spriteViews, new InvincibilityPotion(temp), 5, 1, 2.5, 2.5);
+        addSelectHandler(spriteViews, new HoverPotion(temp), 6, 1, 2.5,2.5);
+        addSelectHandler(spriteViews, new BombPotion(temp), 7, 1, 2.5, 2.5);
+        addSelectHandler(spriteViews, new Avatar(temp), 8, 1, 1.5, 1.5);
+        addSelectHandler(spriteViews, new Hound(temp), 9, 1);
+        addSelectHandler(spriteViews, new Coward(temp), 10, 1);
 
         for (Node n : toolbox.getChildren()) {
             GridPane.setHalignment(n, HPos.CENTER);
@@ -330,14 +337,51 @@ public class CreativeLabScreen extends AppScreen {
 
             int selectedRow = GridPane.getRowIndex(source);
             int selectedCol = GridPane.getColumnIndex(source);
+            Vec2i pos = new Vec2i(selectedCol, selectedRow);
 
-            if (selectedEntity != null) {
-                Vec2i pos = new Vec2i(selectedCol, selectedRow);
-
-                if (selectedEntity.equals("E")) draftBuilder.eraseEntitiesAt(pos);
-
-                draftBuilder.editTileGUI(pos, selectedEntity);
-                draftBuilder.displayLevel();
+            if (!isKeyDoorMatching) {
+                if (selectedEntity != null) {
+                    switch (selectedEntity) {
+                        case "E":
+                            draftBuilder.eraseEntitiesAt(pos);
+                            break;
+                        case "K":
+                            originalPos = pos;
+                            selectedEntity = "|";
+                            wasKey = true;
+                            isKeyDoorMatching = true;
+                            System.out.println("plz set matching door");
+                            break;
+                        case "|":
+                            originalPos = pos;
+                            selectedEntity = "K";
+                            wasKey = false;
+                            isKeyDoorMatching = true;
+                            System.out.println("plz set matching key");
+                            break;
+                        default:
+                            draftBuilder.editTileGUI(pos, selectedEntity);
+                            draftBuilder.displayLevel();
+                            break;
+                    }
+                }
+            } else {
+                if (!pos.equals(originalPos)) {
+                    switch (selectedEntity) {
+                        case "K":
+                            if (wasKey) break;
+                            draftBuilder.editTileKeyDoorGUI(pos, originalPos);
+                            break;
+                        case "|":
+                            if (!wasKey) break;
+                            draftBuilder.editTileKeyDoorGUI(originalPos, pos);
+                            break;
+                        default:
+                            System.out.println("selected entity was changed");
+                    }
+                    isKeyDoorMatching = false;
+                    draftBuilder.displayLevel();
+                }
             }
         });
 
@@ -401,5 +445,6 @@ public class CreativeLabScreen extends AppScreen {
     public Node initialiseView() {
         return draftBuilder.getLevel().getView();
     }
+
 
 }
