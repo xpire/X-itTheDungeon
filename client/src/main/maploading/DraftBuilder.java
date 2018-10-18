@@ -60,13 +60,6 @@ public class DraftBuilder {
         return level.isValidGridPos(tile);
     }
 
-    /**
-     * Setter for the drafts objective
-     * @param objectives
-     */
-    public void setObjective(ArrayList<String> objectives) {
-        level.setObjectives(objectives);
-    }
 
     /**
      * Resizes the dimensions of the draft
@@ -126,12 +119,12 @@ public class DraftBuilder {
             w.write(nRow + "\t" + nCol);
             w.append("\n");
 
-            //set the objective
-            ArrayList<String> obj = level.getObjectives();
-            for (String s : obj) {
-                w.write(s + "\t");
-            }
-            w.newLine();
+//            //set the objective
+//            ArrayList<String> obj = level.getObjectives();
+//            for (String s : obj) {
+//                w.write(s + "\t");
+//            }
+//            w.newLine();
 
             //set the main body of the map
             StringBuilder metaData = new StringBuilder();

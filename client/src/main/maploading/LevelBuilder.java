@@ -1,11 +1,8 @@
 package main.maploading;
 
 import main.Level;
+import main.entities.Entity;
 import main.entities.prop.IceBlock;
-import main.trigger.objective.AllSwitchesOnTrigger;
-import main.trigger.objective.CollectAllTreasuresTrigger;
-import main.trigger.objective.ExitDungeonTrigger;
-import main.trigger.objective.KillAllEnemiesTrigger;
 import main.entities.Avatar;
 import main.entities.enemies.*;
 import main.entities.pickup.*;
@@ -15,6 +12,10 @@ import main.entities.terrain.*;
 import main.math.Vec2i;
 
 import java.util.ArrayList;
+import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
+
+import static main.init.ObjectiveFactory.*;
 
 /**
  * A Class using Factory Pattern to add entities to a Level
@@ -91,29 +92,28 @@ public class LevelBuilder {
     }
 
 
-
+    // TODO: PASS IN FACTORY AS A DEPENDENCY
     public void setObjectives(ArrayList<String> objectives) throws InvalidMapException {
 
         for (String objective : objectives) {
             switch (objective) {
                 case "A":
-                    level.addObjectives(new ExitDungeonTrigger());
+                    level.addObjective(makeObjective(Type.EXIT));
                     break;
                 case "B":
-                    level.addObjectives(new AllSwitchesOnTrigger());
+                    level.addObjective(makeObjective(Type.ACTIVATE_ALL_SWITCHES));
                     break;
                 case "C":
-                    level.addObjectives(new CollectAllTreasuresTrigger());
+                    level.addObjective(makeObjective(Type.COLLECT_ALL_TREASURES));
                     break;
                 case "D":
-                    level.addObjectives(new KillAllEnemiesTrigger());
+                    level.addObjective(makeObjective(Type.KILL_ALL_ENEMIES));
                     break;
                 default:
                     throw new InvalidMapException("Invalid Objective Code: " + objective);
             }
         }
     }
-
 
     public int getNRows() {
         return level.getNRows();
@@ -156,47 +156,23 @@ public class LevelBuilder {
         terrainFactory.addSupplier('*', () -> new Wall(level));
         terrainFactory.addSupplier('H', () -> new HeatPlate(level));
 
-        terrainLayerBuilder = new LayerBuilder<Terrain>(level, terrainFactory) {
-            @Override
-            protected boolean canPlaceEntity(Vec2i pos, Terrain entity) {
-                return level.canPlaceTerrain(pos, entity);
-            }
-
-            @Override
-            protected boolean canReplaceEntity(Vec2i pos, Terrain entity) {
-                return level.canReplaceTerrain(pos, entity);
-            }
-
-            @Override
-            protected void addEntity(Vec2i pos, Terrain entity) {
-                level.addTerrain(pos, entity);
-            }
-        };
+        terrainLayerBuilder = createLayerBuilder(
+                level, terrainFactory,
+                (pos, entity) -> level.canPlaceTerrain(pos, entity),
+                (pos, entity) -> level.canReplaceTerrain(pos, entity),
+                (pos, entity) -> level.addTerrain(pos, entity));
     }
-
-
 
     private void initPropLayerBuilder() {
         EntityFactory<Prop> propFactory = new EntityFactory<>();
         propFactory.addSupplier('O', () -> new Boulder(level));
         propFactory.addSupplier('I', () -> new IceBlock(level));
 
-        propLayerBuilder = new LayerBuilder<Prop>(level, propFactory) {
-            @Override
-            protected boolean canPlaceEntity(Vec2i pos, Prop entity) {
-                return level.canPlaceProp(pos, entity);
-            }
-
-            @Override
-            protected boolean canReplaceEntity(Vec2i pos, Prop entity) {
-                return level.canReplaceProp(pos, entity);
-            }
-
-            @Override
-            protected void addEntity(Vec2i pos, Prop entity) {
-                level.addProp(pos, entity);
-            }
-        };
+        propLayerBuilder = createLayerBuilder(
+                level, propFactory,
+                (pos, entity) -> level.canPlaceProp(pos, entity),
+                (pos, entity) -> level.canReplaceProp(pos, entity),
+                (pos, entity) -> level.addProp(pos, entity));
     }
 
     private void initPickupLayerBuilder() {
@@ -209,22 +185,11 @@ public class LevelBuilder {
         pickupFactory.addSupplier('$', () -> new Treasure(level));
         pickupFactory.addSupplier('@', () -> new BombPotion(level));
 
-        pickupLayerBuilder = new LayerBuilder<Pickup>(level, pickupFactory) {
-            @Override
-            protected boolean canPlaceEntity(Vec2i pos, Pickup entity) {
-                return level.canPlacePickup(pos, entity);
-            }
-
-            @Override
-            protected boolean canReplaceEntity(Vec2i pos, Pickup entity) {
-                return level.canReplacePickup(pos, entity);
-            }
-
-            @Override
-            protected void addEntity(Vec2i pos, Pickup entity) {
-                level.addPickup(pos, entity);
-            }
-        };
+        pickupLayerBuilder = createLayerBuilder(
+                level, pickupFactory,
+                (pos, entity) -> level.canPlacePickup(pos, entity),
+                (pos, entity) -> level.canReplacePickup(pos, entity),
+                (pos, entity) -> level.addPickup(pos, entity));
     }
 
     private void initEnemyLayerBuilder() {
@@ -234,43 +199,47 @@ public class LevelBuilder {
         enemyFactory.addSupplier('3', () -> new Hound(level));
         enemyFactory.addSupplier('4', () -> new Coward(level));
 
-        enemyLayerBuilder = new LayerBuilder<Enemy>(level, enemyFactory) {
-            @Override
-            protected boolean canPlaceEntity(Vec2i pos, Enemy entity) {
-                return level.canPlaceEnemy(pos, entity);
-            }
-
-            @Override
-            protected boolean canReplaceEntity(Vec2i pos, Enemy entity) {
-                return level.canReplaceEnemy(pos, entity);
-            }
-
-            @Override
-            protected void addEntity(Vec2i pos, Enemy entity) {
-                level.addEnemy(pos, entity);
-            }
-        };
+        enemyLayerBuilder = createLayerBuilder(
+                level, enemyFactory,
+                (pos, entity) -> level.canPlaceEnemy(pos, entity),
+                (pos, entity) -> level.canReplaceEnemy(pos, entity),
+                (pos, entity) -> level.addEnemy(pos, entity));
     }
 
     private void initAvatarLayerBuilder() {
         EntityFactory<Avatar> avatarFactory = new EntityFactory<>();
         avatarFactory.addSupplier('P', () -> new Avatar(level));
 
-        avatarLayerBuilder = new LayerBuilder<Avatar>(level, avatarFactory) {
+        avatarLayerBuilder = createLayerBuilder(
+                level, avatarFactory,
+                (pos, entity) -> level.canPlaceAvatar(pos, entity),
+                (pos, entity) -> level.canReplaceAvatar(pos, entity),
+                (pos, entity) -> level.addAvatar(pos, entity));
+    }
+
+    private <T extends Entity> LayerBuilder<T> createLayerBuilder(
+            Level level, EntityFactory<T> factory,
+            BiFunction<Vec2i, T, Boolean> canPlace,
+            BiFunction<Vec2i, T, Boolean> canReplace,
+            BiConsumer<Vec2i, T> addEntity) {
+
+        LayerBuilder<T> builder = new LayerBuilder<T>(level, factory) {
             @Override
-            protected boolean canPlaceEntity(Vec2i pos, Avatar entity) {
-                return level.canPlaceAvatar(pos, entity);
+            protected boolean canPlaceEntity(Vec2i pos, T entity) {
+                return canPlace.apply(pos, entity);
             }
 
             @Override
-            protected boolean canReplaceEntity(Vec2i pos, Avatar entity) {
-                return level.canReplaceAvatar(pos, entity);
+            protected boolean canReplaceEntity(Vec2i pos, T entity) {
+                return canReplace.apply(pos, entity);
             }
 
             @Override
-            protected void addEntity(Vec2i pos, Avatar entity) {
-                level.addAvatar(pos, entity);
+            protected void addEntity(Vec2i pos, T entity) {
+                addEntity.accept(pos, entity);
             }
         };
+
+        return builder;
     }
 }

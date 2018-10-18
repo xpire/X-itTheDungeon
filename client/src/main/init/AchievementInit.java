@@ -4,12 +4,12 @@ import main.content.IntStat;
 import main.trigger.achievement.Achievement;
 import main.trigger.achievement.AchievementSystem;
 
-public class AchievementInitialiser {
+public class AchievementInit {
 
     private AchievementSystem system;
     private IntStat stats;
 
-    public AchievementInitialiser(AchievementSystem system, IntStat stats) {
+    public AchievementInit(AchievementSystem system, IntStat stats) {
         this.system = system;
         this.stats  = stats;
     }

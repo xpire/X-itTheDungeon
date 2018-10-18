@@ -1,13 +1,13 @@
 package main;
 
 import javafx.beans.binding.Bindings;
-import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import main.app.controller.PlayLevelController;
 import main.app.engine.Game;
@@ -22,6 +22,16 @@ import main.events.AvatarDeathEvent;
 import main.events.AvatarEvent;
 import main.events.LevelEvent;
 import main.maploading.MapLoader;
+
+
+/*
+TODO
+ - Achievements page, notification
+ - More achievements
+ - Help Manual
+ - Settings
+ - Inventory View
+ */
 
 public class PlayMode implements Game {
 
@@ -40,6 +50,7 @@ public class PlayMode implements Game {
     private ViewComponent view;
 
     private StackPane pane = new StackPane();
+    private boolean isGameOver = false;
 
 
     // TAKE SCENE OUT!
@@ -81,25 +92,37 @@ public class PlayMode implements Game {
     }
 
     private void initUi() {
+        PlayModeUILocator locator = PlayLevelController.locator;
+
+        VBox objectives = locator.getObjectivesPanel();
+        objectives.getChildren().clear();
+        level.getObjectiveViews().forEachRemaining( o -> {
+            objectives.getChildren().add(o.getCheckBox());
+        });
 
         Label lblNumArrows = new Label();
-        PlayLevelController.locator.getInvArrow().getChildren().add(lblNumArrows);
+        locator.getInvArrow().getChildren().clear();
+        locator.getInvArrow().getChildren().add(lblNumArrows);
         lblNumArrows.textProperty().bind(Bindings.format("%d", avatar.getNumArrowsProperty()));
 
         Label lblNumBombs = new Label();
-        PlayLevelController.locator.getInvBomb().getChildren().add(lblNumBombs);
+        locator.getInvBomb().getChildren().clear();
+        locator.getInvBomb().getChildren().add(lblNumBombs);
         lblNumBombs.textProperty().bind(Bindings.format("%d", avatar.getNumBombsProperty()));
 
         Label lblSwordDurability = new Label();
-        PlayLevelController.locator.getInvSword().getChildren().add(lblSwordDurability);
+        locator.getInvSword().getChildren().clear();
+        locator.getInvSword().getChildren().add(lblSwordDurability);
         lblSwordDurability.textProperty().bind(Bindings.format("%d", avatar.getSwordDurability()));
 
         Label lblNumTreasures = new Label();
-        PlayLevelController.locator.getInvGold().getChildren().add(lblNumTreasures);
+        locator.getInvGold().getChildren().clear();
+        locator.getInvGold().getChildren().add(lblNumTreasures);
         lblNumTreasures.textProperty().bind(Bindings.format("%d", avatar.getNumTreasuresProperty()));
 
         Label lblHasKey = new Label();
-        PlayLevelController.locator.getInvKey().getChildren().add(lblHasKey);
+        locator.getInvGold().getChildren().clear();
+        locator.getInvKey().getChildren().add(lblHasKey);
         lblHasKey.textProperty().bind(Bindings.format("%s", avatar.hasKeyProperty()));
     }
 
@@ -197,13 +220,17 @@ public class PlayMode implements Game {
     }
 
     private void gameOver() {
+        isGameOver = true;
         Label lblGameOver = new Label("GAME OVER");
         lblGameOver.fontProperty().set(Font.font(40));
         pane.getChildren().add(lblGameOver);
         isRunning = false;
+
+        level.postEvent(new LevelEvent(LevelEvent.LEVEL_FAILED, levelNum));
     }
 
     private void gameWin() {
+        if (isGameOver) return;
         Label lblGameWin = new Label("GAME WON");
         lblGameWin.fontProperty().set(Font.font(40));
         pane.getChildren().add(lblGameWin);
