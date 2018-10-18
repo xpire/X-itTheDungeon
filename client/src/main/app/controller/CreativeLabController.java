@@ -9,10 +9,8 @@ import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.effect.DropShadow;
-import javafx.scene.effect.InnerShadow;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import main.Level;
 import main.app.model.AppScreen;
 import main.app.model.CreateModeSelectScreen;
 import main.entities.Avatar;
@@ -23,21 +21,18 @@ import main.entities.prop.Boulder;
 import main.entities.prop.IceBlock;
 import main.entities.terrain.*;
 import main.maploading.DraftBuilder;
-import main.maploading.MapLoader;
-import main.math.Vec2d;
 import main.math.Vec2i;
 import main.sprite.SpriteView;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 //TODO :
 //Key-door mapping
-//fix resize issues
 //hover w/ key-door
 //creative select screen
 //make replacing things more intuitive?
-//move options box to the right for consistency w/ play
-//add toolbox sprites + imageview rather than radio buttons
 //UNDO function - command pattern + memento pattern
 
 public class CreativeLabController extends AppController {
@@ -96,28 +91,7 @@ public class CreativeLabController extends AppController {
 
         for (int i = 0 ; i < numCols ; i++) {
             for (int j = 0; j < numRows; j++) {
-                Pane pane = new Pane();
-                pane.setPrefSize(30, 30);
-
-                pane.setOnMouseClicked(e -> {
-                    Node source = (Node) e.getSource();
-
-                    int selectedRow = GridPane.getRowIndex(source);
-                    int selectedCol = GridPane.getColumnIndex(source);
-
-                    if (selectedEntity != null) {
-                        Vec2i pos = new Vec2i(selectedCol, selectedRow);
-
-                        if (selectedEntity.equals("E")) draftBuilder.eraseEntitiesAt(pos);
-
-                        draftBuilder.editTileGUI(pos, selectedEntity);
-                        draftBuilder.displayLevel();
-                    }
-
-                    System.out.println(selectedRow + " " + selectedCol + selectedEntity);
-                });
-
-                currDraft.add(pane, i, j);
+                editorSelectHandler(i, j);
             }
         }
     }
@@ -174,6 +148,21 @@ public class CreativeLabController extends AppController {
         Button publish = new Button();
         Button exit    = new Button();
 
+        save.setText("Save");
+        saveAs.setText("Save As");
+        resize.setText("Resize");
+        publish.setText("Publish");
+        exit.setText("Exit");
+
+        exit.setOnAction(e -> switchScreen(new CreateModeSelectScreen(screen.getStage())));
+        save.setOnAction(e -> draftBuilder.saveMap(draftBuilder.getName(), "drafts"));
+
+        optionsMenu.add(save, 0, 0);
+        optionsMenu.add(saveAs, 0, 1);
+        optionsMenu.add(resize, 0, 2);
+        optionsMenu.add(publish, 0, 5);
+        optionsMenu.add(exit, 0, 6);
+
         Label rowsLabel  = new Label("Rows: ");
         rowsLabel.setMinWidth(15.0);
         TextField newRow = new TextField();
@@ -183,22 +172,6 @@ public class CreativeLabController extends AppController {
         colsLabel.setMinWidth(15.0);
         TextField newCol = new TextField();
         newCol.setMaxWidth(45.0);
-
-        save.setText("Save");
-        saveAs.setText("Save As");
-        resize.setText("Resize");
-        publish.setText("Publish");
-        exit.setText("Exit");
-
-        exit.setOnAction(e -> switchScreen(new CreateModeSelectScreen(screen.getStage())));
-
-        save.setOnAction(e -> draftBuilder.saveMap(draftBuilder.getName(), "drafts"));
-
-        optionsMenu.add(save, 0, 0);
-        optionsMenu.add(saveAs, 0, 1);
-        optionsMenu.add(resize, 0, 2);
-        optionsMenu.add(publish, 0, 5);
-        optionsMenu.add(exit, 0, 6);
 
         HBox resizeRow = new HBox();
         resizeRow.getChildren().addAll(rowsLabel, newRow);
@@ -276,7 +249,6 @@ public class CreativeLabController extends AppController {
 
 //            draftBuilder.setObjective(objectives);
             draftBuilder.displayLevel();
-
         };
 
         exitCondition.setOnAction(makeMutuallyExclusive);
@@ -289,6 +261,10 @@ public class CreativeLabController extends AppController {
         objectivesBox.add(treasureCondition, 1, 0);
         objectivesBox.add(switchCondition, 1, 1);
 
+        for (Node n : objectivesBox.getChildren()) {
+            GridPane.setHalignment(n, HPos.CENTER);
+            GridPane.setValignment(n, VPos.CENTER);
+        }
     }
 
     /**
@@ -319,27 +295,71 @@ public class CreativeLabController extends AppController {
      * @param newCol : new number of cols
      */
     private void updateEditorGridPane(int newRow, int newCol) {
-        System.out.println("testing" + newCol + " " + newCol);
+        Set<Node> deleteNodes = new HashSet<>();
+        for (Node child : currDraft.getChildren()) {
+            Integer rowIndex = GridPane.getRowIndex(child);
+            Integer colIndex = GridPane.getColumnIndex(child);
+
+            int r = (rowIndex == null) ? 0 : rowIndex;
+            int c = (colIndex == null) ? 0 : colIndex;
+
+            if (r >= newRow || c >= newCol) deleteNodes.add(child);
+        }
+
+        currDraft.getChildren().removeAll(deleteNodes);
+
         for (int currRow = currDraft.getRowConstraints().size() - 1; currRow >= newRow; currRow--)
             currDraft.getRowConstraints().remove(currRow);
 
         for (int currCol = currDraft.getColumnConstraints().size() - 1; currCol >= newCol; currCol--)
             currDraft.getColumnConstraints().remove(currCol);
 
-
         for (int currRow = currDraft.getRowConstraints().size(); currRow < newRow; currRow++) {
             RowConstraints rowConstraints = new RowConstraints();
-            rowConstraints.setVgrow(Priority.SOMETIMES);
             currDraft.getRowConstraints().add(rowConstraints);
+
+            for (int i = 0; i < currDraft.getColumnConstraints().size(); i++) editorSelectHandler(i, currRow);
         }
 
         for (int currCol = currDraft.getColumnConstraints().size(); currCol < newCol; currCol++) {
             ColumnConstraints columnConstraints = new ColumnConstraints();
-            columnConstraints.setHgrow(Priority.SOMETIMES);
             currDraft.getColumnConstraints().add(columnConstraints);
+
+            for (int j = 0; j < currDraft.getRowConstraints().size(); j++) editorSelectHandler(currCol, j);
         }
+
+        StackPane.setAlignment(currDraft, Pos.CENTER);
+
     }
 
+    private void editorSelectHandler(int i, int j) {
+        Pane pane = new Pane();
+        pane.setPrefSize(30, 30);
+
+        pane.setOnMouseClicked(e -> {
+            Node source = (Node) e.getSource();
+
+            int selectedRow = GridPane.getRowIndex(source);
+            int selectedCol = GridPane.getColumnIndex(source);
+
+            if (selectedEntity != null) {
+                Vec2i pos = new Vec2i(selectedCol, selectedRow);
+
+                if (selectedEntity.equals("E")) draftBuilder.eraseEntitiesAt(pos);
+
+                draftBuilder.editTileGUI(pos, selectedEntity);
+                draftBuilder.displayLevel();
+            }
+        });
+
+        currDraft.add(pane, i, j);
+    }
+
+    /**
+     * Adds a DropShadow to the currently selected entity in the toolbox
+     * @param sv : ArrayList of all SpriteViews within the toolbox
+     * @param spriteView : spriteView to add the DropShadow to
+     */
     private void setSelectedGlow(ArrayList<SpriteView> sv, SpriteView spriteView) {
         for (SpriteView spv : sv) spv.setEffect(null);
 
@@ -351,10 +371,15 @@ public class CreativeLabController extends AppController {
         spriteView.setEffect(dropShadow);
     }
 
-    private void addSelectHandler(ArrayList<SpriteView> views, Entity entity, int x, int y) {
-        addSelectHandler(views, entity, x, y, 1, 1);
-    }
-
+    /**
+     * Creates SpriteViews for the toolbox GridPane and sets their onclick property
+     * @param views : ArrayList of all current sprites in the toolbox
+     * @param entity : Entity corresponding to the sprite required
+     * @param x : x position
+     * @param y : y position
+     * @param scaleX : Additional x-scaling of sprite
+     * @param scaleY : Additional y-scaling of sprite
+     */
     private void addSelectHandler(ArrayList<SpriteView> views, Entity entity, int x, int y, double scaleX, double scaleY) {
         SpriteView s = entity.getSprite();
 
@@ -367,6 +392,10 @@ public class CreativeLabController extends AppController {
 
         views.add(s);
         toolbox.add(s, x, y);
+    }
+
+    private void addSelectHandler(ArrayList<SpriteView> views, Entity entity, int x, int y) {
+        addSelectHandler(views, entity, x, y, 1, 1);
     }
 
 }
