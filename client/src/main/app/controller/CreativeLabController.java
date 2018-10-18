@@ -37,6 +37,9 @@ import java.util.Set;
 //make replacing things more intuitive?
 //UNDO function - command pattern + memento pattern
 
+//bomb is broken on dev??
+//resizing which removes an enemy/avatar breaks down (arrayOutOfBounds Exception)
+
 public class CreativeLabController extends AppController<CreativeLabScreen> {
 
     private String selectedEntity;
@@ -67,7 +70,6 @@ public class CreativeLabController extends AppController<CreativeLabScreen> {
 
     @FXML
     public void initialize() {
-//        draftBuilder = new DraftBuilder(8, 8, "testDraft");
 
         screen.initialiseEditor(currDraft, 8, 8);
         screen.initialiseToolBox(toolbox);
@@ -83,10 +85,18 @@ public class CreativeLabController extends AppController<CreativeLabScreen> {
         StackPane.setAlignment(toolbox, Pos.CENTER);
     }
 
+    /**
+     * Getter for the currDraft GridPane
+     * @return The currDraft GridPane
+     */
     public GridPane getCurrDraft() {
         return currDraft;
     }
 
+    /**
+     * Getter for the toolbox GridPane
+     * @return The toolbox GridPane
+     */
     public GridPane getToolbox() {
         return toolbox;
     }

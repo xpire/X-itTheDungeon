@@ -308,6 +308,11 @@ public class CreativeLabScreen extends AppScreen {
 
     }
 
+    /**
+     * Adds a selectable Pane to the editor GridPane at a given location
+     * @param i : x position
+     * @param j : y position
+     */
     private void editorSelectHandler(int i, int j) {
         Pane pane = new Pane();
         pane.setPrefSize(30, 30);
@@ -370,6 +375,13 @@ public class CreativeLabScreen extends AppScreen {
         controller.getToolbox().add(s, x, y);
     }
 
+    /**
+     * Overloaded addSelectHandler method which sets the additional scaling factors to 1
+     * @param views : ArrayList of SpriteViews
+     * @param entity : Entity corresponding to the sprite required
+     * @param x : x position
+     * @param y : y position
+     */
     private void addSelectHandler(ArrayList<SpriteView> views, Entity entity, int x, int y) {
         addSelectHandler(views, entity, x, y, 1, 1);
     }
