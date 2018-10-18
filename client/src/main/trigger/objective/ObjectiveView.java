@@ -1,10 +1,8 @@
 package main.trigger.objective;
 
 import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-import main.trigger.Trigger;
 
 import java.util.function.Function;
 

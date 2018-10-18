@@ -35,9 +35,6 @@ public abstract class Trigger {
     public abstract void deactivate(EventBus bus);
 
 
-//    public <T extends Event> void addEventHandler(EventType<T> type, EventHandler<? super T> handler) {
-//        eventHandlers.addEventHandler(type, handler);
-//    }
     protected <T extends Event> void addEventHandler(EventBus bus, EventType<T> type, EventHandler<? super T> handler) {
         bus.addEventHandler(type, handler);
         bus.addEventHandler(type, POST);
@@ -59,7 +56,7 @@ public abstract class Trigger {
         listeners.remove(callback);
     }
 
-    private void post() {
+    protected void post() {
         listeners.forEach(Runnable::run);
     }
 }

@@ -4,10 +4,8 @@ import main.events.EnemyEvent;
 import main.events.ExitEvent;
 import main.events.SwitchEvent;
 import main.events.TreasureEvent;
-import main.trigger.Trigger;
 import main.trigger.objective.*;
 
-import java.lang.annotation.Target;
 import java.util.EnumMap;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -20,7 +18,7 @@ public class ObjectiveFactory {
     static {
         registerObjective(
                 Type.EXIT,
-                () -> new FixedCountTrigger<>(ExitEvent.EXIT_SUCCESS, null, 1),
+                () -> new FixedTargetTrigger<>(ExitEvent.EXIT_SUCCESS, null, 1),
                 t -> "Exit the Dungeon" + (t.isTriggered() ? " XD" : "")
         );
 

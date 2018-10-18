@@ -1,24 +1,24 @@
 package main.app.model;
 
-import javafx.fxml.FXML;
 import javafx.stage.Stage;
 import main.app.controller.AppController;
 import main.app.controller.MainController;
+import main.app.controller.TrophyController;
 
-public class MainScreen extends AppScreen{
+public class TrophyScreen extends AppScreen{
 
     {
         title = "X-it the Dungeon";
-        fxmlName = "main/app/view/main.fxml";
+        fxmlName = "main/app/view/trophy.fxml";
     }
 
-    public MainScreen(Stage stage) {
+    public TrophyScreen(Stage stage) {
         super(stage);
     }
 
 
     @Override
     protected AppController getController() {
-        return new MainController(this);
+        return new TrophyController(this);
     }
 }

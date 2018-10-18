@@ -3,6 +3,7 @@ package main.app;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
+import main.ServiceLocator;
 import main.app.model.MainScreen;
 import main.content.GameConfig;
 import main.events.EventBus;
@@ -29,8 +30,12 @@ public class Main extends Application {
     public SoundManager soundManager = SoundManager.getInstance(5);
     public static GameConfig gameConfig;
 
+    public static Stage primaryStage;
+    public static ServiceLocator locator;
+
     @Override
     public void start(Stage s){
+        primaryStage = s;
 
         s.setWidth(960);
         s.setHeight(640);
@@ -56,6 +61,10 @@ public class Main extends Application {
 //        Gson gson = GameConfig.SerialisationProxy.getBuilder().create();
 
         AchievementSystem achievementSystem = new AchievementSystem();
+
+        locator = new ServiceLocator.ServiceLocatorBuilder()
+                .achievementSystem(achievementSystem)
+                .build();
 
         StatInit statInit = new StatInit(playModeBus);
         statInit.init(gameConfig.getIntStat());

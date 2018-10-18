@@ -19,16 +19,17 @@ public class PlayModeSelectController extends AppController {
 
     }
 
+
     @FXML
     public void onStoryBtnPressed() {
         switchScreen(new PlayLevelSelectScreen(screen.getStage()));
         soundManager.playSoundEffect("Item");
     }
 
+
     @FXML
     public void onBackBtnPressed() {
         switchScreen(new MainScreen(screen.getStage()));
         soundManager.playSoundEffect("Item");
     }
-
 }
