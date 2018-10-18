@@ -1,34 +1,10 @@
 package main.app.controller;
 
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.geometry.HPos;
 import javafx.geometry.Pos;
-import javafx.geometry.VPos;
 import javafx.scene.Node;
-import javafx.scene.control.*;
-import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
-import main.app.model.AppScreen;
-import main.app.model.CreateModeSelectScreen;
 import main.app.model.CreativeLabScreen;
-import main.entities.Avatar;
-import main.entities.Entity;
-import main.entities.enemies.*;
-import main.entities.pickup.*;
-import main.entities.prop.Boulder;
-import main.entities.prop.IceBlock;
-import main.entities.terrain.*;
-import main.maploading.DraftBuilder;
-import main.math.Vec2i;
-import main.sprite.SpriteView;
-
-import javax.swing.*;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 
 //TODO :
 //Key-door mapping

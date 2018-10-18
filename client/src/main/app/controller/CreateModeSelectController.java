@@ -1,19 +1,23 @@
 package main.app.controller;
 
 import javafx.fxml.FXML;
-import main.app.model.AppScreen;
+import javafx.scene.control.Accordion;
+import main.app.model.CreateModeSelectScreen;
 import main.app.model.CreativeLabScreen;
 import main.app.model.MainScreen;
 
-public class CreateModeSelectController extends AppController{
+public class CreateModeSelectController extends AppController<CreateModeSelectScreen>{
 
-    public CreateModeSelectController(AppScreen screen) {
+    @FXML
+    private Accordion draftsView;
+
+    public CreateModeSelectController(CreateModeSelectScreen screen) {
         super(screen);
     }
 
     @FXML
     public void initialize() {
-
+        screen.initialiseDraftList(draftsView);
     }
 
     @FXML
@@ -25,6 +29,5 @@ public class CreateModeSelectController extends AppController{
     public void onBackBtnPressed() {
         switchScreen(new MainScreen(screen.getStage()));
     }
-
 
 }

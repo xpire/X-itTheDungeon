@@ -23,6 +23,7 @@ import main.entities.pickup.*;
 import main.entities.prop.*;
 import main.entities.terrain.*;
 import main.maploading.DraftBuilder;
+import main.maploading.MapLoader;
 import main.math.Vec2i;
 import main.sprite.SpriteView;
 
@@ -41,10 +42,17 @@ public class CreativeLabScreen extends AppScreen {
     private DraftBuilder draftBuilder;
     private String selectedEntity;
 
-    public CreativeLabScreen(Stage stage) {
+    public CreativeLabScreen(Stage stage, String draftName) {
         super(stage);
         this.controller = new CreativeLabController(this);
-        this.draftBuilder = new DraftBuilder(8, 8, "testDraft");
+
+        this.draftBuilder = (draftName == null) ?
+                new DraftBuilder(8, 8, "newDraft") :
+                new DraftBuilder(new MapLoader().loadLevel(draftName, "src/main/drafts", true));
+    }
+
+    public CreativeLabScreen(Stage stage) {
+        this(stage, null);
     }
 
     @Override
@@ -107,7 +115,7 @@ public class CreativeLabScreen extends AppScreen {
      * Initialises the Options GridPlane on the scene
      */
     public void initialiseOptions(GridPane optionsMenu) {
-        int numCols = 1, numRows = 7;
+        int numCols = 1, numRows = 8;
 
         initialiseGridPane(optionsMenu, numCols, numRows, true);
 
@@ -115,23 +123,27 @@ public class CreativeLabScreen extends AppScreen {
         Button saveAs  = new Button();
         Button resize  = new Button();
         Button publish = new Button();
+        Button delete  = new Button();
         Button exit    = new Button();
 
         save.setText("Save");
         saveAs.setText("Save As");
         resize.setText("Resize");
         publish.setText("Publish");
+        delete.setText("Delete");
         exit.setText("Exit");
 
         //Maybe make the options menu more fxml integrated rather than model
-        exit.setOnAction(e -> controller.switchScreen(new CreateModeSelectScreen(this.getStage())));
         save.setOnAction(e -> draftBuilder.saveMap(draftBuilder.getName(), "drafts"));
+        delete.setOnAction(e -> draftBuilder.deleteDraft(draftBuilder.getName()));
+        exit.setOnAction(e -> controller.switchScreen(new CreateModeSelectScreen(this.getStage())));
 
         optionsMenu.add(save, 0, 0);
         optionsMenu.add(saveAs, 0, 1);
         optionsMenu.add(resize, 0, 2);
         optionsMenu.add(publish, 0, 5);
-        optionsMenu.add(exit, 0, 6);
+        optionsMenu.add(delete, 0, 6);
+        optionsMenu.add(exit, 0, 7);
 
         Label rowsLabel  = new Label("Rows: ");
         rowsLabel.setMinWidth(15.0);
