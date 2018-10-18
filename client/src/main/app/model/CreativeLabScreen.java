@@ -237,10 +237,6 @@ public class CreativeLabScreen extends AppScreen {
         }
     }
 
-    public Node initialiseView() {
-        return draftBuilder.getLevel().getView();
-    }
-
     /**
      * Initialises a default GridPlane with row/col constraints
      * @param gp : GridPlane to be initialised
@@ -384,6 +380,14 @@ public class CreativeLabScreen extends AppScreen {
      */
     private void addSelectHandler(ArrayList<SpriteView> views, Entity entity, int x, int y) {
         addSelectHandler(views, entity, x, y, 1, 1);
+    }
+
+    /**
+     * Initialises the View for the editor GridPane to display the level as it's being made
+     * @return The view of the level in progress
+     */
+    public Node initialiseView() {
+        return draftBuilder.getLevel().getView();
     }
 
 }
