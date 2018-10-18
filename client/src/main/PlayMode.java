@@ -1,7 +1,6 @@
 package main;
 
 import javafx.beans.binding.Bindings;
-import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -23,7 +22,16 @@ import main.events.AvatarDeathEvent;
 import main.events.AvatarEvent;
 import main.events.LevelEvent;
 import main.maploading.MapLoader;
-import main.trigger.objective.ObjectiveView;
+
+
+/*
+TODO
+ - Achievements page, notification
+ - More achievements
+ - Help Manual
+ - Settings
+ - Inventory View
+ */
 
 public class PlayMode implements Game {
 
