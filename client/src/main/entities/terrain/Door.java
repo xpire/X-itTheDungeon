@@ -1,16 +1,14 @@
 package main.entities.terrain;
 
 
-import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import main.Level;
 import main.entities.Avatar;
 import main.entities.Entity;
 import main.entities.enemies.Enemy;
 import main.entities.prop.Prop;
 import main.events.DoorEvent;
 import main.events.KeyEvent;
-import main.Level;
 import main.math.Vec2d;
 import main.math.Vec2i;
 import main.sprite.SpriteView;

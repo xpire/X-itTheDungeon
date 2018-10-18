@@ -93,7 +93,7 @@ public class LitBomb extends Prop{
      */
     public void onExplosion() {
         System.out.println("EXPLOSION");
-        sprite.playAnime("Explosion");
+//        sprite.playAnime("Explosion");
         destroyEntity(pos);
 
         for (Vec2i dir : Vec2i.DIRECTIONS) {

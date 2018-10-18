@@ -2,12 +2,15 @@ package main.maploading;
 
 import main.Level;
 import main.entities.Entity;
+import main.init.ObjectiveFactory;
 import main.math.Vec2i;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Scanner;
+
+import static main.init.ObjectiveFactory.makeObjective;
 
 /**
  * Class which contains the logic of the CreateMode class
@@ -60,6 +63,27 @@ public class DraftBuilder {
         return level.isValidGridPos(tile);
     }
 
+    //TODO : fix this with Ian's level builder code as well
+    public void setObjective(ArrayList<String> objectives) throws InvalidMapException{
+        for (String objective : objectives) {
+            switch (objective) {
+                case "A":
+                    level.addObjective(makeObjective(ObjectiveFactory.Type.EXIT));
+                    break;
+                case "B":
+                    level.addObjective(makeObjective(ObjectiveFactory.Type.ACTIVATE_ALL_SWITCHES));
+                    break;
+                case "C":
+                    level.addObjective(makeObjective(ObjectiveFactory.Type.COLLECT_ALL_TREASURES));
+                    break;
+                case "D":
+                    level.addObjective(makeObjective(ObjectiveFactory.Type.KILL_ALL_ENEMIES));
+                    break;
+                default:
+                    throw new InvalidMapException("Invalid Objective Code: " + objective);
+            }
+        }
+    }
 
     /**
      * Resizes the dimensions of the draft
@@ -163,6 +187,8 @@ public class DraftBuilder {
         }
     }
 
+    //TODO: this method is now redundant - only used in terminal creative mode
+    //TODO: remove before submission
     /**
      * Adds Entities to a certain position on the Level
      *
@@ -224,14 +250,19 @@ public class DraftBuilder {
         LevelBuilder levelBuilder = new LevelBuilder(level);
 
         try {
-            if (!entity.equals("K") && !entity.equals("|"))
-                levelBuilder.makeAndAttach(tile, entity.charAt(0));
-            else {
-                //TODO: fix this
-                System.out.println("this will be handled later :P");
-
-            }
+            levelBuilder.makeAndAttach(tile, entity.charAt(0));
         } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void editTileKeyDoorGUI(Vec2i key, Vec2i door) {
+        LevelBuilder levelBuilder = new LevelBuilder(level);
+
+        try {
+            levelBuilder.addKeyDoor(key, door);
+        } catch (Exception e) {
+            e.printStackTrace();
             System.out.println(e.getMessage());
         }
     }
@@ -242,10 +273,8 @@ public class DraftBuilder {
      * @return true if draft was deleted, false otherwise
      */
     public boolean deleteDraft(String draftName) {
-        StringBuilder draftPath = new StringBuilder("./src/main/drafts/");
-        draftPath.append(draftName).append(".txt");
-
-        File draft = new File(draftPath.toString());
+        String draftPath = String.format("./src/main/drafts/%s.txt", draftName);
+        File draft = new File(draftPath);
 
         return draft.delete();
     }

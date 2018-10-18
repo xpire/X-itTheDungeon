@@ -34,7 +34,9 @@ public class TerrainLayer extends EntityLayer<Terrain> {
 
     @Override
     public Terrain getEntity(Vec2i pos) {
-        return terrains[pos.getY()][pos.getX()];
+        if (pos.within(new Vec2i(0, 0), new Vec2i(nCols-1, nRows-1)))
+            return terrains[pos.getY()][pos.getX()];
+        return null;
     }
 
     @Override
