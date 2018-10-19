@@ -4,6 +4,7 @@ import main.Level;
 import main.content.ObjectiveFactory;
 import main.entities.Entity;
 import main.math.Vec2i;
+import main.trigger.objective.Objective;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -64,23 +65,13 @@ public class DraftBuilder {
     }
 
     //TODO : fix this with Ian's level builder code as well
-    public void setObjective(ArrayList<String> objectives) throws InvalidMapException{
+    public void setObjective(ArrayList<String> objectives) throws InvalidMapException {
+
         for (String objective : objectives) {
-            switch (objective) {
-                case "A":
-                    level.addObjective(makeObjective(ObjectiveFactory.Type.EXIT));
-                    break;
-                case "B":
-                    level.addObjective(makeObjective(ObjectiveFactory.Type.ACTIVATE_ALL_SWITCHES));
-                    break;
-                case "C":
-                    level.addObjective(makeObjective(ObjectiveFactory.Type.COLLECT_ALL_TREASURES));
-                    break;
-                case "D":
-                    level.addObjective(makeObjective(ObjectiveFactory.Type.KILL_ALL_ENEMIES));
-                    break;
-                default:
-                    throw new InvalidMapException("Invalid Objective Code: " + objective);
+            try {
+                level.addObjective(makeObjective(ObjectiveFactory.Type.valueOf(objective)));
+            } catch (IllegalArgumentException e) {
+                throw new InvalidMapException("Invalid Objective Code: " + objective);
             }
         }
     }
@@ -143,12 +134,9 @@ public class DraftBuilder {
             w.write(nRow + "\t" + nCol);
             w.append("\n");
 
-//            //set the objective
-//            ArrayList<String> obj = level.getObjectives();
-//            for (String s : obj) {
-//                w.write(s + "\t");
-//            }
-//            w.newLine();
+            //setting objectives
+            w.write(level.listObjectives());
+            w.newLine();
 
             //set the main body of the map
             StringBuilder metaData = new StringBuilder();
@@ -285,5 +273,9 @@ public class DraftBuilder {
 
     public void eraseEntitiesAt(Vec2i pos) {
         level.removeAllAt(pos, true);
+    }
+
+    public void clearObjectives() {
+        level.clearObjectives();
     }
 }

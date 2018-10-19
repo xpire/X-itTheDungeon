@@ -9,6 +9,7 @@ import main.entities.pickup.*;
 import main.entities.prop.Boulder;
 import main.entities.prop.Prop;
 import main.entities.terrain.*;
+import main.init.ObjectiveFactory;
 import main.math.Vec2i;
 
 import java.util.ArrayList;
@@ -96,21 +97,10 @@ public class LevelBuilder {
     public void setObjectives(ArrayList<String> objectives) throws InvalidMapException {
 
         for (String objective : objectives) {
-            switch (objective) {
-                case "A":
-                    level.addObjective(makeObjective(Type.EXIT));
-                    break;
-                case "B":
-                    level.addObjective(makeObjective(Type.ACTIVATE_ALL_SWITCHES));
-                    break;
-                case "C":
-                    level.addObjective(makeObjective(Type.COLLECT_ALL_TREASURES));
-                    break;
-                case "D":
-                    level.addObjective(makeObjective(Type.KILL_ALL_ENEMIES));
-                    break;
-                default:
-                    throw new InvalidMapException("Invalid Objective Code: " + objective);
+            try {
+                level.addObjective(makeObjective(ObjectiveFactory.Type.valueOf(objective)));
+            } catch (IllegalArgumentException e) {
+                throw new InvalidMapException("Invalid Objective Code: " + objective);
             }
         }
     }

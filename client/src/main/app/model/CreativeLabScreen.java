@@ -23,11 +23,14 @@ import main.entities.enemies.*;
 import main.entities.pickup.*;
 import main.entities.prop.*;
 import main.entities.terrain.*;
+import main.content.ObjectiveFactory;
 import main.maploading.DraftBuilder;
 import main.maploading.InvalidMapException;
 import main.maploading.MapLoader;
+import main.maploading.TerrainLayer;
 import main.math.Vec2i;
 import main.sprite.SpriteView;
+import main.trigger.objective.Objective;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -43,6 +46,8 @@ public class CreativeLabScreen extends AppScreen {
     private CreativeLabController controller;
     private DraftBuilder draftBuilder;
     private String selectedEntity;
+
+    private ArrayList<String> selectedObjectives = new ArrayList<>();
 
     private boolean isKeyDoorMatching = false;
     private boolean wasKey = false;
@@ -142,7 +147,12 @@ public class CreativeLabScreen extends AppScreen {
         exit.setText("Exit");
 
         //Maybe make the options menu more fxml integrated rather than model
-        save.setOnAction(e -> draftBuilder.saveMap(draftBuilder.getName(), "drafts"));
+        save.setOnAction(e -> {
+            draftBuilder.clearObjectives();
+            setObjectives();
+
+            draftBuilder.saveMap(draftBuilder.getName(), "drafts");
+        });
         delete.setOnAction(e -> draftBuilder.deleteDraft(draftBuilder.getName()));
         exit.setOnAction(e -> controller.switchScreen(new CreateModeSelectScreen(this.getStage())));
 
@@ -214,36 +224,37 @@ public class CreativeLabScreen extends AppScreen {
         CheckBox treasureCondition = new CheckBox();
         CheckBox switchCondition = new CheckBox();
 
-        exitCondition.setText("A");
-        treasureCondition.setText("B");
-        killCondition.setText("C");
-        switchCondition.setText("D");
+        exitCondition.setText("Exit");
+        exitCondition.setAccessibleText(ObjectiveFactory.Type.EXIT.name());
+
+        treasureCondition.setText("$$$");
+        treasureCondition.setAccessibleText(ObjectiveFactory.Type.COLLECT_ALL_TREASURES.name());
+
+        killCondition.setText("Kill");
+        killCondition.setAccessibleText(ObjectiveFactory.Type.KILL_ALL_ENEMIES.name());
+
+        switchCondition.setText("Flip");
+        switchCondition.setAccessibleText(ObjectiveFactory.Type.ACTIVATE_ALL_SWITCHES.name());
 
         EventHandler<ActionEvent> makeMutuallyExclusive = e -> {
             CheckBox cb = (CheckBox) e.getSource();
             ArrayList<String> objectives = new ArrayList<>();
 
-            if (cb.getText().equals("A")) {
+            if (cb.getText().equals("Exit")) {
                 killCondition.setSelected(false);
                 treasureCondition.setSelected(false);
                 switchCondition.setSelected(false);
 
-                objectives.add(cb.getText());
+                objectives.add(killCondition.getAccessibleText());
             } else {
                 exitCondition.setSelected(false);
 
-                if (treasureCondition.isSelected()) objectives.add("B");
-                if (killCondition.isSelected()) objectives.add("C");
-                if (switchCondition.isSelected()) objectives.add("D");
+                if (treasureCondition.isSelected()) objectives.add(treasureCondition.getAccessibleText());
+                if (killCondition.isSelected()) objectives.add(killCondition.getAccessibleText());
+                if (switchCondition.isSelected()) objectives.add(switchCondition.getAccessibleText());
             }
 
-            try {
-                draftBuilder.setObjective(objectives);
-            } catch (InvalidMapException ex) {
-                ex.printStackTrace();
-            }
-
-            draftBuilder.displayLevel();
+            selectedObjectives = objectives;
         };
 
         exitCondition.setOnAction(makeMutuallyExclusive);
@@ -452,5 +463,12 @@ public class CreativeLabScreen extends AppScreen {
         return draftBuilder.getLevel().getView();
     }
 
+    public void setObjectives() {
+        try {
+            draftBuilder.setObjective(selectedObjectives);
+        } catch (InvalidMapException e) {
+            e.printStackTrace();
+        }
+    }
 
 }

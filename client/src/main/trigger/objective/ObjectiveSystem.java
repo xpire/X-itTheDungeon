@@ -32,4 +32,21 @@ public class ObjectiveSystem {
     public boolean checkTriggeredAll() {
         return objectives.stream().allMatch(Objective::isTriggered);
     }
+
+    public String getObjectives() {
+        StringBuilder sb = new StringBuilder();
+
+        for (Objective objective : objectives) {
+            sb.append(objective.toString()).append("\t");
+        }
+
+        return sb.toString();
+    }
+
+    public void clearObjectives() {
+        for (Objective objective : objectives) {
+            objective.getTrigger().deactivate(eventBus);
+        }
+        objectives.clear();
+    }
 }

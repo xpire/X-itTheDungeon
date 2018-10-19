@@ -8,7 +8,6 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import main.app.controller.AppController;
 import main.app.controller.CreateModeSelectController;
-import main.maploading.MapLoader;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -29,11 +28,6 @@ public class CreateModeSelectScreen extends AppScreen{
     }
 
     public void initialiseDraftList(Accordion draftsView) {
-//        TitledPane testing = new TitledPane();
-//        testing.setText("Testing");
-//
-//        draftsView.getPanes().add(testing);
-
         try {
             Files.walk(Paths.get("src/main/drafts"))
                  .filter(Files::isRegularFile)
@@ -48,7 +42,6 @@ public class CreateModeSelectScreen extends AppScreen{
                      vBox.getChildren().add(new Label("testing"));
                      vBox.getChildren().add(new Label("testing1"));
                      vBox.getChildren().add(new Label("testing2"));
-
 
                      Button button = new Button();
                      button.setText("Resume");

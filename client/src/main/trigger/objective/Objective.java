@@ -4,10 +4,12 @@ public class Objective<T extends TargetCountTrigger> {
 
     private T trigger;
     private ObjectiveView<T> view;
+    private String name;
 
-    public Objective(T trigger, ObjectiveView<T> view) {
+    public Objective(String name, T trigger, ObjectiveView<T> view) {
         this.trigger = trigger;
         this.view = view;
+        this.name = name;
     }
 
     public T getTrigger() {
@@ -20,5 +22,10 @@ public class Objective<T extends TargetCountTrigger> {
 
     public ObjectiveView<T> getView() {
         return view;
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 }
