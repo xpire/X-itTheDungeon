@@ -3,19 +3,19 @@ package main;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
 
 import java.util.LinkedList;
-import java.util.Queue;
 
 public final class Toast
 {
@@ -44,13 +44,14 @@ public final class Toast
     {
         locked = true;
 
-        // Create popup window
-        Stage toastStage = new Stage();
-        toastStage.initOwner(parent);
-        toastStage.setResizable(false);
-        toastStage.initStyle(StageStyle.TRANSPARENT);
+        // Create toast
+        Stage toast = new Stage();
+        toast.initOwner(parent);
+        toast.initStyle(StageStyle.TRANSPARENT);
+        toast.setResizable(false);
+        toast.setAlwaysOnTop(true);
 
-        // Text styling
+        // Create toast content
         Text text = new Text(toastMsg);
         text.setFont(Font.font("Verdana", 40));
         text.setFill(Color.RED);
@@ -58,29 +59,38 @@ public final class Toast
         StackPane root = new StackPane(text);
         root.setStyle("-fx-background-radius: 20; -fx-background-color: rgba(0, 0, 0, 0.2); -fx-padding: 50px;");
         root.setOpacity(0);
+        root.setFocusTraversable(false);
+        root.setMouseTransparent(true);
 
         Scene scene = new Scene(root);
+        scene.setOnMouseClicked(e -> closeToast(toast));
         scene.setFill(Color.TRANSPARENT);
-        toastStage.setScene(scene);
-        toastStage.show();
+        toast.setScene(scene);
+        toast.show();
 
-        Timeline fadeIn = phase(toastStage, fadeInDelay, 1);
-        Timeline toast = phase(toastStage, toastDelay, 1);
-        Timeline fadeOut = phase(toastStage, fadeOutDelay, 0);
+        parent.requestFocus();
 
-        fadeIn.setOnFinished(e  -> toast.play());
-        toast.setOnFinished(e   -> fadeOut.play());
-        fadeOut.setOnFinished(e -> {
-            toastStage.close();
-            locked = false;
-            nextToast();
-        });
+        // Display toast
+        Timeline fadeIn = phase(toast, fadeInDelay, 1);
+        Timeline stay = phase(toast, toastDelay, 1);
+        Timeline fadeOut = phase(toast, fadeOutDelay, 0);
+
+        fadeIn.setOnFinished(e  -> stay.play());
+        stay.setOnFinished(e   -> fadeOut.play());
+        fadeOut.setOnFinished(e -> closeToast(toast));
         fadeIn.play();
     }
 
-    static private Timeline phase(Stage s, int duration, int endOpacity) {
+
+    static private void closeToast(Stage toast) {
+        toast.close();
+        locked = false;
+        nextToast();
+    }
+
+    static private Timeline phase(Stage toast, int duration, int endOpacity) {
         Timeline timeline = new Timeline();
-        timeline.getKeyFrames().add(getOpacityTransition(s, duration, endOpacity));
+        timeline.getKeyFrames().add(getOpacityTransition(toast, duration, endOpacity));
         return timeline;
     }
 

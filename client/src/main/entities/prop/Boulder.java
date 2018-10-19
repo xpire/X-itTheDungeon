@@ -6,6 +6,7 @@ import javafx.scene.shape.Circle;
 import main.entities.Avatar;
 import main.entities.Entity;
 import main.Level;
+import main.events.BoulderEvent;
 import main.math.Vec2d;
 import main.math.Vec2i;
 import main.sprite.SpriteView;
@@ -37,13 +38,14 @@ public class Boulder extends Prop {
     public void onCreated(){
 //        Circle circle = new Circle(12, Color.HONEYDEW);
 //        view.addNode(circle);
-        sprite = new SpriteView(getImage("sprite/prop/boulder/2.png"),new Vec2d(-8,-8), 1,1);
+        sprite = new SpriteView(getImage("sprite/prop/boulder/2.png"), new Vec2d(-8,-8), 1,1);
         view.addNode(sprite);
     }
 
 
     @Override
     public void onExploded() {
+        level.postEvent(new BoulderEvent(BoulderEvent.BOULDER_BOMBED));
         onDestroyed();
     }
 

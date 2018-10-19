@@ -1,4 +1,4 @@
-package main.init;
+package main.content;
 
 import main.events.EnemyEvent;
 import main.events.ExitEvent;

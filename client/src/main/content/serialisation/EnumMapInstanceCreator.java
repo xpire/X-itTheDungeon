@@ -1,4 +1,4 @@
-package main.content;
+package main.content.serialisation;
 
 import com.google.gson.InstanceCreator;
 

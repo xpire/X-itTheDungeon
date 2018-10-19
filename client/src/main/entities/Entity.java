@@ -121,7 +121,7 @@ public abstract class Entity {
      * @param x - change in x
      * @param y - change in y
      */
-    public void moveTo(int x, int y) {
+    public void setPos(int x, int y) {
 //        Vec2i from = new Vec2i(pos);
         pos = new Vec2i(x, y);
         view.moveTo(getWorldPos().sub(view.getCentre()));
@@ -132,22 +132,10 @@ public abstract class Entity {
      * Move to a new vector position
      * @param newPos : position to move to
      */
-    public void moveTo(Vec2i newPos) {
-        moveTo(newPos.getX(), newPos.getY());
+    public void setPos(Vec2i newPos) {
+        setPos(newPos.getX(), newPos.getY());
     }
 
-    /**
-     * Move entity by certain amount
-     * @param dx - change in x
-     * @param dy - change in y
-     */
-    public void moveBy(int dx, int dy) {
-        moveTo(pos.getX() + dx, pos.getY() + dy);
-    }
-
-    public void moveBy(Vec2i dv) {
-        moveBy(dv.getX(), dv.getY());
-    }
 
 
 

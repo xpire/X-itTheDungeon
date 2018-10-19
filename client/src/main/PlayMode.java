@@ -18,7 +18,7 @@ import main.component.ViewComponent;
 import main.entities.Avatar;
 import main.entities.Entity;
 import main.entities.enemies.EnemyManager;
-import main.events.AvatarDeathEvent;
+import main.events.DeathEvent;
 import main.events.AvatarEvent;
 import main.events.LevelEvent;
 import main.maploading.MapLoader;
@@ -90,7 +90,12 @@ public class PlayMode implements Game {
 
     private void initEvents() {
         level.addEventHandler(AvatarEvent.AVATAR_TURN_ENDED, event -> endPlayerTurn());
-        level.addEventHandler(AvatarDeathEvent.AVATAR_DEATH, event -> gameOver());
+        level.addEventHandler(DeathEvent.ANY, e -> {
+            System.out.println("DIED! " + e.isAvatar());
+
+            if (e.isAvatar())
+                gameOver();
+        });
     }
 
     private void initUi() {
@@ -98,9 +103,7 @@ public class PlayMode implements Game {
 
         VBox objectives = locator.getObjectivesPanel();
         objectives.getChildren().clear();
-        level.getObjectiveViews().forEachRemaining( o -> {
-            objectives.getChildren().add(o.getCheckBox());
-        });
+        level.getObjectiveViews().forEachRemaining( o -> objectives.getChildren().add(o.getCheckBox()));
 
         Label lblNumArrows = new Label();
         locator.getInvArrow().getChildren().clear();
@@ -132,22 +135,22 @@ public class PlayMode implements Game {
     private void initInput(Scene scene) {
         scene.addEventHandler(KeyEvent.ANY, evt -> input.onKeyEvent(evt));
 
-        addAvatarActionBinding(KeyCode.W,       () -> avatar.faceUp());
-        addAvatarActionBinding(KeyCode.S,       () -> avatar.faceDown());
-        addAvatarActionBinding(KeyCode.A,       () -> avatar.faceLeft());
-        addAvatarActionBinding(KeyCode.D,       () -> avatar.faceRight());
-        addAvatarActionBinding(KeyCode.UP,      () -> avatar.moveUp());
-        addAvatarActionBinding(KeyCode.DOWN,    () -> avatar.moveDown());
-        addAvatarActionBinding(KeyCode.LEFT,    () -> avatar.moveLeft());
-        addAvatarActionBinding(KeyCode.RIGHT,   () -> avatar.moveRight());
-        addAvatarActionBinding(KeyCode.Z,       () -> avatar.dropKey());
-        addAvatarActionBinding(KeyCode.X,       () -> avatar.placeBomb());
-        addAvatarActionBinding(KeyCode.C,       () -> avatar.shootArrow());
-        addAvatarActionBinding(KeyCode.V,       () -> avatar.swingSword());
+        addAction(KeyCode.W,       () -> avatar.faceUp());
+        addAction(KeyCode.S,       () -> avatar.faceDown());
+        addAction(KeyCode.A,       () -> avatar.faceLeft());
+        addAction(KeyCode.D,       () -> avatar.faceRight());
+        addAction(KeyCode.UP,      () -> avatar.moveUp());
+        addAction(KeyCode.DOWN,    () -> avatar.moveDown());
+        addAction(KeyCode.LEFT,    () -> avatar.moveLeft());
+        addAction(KeyCode.RIGHT,   () -> avatar.moveRight());
+        addAction(KeyCode.Z,       () -> avatar.dropKey());
+        addAction(KeyCode.X,       () -> avatar.placeBomb());
+        addAction(KeyCode.C,       () -> avatar.shootArrow());
+        addAction(KeyCode.V,       () -> avatar.swingSword());
     }
 
 
-    private void addAvatarActionBinding(KeyCode code, Runnable action) {
+    private void addAction(KeyCode code, Runnable action) {
         input.addBinding(code, new UserAction() {
             @Override
             protected void onActionBegin() {

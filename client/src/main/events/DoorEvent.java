@@ -15,6 +15,9 @@ public class DoorEvent extends GameEvent {
     public static final EventType<DoorEvent> DOOR_REMOVED
             = new EventType<>(DoorEvent.ANY,"DOOR_REMOVED");
 
+    public static final EventType<DoorEvent> DOOR_OPENED
+            = new EventType<>(DoorEvent.ANY,"DOOR_OPENED");
+
     private Door door;
 
     /**

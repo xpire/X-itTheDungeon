@@ -1,25 +1,7 @@
 package main;
 
 import javafx.scene.Group;
-import javafx.scene.Node;
-import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
-import main.app.engine.Game;
-import main.app.engine.GameLoop;
-import main.app.engine.Input;
-import main.app.engine.UserAction;
-import main.component.ViewComponent;
-import main.entities.Avatar;
-import main.entities.Entity;
-import main.entities.enemies.EnemyManager;
-import main.events.AvatarDeathEvent;
-import main.events.AvatarEvent;
-import main.events.LevelEvent;
-import main.maploading.MapLoader;
 
 public class PlayModeUILocator {
 

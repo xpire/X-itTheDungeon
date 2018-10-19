@@ -7,9 +7,9 @@ import main.ServiceLocator;
 import main.app.model.MainScreen;
 import main.content.GameConfig;
 import main.events.EventBus;
-import main.init.AchievementInit;
-import main.init.StatInit;
 import main.sound.SoundManager;
+import main.content.AchievementInit;
+import main.content.StatInit;
 import main.trigger.achievement.AchievementSystem;
 import main.persistence.JsonPersistor;
 
@@ -66,8 +66,7 @@ public class Main extends Application {
                 .achievementSystem(achievementSystem)
                 .build();
 
-        StatInit statInit = new StatInit(playModeBus);
-        statInit.init(gameConfig.getIntStat());
+        new StatInit(playModeBus, gameConfig.getIntStat()).init();
 
         AchievementInit achieveInit = new AchievementInit(achievementSystem, gameConfig.getIntStat());
         achieveInit.init();

@@ -5,6 +5,7 @@ import main.algorithms.GridAStar;
 import main.behaviour.AIBehaviour;
 import main.entities.Avatar;
 import main.entities.Entity;
+import main.events.DeathEvent;
 import main.events.EnemyEvent;
 import main.math.Vec2i;
 import main.sound.SoundManager;
@@ -46,6 +47,7 @@ public abstract class Enemy extends Entity {
 
     @Override
     public void onExploded() {
+        level.postEvent(new DeathEvent(DeathEvent.DEATH_BY_BOMB, false));
         onDestroyed();
     }
 

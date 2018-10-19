@@ -1,7 +1,6 @@
 package main.maploading;
 
 import javafx.scene.Node;
-import main.Level;
 import main.component.ViewComponent;
 import main.entities.Entity;
 import main.math.Vec2i;
@@ -22,7 +21,7 @@ public abstract class EntityLayer <T extends Entity> {
         removeEntity(pos);
         setEntityRaw(pos, entity);
         onEntityEnter.accept(pos, entity);
-        entity.moveTo(pos);
+        entity.setPos(pos);
     }
 
     protected abstract void setEntityRaw(Vec2i pos, T entity);
