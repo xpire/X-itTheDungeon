@@ -57,14 +57,13 @@ public class DraftBuilder {
 
     /**
      * Checks if a coordinate is a valid tile on the draft
-     * @param tile
-     * @return
+     * @param tile the tile coordinate to check
+     * @return true if valid, false otherwise
      */
     public boolean isValidGridPos(Vec2i tile) {
         return level.isValidGridPos(tile);
     }
 
-    //TODO : fix this with Ian's level builder code as well
     public void setObjective(ArrayList<String> objectives) throws InvalidMapException {
 
         for (String objective : objectives) {
@@ -251,7 +250,6 @@ public class DraftBuilder {
             levelBuilder.addKeyDoor(key, door);
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println(e.getMessage());
         }
     }
 

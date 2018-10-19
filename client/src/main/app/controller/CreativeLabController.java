@@ -7,9 +7,11 @@ import javafx.scene.layout.*;
 import main.app.model.CreativeLabScreen;
 
 //TODO :
-//hover w/ key-door
+//hover with key-door?
 //naming new drafts
-//fix objectives and sizing issues
+
+//publish
+//play test
 
 //UNDO function - command pattern + memento pattern
 
@@ -41,8 +43,7 @@ public class CreativeLabController extends AppController<CreativeLabScreen> {
 
     @FXML
     public void initialize() {
-        //fix this for loading drafts up
-        screen.initialiseEditor(currDraft, 8, 8);
+        screen.initialiseEditor(currDraft);
         screen.initialiseToolBox(toolbox);
         screen.initialiseOptions(optionsMenu);
         screen.initialiseObjectivesBox(objectivesBox);

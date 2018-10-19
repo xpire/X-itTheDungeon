@@ -1,6 +1,5 @@
 package main.trigger.objective;
 
-
 import main.events.EventBus;
 
 import java.util.ArrayList;

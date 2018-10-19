@@ -951,9 +951,17 @@ public class Level {
 
     /**
      * Sets the level into Create Mode
-     * @param isCreateMode
+     * @param isCreateMode whether or not the level is in Creative mode
      */
     public void setCreateMode(boolean isCreateMode) {
         this.isCreateMode = isCreateMode;
+    }
+
+    public String listObjectives() {
+        return objectiveSystem.getObjectives();
+    }
+
+    public void clearObjectives() {
+        objectiveSystem.clearObjectives();
     }
 }

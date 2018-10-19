@@ -27,6 +27,8 @@ public class CreateModeSelectController extends AppController<CreateModeSelectSc
     public void onEnterLabBtnPressed() {
         switchScreen(new CreativeLabScreen(screen.getStage()));
         soundManager.playSoundEffect("Item");
+
+        screen.initialiseNewDraft();
     }
 
     @FXML

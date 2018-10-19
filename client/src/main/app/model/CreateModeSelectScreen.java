@@ -2,12 +2,13 @@ package main.app.model;
 
 import javafx.scene.control.Accordion;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.TitledPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import main.app.controller.AppController;
 import main.app.controller.CreateModeSelectController;
+import main.maploading.DraftBuilder;
+import main.maploading.MapLoader;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -39,13 +40,13 @@ public class CreateModeSelectScreen extends AppScreen{
                      titledPane.setText(trimmedFileName);
 
                      VBox vBox = new VBox();
-                     vBox.getChildren().add(new Label("testing"));
-                     vBox.getChildren().add(new Label("testing1"));
-                     vBox.getChildren().add(new Label("testing2"));
 
                      Button button = new Button();
                      button.setText("Resume");
-                     button.setOnAction(e -> controller.switchScreen(new CreativeLabScreen(this.getStage(), trimmedFileName)));
+                     button.setOnAction(e -> controller.switchScreen(
+                             new CreativeLabScreen(this.getStage(),
+                             new DraftBuilder(
+                             new MapLoader().loadLevel(trimmedFileName, "src/main/drafts", true)))));
 
                      vBox.getChildren().add(button);
 
@@ -56,6 +57,11 @@ public class CreateModeSelectScreen extends AppScreen{
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    public void initialiseNewDraft() {
+        DraftBuilder draftBuilder = new DraftBuilder(8, 8, "newDraft");
+        controller.switchScreen(new CreativeLabScreen(this.getStage(), draftBuilder));
     }
 
     @Override

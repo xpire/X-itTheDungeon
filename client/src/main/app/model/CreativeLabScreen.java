@@ -47,34 +47,27 @@ public class CreativeLabScreen extends AppScreen {
     private DraftBuilder draftBuilder;
     private String selectedEntity;
 
-    private ArrayList<String> selectedObjectives = new ArrayList<>();
-
     private boolean isKeyDoorMatching = false;
     private boolean wasKey = false;
     private Vec2i originalPos;
 
-    public CreativeLabScreen(Stage stage, String draftName) {
+    public CreativeLabScreen(Stage stage, DraftBuilder draftBuilder) {
         super(stage);
         this.controller = new CreativeLabController(this);
-
-        this.draftBuilder = (draftName == null) ?
-                new DraftBuilder(8, 8, "newDraft") :
-                new DraftBuilder(new MapLoader().loadLevel(draftName, "src/main/drafts", true));
+        this.draftBuilder = draftBuilder;
     }
 
     public CreativeLabScreen(Stage stage) {
         this(stage, null);
     }
 
-    @Override
-    protected AppController getController() {
-        return controller;
-    }
-
     /**
      * Initialises the Editor GridPlane on the scene
      */
-    public void initialiseEditor(GridPane currDraft, int numCols, int numRows) {
+    public void initialiseEditor(GridPane currDraft) {
+        int numCols = draftBuilder.getNCols();
+        int numRows = draftBuilder.getNRows();
+
         initialiseGridPane(currDraft, numCols, numRows, false);
 
         for (int i = 0 ; i < numCols ; i++) {
@@ -147,12 +140,7 @@ public class CreativeLabScreen extends AppScreen {
         exit.setText("Exit");
 
         //Maybe make the options menu more fxml integrated rather than model
-        save.setOnAction(e -> {
-            draftBuilder.clearObjectives();
-            setObjectives();
-
-            draftBuilder.saveMap(draftBuilder.getName(), "drafts");
-        });
+        save.setOnAction(e -> draftBuilder.saveMap(draftBuilder.getName(), "drafts"));
         delete.setOnAction(e -> draftBuilder.deleteDraft(draftBuilder.getName()));
         exit.setOnAction(e -> controller.switchScreen(new CreateModeSelectScreen(this.getStage())));
 
@@ -254,7 +242,7 @@ public class CreativeLabScreen extends AppScreen {
                 if (switchCondition.isSelected()) objectives.add(switchCondition.getAccessibleText());
             }
 
-            selectedObjectives = objectives;
+            setObjectives(objectives);
         };
 
         exitCondition.setOnAction(makeMutuallyExclusive);
@@ -301,6 +289,8 @@ public class CreativeLabScreen extends AppScreen {
      * @param newCol : new number of cols
      */
     private void updateEditorGridPane(int newRow, int newCol) {
+        //break this up into multiple methods
+
         GridPane currDraft = controller.getCurrDraft();
 
         Set<Node> deleteNodes = new HashSet<>();
@@ -346,6 +336,7 @@ public class CreativeLabScreen extends AppScreen {
      * @param j : y position
      */
     private void editorSelectHandler(int i, int j) {
+        //make this prettier..this is bloody atrocious
         Pane pane = new Pane();
         pane.setPrefSize(30, 30);
 
@@ -463,12 +454,21 @@ public class CreativeLabScreen extends AppScreen {
         return draftBuilder.getLevel().getView();
     }
 
-    public void setObjectives() {
+    /**
+     * Sets the objectives of a level to the currently selected checkboxes
+     * @param objectives ArrayList of objectives
+     */
+    private void setObjectives(ArrayList<String> objectives) {
         try {
-            draftBuilder.setObjective(selectedObjectives);
+            draftBuilder.clearObjectives();
+            draftBuilder.setObjective(objectives);
         } catch (InvalidMapException e) {
             e.printStackTrace();
         }
     }
 
+    @Override
+    protected AppController getController() {
+        return controller;
+    }
 }
