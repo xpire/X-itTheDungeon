@@ -59,7 +59,7 @@ public class ObjectiveFactory {
 
         OBJECTIVES.put(type, () -> {
             T t = triggerSupplier.get();
-            return new Objective<>(t, new ObjectiveView<T>(t, labelText));
+            return new Objective<>(t, new ObjectiveView<>(t, labelText));
         });
     }
 
