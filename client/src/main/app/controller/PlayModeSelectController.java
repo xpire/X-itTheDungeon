@@ -5,6 +5,7 @@ import main.app.model.AppScreen;
 import main.app.model.MainScreen;
 import main.app.model.PlayLevelSelectScreen;
 import main.sound.SoundManager;
+import main.app.model.*;
 
 public class PlayModeSelectController extends AppController {
 
@@ -32,4 +33,10 @@ public class PlayModeSelectController extends AppController {
         switchScreen(new MainScreen(screen.getStage()));
         soundManager.playSoundEffect("Item");
     }
+
+    @FXML
+    public void onExplorePressed() { switchScreen(new ExploreModeScreen(screen.getStage())); }
+
+    @FXML
+    public void onLocalBtnPressed() { switchScreen(new LocalLevelScreen(screen.getStage())); }
 }

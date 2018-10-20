@@ -4,6 +4,7 @@ import main.client.structure.LoginStruct;
 import main.client.structure.MapStructure;
 import main.client.structure.ReqStructure;
 import main.client.structure.StatsStructure;
+import main.client.util.LocalManager;
 import main.client.util.Routes;
 import com.google.gson.Gson;
 import com.mashape.unirest.http.HttpResponse;
@@ -32,7 +33,6 @@ public class Client {
 
     private boolean Loggedin;
     private String LoggedUser;
-
     /**
      * TODO Optional feature, must discuss with Ian
      */
@@ -71,9 +71,12 @@ public class Client {
                 if (!res.equals(Routes.LOGIN_FAILED)) {
                     Loggedin = true;
                     LoggedUser = username;
+
+                    if (LocalManager.hasLogged(username)) { LocalManager.addUser(username); }
                 }
                 return res;
-            } else {
+            }
+            else {
                 return Routes.INVALID_INPUT;
             }
         }
