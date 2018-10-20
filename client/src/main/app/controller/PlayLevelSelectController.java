@@ -13,7 +13,6 @@ import main.content.IntStat;
 import main.content.LevelConfig;
 import main.sound.SoundManager;
 
-import javax.sound.midi.Soundbank;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -54,7 +53,7 @@ public class PlayLevelSelectController extends AppController {
 
     public void onLevelSelected(String filename, int levelNum) {
         soundManager.playSoundEffect("Item");
-        soundManager.playBGM(new StringBuilder("Level ").append(levelNum).toString());
+        soundManager.playBGM("Level " + levelNum);
 
         switchScreen(new PlayLevelScreen(screen, screen.getStage(), filename, "src/asset/level", levelNum));
     }
