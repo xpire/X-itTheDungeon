@@ -5,11 +5,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import main.app.Main;
 import main.app.engine.AlertHelper;
-import main.app.model.CreateModeSelectScreen;
-import main.app.model.MainScreen;
-import main.app.model.LoginScreen;
-import main.app.model.PlayModeSelectScreen;
-import main.app.model.TrophyScreen;
+import main.app.model.*;
 import main.sound.SoundManager;
 import javafx.scene.control.Alert;
 
@@ -20,7 +16,7 @@ public class MainController extends AppController implements Initializable  {
 
 //    @FXML
 //    private Button btnStart;
-    SoundManager soundManager = SoundManager.getInstance(5);
+    private SoundManager soundManager = SoundManager.getInstance(5);
 
     @FXML
     Button btnLogin;
@@ -66,8 +62,12 @@ public class MainController extends AppController implements Initializable  {
 
     @FXML
     public void onLogoutBtnPressed() {
-        AlertHelper.showAlert(Alert.AlertType.INFORMATION,"Hello!!!", Main.currClient.attemptLogout());
+        AlertHelper.showAlert(Alert.AlertType.INFORMATION, "Hello!!!", Main.currClient.attemptLogout());
         btnLogin.setVisible(true);
         btnLogout.setVisible(false);
+    }
+
+    public void onHelpBtnPressed() {
+        switchScreen(new HelpManualScreen(screen.getStage(), screen));
     }
 }

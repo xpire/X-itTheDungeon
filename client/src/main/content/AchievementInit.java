@@ -22,7 +22,7 @@ public class AchievementInit {
         addAchievement("Caching!", "Collect 1 Treasure", 1, IntStat.Key.NUM_TREASURES_COLLECTED);
         addAchievement("Treasure Hunter", "Collect 7 Treasures", 7, IntStat.Key.NUM_TREASURES_COLLECTED);
         addAchievement("Millionaire $$$", "Collect 20 Treasures", 20, IntStat.Key.NUM_TREASURES_COLLECTED);
-        addAchievement("Oops!", "Fall into a Pit", 1, IntStat.Key.NUM_PIT_DEATHS);
+        addAchievement("Explorer of the Abyss", "Fall into a Pit", 1, IntStat.Key.NUM_PIT_DEATHS);
         addAchievement("Hawkeye", "Kill 3 Enemies with a Bow", 3, IntStat.Key.NUM_ENEMIES_KILLED_WITH_ARROW);
         addAchievement("Superman", "Kill an Enemy while Invincible", 1, IntStat.Key.NUM_ENEMIES_KILLED_WHEN_INVINCIBLE);
         addAchievement("Bomberman", "Kill 3 Enemies with a Bomb", 3, IntStat.Key.NUM_ENEMIES_KILLED_WITH_BOMB);

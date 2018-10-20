@@ -13,7 +13,7 @@ public abstract class AppScreen {
     protected Stage stage;
     protected FXMLLoader fxmlLoader;
 
-    protected String title = "";
+    protected String title = "X-it the Dungeon";
     protected String fxmlName = "";
 
     public AppScreen(Stage stage) {
