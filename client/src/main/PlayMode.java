@@ -105,6 +105,7 @@ public class PlayMode implements Game {
     public void startGame() {
         gameLoop.start();
         input.startListening();
+        soundManager.playSoundEffect("Start");
     }
 
     public void pauseGame() {

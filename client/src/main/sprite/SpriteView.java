@@ -71,17 +71,22 @@ public class SpriteView extends ImageView{
 
     public void playAnimation(String name, Vec2i direction, EventHandler<ActionEvent> afterFinish){
         StringBuilder sb = new StringBuilder();
-        sb.append(name).append(" ");
-        if (direction == Vec2i.NORTH) {
-            sb.append("Up");
-        } else if (direction == Vec2i.SOUTH) {
-            sb.append("Down");
-        } else if (direction == Vec2i.EAST) {
-            sb.append("Right");
-        } else if (direction == Vec2i.WEST) {
-            sb.append("Left");
-        }
+        sb.append(name).append(" ").append(directionParser(direction));
         playAnime(sb.toString(), afterFinish);
+    }
+
+    public String directionParser(Vec2i direction) {
+        if (direction == Vec2i.NORTH) {
+            return "Up";
+        } else if (direction == Vec2i.SOUTH) {
+            return "Down";
+        } else if (direction == Vec2i.EAST) {
+            return "Right";
+        } else if (direction == Vec2i.WEST) {
+            return "Left";
+        } else {
+            return "Up";
+        }
     }
 
     public void magnifyScales(double newScaleX, double newScaleY) {

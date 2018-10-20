@@ -21,7 +21,7 @@ public class SoundManager {
     private static SoundManager soundManagerInstance = null;
     private ExecutorService soundPool;
     private Map<String, AudioClip> soundEffectsMap = new HashMap<>();
-    private double FXVolume = 0.5;
+    private double FXVolume = 1.0;
 //    private ExecutorService BGMPool;
     private MediaPlayer BGMPlayer;
     private Map<String, Media> BGMMap = new HashMap<>();
@@ -77,6 +77,7 @@ public class SoundManager {
         loadSoundEffect("Drink", "sfx/snd_drink.mp3");
         //      - treasure
         loadSoundEffect("Treasure", "sfx/snd_gold.mp3");
+        loadSoundEffect("Coin", "sfx/snd_coin.mp3");
         // Game
         // - start
         loadSoundEffect("Start", "sfx/snd_descend.mp3");

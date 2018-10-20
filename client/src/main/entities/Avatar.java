@@ -468,6 +468,8 @@ public class Avatar extends Entity {
         }
         else if(level.onPushByAvatar(newPos, this)) {
             move(dir);
+        } else {
+            soundManager.playSoundEffect("Door Locked");
         }
     }
 
@@ -574,27 +576,15 @@ public class Avatar extends Entity {
 
         soundManager.playSoundEffect("Arrow");
         Vec2i arrowPos = new Vec2i(pos).add(direction);
-        FlyingArrow arrow = new FlyingArrow(level, arrowPos, pos);
+        System.out.printf("possss:%d %d, dir:%d %d\n",arrowPos.getX(), arrowPos.getY(), direction.getX(), direction.getY());
+        System.out.println(arrowPos);
+        System.out.println(direction);
+        FlyingArrow arrow = new FlyingArrow(level, arrowPos, direction);
+        level.addProp(arrowPos, arrow);
 
         //Animation
         sprite.playAnimation("Bow", direction, doNothing);
 
-        // kill first enemy in avatar's direction, if the enemy exists and is reachable
-        while(level.isValidGridPos(arrowPos)) {
-
-            // enemy hit
-            if (level.hasEnemy(arrowPos)) {
-                level.postEvent(new DeathEvent(DeathEvent.DEATH_BY_ARROW, false));
-                level.getEnemy(arrowPos).onDestroyed(); //TODO onDestroyed --> destroy(new DeathEvt...)
-                break;
-            }
-            // non-passable entity hit
-            else if (!level.isPassableForProp(arrowPos, arrow)) {
-                break;
-            }
-
-            arrowPos = arrowPos.add(direction);
-        }
 
         // -1 arrow
         numArrows.set(numArrows.get() - 1);
