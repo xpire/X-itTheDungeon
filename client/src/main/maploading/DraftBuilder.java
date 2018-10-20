@@ -1,5 +1,7 @@
 package main.maploading;
 
+import javafx.scene.Group;
+import javafx.scene.Node;
 import main.Level;
 import main.content.ObjectiveFactory;
 import main.entities.Entity;
@@ -8,14 +10,11 @@ import main.math.Vec2i;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Scanner;
 
 import static main.content.ObjectiveFactory.makeObjective;
 
 /**
- * Class which contains the logic of the CreateMode class
- * Talks to the level class for information
- * Also implements draft saving, deleting, editing
+ * Class which contains the logic for building maps in the Creative Lab
  */
 public class DraftBuilder {
 
@@ -54,33 +53,13 @@ public class DraftBuilder {
         level.displayLevel();
     }
 
-    /**
-     * Checks if a coordinate is a valid tile on the draft
-     * @param tile
-     * @return
-     */
-    public boolean isValidGridPos(Vec2i tile) {
-        return level.isValidGridPos(tile);
-    }
+    public void setObjective(ArrayList<String> objectives) throws InvalidMapException {
 
-    //TODO : fix this with Ian's level builder code as well
-    public void setObjective(ArrayList<String> objectives) throws InvalidMapException{
         for (String objective : objectives) {
-            switch (objective) {
-                case "A":
-                    level.addObjective(makeObjective(ObjectiveFactory.Type.EXIT));
-                    break;
-                case "B":
-                    level.addObjective(makeObjective(ObjectiveFactory.Type.ACTIVATE_ALL_SWITCHES));
-                    break;
-                case "C":
-                    level.addObjective(makeObjective(ObjectiveFactory.Type.COLLECT_ALL_TREASURES));
-                    break;
-                case "D":
-                    level.addObjective(makeObjective(ObjectiveFactory.Type.KILL_ALL_ENEMIES));
-                    break;
-                default:
-                    throw new InvalidMapException("Invalid Objective Code: " + objective);
+            try {
+                level.addObjective(makeObjective(ObjectiveFactory.Type.valueOf(objective)));
+            } catch (IllegalArgumentException e) {
+                throw new InvalidMapException("Invalid Objective Code: " + objective);
             }
         }
     }
@@ -124,17 +103,14 @@ public class DraftBuilder {
      * @param path save location, root at main
      */
     public void saveMap(String mapName, String path) {
-        StringBuilder mapPath = new StringBuilder("./src/main/");
-        mapPath.append(path).append("/").append(mapName).append(".txt");
+        String mapPath = String.format("./src/%s/%s.txt", path, mapName);
 
         BufferedWriter w = null;
         try {
-
-            //beautiful use of Decorator Pattern
             w = new BufferedWriter(
                     new OutputStreamWriter(
                             new FileOutputStream(
-                                    new File(mapPath.toString()))));
+                                    new File(mapPath))));
 
             int nRow = getNRows();
             int nCol = getNCols();
@@ -143,12 +119,9 @@ public class DraftBuilder {
             w.write(nRow + "\t" + nCol);
             w.append("\n");
 
-//            //set the objective
-//            ArrayList<String> obj = level.getObjectives();
-//            for (String s : obj) {
-//                w.write(s + "\t");
-//            }
-//            w.newLine();
+            //setting objectives
+            w.write(level.listObjectives());
+            w.newLine();
 
             //set the main body of the map
             StringBuilder metaData = new StringBuilder();
@@ -187,65 +160,11 @@ public class DraftBuilder {
         }
     }
 
-    //TODO: this method is now redundant - only used in terminal creative mode
-    //TODO: remove before submission
     /**
-     * Adds Entities to a certain position on the Level
-     *
-     * Uses the LevelBuilderContext class
-     * If a key/door is added, user will be prompted to give the
-     * coordinates of the matching door/key
-     *
-     * @param tile position to add entities to
-     * @param entities String of entities to add (in symbol format)
-     * @param sc instance of a scanner if they wish to add a key/door
+     * Adds a non key-door entity to the level at a specified position
+     * @param tile the position to add the entity to
+     * @param entity the entity to be added - cannot be a key/door
      */
-    public void editTile(Vec2i tile, String entities, Scanner sc) { //TODO remove need for scanner
-        LevelBuilder levelBuilder = new LevelBuilder(level);
-
-        char[] eachEnt = entities.toCharArray();
-        for (char ent : eachEnt) {
-            try {
-                if (ent != 'K' && ent != '|') {
-                    levelBuilder.makeAndAttach(tile, ent);
-
-                } else {//// if (ent == 'K') {
-
-                    String[] matching = null;
-                    Vec2i matchingPos = null;
-
-                    while (matching == null) {
-                        System.out.println("Please set the matching Key/Door");
-                        if (sc.hasNextLine()) {
-                            matching = sc.nextLine().split("\\s+");
-                            if (matching.length != 2) {
-                                System.out.println("Error: must be a tile location");
-                                matching = null;
-                                continue;
-                            }
-
-                            matchingPos = new Vec2i(Integer.parseInt(matching[0]),
-                                    Integer.parseInt(matching[1]));
-
-                            if (!level.isValidGridPos(matchingPos) || matchingPos.equals(tile)) {
-                                System.out.println("Error: invalid tile (note: matching tile must be distinct)");
-                                matching = null;
-                            }
-                        }
-                    }
-
-                    if (ent == 'K') {
-                        levelBuilder.addKeyDoor(tile, matchingPos);
-                    } else {
-                        levelBuilder.addKeyDoor(matchingPos, tile);
-                    }
-                }
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-        }
-    }
-
     public void editTileGUI(Vec2i tile, String entity) {
         LevelBuilder levelBuilder = new LevelBuilder(level);
 
@@ -256,6 +175,11 @@ public class DraftBuilder {
         }
     }
 
+    /**
+     * Adds a key/door pairing to the level at specified positions
+     * @param key the position of the key
+     * @param door the position of the door
+     */
     public void editTileKeyDoorGUI(Vec2i key, Vec2i door) {
         LevelBuilder levelBuilder = new LevelBuilder(level);
 
@@ -263,20 +187,7 @@ public class DraftBuilder {
             levelBuilder.addKeyDoor(key, door);
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println(e.getMessage());
         }
-    }
-
-    /**
-     * Deletes the currently open draft and exists Create mode
-     * @param draftName name of the draft
-     * @return true if draft was deleted, false otherwise
-     */
-    public boolean deleteDraft(String draftName) {
-        String draftPath = String.format("./src/main/drafts/%s.txt", draftName);
-        File draft = new File(draftPath);
-
-        return draft.delete();
     }
 
     public Level getLevel() {
@@ -285,5 +196,17 @@ public class DraftBuilder {
 
     public void eraseEntitiesAt(Vec2i pos) {
         level.removeAllAt(pos, true);
+    }
+
+    public void clearObjectives() {
+        level.clearObjectives();
+    }
+
+    public String listObjectives() {
+        return level.listObjectives();
+    }
+
+    public Group getView() {
+        return level.getView();
     }
 }

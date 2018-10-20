@@ -1,5 +1,6 @@
 package main.algorithms;
 
+import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 import main.math.Tuple;
 
 import java.util.*;
@@ -44,15 +45,17 @@ public class AStar<T> {
                 int oldDist = dists.getOrDefault(vertex, Integer.MAX_VALUE);
                 int newDist = dists.get(curr.vertex) + dist;
 
-                if (newDist < oldDist) {
-                    dists.put(vertex, newDist);
-                    preds.put(vertex, curr);
-                    frontier.add(new Node(vertex, newDist + heuristic.apply(vertex)));
-                }
-            }
+        if (newDist < oldDist) {
+            dists.put(vertex, newDist);
+            preds.put(vertex, curr);
+            frontier.add(new Node(vertex, newDist + heuristic.apply(vertex)));
         }
+    }
+}
 
         Node min = findMin(preds.values());
+        if (min == null)
+            return Collections.singletonList(start);
         return constructPath(min, preds);
     }
 

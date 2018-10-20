@@ -46,7 +46,7 @@ public class ViewComponent {
      * getter for the view
      * @return the view
      */
-    public Node getView() {
+    public Group getView() {
         return view;
     }
 

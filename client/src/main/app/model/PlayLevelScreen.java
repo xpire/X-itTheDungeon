@@ -4,6 +4,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import main.PlayMode;
 import main.app.controller.AppController;
@@ -12,8 +13,10 @@ import main.sound.SoundManager;
 
 public class PlayLevelScreen extends AppScreen {
 
-    private final String FILEPATH = "src/asset/level";
+//    private final String FILEPATH = "src/asset/level";
+    private String filePath;
     private String filename;
+    private AppScreen parentScreen;
     private int levelNum;
 
     {
@@ -24,9 +27,11 @@ public class PlayLevelScreen extends AppScreen {
     private PlayMode world;
     private PlayLevelController controller;
 
-    public PlayLevelScreen(Stage stage, String filename, int levelNum) {
+    public PlayLevelScreen(AppScreen parent, Stage stage, String filename, String filePath, int levelNum) {
         super(stage);
+        this.parentScreen = parent;
         this.filename = filename;
+        this.filePath = filePath;
         this.levelNum = levelNum;
         this.controller = new PlayLevelController(this);
     }
@@ -36,12 +41,16 @@ public class PlayLevelScreen extends AppScreen {
     public void restart() {
         Pane layer = controller.getDynamicLayer();
         layer.getChildren().remove(world.getView());
-        world = new PlayMode(scene, filename, FILEPATH);
+        world = new PlayMode(scene, filename, filePath);
         world.setLevelNum(levelNum);
         layer.getChildren().add(world.getView());
         StackPane.setAlignment(world.getView(), Pos.CENTER);
         world.startGame();
 
+    }
+
+    public void backBtnPressed() {
+        controller.switchScreen(parentScreen);
     }
 
     @Override
@@ -50,7 +59,7 @@ public class PlayLevelScreen extends AppScreen {
 
         Pane layer = controller.getDynamicLayer();
 
-        world = new PlayMode(scene, filename, FILEPATH);
+        world = new PlayMode(scene, filename, filePath);
         world.setLevelNum(levelNum);
         layer.getChildren().add(world.getView());
         StackPane.setAlignment(world.getView(), Pos.CENTER);

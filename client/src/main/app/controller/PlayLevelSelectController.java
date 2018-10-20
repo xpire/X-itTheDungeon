@@ -1,6 +1,5 @@
 package main.app.controller;
 
-import com.google.gson.Gson;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
@@ -14,7 +13,6 @@ import main.content.IntStat;
 import main.content.LevelConfig;
 import main.sound.SoundManager;
 
-import javax.sound.midi.Soundbank;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -32,8 +30,6 @@ public class PlayLevelSelectController extends AppController {
 
     @FXML
     public void initialize() {
-
-//        Gson gson = new Gson();
 
         GameConfig config = new GameConfig();
 
@@ -55,17 +51,11 @@ public class PlayLevelSelectController extends AppController {
     }
 
 
-//    @FXML
-//    public void onLevelBtnSelected() {
-//        System.out.println("Play Level!");
-//    }
-
     public void onLevelSelected(String filename, int levelNum) {
-        switchScreen(new PlayLevelScreen(screen.getStage(), filename, levelNum));
         soundManager.playSoundEffect("Item");
-        System.out.println(levelNum);
-        soundManager.playBGM(new StringBuilder("Level ").append(levelNum).toString());
+        soundManager.playBGM("Level " + levelNum);
 
+        switchScreen(new PlayLevelScreen(screen, screen.getStage(), filename, "src/asset/level", levelNum));
     }
 
 

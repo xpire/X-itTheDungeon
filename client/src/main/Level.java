@@ -3,6 +3,7 @@ package main;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
+import javafx.scene.Group;
 import javafx.scene.Node;
 import main.app.Main;
 import main.trigger.objective.Objective;
@@ -761,7 +762,7 @@ public class Level {
      * Getter for the View of the Level
      * @return the View of the Level
      */
-    public Node getView() {
+    public Group getView() {
         return view.getView();
     }
 
@@ -951,9 +952,17 @@ public class Level {
 
     /**
      * Sets the level into Create Mode
-     * @param isCreateMode
+     * @param isCreateMode whether or not the level is in Creative mode
      */
     public void setCreateMode(boolean isCreateMode) {
         this.isCreateMode = isCreateMode;
+    }
+
+    public String listObjectives() {
+        return objectiveSystem.getObjectives();
+    }
+
+    public void clearObjectives() {
+        objectiveSystem.clearObjectives();
     }
 }

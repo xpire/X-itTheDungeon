@@ -23,9 +23,9 @@ import main.entities.enemies.*;
 import main.entities.pickup.*;
 import main.entities.prop.*;
 import main.entities.terrain.*;
+import main.content.ObjectiveFactory;
 import main.maploading.DraftBuilder;
 import main.maploading.InvalidMapException;
-import main.maploading.MapLoader;
 import main.math.Vec2i;
 import main.sprite.SpriteView;
 
@@ -48,28 +48,19 @@ public class CreativeLabScreen extends AppScreen {
     private boolean wasKey = false;
     private Vec2i originalPos;
 
-    public CreativeLabScreen(Stage stage, String draftName) {
+    public CreativeLabScreen(Stage stage, DraftBuilder draftBuilder) {
         super(stage);
         this.controller = new CreativeLabController(this);
-
-        this.draftBuilder = (draftName == null) ?
-                new DraftBuilder(8, 8, "newDraft") :
-                new DraftBuilder(new MapLoader().loadLevel(draftName, "src/main/drafts", true));
-    }
-
-    public CreativeLabScreen(Stage stage) {
-        this(stage, null);
-    }
-
-    @Override
-    protected AppController getController() {
-        return controller;
+        this.draftBuilder = draftBuilder;
     }
 
     /**
      * Initialises the Editor GridPlane on the scene
      */
-    public void initialiseEditor(GridPane currDraft, int numCols, int numRows) {
+    public void initialiseEditor(GridPane currDraft) {
+        int numCols = draftBuilder.getNCols();
+        int numRows = draftBuilder.getNRows();
+
         initialiseGridPane(currDraft, numCols, numRows, false);
 
         for (int i = 0 ; i < numCols ; i++) {
@@ -131,26 +122,22 @@ public class CreativeLabScreen extends AppScreen {
         Button saveAs  = new Button();
         Button resize  = new Button();
         Button publish = new Button();
-        Button delete  = new Button();
         Button exit    = new Button();
 
         save.setText("Save");
         saveAs.setText("Save As");
         resize.setText("Resize");
         publish.setText("Publish");
-        delete.setText("Delete");
         exit.setText("Exit");
 
         //Maybe make the options menu more fxml integrated rather than model
-        save.setOnAction(e -> draftBuilder.saveMap(draftBuilder.getName(), "drafts"));
-        delete.setOnAction(e -> draftBuilder.deleteDraft(draftBuilder.getName()));
+        save.setOnAction(e -> draftBuilder.saveMap(draftBuilder.getName(), "main/drafts"));
         exit.setOnAction(e -> controller.switchScreen(new CreateModeSelectScreen(this.getStage())));
 
         optionsMenu.add(save, 0, 0);
         optionsMenu.add(saveAs, 0, 1);
         optionsMenu.add(resize, 0, 2);
         optionsMenu.add(publish, 0, 5);
-        optionsMenu.add(delete, 0, 6);
         optionsMenu.add(exit, 0, 7);
 
         Label rowsLabel  = new Label("Rows: ");
@@ -214,36 +201,52 @@ public class CreativeLabScreen extends AppScreen {
         CheckBox treasureCondition = new CheckBox();
         CheckBox switchCondition = new CheckBox();
 
-        exitCondition.setText("A");
-        treasureCondition.setText("B");
-        killCondition.setText("C");
-        switchCondition.setText("D");
+        exitCondition.setText("Exit");
+        treasureCondition.setText("$$$");
+        killCondition.setText("Kill");
+        switchCondition.setText("Flip");
+
+        exitCondition.setAccessibleText(ObjectiveFactory.Type.EXIT.name());
+        treasureCondition.setAccessibleText(ObjectiveFactory.Type.COLLECT_ALL_TREASURES.name());
+        killCondition.setAccessibleText(ObjectiveFactory.Type.KILL_ALL_ENEMIES.name());
+        switchCondition.setAccessibleText(ObjectiveFactory.Type.ACTIVATE_ALL_SWITCHES.name());
+
+        for (String s : draftBuilder.listObjectives().split("\\s+")) {
+            switch (s) {
+                case "EXIT":
+                    exitCondition.setSelected(true);
+                    break;
+                case "COLLECT_ALL_TREASURES":
+                    treasureCondition.setSelected(true);
+                    break;
+                case "KILL_ALL_ENEMIES":
+                    killCondition.setSelected(true);
+                    break;
+                case "ACTIVATE_ALL_SWITCHES":
+                    switchCondition.setSelected(true);
+            }
+        }
 
         EventHandler<ActionEvent> makeMutuallyExclusive = e -> {
             CheckBox cb = (CheckBox) e.getSource();
             ArrayList<String> objectives = new ArrayList<>();
 
-            if (cb.getText().equals("A")) {
+            if (cb.getText().equals("Exit")) {
                 killCondition.setSelected(false);
                 treasureCondition.setSelected(false);
                 switchCondition.setSelected(false);
 
-                objectives.add(cb.getText());
+                objectives.add(exitCondition.getAccessibleText());
             } else {
                 exitCondition.setSelected(false);
 
-                if (treasureCondition.isSelected()) objectives.add("B");
-                if (killCondition.isSelected()) objectives.add("C");
-                if (switchCondition.isSelected()) objectives.add("D");
+                if (treasureCondition.isSelected()) objectives.add(treasureCondition.getAccessibleText());
+                if (killCondition.isSelected()) objectives.add(killCondition.getAccessibleText());
+                if (switchCondition.isSelected()) objectives.add(switchCondition.getAccessibleText());
             }
 
-            try {
-                draftBuilder.setObjective(objectives);
-            } catch (InvalidMapException ex) {
-                ex.printStackTrace();
-            }
-
-            draftBuilder.displayLevel();
+            setObjectives(objectives);
+        System.out.println(draftBuilder.listObjectives());
         };
 
         exitCondition.setOnAction(makeMutuallyExclusive);
@@ -285,6 +288,14 @@ public class CreativeLabScreen extends AppScreen {
     }
 
     /**
+     * Saves the current state of the level to a temporary file and runs it in Play Mode
+     */
+    public void testPlay() {
+        draftBuilder.saveMap("tempSave", "save/temp");
+        controller.switchScreen(new PlayLevelScreen(this, this.getStage(), "tempSave", "src/save/temp", 0));
+    }
+
+    /**
      * Updates the GridPane to represent the resized level
      * @param newRow : new number of rows
      * @param newCol : new number of cols
@@ -292,25 +303,20 @@ public class CreativeLabScreen extends AppScreen {
     private void updateEditorGridPane(int newRow, int newCol) {
         GridPane currDraft = controller.getCurrDraft();
 
-        Set<Node> deleteNodes = new HashSet<>();
-        for (Node child : currDraft.getChildren()) {
-            Integer rowIndex = GridPane.getRowIndex(child);
-            Integer colIndex = GridPane.getColumnIndex(child);
+        removeGridPaneNodes(currDraft, newRow, newCol);
+        removeConstraints(currDraft, newRow, newCol);
+        addConstraints(currDraft, newRow, newCol);
 
-            int r = (rowIndex == null) ? 0 : rowIndex;
-            int c = (colIndex == null) ? 0 : colIndex;
+        StackPane.setAlignment(currDraft, Pos.CENTER);
+    }
 
-            if (r >= newRow || c >= newCol) deleteNodes.add(child);
-        }
-
-        currDraft.getChildren().removeAll(deleteNodes);
-
-        for (int currRow = currDraft.getRowConstraints().size() - 1; currRow >= newRow; currRow--)
-            currDraft.getRowConstraints().remove(currRow);
-
-        for (int currCol = currDraft.getColumnConstraints().size() - 1; currCol >= newCol; currCol--)
-            currDraft.getColumnConstraints().remove(currCol);
-
+    /**
+     * Adds row and column constraints to the editor GridPane when resizing to a larger map
+     * @param currDraft the editor GridPane
+     * @param newRow new number of rows
+     * @param newCol new number of cols
+     */
+    private void addConstraints(GridPane currDraft, int newRow, int newCol) {
         for (int currRow = currDraft.getRowConstraints().size(); currRow < newRow; currRow++) {
             RowConstraints rowConstraints = new RowConstraints();
             currDraft.getRowConstraints().add(rowConstraints);
@@ -324,9 +330,41 @@ public class CreativeLabScreen extends AppScreen {
 
             for (int j = 0; j < currDraft.getRowConstraints().size(); j++) editorSelectHandler(currCol, j);
         }
+    }
 
-        StackPane.setAlignment(currDraft, Pos.CENTER);
+    /**
+     * Removes row and column constraints from the editor GridPane when resizing to a smaller map
+     * @param currDraft the editor GridPane
+     * @param newRow new number of rows
+     * @param newCol new number of cols
+     */
+    private void removeConstraints(GridPane currDraft, int newRow, int newCol) {
+        for (int currRow = currDraft.getRowConstraints().size() - 1; currRow >= newRow; currRow--)
+            currDraft.getRowConstraints().remove(currRow);
 
+        for (int currCol = currDraft.getColumnConstraints().size() - 1; currCol >= newCol; currCol--)
+            currDraft.getColumnConstraints().remove(currCol);
+    }
+
+    /**
+     * Clears nodes from the editor GridPane when resizing to a smaller map
+     * @param currDraft the editor GridPane
+     * @param newRow new number of rows
+     * @param newCol new number of cols
+     */
+    private void removeGridPaneNodes(GridPane currDraft, int newRow, int newCol) {
+        Set<Node> deleteNodes = new HashSet<>();
+        for (Node child : currDraft.getChildren()) {
+            Integer rowIndex = GridPane.getRowIndex(child);
+            Integer colIndex = GridPane.getColumnIndex(child);
+
+            int r = (rowIndex == null) ? 0 : rowIndex;
+            int c = (colIndex == null) ? 0 : colIndex;
+
+            if (r >= newRow || c >= newCol) deleteNodes.add(child);
+        }
+
+        currDraft.getChildren().removeAll(deleteNodes);
     }
 
     /**
@@ -335,6 +373,7 @@ public class CreativeLabScreen extends AppScreen {
      * @param j : y position
      */
     private void editorSelectHandler(int i, int j) {
+        //make this prettier..this is bloody atrocious
         Pane pane = new Pane();
         pane.setPrefSize(30, 30);
 
@@ -377,10 +416,12 @@ public class CreativeLabScreen extends AppScreen {
                         case "K":
                             if (wasKey) break;
                             draftBuilder.editTileKeyDoorGUI(pos, originalPos);
+                            selectedEntity = "|";
                             break;
                         case "|":
                             if (!wasKey) break;
                             draftBuilder.editTileKeyDoorGUI(originalPos, pos);
+                            selectedEntity = "K";
                             break;
                         default:
                             System.out.println("selected entity was changed");
@@ -445,12 +486,28 @@ public class CreativeLabScreen extends AppScreen {
     }
 
     /**
-     * Initialises the View for the editor GridPane to display the level as it's being made
-     * @return The view of the level in progress
+     * Sets the objectives of a level to the currently selected checkboxes
+     * @param objectives ArrayList of objectives
      */
-    public Node initialiseView() {
-        return draftBuilder.getLevel().getView();
+    private void setObjectives(ArrayList<String> objectives) {
+        try {
+            draftBuilder.clearObjectives();
+            draftBuilder.setObjective(objectives);
+        } catch (InvalidMapException e) {
+            e.printStackTrace();
+        }
     }
 
+    /**
+     * Gets the view for the current level so that it can be displayed while creating maps
+     * @return The view of the level in progress
+     */
+    public Node getView() {
+        return draftBuilder.getView();
+    }
 
+    @Override
+    protected AppController getController() {
+        return controller;
+    }
 }

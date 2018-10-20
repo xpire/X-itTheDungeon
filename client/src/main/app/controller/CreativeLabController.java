@@ -7,14 +7,9 @@ import javafx.scene.layout.*;
 import main.app.model.CreativeLabScreen;
 
 //TODO :
-//Key-door mapping
-//hover w/ key-door
-//creative select screen
-//make replacing things more intuitive?
-//UNDO function - command pattern + memento pattern
+//hover with key-door?
 
-//bomb is broken on dev??
-//resizing which removes an enemy/avatar breaks down (arrayOutOfBounds Exception)
+//publish
 
 public class CreativeLabController extends AppController<CreativeLabScreen> {
 
@@ -44,19 +39,23 @@ public class CreativeLabController extends AppController<CreativeLabScreen> {
 
     @FXML
     public void initialize() {
-
-        screen.initialiseEditor(currDraft, 8, 8);
+        screen.initialiseEditor(currDraft);
         screen.initialiseToolBox(toolbox);
         screen.initialiseOptions(optionsMenu);
         screen.initialiseObjectivesBox(objectivesBox);
 
-        Node view = screen.initialiseView();
+        Node view = screen.getView();
         viewPane.getChildren().add(0, view);
 
         StackPane.setAlignment(view, Pos.CENTER);
         StackPane.setAlignment(currDraft, Pos.CENTER);
 
         StackPane.setAlignment(toolbox, Pos.CENTER);
+    }
+
+    @FXML
+    public void onPlayTestBtnPressed() {
+        screen.testPlay();
     }
 
     /**
@@ -74,6 +73,5 @@ public class CreativeLabController extends AppController<CreativeLabScreen> {
     public GridPane getToolbox() {
         return toolbox;
     }
-
 
 }
