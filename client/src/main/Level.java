@@ -4,10 +4,7 @@ import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
 import javafx.scene.Node;
-import javafx.scene.layout.GridPane;
 import main.app.Main;
-import main.sound.SoundManager;
-import main.trigger.Trigger;
 import main.trigger.objective.Objective;
 import main.trigger.objective.ObjectiveSystem;
 import main.component.ViewComponent;
@@ -26,7 +23,6 @@ import main.maploading.TerrainLayer;
 import main.math.Vec2d;
 import main.math.Vec2i;
 import main.trigger.objective.ObjectiveView;
-import main.trigger.objective.TargetCountTrigger;
 
 import java.util.ArrayList;
 import java.util.Iterator;

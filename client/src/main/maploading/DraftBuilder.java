@@ -1,8 +1,8 @@
 package main.maploading;
 
 import main.Level;
+import main.content.ObjectiveFactory;
 import main.entities.Entity;
-import main.init.ObjectiveFactory;
 import main.math.Vec2i;
 
 import java.io.*;
@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Scanner;
 
-import static main.init.ObjectiveFactory.makeObjective;
+import static main.content.ObjectiveFactory.makeObjective;
 
 /**
  * Class which contains the logic of the CreateMode class

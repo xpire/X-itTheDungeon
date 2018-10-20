@@ -1,18 +1,19 @@
 package main.app.controller;
 
 import javafx.fxml.FXML;
-import main.app.model.AppScreen;
 import main.app.model.CreateModeSelectScreen;
+import main.app.model.MainScreen;
 import main.app.model.PlayModeSelectScreen;
+import main.app.model.TrophyScreen;
 import main.sound.SoundManager;
 
-public class MainController extends AppController{
+public class MainController extends AppController<MainScreen> {
 
 //    @FXML
 //    private Button btnStart;
     SoundManager soundManager = SoundManager.getInstance(5);
 
-    public MainController(AppScreen screen) {
+    public MainController(MainScreen screen) {
         super(screen);
     }
 
@@ -33,5 +34,10 @@ public class MainController extends AppController{
     public void onMakeBtnPressed() {
         switchScreen(new CreateModeSelectScreen(screen.getStage()));
         soundManager.playSoundEffect("Item");
+    }
+
+    @FXML
+    public void onTrophyBtnPressed() {
+        switchScreen(new TrophyScreen(screen.getStage()));
     }
 }

@@ -72,6 +72,7 @@ public class Door extends Terrain {
      */
     public void onOpen() {
         isOpen = true;
+        level.postEvent(new DoorEvent(DoorEvent.DOOR_OPENED, this));
 //        doorFrame.setFill(Color.SILVER);
         sprite.setState("Open");
     }

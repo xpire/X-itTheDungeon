@@ -2,12 +2,9 @@ package main.trigger.objective;
 
 
 import main.events.EventBus;
-import main.trigger.Trigger;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.function.Function;
 
 /**
  * Class which manages the set of triggers for a game

@@ -8,6 +8,6 @@
       <Button fx:id="btnStory" layoutX="179.0" layoutY="330.0" mnemonicParsing="false" onAction="#onStoryBtnPressed" prefHeight="99.0" prefWidth="112.0" text="Story" />
       <Button layoutX="604.0" layoutY="318.0" mnemonicParsing="false" prefHeight="99.0" prefWidth="112.0" text="My Level" />
       <Button layoutX="390.0" layoutY="318.0" mnemonicParsing="false" prefHeight="111.0" prefWidth="112.0" text="Explore" />
-      <Button fx:id="btnBack" layoutX="14.0" layoutY="584.0" mnemonicParsing="false" onAction="#onBackBtnPressed" prefHeight="42.0" prefWidth="95.0" text="Back" />
+      <Button fx:id="btnBack" layoutX="84.0" layoutY="512.0" mnemonicParsing="false" onAction="#onBackBtnPressed" prefHeight="42.0" prefWidth="95.0" text="Back" />
    </children>
 </AnchorPane>

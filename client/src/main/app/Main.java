@@ -3,12 +3,13 @@ package main.app;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
+import main.ServiceLocator;
 import main.app.model.MainScreen;
 import main.content.GameConfig;
 import main.events.EventBus;
-import main.init.AchievementInit;
-import main.init.StatInit;
 import main.sound.SoundManager;
+import main.content.AchievementInit;
+import main.content.StatInit;
 import main.trigger.achievement.AchievementSystem;
 import main.persistence.JsonPersistor;
 
@@ -29,8 +30,12 @@ public class Main extends Application {
     public SoundManager soundManager = SoundManager.getInstance(5);
     public static GameConfig gameConfig;
 
+    public static Stage primaryStage;
+    public static ServiceLocator locator;
+
     @Override
     public void start(Stage s){
+        primaryStage = s;
 
         s.setWidth(960);
         s.setHeight(640);
@@ -57,8 +62,11 @@ public class Main extends Application {
 
         AchievementSystem achievementSystem = new AchievementSystem();
 
-        StatInit statInit = new StatInit(playModeBus);
-        statInit.init(gameConfig.getIntStat());
+        locator = new ServiceLocator.ServiceLocatorBuilder()
+                .achievementSystem(achievementSystem)
+                .build();
+
+        new StatInit(playModeBus, gameConfig.getIntStat()).init();
 
         AchievementInit achieveInit = new AchievementInit(achievementSystem, gameConfig.getIntStat());
         achieveInit.init();

@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 
-import static main.init.ObjectiveFactory.*;
+import static main.content.ObjectiveFactory.*;
 
 /**
  * A Class using Factory Pattern to add entities to a Level

@@ -10,7 +10,7 @@
 
 <AnchorPane prefHeight="640.0" prefWidth="960.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Button fx:id="btnBack" layoutX="14.0" layoutY="584.0" mnemonicParsing="false" onAction="#onBackBtnPressed" prefHeight="42.0" prefWidth="95.0" text="Back" />
+      <Button fx:id="btnBack" layoutX="66.0" layoutY="537.0" mnemonicParsing="false" onAction="#onBackBtnPressed" prefHeight="42.0" prefWidth="95.0" text="Back" />
       <Label layoutX="328.0" layoutY="70.0" text="Select Level">
          <font>
             <Font size="53.0" />

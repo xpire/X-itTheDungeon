@@ -3,10 +3,9 @@ package main.content;
 
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
-import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import main.content.serialisation.EnumMapInstanceCreator;
 
-import java.lang.reflect.Type;
 import java.util.EnumMap;
 import java.util.function.Consumer;
 
@@ -40,10 +39,9 @@ public class IntStat extends GameStat<IntStat.Key, SimpleIntegerProperty> {
 
     public enum Key {
         NUM_PIT_DEATHS,
+        NUM_BOMB_DEATHS,
         MAX_LEVEL_CONQUERED,
         NUM_ENEMIES_KILLED,
-        NUM_BOSS_KILLED,
-        NUM_STARS_COLLECTED,
         NUM_TREASURES_COLLECTED,
         NUM_BOULDERS_BOMBED,
         NUM_ENEMIES_KILLED_WITH_BOMB,
@@ -59,7 +57,7 @@ public class IntStat extends GameStat<IntStat.Key, SimpleIntegerProperty> {
                 .registerTypeAdapter(
                         new TypeToken<EnumMap<IntStat.Key, SimpleIntegerProperty>>() {
                         }.getType(),
-                        new EnumMapInstanceCreator<IntStat.Key, SimpleIntegerProperty>(IntStat.Key.class))
+                        new EnumMapInstanceCreator<Key, SimpleIntegerProperty>(IntStat.Key.class))
                 .registerTypeAdapter(
                         SimpleIntegerProperty.class, (JsonDeserializer<SimpleIntegerProperty>) (x, type, ctx) -> new SimpleIntegerProperty(x.getAsInt()))
                 .registerTypeAdapter(

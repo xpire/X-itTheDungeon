@@ -4,12 +4,11 @@ import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
 import main.events.EventBus;
-import main.trigger.Trigger;
 
 /**
  * Class which tracks the "all switches activated" game objective
  */
-public class FixedCountTrigger<T extends Event> extends TargetCountTrigger {
+public class FixedTargetTrigger<T extends Event> extends TargetCountTrigger {
 
     private final EventHandler<T>  COUNT_UP    = e -> count++;
     private final EventHandler<T>  COUNT_DOWN  = e -> count--;
@@ -17,11 +16,10 @@ public class FixedCountTrigger<T extends Event> extends TargetCountTrigger {
     private EventType<T>  countUpEvent;
     private EventType<T>  countDownEvent;
 
-    public FixedCountTrigger(EventType<T> countUpEvent, EventType<T> countDownEvent, int target) {
+    public FixedTargetTrigger(EventType<T> countUpEvent, EventType<T> countDownEvent, int target) {
+        super(target, 0);
         this.countUpEvent   = countUpEvent;
         this.countDownEvent = countDownEvent;
-        this.target = target;
-        this.count  = 0;
     }
 
     @Override

@@ -18,7 +18,7 @@ import main.entities.prop.FlyingArrow;
 import main.entities.prop.LitBomb;
 import main.entities.terrain.Door;
 import main.entities.terrain.Pit;
-import main.events.AvatarDeathEvent;
+import main.events.DeathEvent;
 import main.events.AvatarEvent;
 import main.math.Vec2d;
 import main.math.Vec2i;
@@ -27,9 +27,6 @@ import main.sprite.SpriteAnimation;
 import main.sprite.SpriteView;
 
 import java.util.ArrayList;
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
-import java.util.function.Function;
 
 public class Avatar extends Entity {
 
@@ -388,28 +385,29 @@ public class Avatar extends Entity {
     }
 
     public void onThreatenedByPit(Pit pit) {
-        if (!isHovering()) {
-            level.postEvent(AvatarDeathEvent.deathByFalling());
-            soundManager.playSoundEffect("Falling");
-            soundManager.playSoundEffect("Death");
-            onDestroyed();
-        }
+        if (isHovering()) return;
+
+        level.postEvent(new DeathEvent(DeathEvent.DEATH_BY_FALL, true));
+        soundManager.playSoundEffect("Falling");
+        soundManager.playSoundEffect("Death");
+        onDestroyed();
     }
 
     public void onThreatenedByBomb(Bomb bomb) {
         if (isRaged()) return;
 
-        level.postEvent(AvatarDeathEvent.deathByExplosion());
+        level.postEvent(new DeathEvent(DeathEvent.DEATH_BY_BOMB, true));
         soundManager.playSoundEffect("Death");
         onDestroyed();
     }
 
     public void onThreatenedByEnemy(Enemy enemy) {
         if (isRaged()) {
+            level.postEvent(new DeathEvent(DeathEvent.DEATH_BY_ATTACK, false));
             enemy.onDestroyed();
         }
         else {
-            level.postEvent(AvatarDeathEvent.deathByAttack());
+            level.postEvent(new DeathEvent(DeathEvent.DEATH_BY_ATTACK, true));
             soundManager.playSoundEffect("Death");
             onDestroyed();
         }
@@ -586,7 +584,8 @@ public class Avatar extends Entity {
 
             // enemy hit
             if (level.hasEnemy(arrowPos)) {
-                level.getEnemy(arrowPos).onDestroyed();
+                level.postEvent(new DeathEvent(DeathEvent.DEATH_BY_ARROW, false));
+                level.getEnemy(arrowPos).onDestroyed(); //TODO onDestroyed --> destroy(new DeathEvt...)
                 break;
             }
             // non-passable entity hit

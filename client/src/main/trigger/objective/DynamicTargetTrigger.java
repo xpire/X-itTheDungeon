@@ -4,8 +4,6 @@ import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
 import main.events.EventBus;
-import main.events.SwitchEvent;
-import main.trigger.Trigger;
 
 /**
  * Class which tracks the "all switches activated" game objective
@@ -24,6 +22,7 @@ public class DynamicTargetTrigger<T extends Event> extends TargetCountTrigger {
 
     public DynamicTargetTrigger(EventType<T> targetUpEvent, EventType<T> targetDownEvent,
                                 EventType<T> countUpEvent, EventType<T> countDownEvent) {
+        super(0, 0);
         this.targetUpEvent      = targetUpEvent;
         this.targetDownEvent    = targetDownEvent;
         this.countUpEvent       = countUpEvent;

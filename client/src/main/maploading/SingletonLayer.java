@@ -31,7 +31,7 @@ public class SingletonLayer<T extends Entity> extends EntityLayer<T> {
     }
 
     public void move(Vec2i pos) {
-        entity.moveTo(pos);
+        entity.setPos(pos);
     }
 
 

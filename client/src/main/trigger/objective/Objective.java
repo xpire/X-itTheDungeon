@@ -1,8 +1,5 @@
 package main.trigger.objective;
 
-import main.trigger.objective.ObjectiveView;
-import main.trigger.Trigger;
-
 public class Objective<T extends TargetCountTrigger> {
 
     private T trigger;
