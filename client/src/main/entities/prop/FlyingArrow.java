@@ -64,7 +64,7 @@ public class FlyingArrow extends Prop{
         final Vec2i fPos = new Vec2i(finishPos);
         //animate the path from pos to finishPos which should be in directionn
         TranslateTransition transition = new TranslateTransition();
-        transition.setDuration(Duration.millis(40*pos.manhattan(finishPos)));
+        transition.setDuration(Duration.millis(40*pos.manhattan(finishPos)+1));
         transition.setNode(sprite);
         if (direction.getY() == 0)
             transition.setToX(pos.getX() + (finishPos.getX()-pos.getX())*30);
@@ -73,7 +73,7 @@ public class FlyingArrow extends Prop{
         transition.setOnFinished(e -> {
             if (level.hasEnemy(fPos))
                 level.getEnemy(fPos).onDestroyed();
-            onDestroyed();
+            this.onDestroyed();
         });
         transition.play();
 

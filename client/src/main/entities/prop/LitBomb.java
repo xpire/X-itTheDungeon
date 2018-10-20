@@ -29,7 +29,8 @@ public class LitBomb extends Prop{
     private int radius = 1;
     private Vec2i direction = new Vec2i(0,0);
     private EventHandler<ActionEvent> afterFinish =  e -> {
-        onDestroyed();
+        this.destroyEntity(pos);
+        this.onDestroyed();
     };;
 
     /**
@@ -83,15 +84,12 @@ public class LitBomb extends Prop{
     @Override
     public void onTurnUpdate() {
         sprite.setState(fuseLength.toString());
-        soundManager.playSoundEffect("Lit Bomb");
         fuseLength--;
-
-//        int count = MAX_FUSE_LENGTH - fuseLength;
-//        int redness = Math.min( (int)(((double)count)/MAX_FUSE_LENGTH * 255), 255);
-//        bomb.setFill(Color.rgb(redness, 0, 0));
 
         if (fuseLength < 0)
             onExplosion();
+        else
+            soundManager.playSoundEffect("Click");
     }
 
 
@@ -101,25 +99,43 @@ public class LitBomb extends Prop{
      */
     public void onExplosion() {
         System.out.println("EXPLOSION");
-        soundManager.playSoundEffect("Lit Bomb Explosion");
+        soundManager.playSoundEffect("Explosion");
         ArrayList<Vec2i> targets = new ArrayList<>();
 
         for (Vec2i dir : Vec2i.DIRECTIONS) {
             Vec2i target = new Vec2i(pos);
             for (int i = 1; i <= radius; i++) {
                 target = target.add(dir);
-
-                targets.add(target);
-                //TODO: animation wait
-//                sprite.playAnime("Lit Bomb Explosion");
-
-//                destroyEntity(target);
+//                targets.add(target);
+//                if (level.canReplaceProp(target, this))
+//                    view.addNode(explosion().);
+                destroyEntity(target);
             }
         }
-        destroyEntity(pos);
+        sprite.playAnime("Explosion", afterFinish);
 
-        onDestroyed();
+//        this.destroyEntity(pos);
+//        onDestroyed();
     }
+
+//    SpriteView explosion() {
+//        SpriteView spriteExplosion = new SpriteView(getImage("sprite/prop/litbomb/0.png"),new Vec2d(-8,-8), 1,1);
+//        SpriteAnimation explosion = new SpriteAnimation(sprite, new Duration(500),new Vec2i(-8,-8), 1);
+//        explosion.addState(getImage("sprite/prop/litbomb/centre0.png"));
+//        explosion.addState(getImage("sprite/prop/litbomb/centre1.png"));
+//        explosion.addState(getImage("sprite/prop/litbomb/centre2.png"));
+//        explosion.addState(getImage("sprite/prop/litbomb/centre3.png"));
+//
+//        explosion.alignToUp(1,1);
+//        explosion.alignToUp(1,2);
+//        explosion.alignToUp(1,3);
+//
+//        explosion.alignToLeft(1,1);
+//        explosion.alignToLeft(1,2);
+//        explosion.alignToLeft(1,3);
+//        spriteExplosion.addAnime("Explosion", explosion);
+//        return spriteExplosion;
+//    }
 
 
     /**

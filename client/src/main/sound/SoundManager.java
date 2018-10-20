@@ -41,6 +41,7 @@ public class SoundManager {
         // - bomb
         loadSoundEffect("Lit Bomb Explosion","sfx/snd_blast.mp3");
         loadSoundEffect("Lit Bomb", "sfx/snd_burning.mp3");
+        loadSoundEffect("Explosion", "sfx/snd_explosion.mp3");
         // - boulder
         loadSoundEffect("Boulder", "sfx/snd_meld.mp3");
         // - flying arrow

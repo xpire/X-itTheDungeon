@@ -9,6 +9,7 @@ import main.entities.enemies.Enemy;
 import main.entities.prop.Prop;
 import main.math.Vec2d;
 import main.math.Vec2i;
+import main.sprite.SpriteView;
 
 import java.util.EnumMap;
 
@@ -25,7 +26,7 @@ public class HeatPlate extends Terrain{
     private static final int BURN = 3;
     private static final int TURNS = 4;
 
-    private int state;
+    private Integer state;
 
     {
         symbol = 'H';
@@ -46,45 +47,37 @@ public class HeatPlate extends Terrain{
 
     @Override
     public void onCreated(){
-        plates = new Rectangle[4];
+//        plates = new Rectangle[4];
         state = COLD;
-
-        for (int i = 0; i < plates.length; i++) {
-            plates[i] = new Rectangle(10, 10, Color.BLACK);
-            view.addNode(plates[i]);
-        }
-        plates[1].setX(20);
-        plates[2].setY(20);
-        plates[3].setX(20);
-        plates[3].setY(20);
-
-        view.setCentre(new Vec2d(15, 15));
+        sprite = new SpriteView(getImage("sprite/terrain/heatplate/4.png"), new Vec2d(-16,-16), 30.0/32, 30.0/32);
+        sprite.addState("0", getImage("sprite/terrain/heatplate/0.png"), new Vec2d(-16,-16), 30.0/32, 30.0/32);
+        sprite.addState("1", getImage("sprite/terrain/heatplate/1.png"), new Vec2d(-16,-16), 30.0/32, 30.0/32);
+        sprite.addState("2", getImage("sprite/terrain/heatplate/2.png"), new Vec2d(-16,-16), 30.0/32, 30.0/32);
+        sprite.addState("3", getImage("sprite/terrain/heatplate/3.png"), new Vec2d(-16,-16), 30.0/32, 30.0/32);
+        view.addNode(sprite);
+//        for (int i = 0; i < plates.length; i++) {
+//            plates[i] = new Rectangle(10, 10, Color.BLACK);
+//            view.addNode(plates[i]);
+//        }
+//        plates[1].setX(20);
+//        plates[2].setY(20);
+//        plates[3].setX(20);
+//        plates[3].setY(20);
+//
+//        view.setCentre(new Vec2d(15, 15));
     }
 
     @Override
     public void onTurnUpdate() {
         state = (state + 1) % TURNS;
 
-        Color color = Color.BLACK;
+//        Color color = Color.BLACK;
 
-        switch(state) {
-            case COLD:
-                color = Color.BLACK;
-                break;
-            case GLOW:
-                color = Color.rgb(100,10,10);
-                break;
-            case WARM:
-                color = Color.rgb(150,30,30);
-                break;
-            case BURN:
-                color = Color.RED;
-                break;
-        }
+        sprite.setState(state.toString());
 
-        for (int i = 0; i < plates.length; i++) {
-            plates[i].setFill(color);
-        }
+//        for (int i = 0; i < plates.length; i++) {
+//            plates[i].setFill(color);
+//        }
 
         if (state == BURN) {
             if (level.hasEnemy(pos)) {
@@ -94,6 +87,7 @@ public class HeatPlate extends Terrain{
             if (level.hasAvatar(pos)) {
                 level.getAvatar().onThreatenedByBomb(null);
             }
+
         }
     }
 
