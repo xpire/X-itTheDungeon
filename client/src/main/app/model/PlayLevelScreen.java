@@ -18,6 +18,7 @@ public class PlayLevelScreen extends AppScreen {
     private String filename;
     private AppScreen parentScreen;
     private int levelNum;
+    private boolean isPublishTest;
 
     {
         title = "X-it the Dungeon";
@@ -27,12 +28,13 @@ public class PlayLevelScreen extends AppScreen {
     private PlayMode world;
     private PlayLevelController controller;
 
-    public PlayLevelScreen(AppScreen parent, Stage stage, String filename, String filePath, int levelNum) {
+    public PlayLevelScreen(AppScreen parent, Stage stage, String filename, String filePath, int levelNum, boolean isPublishTest) {
         super(stage);
         this.parentScreen = parent;
         this.filename = filename;
         this.filePath = filePath;
         this.levelNum = levelNum;
+        this.isPublishTest = isPublishTest;
         this.controller = new PlayLevelController(this);
     }
 
@@ -41,7 +43,7 @@ public class PlayLevelScreen extends AppScreen {
     public void restart() {
         Pane layer = controller.getDynamicLayer();
         layer.getChildren().remove(world.getView());
-        world = new PlayMode(scene, filename, filePath);
+        world = new PlayMode(scene, filename, filePath, isPublishTest);
         world.setLevelNum(levelNum);
         layer.getChildren().add(world.getView());
         StackPane.setAlignment(world.getView(), Pos.CENTER);
@@ -59,7 +61,7 @@ public class PlayLevelScreen extends AppScreen {
 
         Pane layer = controller.getDynamicLayer();
 
-        world = new PlayMode(scene, filename, filePath);
+        world = new PlayMode(scene, filename, filePath, isPublishTest);
         world.setLevelNum(levelNum);
         layer.getChildren().add(world.getView());
         StackPane.setAlignment(world.getView(), Pos.CENTER);

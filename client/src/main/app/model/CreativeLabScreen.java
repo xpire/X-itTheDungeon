@@ -133,6 +133,9 @@ public class CreativeLabScreen extends AppScreen {
         //Maybe make the options menu more fxml integrated rather than model
         save.setOnAction(e -> draftBuilder.saveMap(draftBuilder.getName(), "main/drafts"));
         exit.setOnAction(e -> controller.switchScreen(new CreateModeSelectScreen(this.getStage())));
+        publish.setOnAction(e -> {
+            testPlay(true);
+        });
 
         optionsMenu.add(save, 0, 0);
         optionsMenu.add(saveAs, 0, 1);
@@ -290,9 +293,10 @@ public class CreativeLabScreen extends AppScreen {
     /**
      * Saves the current state of the level to a temporary file and runs it in Play Mode
      */
-    public void testPlay() {
+    public void testPlay(boolean isPublishTest) {
+
         draftBuilder.saveMap("tempSave", "save/temp");
-        controller.switchScreen(new PlayLevelScreen(this, this.getStage(), "tempSave", "src/save/temp", 0));
+        controller.switchScreen(new PlayLevelScreen(this, this.getStage(), "tempSave", "src/save/temp", 0, isPublishTest));
     }
 
     /**

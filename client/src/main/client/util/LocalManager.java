@@ -7,10 +7,8 @@ import main.client.structure.ReqStructure;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedHashMap;
 import java.util.stream.Collectors;
 
-//TODO This needs to be done !!!!!
 public class LocalManager {
 
     public static class LocalStructure {
@@ -39,7 +37,12 @@ public class LocalManager {
     private static File localFiles = new File(PATH);
 
     public static void addUser(String username) {
-        if (!new File(PATH + username).mkdirs()) { System.out.println("Internal Error: Make directory failed."); }
+
+        if (!new File(PATH + username).mkdirs() ||
+                !new File(PATH + username + "/" + "drafts").mkdirs() ||
+                !new File(PATH + username + "/" + "downloads").mkdirs()) {
+            System.out.println("Internal Error: Make directory failed.");
+        }
     }
 
     // Has this user logged on before?
@@ -58,7 +61,7 @@ public class LocalManager {
 
     // Does this map exist?
     public static boolean hasMapLocal(ReqStructure request) {
-        File[] files = new File(PATH + Main.currClient.getLoggedUser() +"/").listFiles();
+        File[] files = new File(PATH + Main.currClient.getLoggedUser() + "/downloads/").listFiles();
         if (files == null || files.length == 0) { return false; }
         else {
             return Arrays.stream(files)
@@ -69,18 +72,17 @@ public class LocalManager {
         }
     }
 
-    //TODO Auto logout functionality is not set
+    //TODO Certain username cannot be made in this case, default and unknown
     /**
      * Download the map and put in local directory
      * @param request the provided request by the user
      */
     public static void addMap(ReqStructure request, String requestedUser) {
-        File wantDir = new File(PATH + requestedUser + "/" + request.mapname + ".json");
+        File wantDir = new File(PATH + requestedUser + "/downloads/" + request.mapname + ".json");
         try {
             if (wantDir.createNewFile()) {
                 FileWriter writer = new FileWriter(wantDir);
                 String map = Main.currClient.RequestSpecMap(request.name, request.mapname);
-                //Type type = new TypeToken<Map<String, String>>(){}.getType();
                 MapStruct data = new Gson().fromJson(map, MapStruct.class);
 
                 writer.write(
@@ -103,9 +105,39 @@ public class LocalManager {
         }
     }
 
+    // Overloaded method
+    public static void addMap(String username, String mapName, String mapContent, String where) {
+        File wantDir;
+        if (!where.equals("default")) {
+            wantDir = new File(PATH + username + "/downloads/" + mapName + ".json");
+        } else {
+            wantDir = new File(PATH + "default" + "/downloads/" + mapName + ".json");
+        }
+        try {
+            if (wantDir.createNewFile()) {
+                FileWriter writer = new FileWriter(wantDir);
+                writer.write(
+                        new Gson().toJson(
+                                new LocalStructure(
+                                        username,
+                                        mapName,
+                                        mapContent
+                                ), LocalStructure.class
+                        )
+                );
+                writer.close();
+            } else {
+                System.out.println("Cannot create file.");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
     // Fetches the header of all the local maps to display for play
     public static ArrayList<LocalStructure> fetchLocal(String loggedUser) {
-        File usrDir = new File(PATH + loggedUser + "/");
+        File usrDir = new File(PATH + loggedUser + "/downloads/");
         File[] files = usrDir.listFiles();
 
         if (files != null || files.length == 0)
@@ -126,5 +158,34 @@ public class LocalManager {
         catch (FileNotFoundException e) { System.out.println("Error in getting local maps."); }
         catch (IOException e) { System.out.println("Error in getting maps."); }
         return null;
+    }
+
+    public static void LocalDraftAdd(String mapName, String mapContent) {
+        if (Main.currClient.isLoggedin()) {
+            if (hasLogged(Main.currClient.getLoggedUser())) {
+                addMap(
+                        Main.currClient.getLoggedUser(),
+                        mapName,
+                        mapContent,
+                        "null"
+                );
+            }
+            else {
+                addMap(
+                        Main.currClient.getLoggedUser(),
+                        mapName,
+                        mapContent,
+                        "default"
+                );
+            }
+        }
+        else {
+            addMap(
+                    "Unknown",
+                    mapName,
+                    mapContent,
+                    "default"
+            );
+        }
     }
 }

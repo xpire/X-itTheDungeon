@@ -10,11 +10,13 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
+import main.app.Main;
 import main.app.controller.PlayLevelController;
 import main.app.engine.Game;
 import main.app.engine.GameLoop;
 import main.app.engine.Input;
 import main.app.engine.UserAction;
+import main.client.util.LocalManager;
 import main.component.ViewComponent;
 import main.entities.Avatar;
 import main.entities.Entity;
@@ -56,9 +58,14 @@ public class PlayMode implements Game {
     private boolean isGameOver = false;
 
     // TAKE SCENE OUT!
-    public PlayMode(Scene scene, String levelName, String levelPath) {
+    public PlayMode(Scene scene, String levelName, String levelPath, boolean isPublishTest) {
 
         level = new MapLoader().loadLevel(levelName, levelPath);
+
+        if (isPublishTest) level.addEventHandler(LevelEvent.LEVEL_PASSED, e -> {
+            LocalManager.LocalDraftAdd(level.getName(), level.save());
+        });
+
         avatar = level.getAvatar();
 
         pane.getChildren().add(level.getView());

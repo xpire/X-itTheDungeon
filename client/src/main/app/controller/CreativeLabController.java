@@ -55,7 +55,7 @@ public class CreativeLabController extends AppController<CreativeLabScreen> {
 
     @FXML
     public void onPlayTestBtnPressed() {
-        screen.testPlay();
+        screen.testPlay(false);
     }
 
     /**

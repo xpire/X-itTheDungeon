@@ -1,5 +1,7 @@
 package main.client;
 
+import javafx.scene.control.Alert;
+import main.app.engine.AlertHelper;
 import main.client.structure.LoginStruct;
 import main.client.structure.MapStructure;
 import main.client.structure.ReqStructure;
@@ -67,12 +69,15 @@ public class Client {
                         new Gson().toJson(new LoginStruct(username, password), LoginStruct.class)
                 );
 
-                // check if its logged in
+                if (res == null) { return "Internet error. "; }
+
                 if (!res.equals(Routes.LOGIN_FAILED)) {
                     Loggedin = true;
                     LoggedUser = username;
 
-                    if (!LocalManager.hasLogged(username)) { LocalManager.addUser(username); }
+                    if (!LocalManager.hasLogged(username)) {
+                        LocalManager.addUser(username);
+                    }
                 }
                 return res;
             }
@@ -214,8 +219,8 @@ public class Client {
             return res.getBody();
         }
         catch (UnirestException e){
-            e.printStackTrace();
-            System.out.println("The Post didn't work and you shouldn't be here");
+            System.out.println("Not connected");
+            AlertHelper.showAlert(Alert.AlertType.ERROR,"Network Error","Internet not connected.");
         }
         return null;
     }
@@ -231,7 +236,8 @@ public class Client {
             return res.getBody();
         }
         catch (UnirestException e) {
-            System.out.println("Get Error please retry.");
+            System.out.println("Not connected");
+            AlertHelper.showAlert(Alert.AlertType.ERROR,"Network Error","Internet not connected.");
         }
         return null;
     }
