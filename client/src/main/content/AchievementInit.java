@@ -2,7 +2,6 @@ package main.content;
 
 import main.Toast;
 import main.app.Main;
-import main.content.IntStat;
 import main.trigger.achievement.Achievement;
 import main.trigger.achievement.AchievementSystem;
 
