@@ -1,5 +1,6 @@
 package main.maploading;
 
+import javafx.scene.Group;
 import javafx.scene.Node;
 import main.Level;
 import main.content.ObjectiveFactory;
@@ -205,7 +206,7 @@ public class DraftBuilder {
         return level.listObjectives();
     }
 
-    public Node getView() {
+    public Group getView() {
         return level.getView();
     }
 }

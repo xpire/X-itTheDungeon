@@ -12,7 +12,7 @@
    <center>
       <AnchorPane prefHeight="640.0" prefWidth="862.0">
           <children>
-            <Accordion fx:id="draftsView" layoutX="27.0" layoutY="15.0" prefHeight="540.0" prefWidth="768.0" AnchorPane.bottomAnchor="85.0" AnchorPane.leftAnchor="27.0" AnchorPane.topAnchor="15.0" />
+            <Accordion fx:id="draftsView" layoutX="27.0" layoutY="15.0" prefHeight="540.0" prefWidth="768.0" AnchorPane.bottomAnchor="85.0" AnchorPane.leftAnchor="27.0" AnchorPane.rightAnchor="67.0" AnchorPane.topAnchor="15.0" />
           </children>
       </AnchorPane>
    </center>
@@ -29,7 +29,7 @@
             <Button fx:id="btnNewDraft" alignment="CENTER" contentDisplay="CENTER" layoutX="26.0" layoutY="14.0" mnemonicParsing="false" onAction="#onEnterLabBtnPressed" prefHeight="98.0" prefWidth="111.0" text="New Draft" textAlignment="CENTER" />
               <Button fx:id="btnBack" alignment="CENTER" contentDisplay="CENTER" layoutX="34.0" layoutY="560.0" mnemonicParsing="false" onAction="#onBackBtnPressed" prefHeight="42.0" prefWidth="95.0" text="Back" textAlignment="CENTER" AnchorPane.bottomAnchor="38.0" AnchorPane.leftAnchor="34.0" />
             <TextField fx:id="newDraftNameField" alignment="CENTER" layoutX="7.0" layoutY="153.0" prefHeight="31.0" prefWidth="151.0" promptText="New Draft Name" visible="false" />
-            <Button fx:id="beginNewDraftBtn" layoutX="45.0" layoutY="192.0" mnemonicParsing="false" onAction="#onBeginNewDraftBtnPressed" text="Lets Go!" visible="false"/>
+            <Button fx:id="beginNewDraftBtn" layoutX="45.0" layoutY="192.0" mnemonicParsing="false" onAction="#onBeginNewDraftBtnPressed" text="Lets Go!" visible="false" />
          </children>
       </AnchorPane>
    </right>

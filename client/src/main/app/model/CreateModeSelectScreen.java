@@ -1,15 +1,18 @@
 package main.app.model;
 
+import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Box;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import main.app.controller.AppController;
 import main.app.controller.CreateModeSelectController;
 import main.maploading.DraftBuilder;
 import main.maploading.MapLoader;
 
-import javax.xml.soap.Text;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -40,13 +43,48 @@ public class CreateModeSelectScreen extends AppScreen{
                      String trimmedFileName = fileName.substring(0, fileName.lastIndexOf('.'));
                      titledPane.setText(trimmedFileName);
 
-                     VBox vBox = new VBox();
+                     HBox totalView = new HBox();
+                     totalView.setSpacing(10);
+
+                     ScrollPane viewPane = new ScrollPane();
+                     viewPane.setPrefSize(270, 270);
+                     viewPane.setMaxSize(270,270);
+
+                     DraftBuilder previewBuilder = new DraftBuilder(
+                             new MapLoader().loadLevel(trimmedFileName, "src/main/drafts", true));
+
+                     Group preview = previewBuilder.getView();
+
+//                     preview.setScaleX(9.0/Math.max(previewBuilder.getNCols(), previewBuilder.getNRows()));
+//                     preview.setScaleY(9.0/Math.max(previewBuilder.getNCols(), previewBuilder.getNRows()));
+                     viewPane.setBorder(new Border(new BorderStroke(Color.BLACK,
+                             BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+                     viewPane.setContent(preview);
+//                     viewPane.setPrefViewportWidth(100);
+
+                     int maxDim = Math.max(previewBuilder.getNCols(), previewBuilder.getNRows());
+                     int prefSize = 9;
+                     double scaleFactor = (double) prefSize/maxDim;
+
+                     System.out.println(previewBuilder.getNCols() + " " + previewBuilder.getNRows() + " " + scaleFactor);
+                     preview.setScaleX(scaleFactor);
+                     preview.setScaleY(scaleFactor);
+                     preview.setTranslateX(-(previewBuilder.getNCols() - prefSize) * 15 * scaleFactor);
+//                     preview.setTranslateY(-(previewBuilder.getNRows() - prefSize) * 16.1 * scaleFactor);
+//
+
+                     viewPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+                     viewPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+                     totalView.getChildren().add(viewPane);
+
+                     VBox optionsList = new VBox();
+                     optionsList.setSpacing(10);
 
                      HBox nameBox = new HBox();
                      Label nameLabel = new Label("Name: ");
                      TextField nameField = new TextField(trimmedFileName);
                      Button okBtn = new Button("Ok");
-                     Button renameBtn = new Button("Rename Working");
+                     Button renameBtn = new Button("Rename");
 
                      nameField.setEditable(false);
                      okBtn.setVisible(false);
@@ -72,7 +110,7 @@ public class CreateModeSelectScreen extends AppScreen{
                      nameBox.getChildren().addAll(nameLabel, nameField, okBtn, renameBtn);
 
                      Button resumeBtn = new Button();
-                     resumeBtn.setText("Resume");
+                     resumeBtn.setText("Resume Working");
                      resumeBtn.setOnAction(e -> controller.switchScreen(
                              new CreativeLabScreen(getStage(),
                              new DraftBuilder(
@@ -85,8 +123,11 @@ public class CreateModeSelectScreen extends AppScreen{
                          controller.switchScreen(new CreateModeSelectScreen(getStage()));
                      });
 
-                     vBox.getChildren().addAll(nameBox, resumeBtn, deleteBtn);
-                     titledPane.setContent(vBox);
+                     optionsList.getChildren().addAll(nameBox, resumeBtn, deleteBtn);
+
+                     totalView.getChildren().add(optionsList);
+                     titledPane.setContent(totalView);
+
                      draftsView.getPanes().add(titledPane);
                  });
         } catch (IOException e) {
