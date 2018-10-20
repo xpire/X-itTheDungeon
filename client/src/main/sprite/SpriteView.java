@@ -1,11 +1,14 @@
 package main.sprite;
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import main.math.Vec2d;
 import main.math.Vec2i;
 
+import javax.swing.*;
 import java.util.HashMap;
 
 public class SpriteView extends ImageView{
@@ -60,13 +63,13 @@ public class SpriteView extends ImageView{
         anime.put(name, animation);
     }
 
-    public void playAnime(String name) {
+    public void playAnime(String name, EventHandler<ActionEvent> afterFinish) {
         SpriteAnimation animation = anime.get(name);
         if (animation == null) return;
-        animation.play();
+        animation.play(afterFinish);
     }
 
-    public void playAnimation(String name, Vec2i direction){
+    public void playAnimation(String name, Vec2i direction, EventHandler<ActionEvent> afterFinish){
         StringBuilder sb = new StringBuilder();
         sb.append(name).append(" ");
         if (direction == Vec2i.NORTH) {
@@ -78,7 +81,7 @@ public class SpriteView extends ImageView{
         } else if (direction == Vec2i.WEST) {
             sb.append("Left");
         }
-        playAnime(sb.toString());
+        playAnime(sb.toString(), afterFinish);
     }
 
     public void magnifyScales(double newScaleX, double newScaleY) {

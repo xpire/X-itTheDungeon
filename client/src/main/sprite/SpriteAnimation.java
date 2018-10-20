@@ -2,6 +2,8 @@ package main.sprite;
 
 import javafx.animation.Interpolator;
 import javafx.animation.Transition;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -150,9 +152,7 @@ public class SpriteAnimation extends Transition {
     }
 
 
-
-    @Override
-    public void play() {
+    public void play(EventHandler<ActionEvent> afterFinish) {
         this.imageView.setX(initialOffset.getX());
         this.imageView.setY(initialOffset.getY());
         this.imageView.setScaleX(scale);
@@ -162,6 +162,7 @@ public class SpriteAnimation extends Transition {
         this.setOnFinished(e -> {
             PlayMode.input.startListening();
             System.out.println("START INPUT");
+            afterFinish.handle(e);
         });
         super.play();
     }

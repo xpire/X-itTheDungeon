@@ -10,6 +10,7 @@ import main.entities.terrain.Terrain;
 import main.Level;
 import main.math.Vec2d;
 import main.math.Vec2i;
+import main.sound.SoundManager;
 import main.sprite.SpriteView;
 
 import java.io.FileInputStream;
@@ -37,6 +38,7 @@ public abstract class Entity {
     protected Level level;
     protected ViewComponent view;
     public SpriteView sprite;
+    public SoundManager soundManager;// = SoundManager.getInstance(5);
 
 
     /**
@@ -51,7 +53,7 @@ public abstract class Entity {
         this.view  = new ViewComponent();
         this.pos   = new Vec2i(pos);
         this.level = level;
-
+        soundManager = SoundManager.getInstance(5);
         onCreated();
     }
 

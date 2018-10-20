@@ -1,9 +1,12 @@
 package main.entities.prop;
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.util.Duration;
+import main.PlayMode;
 import main.entities.Entity;
 import main.Level;
 import main.math.Vec2d;
@@ -11,6 +14,7 @@ import main.math.Vec2i;
 import main.sprite.SpriteAnimation;
 import main.sprite.SpriteView;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 
 /**
@@ -23,6 +27,10 @@ public class LitBomb extends Prop{
     private final int MAX_FUSE_LENGTH = 5;
     private Integer fuseLength = MAX_FUSE_LENGTH;
     private int radius = 1;
+    private Vec2i direction = new Vec2i(0,0);
+    private EventHandler<ActionEvent> afterFinish =  e -> {
+        onDestroyed();
+    };;
 
     /**
      * Basic Constructor
@@ -52,7 +60,7 @@ public class LitBomb extends Prop{
         sprite.addState("3", getImage("sprite/prop/litbomb/skull0.png"), new Vec2d(-8,-8), 1, 1);
         sprite.addState("2", getImage("sprite/prop/litbomb/skull1.png"), new Vec2d(-8,-8), 1, 1);
         sprite.addState("1", getImage("sprite/prop/litbomb/skull2.png"), new Vec2d(-8,-8), 1, 1);
-        sprite.addState("1", getImage("sprite/prop/litbomb/centre0.png"), new Vec2d(-8,-8), 1, 1);
+        sprite.addState("0", getImage("sprite/prop/litbomb/centre0.png"), new Vec2d(-8,-8), 1, 1);
         SpriteAnimation explosion = new SpriteAnimation(sprite, new Duration(500),new Vec2i(-8,-8), 1);
         explosion.addState(getImage("sprite/prop/litbomb/centre0.png"));
         explosion.addState(getImage("sprite/prop/litbomb/centre1.png"));
@@ -75,14 +83,14 @@ public class LitBomb extends Prop{
     @Override
     public void onTurnUpdate() {
         sprite.setState(fuseLength.toString());
-//        sprite.playAnime("Explosion");
+        soundManager.playSoundEffect("Lit Bomb");
         fuseLength--;
 
 //        int count = MAX_FUSE_LENGTH - fuseLength;
 //        int redness = Math.min( (int)(((double)count)/MAX_FUSE_LENGTH * 255), 255);
 //        bomb.setFill(Color.rgb(redness, 0, 0));
 
-        if (fuseLength <= 0)
+        if (fuseLength < 0)
             onExplosion();
     }
 
@@ -93,23 +101,29 @@ public class LitBomb extends Prop{
      */
     public void onExplosion() {
         System.out.println("EXPLOSION");
-//        sprite.playAnime("Explosion");
-        destroyEntity(pos);
+        soundManager.playSoundEffect("Lit Bomb Explosion");
+        ArrayList<Vec2i> targets = new ArrayList<>();
 
         for (Vec2i dir : Vec2i.DIRECTIONS) {
             Vec2i target = new Vec2i(pos);
             for (int i = 1; i <= radius; i++) {
                 target = target.add(dir);
-                destroyEntity(target);
+
+                targets.add(target);
+                //TODO: animation wait
+//                sprite.playAnime("Lit Bomb Explosion");
+
+//                destroyEntity(target);
             }
         }
+        destroyEntity(pos);
 
         onDestroyed();
     }
 
 
     /**
-     * Destroying entities on a certain position
+     * D6estroying entities on a certain position
      * @param pos : position to destroy entities
      */
     public void destroyEntity(Vec2i pos) {

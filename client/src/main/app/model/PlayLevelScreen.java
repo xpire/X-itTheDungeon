@@ -8,6 +8,7 @@ import javafx.stage.Stage;
 import main.PlayMode;
 import main.app.controller.AppController;
 import main.app.controller.PlayLevelController;
+import main.sound.SoundManager;
 
 public class PlayLevelScreen extends AppScreen {
 
@@ -40,6 +41,7 @@ public class PlayLevelScreen extends AppScreen {
         layer.getChildren().add(world.getView());
         StackPane.setAlignment(world.getView(), Pos.CENTER);
         world.startGame();
+
     }
 
     @Override

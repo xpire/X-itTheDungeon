@@ -4,11 +4,14 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.util.Duration;
 import main.Level;
+import main.PlayMode;
 import main.entities.enemies.Enemy;
 import main.entities.pickup.*;
 import main.entities.prop.FlyingArrow;
@@ -19,6 +22,7 @@ import main.events.AvatarDeathEvent;
 import main.events.AvatarEvent;
 import main.math.Vec2d;
 import main.math.Vec2i;
+import main.sound.SoundManager;
 import main.sprite.SpriteAnimation;
 import main.sprite.SpriteView;
 
@@ -56,6 +60,10 @@ public class Avatar extends Entity {
     private Line swordView;
     private Circle hoverView;
     private Circle rageView;
+    private SoundManager soundManager;
+
+    private EventHandler<ActionEvent> afterFinish;
+    private EventHandler<ActionEvent> doNothing;
 
     private Runnable nextAction;
 
@@ -96,16 +104,16 @@ public class Avatar extends Entity {
 
     @Override
     public void onCreated() {
-        Circle circle = new Circle(10, Color.AQUA);
-        view.addNode(circle);
+//        Circle circle = new Circle(10, Color.AQUA);
+//        view.addNode(circle);
 
         hoverView   = new Circle(8, Color.LIMEGREEN);
         rageView    = new Circle(4, Color.TOMATO);
         swordView   = new Line(-10, 0, 10, 0);
 
-        view.addNode(hoverView);
-        view.addNode(rageView);
-        view.addNode(swordView);
+//        view.addNode(hoverView);
+//        view.addNode(rageView);
+//        view.addNode(swordView);
 
         isHovering  = new SimpleBooleanProperty(false);
         isRaged     = new SimpleBooleanProperty(false);
@@ -116,12 +124,21 @@ public class Avatar extends Entity {
         rageView.visibleProperty().bind(isRaged);
         swordView.setVisible(false);
 
+        soundManager = SoundManager.getInstance(5);
+
         sprite = new SpriteView(getImage("sprite/idle/0.png"), new Vec2d(-12,-15), 1,1);
         sprite.addState("Face Up", getImage("sprite/idle/0.png"), new Vec2d(-12,-15), 1,1);
         sprite.addState("Face Down", getImage("sprite/idle/2.png"), new Vec2d(-12,-15), 1,1);
         sprite.addState("Face Left", getImage("sprite/idle/1.png"), new Vec2d(-11,-15), 1,1);
         sprite.addState("Face Right", getImage("sprite/idle/1.png"), new Vec2d(-11,-15), -1,1);
 
+
+        afterFinish =  e -> {
+            PlayMode.input.startListening();
+            System.out.println("START INPUT");
+        };
+
+        doNothing = e -> {};
 
         SpriteAnimation swordLeft = new SpriteAnimation(sprite, new Duration(500), new Vec2i(-11,-15),1);
         swordLeft.addState(getImage("sprite/idle/1.png"));
@@ -373,6 +390,8 @@ public class Avatar extends Entity {
     public void onThreatenedByPit(Pit pit) {
         if (!isHovering()) {
             level.postEvent(AvatarDeathEvent.deathByFalling());
+            soundManager.playSoundEffect("Falling");
+            soundManager.playSoundEffect("Death");
             onDestroyed();
         }
     }
@@ -381,6 +400,7 @@ public class Avatar extends Entity {
         if (isRaged()) return;
 
         level.postEvent(AvatarDeathEvent.deathByExplosion());
+        soundManager.playSoundEffect("Death");
         onDestroyed();
     }
 
@@ -390,6 +410,7 @@ public class Avatar extends Entity {
         }
         else {
             level.postEvent(AvatarDeathEvent.deathByAttack());
+            soundManager.playSoundEffect("Death");
             onDestroyed();
         }
     }
@@ -423,15 +444,19 @@ public class Avatar extends Entity {
         MOVE AVATAR
      */
     public void moveUp() {
+        faceUp();
         tryMove(Vec2i.NORTH);
     }
     public void moveDown() {
+        faceDown();
         tryMove(Vec2i.SOUTH);
     }
     public void moveLeft() {
+        faceLeft();
         tryMove(Vec2i.WEST);
     }
     public void moveRight() {
+        faceRight();
         tryMove(Vec2i.EAST);
     }
 
@@ -468,15 +493,19 @@ public class Avatar extends Entity {
         CHANGE AVATAR DIRECTION
      */
     public void faceUp() {
+        sprite.setState("Face Up");
         setDirection(Vec2i.NORTH);
     }
     public void faceDown() {
+        sprite.setState("Face Down");
         setDirection(Vec2i.SOUTH);
     }
     public void faceLeft() {
+        sprite.setState("Face Left");
         setDirection(Vec2i.WEST);
     }
     public void faceRight() {
+        sprite.setState("Face Right");
         setDirection(Vec2i.EAST);
     }
 
@@ -509,6 +538,11 @@ public class Avatar extends Entity {
         // cannot swing if has no sword
         if (sword == null) return;
 
+        //Animation
+        System.out.println("SWORD SWING!");
+        sprite.playAnimation("Sword", direction, doNothing);
+        soundManager.playSoundEffect("Puff");
+
         // kill the entity in the avatar's direction
         Vec2i target = pos.add(direction);
         if (level.isValidGridPos(target) && level.hasEnemy(target)) {
@@ -517,11 +551,14 @@ public class Avatar extends Entity {
             level.getEnemy(target).onDestroyed();
             sword.reduceDurability();
             swordDurability.set(sword.getDurability());
+            soundManager.playSoundEffect("Hit");
+
 
             // check durability and destroy
             if (sword.isBroken()) {
                 sword = null;
                 swordView.setVisible(false);
+                soundManager.playSoundEffect("Shatter");
             }
 
             endTurn();
@@ -537,8 +574,12 @@ public class Avatar extends Entity {
 
         /* TODO: once shot, it should control its own killing logic */
 
-        FlyingArrow arrow = new FlyingArrow(level);
+        soundManager.playSoundEffect("Arrow");
         Vec2i arrowPos = new Vec2i(pos).add(direction);
+        FlyingArrow arrow = new FlyingArrow(level, arrowPos, pos);
+
+        //Animation
+        sprite.playAnimation("Bow", direction, doNothing);
 
         // kill first enemy in avatar's direction, if the enemy exists and is reachable
         while(level.isValidGridPos(arrowPos)) {
@@ -568,6 +609,7 @@ public class Avatar extends Entity {
     public void placeBomb() {
         if (numBombs.get() <= 0) return;
 
+        soundManager.playSoundEffect("Bomb");
         LitBomb bomb = new LitBomb(level, bombRadius.get());
 
         if (level.canPlaceProp(pos, bomb)) {
@@ -598,6 +640,7 @@ public class Avatar extends Entity {
      */
     public void dropKey() {
         if (key == null) return;
+        soundManager.playSoundEffect("Click");
 
         if (level.canPlacePickup(pos, key)) {
             level.addPickup(pos, key);
@@ -623,6 +666,7 @@ public class Avatar extends Entity {
     public void useKey() {
         key = null;
         hasKeyProperty.set(false);
+        soundManager.playSoundEffect("Unlock");
     }
 
 
@@ -638,6 +682,7 @@ public class Avatar extends Entity {
      */
     public boolean pickUpKey(Key k) {
         if (key != null) return false;
+        soundManager.playSoundEffect("Click");
 
         key = k;
         hasKeyProperty.set(true);
@@ -651,6 +696,7 @@ public class Avatar extends Entity {
      */
     public boolean pickUpSword(Sword s) {
         if (sword != null) return false;
+        soundManager.playSoundEffect("Click");
 
         sword = s;
         swordView.setVisible(true);
@@ -668,6 +714,8 @@ public class Avatar extends Entity {
      */
     public boolean pickUpHoverPotion(HoverPotion p) {
         isHovering.set(true);
+        soundManager.playSoundEffect("Drink");
+
         return true;
     }
 
@@ -679,6 +727,7 @@ public class Avatar extends Entity {
     public boolean pickUpInvincibilityPotion(InvincibilityPotion p) {
         ragePotion = p;
         isRaged.set(true);
+        soundManager.playSoundEffect("Drink");
         return true;
     }
 
@@ -689,6 +738,7 @@ public class Avatar extends Entity {
      */
     public boolean pickUpBombPotion(BombPotion p) {
         bombRadius.set(bombRadius.get() + 1);
+        soundManager.playSoundEffect("Drink");
         return true;
     }
 
@@ -699,6 +749,7 @@ public class Avatar extends Entity {
      */
     public boolean pickUpArrow(Arrow arrow) {
         numArrows.setValue(numArrows.get() + 1);
+        soundManager.playSoundEffect("Click");
         return true;
     }
 
@@ -719,6 +770,7 @@ public class Avatar extends Entity {
      */
     public boolean pickUpTreasure(Treasure treasure) {
         numTreasures.setValue(numTreasures.get() + 1);
+        soundManager.playSoundEffect("Treasure");
         return true;
     }
 

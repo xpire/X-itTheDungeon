@@ -22,6 +22,7 @@ import main.events.AvatarDeathEvent;
 import main.events.AvatarEvent;
 import main.events.LevelEvent;
 import main.maploading.MapLoader;
+import main.sound.SoundManager;
 
 
 /*
@@ -48,6 +49,7 @@ public class PlayMode implements Game {
 
     private EnemyManager enemyManager;
     private ViewComponent view;
+    private SoundManager soundManager = SoundManager.getInstance(5);
 
     private StackPane pane = new StackPane();
     private boolean isGameOver = false;
@@ -225,8 +227,8 @@ public class PlayMode implements Game {
         lblGameOver.fontProperty().set(Font.font(40));
         pane.getChildren().add(lblGameOver);
         isRunning = false;
-
         level.postEvent(new LevelEvent(LevelEvent.LEVEL_FAILED, levelNum));
+        soundManager.playSoundEffect("Failure");
     }
 
     private void gameWin() {
@@ -235,6 +237,7 @@ public class PlayMode implements Game {
         lblGameWin.fontProperty().set(Font.font(40));
         pane.getChildren().add(lblGameWin);
         isRunning = false;
+        soundManager.playSoundEffect("Success");
 
         level.postEvent(new LevelEvent(LevelEvent.LEVEL_PASSED, levelNum));
     }

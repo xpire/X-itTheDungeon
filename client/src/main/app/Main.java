@@ -8,6 +8,7 @@ import main.content.GameConfig;
 import main.events.EventBus;
 import main.init.AchievementInit;
 import main.init.StatInit;
+import main.sound.SoundManager;
 import main.trigger.achievement.AchievementSystem;
 import main.persistence.JsonPersistor;
 
@@ -25,6 +26,7 @@ Todo:
 public class Main extends Application {
 
     public static EventBus playModeBus = new EventBus();
+    public SoundManager soundManager = SoundManager.getInstance(5);
     public static GameConfig gameConfig;
 
     @Override
