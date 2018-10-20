@@ -2,6 +2,7 @@ package main.app.model;
 
 import javafx.scene.control.Accordion;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -59,8 +60,8 @@ public class CreateModeSelectScreen extends AppScreen{
         }
     }
 
-    public void initialiseNewDraft() {
-        DraftBuilder draftBuilder = new DraftBuilder(8, 8, "newDraft");
+    public void initialiseNewDraft(String draftName) {
+        DraftBuilder draftBuilder = new DraftBuilder(8, 8, draftName);
         controller.switchScreen(new CreativeLabScreen(this.getStage(), draftBuilder));
     }
 

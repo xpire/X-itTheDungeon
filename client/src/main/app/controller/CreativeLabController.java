@@ -8,12 +8,9 @@ import main.app.model.CreativeLabScreen;
 
 //TODO :
 //hover with key-door?
-//naming new drafts
 
 //publish
 //play test
-
-//UNDO function - command pattern + memento pattern
 
 public class CreativeLabController extends AppController<CreativeLabScreen> {
 
@@ -55,6 +52,11 @@ public class CreativeLabController extends AppController<CreativeLabScreen> {
         StackPane.setAlignment(currDraft, Pos.CENTER);
 
         StackPane.setAlignment(toolbox, Pos.CENTER);
+    }
+
+    @FXML
+    public void onPlayTestBtnPressed() {
+        screen.testPlay();
     }
 
     /**

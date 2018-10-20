@@ -2,6 +2,8 @@ package main.app.controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Accordion;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import main.app.model.CreateModeSelectScreen;
 import main.app.model.CreativeLabScreen;
 import main.app.model.MainScreen;
@@ -9,10 +11,16 @@ import main.sound.SoundManager;
 
 public class CreateModeSelectController extends AppController<CreateModeSelectScreen>{
 
+    SoundManager soundManager = SoundManager.getInstance(5);
+
     @FXML
     private Accordion draftsView;
 
-    SoundManager soundManager = SoundManager.getInstance(5);
+    @FXML
+    private TextField newDraftNameField;
+
+    @FXML
+    private Button beginNewDraftBtn;
 
     public CreateModeSelectController(CreateModeSelectScreen screen) {
         super(screen);
@@ -25,10 +33,10 @@ public class CreateModeSelectController extends AppController<CreateModeSelectSc
 
     @FXML
     public void onEnterLabBtnPressed() {
-        switchScreen(new CreativeLabScreen(screen.getStage()));
         soundManager.playSoundEffect("Item");
 
-        screen.initialiseNewDraft();
+        newDraftNameField.setVisible(true);
+        beginNewDraftBtn.setVisible(true);
     }
 
     @FXML
@@ -37,4 +45,13 @@ public class CreateModeSelectController extends AppController<CreateModeSelectSc
         soundManager.playSoundEffect("Item");
     }
 
+    @FXML
+    public void onBeginNewDraftBtnPressed() {
+        if (newDraftNameField.getText().length() == 0) {
+            System.out.println("plz give the draft a name");
+            return;
+        }
+
+        screen.initialiseNewDraft(newDraftNameField.getText());
+    }
 }

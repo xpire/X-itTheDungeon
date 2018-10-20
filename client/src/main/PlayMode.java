@@ -54,18 +54,46 @@ public class PlayMode implements Game {
     private StackPane pane = new StackPane();
     private boolean isGameOver = false;
 
-
     // TAKE SCENE OUT!
     public PlayMode(Scene scene, String levelName, String levelPath) {
 
         level = new MapLoader().loadLevel(levelName, levelPath);
         avatar = level.getAvatar();
 
-        gameLoop = new GameLoop(this, fps -> System.out.println("FPS: " + fps));
-        input = new Input();
-
         pane.getChildren().add(level.getView());
         view = new ViewComponent(pane);
+        input = new Input();
+
+        if (avatar == null) {
+            gameLoop = new GameLoop(new Game() {
+                @Override
+                public void onStart() {
+                }
+
+                @Override
+                public void onUpdateBegin() {
+
+                }
+
+                @Override
+                public void onUpdate() {
+
+                }
+
+                @Override
+                public void onUpdateEnd() {
+
+                }
+
+                @Override
+                public void onStop() {
+
+                }
+            }, fps -> System.out.println("FPS: " + fps));
+            return;
+        }
+
+        gameLoop = new GameLoop(this, fps -> System.out.println("FPS: " + fps));
 
         initEvents();
         initUi();

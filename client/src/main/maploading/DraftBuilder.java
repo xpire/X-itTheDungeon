@@ -114,8 +114,10 @@ public class DraftBuilder {
      * @param path save location, root at main
      */
     public void saveMap(String mapName, String path) {
-        StringBuilder mapPath = new StringBuilder("./src/main/");
-        mapPath.append(path).append("/").append(mapName).append(".txt");
+//        StringBuilder mapPath = new StringBuilder("./src/main/");
+//        mapPath.append(path).append("/").append(mapName).append(".txt");
+
+        String mapPath = String.format("./src/main/%s/%s.txt", path, mapName);
 
         BufferedWriter w = null;
         try {
@@ -124,7 +126,7 @@ public class DraftBuilder {
             w = new BufferedWriter(
                     new OutputStreamWriter(
                             new FileOutputStream(
-                                    new File(mapPath.toString()))));
+                                    new File(mapPath))));
 
             int nRow = getNRows();
             int nCol = getNCols();
@@ -275,5 +277,9 @@ public class DraftBuilder {
 
     public void clearObjectives() {
         level.clearObjectives();
+    }
+
+    public String listObjectives() {
+        return level.listObjectives();
     }
 }

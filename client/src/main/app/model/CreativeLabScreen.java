@@ -26,11 +26,8 @@ import main.entities.terrain.*;
 import main.content.ObjectiveFactory;
 import main.maploading.DraftBuilder;
 import main.maploading.InvalidMapException;
-import main.maploading.MapLoader;
-import main.maploading.TerrainLayer;
 import main.math.Vec2i;
 import main.sprite.SpriteView;
-import main.trigger.objective.Objective;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -55,10 +52,6 @@ public class CreativeLabScreen extends AppScreen {
         super(stage);
         this.controller = new CreativeLabController(this);
         this.draftBuilder = draftBuilder;
-    }
-
-    public CreativeLabScreen(Stage stage) {
-        this(stage, null);
     }
 
     /**
@@ -213,16 +206,30 @@ public class CreativeLabScreen extends AppScreen {
         CheckBox switchCondition = new CheckBox();
 
         exitCondition.setText("Exit");
-        exitCondition.setAccessibleText(ObjectiveFactory.Type.EXIT.name());
-
         treasureCondition.setText("$$$");
-        treasureCondition.setAccessibleText(ObjectiveFactory.Type.COLLECT_ALL_TREASURES.name());
-
         killCondition.setText("Kill");
-        killCondition.setAccessibleText(ObjectiveFactory.Type.KILL_ALL_ENEMIES.name());
-
         switchCondition.setText("Flip");
+
+        exitCondition.setAccessibleText(ObjectiveFactory.Type.EXIT.name());
+        treasureCondition.setAccessibleText(ObjectiveFactory.Type.COLLECT_ALL_TREASURES.name());
+        killCondition.setAccessibleText(ObjectiveFactory.Type.KILL_ALL_ENEMIES.name());
         switchCondition.setAccessibleText(ObjectiveFactory.Type.ACTIVATE_ALL_SWITCHES.name());
+
+        for (String s : draftBuilder.listObjectives().split("\\s+")) {
+            switch (s) {
+                case "EXIT":
+                    exitCondition.setSelected(true);
+                    break;
+                case "COLLECT_ALL_TREASURES":
+                    treasureCondition.setSelected(true);
+                    break;
+                case "KILL_ALL_ENEMIES":
+                    killCondition.setSelected(true);
+                    break;
+                case "ACTIVATE_ALL_SWITCHES":
+                    switchCondition.setSelected(true);
+            }
+        }
 
         EventHandler<ActionEvent> makeMutuallyExclusive = e -> {
             CheckBox cb = (CheckBox) e.getSource();
@@ -233,7 +240,7 @@ public class CreativeLabScreen extends AppScreen {
                 treasureCondition.setSelected(false);
                 switchCondition.setSelected(false);
 
-                objectives.add(killCondition.getAccessibleText());
+                objectives.add(exitCondition.getAccessibleText());
             } else {
                 exitCondition.setSelected(false);
 
@@ -243,6 +250,7 @@ public class CreativeLabScreen extends AppScreen {
             }
 
             setObjectives(objectives);
+        System.out.println(draftBuilder.listObjectives());
         };
 
         exitCondition.setOnAction(makeMutuallyExclusive);
@@ -289,29 +297,16 @@ public class CreativeLabScreen extends AppScreen {
      * @param newCol : new number of cols
      */
     private void updateEditorGridPane(int newRow, int newCol) {
-        //break this up into multiple methods
-
         GridPane currDraft = controller.getCurrDraft();
 
-        Set<Node> deleteNodes = new HashSet<>();
-        for (Node child : currDraft.getChildren()) {
-            Integer rowIndex = GridPane.getRowIndex(child);
-            Integer colIndex = GridPane.getColumnIndex(child);
+        removeGridPaneNodes(currDraft, newRow, newCol);
+        removeConstraints(currDraft, newRow, newCol);
+        addConstraints(currDraft, newRow, newCol);
 
-            int r = (rowIndex == null) ? 0 : rowIndex;
-            int c = (colIndex == null) ? 0 : colIndex;
+        StackPane.setAlignment(currDraft, Pos.CENTER);
+    }
 
-            if (r >= newRow || c >= newCol) deleteNodes.add(child);
-        }
-
-        currDraft.getChildren().removeAll(deleteNodes);
-
-        for (int currRow = currDraft.getRowConstraints().size() - 1; currRow >= newRow; currRow--)
-            currDraft.getRowConstraints().remove(currRow);
-
-        for (int currCol = currDraft.getColumnConstraints().size() - 1; currCol >= newCol; currCol--)
-            currDraft.getColumnConstraints().remove(currCol);
-
+    private void addConstraints(GridPane currDraft, int newRow, int newCol) {
         for (int currRow = currDraft.getRowConstraints().size(); currRow < newRow; currRow++) {
             RowConstraints rowConstraints = new RowConstraints();
             currDraft.getRowConstraints().add(rowConstraints);
@@ -325,9 +320,29 @@ public class CreativeLabScreen extends AppScreen {
 
             for (int j = 0; j < currDraft.getRowConstraints().size(); j++) editorSelectHandler(currCol, j);
         }
+    }
 
-        StackPane.setAlignment(currDraft, Pos.CENTER);
+    private void removeConstraints(GridPane currDraft, int newRow, int newCol) {
+        for (int currRow = currDraft.getRowConstraints().size() - 1; currRow >= newRow; currRow--)
+            currDraft.getRowConstraints().remove(currRow);
 
+        for (int currCol = currDraft.getColumnConstraints().size() - 1; currCol >= newCol; currCol--)
+            currDraft.getColumnConstraints().remove(currCol);
+    }
+
+    private void removeGridPaneNodes(GridPane currDraft, int newRow, int newCol) {
+        Set<Node> deleteNodes = new HashSet<>();
+        for (Node child : currDraft.getChildren()) {
+            Integer rowIndex = GridPane.getRowIndex(child);
+            Integer colIndex = GridPane.getColumnIndex(child);
+
+            int r = (rowIndex == null) ? 0 : rowIndex;
+            int c = (colIndex == null) ? 0 : colIndex;
+
+            if (r >= newRow || c >= newCol) deleteNodes.add(child);
+        }
+
+        currDraft.getChildren().removeAll(deleteNodes);
     }
 
     /**
@@ -465,6 +480,11 @@ public class CreativeLabScreen extends AppScreen {
         } catch (InvalidMapException e) {
             e.printStackTrace();
         }
+    }
+
+    public void testPlay() {
+        draftBuilder.saveMap(draftBuilder.getName(), "drafts/temp");
+        controller.switchScreen(new PlayLevelScreen(this, this.getStage(), "tempSave", "src/main/drafts/temp", 0));
     }
 
     @Override

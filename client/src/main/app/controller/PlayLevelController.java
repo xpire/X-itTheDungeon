@@ -61,9 +61,10 @@ public class PlayLevelController extends AppController<PlayLevelScreen> {
 
     @FXML
     public void onBackBtnPressed() {
-        switchScreen(new PlayModeSelectScreen(screen.getStage()));
         soundManager.playSoundEffect("Item");
         soundManager.playBGM("Main Menu");
+
+        screen.backBtnPressed();
     }
 
 
