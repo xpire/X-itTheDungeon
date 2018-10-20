@@ -27,10 +27,6 @@ public class Exit extends Terrain{
         super(level);
     }
 
-    public Exit(Level level, Vec2i pos) {
-        super(level, pos);
-    }
-
     @Override
     public void onCreated() {
 //        Rectangle exit = new Rectangle(30, 30, Color.GOLD);

@@ -40,11 +40,6 @@ public class HeatPlate extends Terrain{
         super(level);
     }
 
-    public HeatPlate(Level level, Vec2i pos) {
-        super(level, pos);
-    }
-
-
     @Override
     public void onCreated(){
 //        plates = new Rectangle[4];

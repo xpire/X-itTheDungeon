@@ -34,10 +34,6 @@ public class Switch extends Terrain{
         super(level);
     }
 
-    public Switch(Level level, Vec2i pos) {
-        super(level, pos);
-    }
-
     /**
      * Flag if the switch is activated
      */

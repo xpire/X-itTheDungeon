@@ -29,10 +29,6 @@ public class Boulder extends Prop {
         super(level);
     }
 
-    public Boulder(Level level, Vec2i pos) {
-        super(level, pos);
-    }
-
 
     @Override
     public void onCreated(){

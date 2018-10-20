@@ -21,9 +21,9 @@ public class SwordTest {
         Level level = mapLoader.loadLevel("TestSword1", "../testdata/");
         Vec2i swordLocation = new Vec2i(2, 2);
         Vec2i avatarLocation = new Vec2i(2, 3);
-        Sword sword = new Sword(level, swordLocation);
-        level.setAvatar(avatarLocation, new Avatar(level, avatarLocation));
-        level.setPickup(swordLocation, sword);
+//        Sword sword = new Sword(level, swordLocation);
+//        level.setAvatar(avatarLocation, new Avatar(level, avatarLocation));
+//        level.setPickup(swordLocation, sword);
         level.displayLevel();
         assert(!level.getAvatar().hasSword());
 

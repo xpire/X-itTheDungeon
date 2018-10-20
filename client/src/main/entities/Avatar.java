@@ -94,11 +94,6 @@ public class Avatar extends Entity {
     }
 
 
-    public Avatar(Level level, Vec2i pos) {
-        super(level, pos);
-    }
-
-
     @Override
     public void onCreated() {
 //        Circle circle = new Circle(10, Color.AQUA);
@@ -576,9 +571,7 @@ public class Avatar extends Entity {
 
         soundManager.playSoundEffect("Arrow");
         Vec2i arrowPos = new Vec2i(pos).add(direction);
-        System.out.printf("possss:%d %d, dir:%d %d\n",arrowPos.getX(), arrowPos.getY(), direction.getX(), direction.getY());
-        System.out.println(arrowPos);
-        System.out.println(direction);
+
         FlyingArrow arrow = new FlyingArrow(level, arrowPos, direction);
         level.addProp(arrowPos, arrow);
 

@@ -31,11 +31,6 @@ public class IceBlock extends Prop {
         super(level);
     }
 
-    public IceBlock(Level level, Vec2i pos) {
-        super(level, pos);
-    }
-
-
     @Override
     public void onCreated(){
 //        Circle circle = new Circle(12, Color.LIGHTBLUE);

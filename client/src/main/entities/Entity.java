@@ -46,16 +46,13 @@ public abstract class Entity {
      * @param level current level
      */
     public Entity(Level level) {
-        this(level, new Vec2i());
-    }
-
-    public Entity(Level level, Vec2i pos) {
-        this.view  = new ViewComponent();
-        this.pos   = new Vec2i(pos);
+        this.view = new ViewComponent();
+        this.pos = new Vec2i(0,0);
         this.level = level;
         soundManager = SoundManager.getInstance(5);
         onCreated();
     }
+
 
     /**
      * Logic when an entity is made

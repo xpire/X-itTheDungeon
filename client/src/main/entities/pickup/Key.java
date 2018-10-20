@@ -31,9 +31,6 @@ public class Key extends Pickup {
     public Key(Level level) {
         super(level);
     }
-    public Key(Level level, Vec2i pos) {
-        super(level, pos);
-    }
 
 
     @Override

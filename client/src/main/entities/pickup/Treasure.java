@@ -29,10 +29,6 @@ public class Treasure extends Pickup{
         super(level);
     }
 
-    public Treasure(Level level, Vec2i pos) {
-        super(level, pos);
-    }
-
     @Override
     public void onCreated(){
         super.onCreated(); //TODO: do this for all

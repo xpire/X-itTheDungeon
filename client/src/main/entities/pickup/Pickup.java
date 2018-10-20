@@ -22,10 +22,6 @@ public abstract class Pickup extends Entity {
         super(level);
     }
 
-    public Pickup(Level level, Vec2i pos) {
-        super(level, pos);
-    }
-
     @Override
     public void onDestroyed() {
         level.removePickup(getGridPos());

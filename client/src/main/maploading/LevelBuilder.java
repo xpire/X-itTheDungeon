@@ -60,8 +60,8 @@ public class LevelBuilder {
         if (!level.isValidGridPos(doorPos))
             throw new InvalidMapException("Invalid Door position: " + doorPos);
 
-        Key key   = new Key(level, keyPos);
-        Door door = new Door(level, doorPos);
+        Key key   = new Key(level);
+        Door door = new Door(level);
 
         key.setMatchingDoor(door);
 

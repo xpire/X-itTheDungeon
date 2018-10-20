@@ -27,10 +27,6 @@ public class Wall extends Terrain {
         super(level);
     }
 
-    public Wall(Level level, Vec2i pos) {
-        super(level, pos);
-    }
-
     @Override
     public void onCreated() {
 //        Rectangle wall = new Rectangle(30, 30, Color.BROWN);

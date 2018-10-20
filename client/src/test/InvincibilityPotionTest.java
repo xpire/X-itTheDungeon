@@ -20,8 +20,8 @@ public class InvincibilityPotionTest {
         Level level = mapLoader.loadLevel("TestInvincibilityPotion", "../testdata/");
         Vec2i avatarLocation = new Vec2i(3, 3);
         Vec2i InvincibilityPotionLocation = new Vec2i(2, 2);
-        level.setAvatar(avatarLocation, new Avatar(level, avatarLocation));
-        level.setPickup(InvincibilityPotionLocation, new HoverPotion(level, InvincibilityPotionLocation));
+//        level.setAvatar(avatarLocation, new Avatar(level, avatarLocation));
+//        level.setPickup(InvincibilityPotionLocation, new HoverPotion(level, InvincibilityPotionLocation));
 
         level.displayLevel();
         System.out.println(level.getAvatar().isRaged());

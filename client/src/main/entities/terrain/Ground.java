@@ -25,10 +25,6 @@ public class Ground extends Terrain {
      */
     public Ground(Level level) { super(level); }
 
-    public Ground(Level level, Vec2i pos) {
-        super(level, pos);
-    }
-
     @Override
     public void onCreated() {
 //        Rectangle tile = new Rectangle(30, 30, Color.rgb(222, 222, 222));

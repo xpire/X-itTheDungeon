@@ -29,9 +29,6 @@ public abstract class Enemy extends Entity {
     public Enemy(Level level) {
         super(level);
     }
-    public Enemy(Level level, Vec2i pos) {
-        super(level, pos);
-    }
 
     @Override
     public void onCreated() {

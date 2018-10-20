@@ -36,11 +36,6 @@ public class Door extends Terrain {
         super(level);
     }
 
-    public Door(Level level, Vec2i pos) {
-        super(level, pos);
-    }
-
-
     @Override
     public void onCreated(){
 //        doorFrame = new Rectangle(6, 30, Color.BLACK);

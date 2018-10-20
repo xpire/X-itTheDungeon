@@ -31,10 +31,6 @@ public class Strategist extends Enemy {
         super(level);
     }
 
-    public Strategist(Level map, Vec2i pos) {
-        super(map, pos);
-    }
-
     @Override
     public void onCreated(){
         super.onCreated();

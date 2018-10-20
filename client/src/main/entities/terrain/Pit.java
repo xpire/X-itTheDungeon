@@ -31,11 +31,6 @@ public class Pit extends Terrain{
         super(level);
     }
 
-    public Pit(Level level, Vec2i pos) {
-        super(level, pos);
-    }
-
-
     @Override
     public void onCreated(){
 //        hole = new Rectangle(30, 30, Color.BLACK);

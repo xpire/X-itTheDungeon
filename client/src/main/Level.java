@@ -78,17 +78,12 @@ public class Level {
         this.name = name;
         this.isCreateMode = isCreateMode;
 
-//        GridPane gridView = new GridPane();
-//        gridView.setMinSize(getWidth(), getHeight());
-//        gridView.gridLinesVisibleProperty().set(true);
-
-//        view = new ViewComponent(gridView);
         view = new ViewComponent();
 
-        terrains = new TerrainLayer(nRows, nCols, () -> new Ground(this));
-        props    = new HashMapLayer<>();
-        pickups  = new HashMapLayer<>();
-        enemies  = new HashMapLayer<>();
+        terrains    = new TerrainLayer(nRows, nCols, () -> new Ground(this));
+        props       = new HashMapLayer<>();
+        pickups     = new HashMapLayer<>();
+        enemies     = new HashMapLayer<>();
         avatarLayer = new SingletonLayer<>();
 
         props.setOnEntityEnter(this::notifyOnEnterByProp);

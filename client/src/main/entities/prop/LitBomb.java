@@ -47,11 +47,6 @@ public class LitBomb extends Prop{
         this.radius = radius;
     }
 
-    public LitBomb(Level level, Vec2i pos) {
-        super(level, pos);
-    }
-
-
     @Override
     public void onCreated(){
 //        bomb = new Circle(5, Color.BLACK);
