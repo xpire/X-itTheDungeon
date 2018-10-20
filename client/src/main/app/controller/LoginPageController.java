@@ -7,7 +7,6 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import main.app.Main;
 import main.app.model.AppScreen;
-import main.app.model.LoginScreen;
 import main.app.model.MainScreen;
 import main.app.model.RegisterScreen;
 

@@ -22,6 +22,6 @@ public class Routes {
 
     // Below are feedback messages sent back to User
     public static final String INVALID_INPUT = "Login Failed: Please check your input. xD";
-    public static final String ALREADY_LOGGED_IN = "Login Failed:";
+    public static final String ALREADY_LOGGED_IN = "Login Failed: You have already Logged in. ";
     public static final String NOT_LOGGED_IN = "Login to see what other people have made. xD";
 }

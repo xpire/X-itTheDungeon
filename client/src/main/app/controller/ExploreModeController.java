@@ -6,10 +6,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.SelectionMode;
+import javafx.scene.control.*;
+import javafx.scene.layout.VBox;
 import main.app.Main;
 import main.app.engine.AlertHelper;
 import main.app.model.AppScreen;
@@ -20,14 +18,13 @@ import main.client.util.LocalManager;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
-import java.util.stream.Collectors;
 
 public class ExploreModeController extends AppController implements Initializable {
 
     public ExploreModeController(AppScreen screen) { super(screen); }
 
     @FXML
-    public ListView<String> listOfHeader;
+    public Accordion headerList;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -39,39 +36,30 @@ public class ExploreModeController extends AppController implements Initializabl
                             new TypeToken<ArrayList<ReqStructure>>()
                             {}.getType()
                     );
-            ArrayList<String> render = globMaps
-                    .stream()
-                    .map(ReqStructure::toString)
-                    .collect(Collectors.toCollection(ArrayList::new));
 
-            ObservableList<String> buffer = FXCollections.observableArrayList(render);
-            // Handle the empty map case
-            if (globMaps.isEmpty()) {
-                listOfHeader.setPlaceholder(new Label("There are currently no map xD, upload some!!!"));
-            }
-            else {
-                listOfHeader.setItems(buffer);
+            for (ReqStructure x: globMaps) {
+                    TitledPane curr = new TitledPane();
+                    curr.setText(x.mapname);
+                    Button Downloadbtn = new Button();
+                    Downloadbtn.setOnAction(e -> {
+                        if (LocalManager.hasMapLocal(x)) { AlertHelper.showAlert(Alert.AlertType.INFORMATION,"Message","You already have this map!!!"); }
+                        else {
+                            // Add to local maps
+                            LocalManager.addMap(x, Main.currClient.getLoggedUser());
+                            AlertHelper.showAlert(Alert.AlertType.INFORMATION,"Message", "Map downloaded!!!");
+                        }
+                    });
 
-                listOfHeader
-                        .getSelectionModel()
-                        .setSelectionMode(SelectionMode.SINGLE);
+                    Downloadbtn.setText("Download this map.");
+                    VBox box = new VBox();
+                    box.getChildren().addAll(new Label("Author: " + x.name), Downloadbtn);
+                    curr.setContent(box);
+
+                    headerList.getPanes().add(curr);
             }
         }
     }
 
     @FXML
     public void onBackBtnPressed() { switchScreen(new PlayModeSelectScreen(screen.getStage())); }
-
-    @FXML
-    public void onDownloadBtnPressed() {
-        // One element only
-        ObservableList<String> maps = listOfHeader.getSelectionModel().getSelectedItems();
-
-        if (LocalManager.hasMapLocal(maps.get(0), Main.currClient.getLoggedUser())) { AlertHelper.showAlert(Alert.AlertType.INFORMATION,"Message","You already have this map!!!"); }
-        else {
-            // Add to local maps
-            LocalManager.addMap(maps.get(0), Main.currClient.getLoggedUser());
-            AlertHelper.showAlert(Alert.AlertType.INFORMATION,"Message", "Map downloaded!!!");
-        }
-    }
 }

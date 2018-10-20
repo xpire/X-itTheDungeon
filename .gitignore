@@ -258,3 +258,5 @@ client/*.iml
 server/*.iml
 
 client/*/save/
+
+client/src/asset/local/*

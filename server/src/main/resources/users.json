@@ -6,3 +6,5 @@
 {"username":"TextField[id\u003dInputName, styleClass\u003dtext-input text-field]","salt":"$2a$10$kOTKyvwY4bDkxQDLISQnee","hashedPassword":"$2a$10$kOTKyvwY4bDkxQDLISQneevz0dMsCb9npUaf1AN32e/DvquQosQZW"}
 {"username":"Song","salt":"$2a$10$qsDbVkKrpaB43n7BhYVyke","hashedPassword":"$2a$10$qsDbVkKrpaB43n7BhYVykenBs4lMHQtokFZwdm.F0pS.OgEgTLktq"}
 {"username":"thisisauser","salt":"$2a$10$u/c4Xx8BoY9hbsZdnr2NI.","hashedPassword":"$2a$10$u/c4Xx8BoY9hbsZdnr2NI.cUfF6IzqrhJGhmh.Wd.ld7NkMS1f0R6"}
+{"username":"admin","salt":"$2a$10$k.RrbvvlvsqqjYAeUfqH3.","hashedPassword":"$2a$10$k.RrbvvlvsqqjYAeUfqH3./MhsLUOIOeiy8rnV/LvZ38z18HGfWx."}
+{"username":"admin1","salt":"$2a$10$b4fZJLp5ToUsZ0zCb3RAYO","hashedPassword":"$2a$10$b4fZJLp5ToUsZ0zCb3RAYOALjbmvZsSCpJQLSeN8T9ljtsZPz.y2i"}

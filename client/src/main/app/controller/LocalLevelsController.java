@@ -1,11 +1,9 @@
 package main.app.controller;
 
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.SelectionMode;
+import javafx.scene.control.*;
+import javafx.scene.layout.VBox;
 import main.app.Main;
 import main.app.model.AppScreen;
 import main.app.model.PlayModeSelectScreen;
@@ -19,36 +17,40 @@ public class LocalLevelsController extends AppController implements Initializabl
     public LocalLevelsController(AppScreen screen) { super(screen); }
 
     @FXML
-    ListView localView;
+    Accordion localView;
 
     @FXML
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        ArrayList<LocalManager.LocalStructure> localMaps;
         // Is the user logged in?
-        if (Main.currClient.isLoggedin()) { localView.setPlaceholder(new Label("Sign in to download maps. ")); }
-        else {
-            ArrayList<String> localMaps = LocalManager.fetchLocal(Main.currClient.getLoggedUser());
+        if (!Main.currClient.isLoggedin()) { localMaps = LocalManager.fetchLocal("default"); }
+        else { localMaps = LocalManager.fetchLocal(Main.currClient.getLoggedUser()); }
 
-            if (localMaps == null || localMaps.isEmpty()) { localView.setPlaceholder(new Label("There's no maps downloaded yet, go  some!!!")); }
-            else {
-                localView.getItems().addAll(localMaps);
-                localView
-                        .getSelectionModel()
-                        .setSelectionMode(SelectionMode.SINGLE);
+        if (localMaps == null || localMaps.isEmpty()) {
+            //TODO handle the return message
+        }
+        else {
+            for (LocalManager.LocalStructure x: localMaps) {
+                TitledPane curr = new TitledPane();
+                curr.setText(x.username);
+                Button Downloadbtn = new Button();
+
+                Downloadbtn.setOnAction(e -> {
+                    String map = x.mapContent;
+                    // TODO launch the play test mode
+                });
+
+                Downloadbtn.setText("Play this map.");
+                VBox box = new VBox();
+                box.getChildren().addAll(new Label("Author: " + x.username), Downloadbtn);
+                curr.setContent(box);
+
+                localView.getPanes().add(curr);
             }
         }
     }
 
-
     @FXML
     public void onBackBtnPressed() { switchScreen(new PlayModeSelectScreen(screen.getStage())); }
-
-    @FXML
-    public void onPlayBtnPressed() {
-        // Providing the text of the map
-        ObservableList<String> maps = localView.getSelectionModel().getSelectedItems();
-
-
-        // Lanuch the game
-    }
 }

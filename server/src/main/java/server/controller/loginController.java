@@ -13,6 +13,7 @@ public class loginController {
     public static final String LOGIN_SUCC = "Login Successful. xD";
     public static final String ALREADY_LOGGED_IN = "Login Failed: Already Logged in. Dx";
 
+
     public static final String LOGOUT_NO_SUCH_USER = "Logout Failed: No such user. Dx";
     public static final String LOGOUT_NOT_LOGGED_IN = "Logout Failed: Not Logged in. Dx";
     public static final String LOGOUT_SUCC = "Logout Success. xD";
@@ -44,12 +45,13 @@ public class loginController {
         // Check if this string works
         String currUser = request.session().attribute("currentUser");
         // Check if the user doesn't exists
-        if (!userController.hasUser(currUser) || !userIsLoggedIn(request)) { return LOGOUT_NO_SUCH_USER; }
+        if (!userController.hasUser(currUser)) { return LOGOUT_NO_SUCH_USER; }
         if (!userIsLoggedIn(request)) { return LOGOUT_NOT_LOGGED_IN; }
 
         // Remove user from current session
         request.session().removeAttribute("currentUser");
         request.session().attribute("loggedOut", true);
+        request.session(false);
         return LOGOUT_SUCC;
     };
 

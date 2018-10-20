@@ -72,7 +72,7 @@ public class Client {
                     Loggedin = true;
                     LoggedUser = username;
 
-                    if (LocalManager.hasLogged(username)) { LocalManager.addUser(username); }
+                    if (!LocalManager.hasLogged(username)) { LocalManager.addUser(username); }
                 }
                 return res;
             }
