@@ -11,10 +11,12 @@ import main.PlayModeUILocator;
 import main.app.model.AppScreen;
 import main.app.model.PlayLevelScreen;
 import main.app.model.PlayModeSelectScreen;
+import main.sound.SoundManager;
 
 public class PlayLevelController extends AppController<PlayLevelScreen> {
 
     public static PlayModeUILocator locator;
+    SoundManager soundManager = SoundManager.getInstance(5);
 
     @FXML
     private StackPane dynamicLayer;
@@ -60,21 +62,26 @@ public class PlayLevelController extends AppController<PlayLevelScreen> {
     @FXML
     public void onBackBtnPressed() {
         switchScreen(new PlayModeSelectScreen(screen.getStage()));
+        soundManager.playSoundEffect("Item");
+        soundManager.playBGM("Main Menu");
     }
 
 
     @FXML
     public void onRestartBtnPressed() {
         screen.restart();
+        soundManager.playSoundEffect("Item");
     }
 
     @FXML
     public void onHelpBtnPressed() {
+        soundManager.playSoundEffect("Item");
 
     }
 
     @FXML
     public void onSettingsBtnPressed() {
+        soundManager.playSoundEffect("Item");
 
     }
 

@@ -12,7 +12,9 @@ import main.app.model.PlayModeSelectScreen;
 import main.content.GameConfig;
 import main.content.IntStat;
 import main.content.LevelConfig;
+import main.sound.SoundManager;
 
+import javax.sound.midi.Soundbank;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -26,6 +28,7 @@ public class PlayLevelSelectController extends AppController {
     public GridPane gridLevels;
 
     public ArrayList<Button> btnLevels;
+    SoundManager soundManager = SoundManager.getInstance(5);
 
     @FXML
     public void initialize() {
@@ -59,11 +62,16 @@ public class PlayLevelSelectController extends AppController {
 
     public void onLevelSelected(String filename, int levelNum) {
         switchScreen(new PlayLevelScreen(screen.getStage(), filename, levelNum));
+        soundManager.playSoundEffect("Item");
+        System.out.println(levelNum);
+        soundManager.playBGM(new StringBuilder("Level ").append(levelNum).toString());
+
     }
 
 
     @FXML
     public void onBackBtnPressed() {
         switchScreen(new PlayModeSelectScreen(screen.getStage()));
+        soundManager.playSoundEffect("Item");
     }
 }

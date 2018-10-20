@@ -64,9 +64,10 @@ public class Boulder extends Prop {
 
         if (level.isPassableForProp(target, this)) {
             level.moveProp(target, this);
+            soundManager.playSoundEffect("Boulder");
             return true;
         }
-
+        soundManager.playSoundEffect("Hit");
         return false;
     }
 }

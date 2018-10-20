@@ -6,6 +6,7 @@ import javafx.event.EventType;
 import javafx.scene.Node;
 import javafx.scene.layout.GridPane;
 import main.app.Main;
+import main.sound.SoundManager;
 import main.trigger.Trigger;
 import main.trigger.objective.Objective;
 import main.trigger.objective.ObjectiveSystem;

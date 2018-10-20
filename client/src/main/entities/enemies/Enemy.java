@@ -7,6 +7,7 @@ import main.entities.Avatar;
 import main.entities.Entity;
 import main.events.EnemyEvent;
 import main.math.Vec2i;
+import main.sound.SoundManager;
 
 import java.util.List;
 
@@ -40,6 +41,7 @@ public abstract class Enemy extends Entity {
     public void onDestroyed() {
         level.postEvent(new EnemyEvent(EnemyEvent.ENEMY_KILLED));
         level.removeEnemy(pos);
+        soundManager.playSoundEffect("Mob");
     }
 
     @Override
