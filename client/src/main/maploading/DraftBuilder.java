@@ -1,22 +1,19 @@
 package main.maploading;
 
+import javafx.scene.Node;
 import main.Level;
 import main.content.ObjectiveFactory;
 import main.entities.Entity;
 import main.math.Vec2i;
-import main.trigger.objective.Objective;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Scanner;
 
 import static main.content.ObjectiveFactory.makeObjective;
 
 /**
- * Class which contains the logic of the CreateMode class
- * Talks to the level class for information
- * Also implements draft saving, deleting, editing
+ * Class which contains the logic for building maps in the Creative Lab
  */
 public class DraftBuilder {
 
@@ -53,15 +50,6 @@ public class DraftBuilder {
      */
     public void displayLevel() {
         level.displayLevel();
-    }
-
-    /**
-     * Checks if a coordinate is a valid tile on the draft
-     * @param tile the tile coordinate to check
-     * @return true if valid, false otherwise
-     */
-    public boolean isValidGridPos(Vec2i tile) {
-        return level.isValidGridPos(tile);
     }
 
     public void setObjective(ArrayList<String> objectives) throws InvalidMapException {
@@ -114,15 +102,10 @@ public class DraftBuilder {
      * @param path save location, root at main
      */
     public void saveMap(String mapName, String path) {
-//        StringBuilder mapPath = new StringBuilder("./src/main/");
-//        mapPath.append(path).append("/").append(mapName).append(".txt");
-
-        String mapPath = String.format("./src/main/%s/%s.txt", path, mapName);
+        String mapPath = String.format("./src/%s/%s.txt", path, mapName);
 
         BufferedWriter w = null;
         try {
-
-            //beautiful use of Decorator Pattern
             w = new BufferedWriter(
                     new OutputStreamWriter(
                             new FileOutputStream(
@@ -176,65 +159,11 @@ public class DraftBuilder {
         }
     }
 
-    //TODO: this method is now redundant - only used in terminal creative mode
-    //TODO: remove before submission
     /**
-     * Adds Entities to a certain position on the Level
-     *
-     * Uses the LevelBuilderContext class
-     * If a key/door is added, user will be prompted to give the
-     * coordinates of the matching door/key
-     *
-     * @param tile position to add entities to
-     * @param entities String of entities to add (in symbol format)
-     * @param sc instance of a scanner if they wish to add a key/door
+     * Adds a non key-door entity to the level at a specified position
+     * @param tile the position to add the entity to
+     * @param entity the entity to be added - cannot be a key/door
      */
-    public void editTile(Vec2i tile, String entities, Scanner sc) { //TODO remove need for scanner
-        LevelBuilder levelBuilder = new LevelBuilder(level);
-
-        char[] eachEnt = entities.toCharArray();
-        for (char ent : eachEnt) {
-            try {
-                if (ent != 'K' && ent != '|') {
-                    levelBuilder.makeAndAttach(tile, ent);
-
-                } else {//// if (ent == 'K') {
-
-                    String[] matching = null;
-                    Vec2i matchingPos = null;
-
-                    while (matching == null) {
-                        System.out.println("Please set the matching Key/Door");
-                        if (sc.hasNextLine()) {
-                            matching = sc.nextLine().split("\\s+");
-                            if (matching.length != 2) {
-                                System.out.println("Error: must be a tile location");
-                                matching = null;
-                                continue;
-                            }
-
-                            matchingPos = new Vec2i(Integer.parseInt(matching[0]),
-                                    Integer.parseInt(matching[1]));
-
-                            if (!level.isValidGridPos(matchingPos) || matchingPos.equals(tile)) {
-                                System.out.println("Error: invalid tile (note: matching tile must be distinct)");
-                                matching = null;
-                            }
-                        }
-                    }
-
-                    if (ent == 'K') {
-                        levelBuilder.addKeyDoor(tile, matchingPos);
-                    } else {
-                        levelBuilder.addKeyDoor(matchingPos, tile);
-                    }
-                }
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-        }
-    }
-
     public void editTileGUI(Vec2i tile, String entity) {
         LevelBuilder levelBuilder = new LevelBuilder(level);
 
@@ -245,6 +174,11 @@ public class DraftBuilder {
         }
     }
 
+    /**
+     * Adds a key/door pairing to the level at specified positions
+     * @param key the position of the key
+     * @param door the position of the door
+     */
     public void editTileKeyDoorGUI(Vec2i key, Vec2i door) {
         LevelBuilder levelBuilder = new LevelBuilder(level);
 
@@ -253,18 +187,6 @@ public class DraftBuilder {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    /**
-     * Deletes the currently open draft and exists Create mode
-     * @param draftName name of the draft
-     * @return true if draft was deleted, false otherwise
-     */
-    public boolean deleteDraft(String draftName) {
-        String draftPath = String.format("./src/main/drafts/%s.txt", draftName);
-        File draft = new File(draftPath);
-
-        return draft.delete();
     }
 
     public Level getLevel() {
@@ -281,5 +203,9 @@ public class DraftBuilder {
 
     public String listObjectives() {
         return level.listObjectives();
+    }
+
+    public Node getView() {
+        return level.getView();
     }
 }

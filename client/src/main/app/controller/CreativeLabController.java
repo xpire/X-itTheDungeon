@@ -10,7 +10,6 @@ import main.app.model.CreativeLabScreen;
 //hover with key-door?
 
 //publish
-//play test
 
 public class CreativeLabController extends AppController<CreativeLabScreen> {
 
@@ -45,7 +44,7 @@ public class CreativeLabController extends AppController<CreativeLabScreen> {
         screen.initialiseOptions(optionsMenu);
         screen.initialiseObjectivesBox(objectivesBox);
 
-        Node view = screen.initialiseView();
+        Node view = screen.getView();
         viewPane.getChildren().add(0, view);
 
         StackPane.setAlignment(view, Pos.CENTER);

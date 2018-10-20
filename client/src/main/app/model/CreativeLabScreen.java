@@ -122,26 +122,22 @@ public class CreativeLabScreen extends AppScreen {
         Button saveAs  = new Button();
         Button resize  = new Button();
         Button publish = new Button();
-        Button delete  = new Button();
         Button exit    = new Button();
 
         save.setText("Save");
         saveAs.setText("Save As");
         resize.setText("Resize");
         publish.setText("Publish");
-        delete.setText("Delete");
         exit.setText("Exit");
 
         //Maybe make the options menu more fxml integrated rather than model
-        save.setOnAction(e -> draftBuilder.saveMap(draftBuilder.getName(), "drafts"));
-        delete.setOnAction(e -> draftBuilder.deleteDraft(draftBuilder.getName()));
+        save.setOnAction(e -> draftBuilder.saveMap(draftBuilder.getName(), "main/drafts"));
         exit.setOnAction(e -> controller.switchScreen(new CreateModeSelectScreen(this.getStage())));
 
         optionsMenu.add(save, 0, 0);
         optionsMenu.add(saveAs, 0, 1);
         optionsMenu.add(resize, 0, 2);
         optionsMenu.add(publish, 0, 5);
-        optionsMenu.add(delete, 0, 6);
         optionsMenu.add(exit, 0, 7);
 
         Label rowsLabel  = new Label("Rows: ");
@@ -292,6 +288,14 @@ public class CreativeLabScreen extends AppScreen {
     }
 
     /**
+     * Saves the current state of the level to a temporary file and runs it in Play Mode
+     */
+    public void testPlay() {
+        draftBuilder.saveMap("tempSave", "save/temp");
+        controller.switchScreen(new PlayLevelScreen(this, this.getStage(), "tempSave", "src/save/temp", 0));
+    }
+
+    /**
      * Updates the GridPane to represent the resized level
      * @param newRow : new number of rows
      * @param newCol : new number of cols
@@ -306,6 +310,12 @@ public class CreativeLabScreen extends AppScreen {
         StackPane.setAlignment(currDraft, Pos.CENTER);
     }
 
+    /**
+     * Adds row and column constraints to the editor GridPane when resizing to a larger map
+     * @param currDraft the editor GridPane
+     * @param newRow new number of rows
+     * @param newCol new number of cols
+     */
     private void addConstraints(GridPane currDraft, int newRow, int newCol) {
         for (int currRow = currDraft.getRowConstraints().size(); currRow < newRow; currRow++) {
             RowConstraints rowConstraints = new RowConstraints();
@@ -322,6 +332,12 @@ public class CreativeLabScreen extends AppScreen {
         }
     }
 
+    /**
+     * Removes row and column constraints from the editor GridPane when resizing to a smaller map
+     * @param currDraft the editor GridPane
+     * @param newRow new number of rows
+     * @param newCol new number of cols
+     */
     private void removeConstraints(GridPane currDraft, int newRow, int newCol) {
         for (int currRow = currDraft.getRowConstraints().size() - 1; currRow >= newRow; currRow--)
             currDraft.getRowConstraints().remove(currRow);
@@ -330,6 +346,12 @@ public class CreativeLabScreen extends AppScreen {
             currDraft.getColumnConstraints().remove(currCol);
     }
 
+    /**
+     * Clears nodes from the editor GridPane when resizing to a smaller map
+     * @param currDraft the editor GridPane
+     * @param newRow new number of rows
+     * @param newCol new number of cols
+     */
     private void removeGridPaneNodes(GridPane currDraft, int newRow, int newCol) {
         Set<Node> deleteNodes = new HashSet<>();
         for (Node child : currDraft.getChildren()) {
@@ -394,10 +416,12 @@ public class CreativeLabScreen extends AppScreen {
                         case "K":
                             if (wasKey) break;
                             draftBuilder.editTileKeyDoorGUI(pos, originalPos);
+                            selectedEntity = "|";
                             break;
                         case "|":
                             if (!wasKey) break;
                             draftBuilder.editTileKeyDoorGUI(originalPos, pos);
+                            selectedEntity = "K";
                             break;
                         default:
                             System.out.println("selected entity was changed");
@@ -462,14 +486,6 @@ public class CreativeLabScreen extends AppScreen {
     }
 
     /**
-     * Initialises the View for the editor GridPane to display the level as it's being made
-     * @return The view of the level in progress
-     */
-    public Node initialiseView() {
-        return draftBuilder.getLevel().getView();
-    }
-
-    /**
      * Sets the objectives of a level to the currently selected checkboxes
      * @param objectives ArrayList of objectives
      */
@@ -482,9 +498,12 @@ public class CreativeLabScreen extends AppScreen {
         }
     }
 
-    public void testPlay() {
-        draftBuilder.saveMap(draftBuilder.getName(), "drafts/temp");
-        controller.switchScreen(new PlayLevelScreen(this, this.getStage(), "tempSave", "src/main/drafts/temp", 0));
+    /**
+     * Gets the view for the current level so that it can be displayed while creating maps
+     * @return The view of the level in progress
+     */
+    public Node getView() {
+        return draftBuilder.getView();
     }
 
     @Override

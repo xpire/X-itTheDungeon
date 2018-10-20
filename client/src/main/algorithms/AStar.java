@@ -68,7 +68,6 @@ public class AStar<T> {
     private List<T> constructPath(Node target, HashMap<T, Node> preds) {
         LinkedList<T> res = new LinkedList<>();
 
-        System.out.println(target);
         res.add(target.vertex);
 
         Node pred = preds.getOrDefault(target.vertex, null);
