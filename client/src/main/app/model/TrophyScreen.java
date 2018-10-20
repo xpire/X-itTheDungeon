@@ -8,7 +8,6 @@ import main.app.controller.TrophyController;
 public class TrophyScreen extends AppScreen{
 
     {
-        title = "X-it the Dungeon";
         fxmlName = "main/app/view/trophy.fxml";
     }
 
