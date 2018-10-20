@@ -8,4 +8,9 @@ public class ReqStructure {
         this.name = name;
         this.mapname = mapname;
     }
+
+    @Override
+    public String toString() {
+        return "Map name: " + mapname + " " + "Author: " + name;
+    }
 }

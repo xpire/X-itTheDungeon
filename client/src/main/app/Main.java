@@ -5,6 +5,7 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 import main.ServiceLocator;
 import main.app.model.MainScreen;
+import main.client.Client;
 import main.content.GameConfig;
 import main.events.EventBus;
 import main.sound.SoundManager;
@@ -29,6 +30,7 @@ public class Main extends Application {
     public static EventBus playModeBus = new EventBus();
     public SoundManager soundManager = SoundManager.getInstance(5);
     public static GameConfig gameConfig;
+    public static Client currClient = new Client();
 
     public static Stage primaryStage;
     public static ServiceLocator locator;
@@ -87,6 +89,7 @@ public class Main extends Application {
 
     @Override
     public void stop() {
+        if (currClient.isLoggedin()) currClient.attemptLogout();
 //        System.out.println(GameConfig.SerialisationProxy.getBuilder().create().toJson(gameConfig));
         new JsonPersistor().save("src/save/localsave.json", gameConfig, GameConfig.SerialisationProxy.getBuilder().create());
     }
