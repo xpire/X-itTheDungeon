@@ -58,8 +58,7 @@ public class LocalManager {
 
     // Does this map exist?
     public static boolean hasMapLocal(ReqStructure request) {
-        File[] files = new File(PATH + request.name +"/").listFiles();
-
+        File[] files = new File(PATH + Main.currClient.getLoggedUser() +"/").listFiles();
         if (files == null || files.length == 0) { return false; }
         else {
             return Arrays.stream(files)
