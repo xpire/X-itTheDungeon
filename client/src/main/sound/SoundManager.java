@@ -1,6 +1,7 @@
 package main.sound;
 
 import com.sun.org.apache.xerces.internal.impl.dv.InvalidDatatypeFacetException;
+import javafx.fxml.FXML;
 import javafx.scene.media.AudioClip;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -147,12 +148,17 @@ public class SoundManager {
             FXVolume = value;
     }
 
+    public double getFXVolume() {return FXVolume;}
+
+
     public void setBGMVolume(double value) {
         if (value >= 0.0 && value <= 1.0)
             BGMVolume = value;
         if (BGMPlayer != null)
             BGMPlayer.setVolume(BGMVolume);
     }
+
+    public double getBGMVolume() {return BGMVolume;}
 
     public void shutDown() {
         soundPool.shutdown();
