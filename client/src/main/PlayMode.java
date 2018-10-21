@@ -254,5 +254,9 @@ public class PlayMode implements Game {
         level.addEventHandler(type, handler);
     }
 
+    public boolean checkImmediateCompletion() {
+        return level.checkAchievedAllObjectives();
+    }
+
     public Level getLevel() { return level; }
 }

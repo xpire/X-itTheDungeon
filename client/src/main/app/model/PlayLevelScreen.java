@@ -7,6 +7,7 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import main.PlayMode;
+import main.Toast;
 import main.app.controller.AppController;
 import main.app.controller.PlayLevelController;
 import main.client.util.LocalManager;
@@ -46,10 +47,7 @@ public class PlayLevelScreen extends AppScreen {
         Pane layer = controller.getDynamicLayer();
         layer.getChildren().remove(world.getView());
         world = new PlayMode(scene, filename, filePath);
-        if (isPublishTest) world.addEventHandler(LevelEvent.LEVEL_PASSED, e-> {
-            LocalManager.LocalDraftAdd(filename, world.getLevel().toFile(filename, "asset/buffer/"));
-            controller.switchScreen(new CreateModeSelectScreen(this.getStage()));
-        });
+        addPublishHandler(world, filename);
 
         world.setLevelNum(levelNum);
         layer.getChildren().add(world.getView());
@@ -69,10 +67,7 @@ public class PlayLevelScreen extends AppScreen {
         Pane layer = controller.getDynamicLayer();
 
         world = new PlayMode(scene, filename, filePath);
-        if (isPublishTest) world.addEventHandler(LevelEvent.LEVEL_PASSED, e-> {
-            LocalManager.LocalDraftAdd(filename, world.getLevel().toFile(filename, "asset/buffer/"));
-            controller.switchScreen(new CreateModeSelectScreen(this.getStage()));
-        });
+        addPublishHandler(world, filename);
         world.setLevelNum(levelNum);
         layer.getChildren().add(world.getView());
         StackPane.setAlignment(world.getView(), Pos.CENTER);
@@ -83,4 +78,14 @@ public class PlayLevelScreen extends AppScreen {
     protected AppController getController() {
         return controller;
     }
+
+    private void addPublishHandler(PlayMode world, String filename) {
+        if (isPublishTest) {
+            world.addEventHandler(LevelEvent.LEVEL_PASSED, e -> {
+                LocalManager.LocalDraftAdd(filename, world.getLevel().toFile(filename, "asset/buffer/"));
+                controller.switchScreen(new CreateModeSelectScreen(this.getStage()));
+            });
+        }
+    }
+
 }
