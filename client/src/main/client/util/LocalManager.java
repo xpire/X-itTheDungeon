@@ -9,12 +9,28 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
+/**
+ * Manages all server requests and parses data
+ */
 public class LocalManager {
+<<<<<<< HEAD
+=======
+
+    /**
+     * Class representing maps stored in GSON form
+     */
+>>>>>>> client package javadoc done
     public static class LocalStructure {
         public String username;
         public String mapname;
         public String mapContent;
 
+        /**
+         * Generic constructor
+         * @param username : username of Gamer
+         * @param mapname : name of the stored map
+         * @param mapContent : content of map in single string
+         */
         public LocalStructure(String username, String mapname, String mapContent) {
             this.username = username;
             this.mapname = mapname;
@@ -32,7 +48,13 @@ public class LocalManager {
 
     }
 
+    /**
+     * Generic constructor
+     */
     public class MapStruct {
+        /**
+         * Class representing the file name of a level
+         */
         public class Header {
             public String name;
             public String mapname;
@@ -45,6 +67,10 @@ public class LocalManager {
     private static String PATH = "./src/asset/local/";
     private static File localFiles = new File(PATH);
 
+    /**
+     * Creates a local directory for a user
+     * @param username : username of the Gamer
+     */
     public static void addUser(String username) {
 
         if (!new File(PATH + username).mkdirs() ||
@@ -54,7 +80,11 @@ public class LocalManager {
         }
     }
 
-    // Has this user logged on before?
+    /**
+     * Check if the user has logged in before
+     * @param username : username of the Gamer
+     * @return true if they have logged in before
+     */
     public static boolean hasLogged(String username) {
         File[] fileList = localFiles.listFiles();
         if (fileList == null || fileList.length == 0) { return false; }
@@ -68,7 +98,12 @@ public class LocalManager {
         }
     }
 
-    // Does this map exist?
+    /**
+     * Checks if a map exists locally
+     * @param request : request to server
+     * @param path : path of the map
+     * @return true if map exists
+     */
     public static boolean hasMapLocal(ReqStructure request, String path) {
         File[] files = new File(PATH + Main.currClient.getLoggedUser() + "/" + path + "/").listFiles();
 
@@ -86,10 +121,10 @@ public class LocalManager {
         }
     }
 
-    //TODO Certain username cannot be made in this case, default and unknown
     /**
      * Download the map and put in local directory
      * @param request the provided request by the user
+     * @param requestedUser : the Gamer's username
      */
     public static void addMap(ReqStructure request, String requestedUser) {
         File wantDir = new File(PATH + requestedUser + "/downloads/" + request.mapname + ".json");
@@ -119,7 +154,13 @@ public class LocalManager {
         }
     }
 
-    // Overloaded method
+    /**
+     * Overloaded method
+     * @param username : Gamer's username
+     * @param mapName : name of map being added
+     * @param mapContent : String content of the map
+     * @param where : path of the map
+     */
     public static void addMap(String username, String mapName, String mapContent, String where) {
 
         System.out.println(mapName);
@@ -152,7 +193,11 @@ public class LocalManager {
 
     }
 
-    // Fetches the header of all the local maps to display for play
+    /**
+     * Gets the local maps
+     * @param loggedUser : Username of the Gamer
+     * @return : List of local maps
+     */
     public static ArrayList<LocalStructure> fetchLocal(String loggedUser) {
         File usrDir = new File(PATH + loggedUser + "/downloads/");
         File[] files = usrDir.listFiles();
@@ -165,7 +210,11 @@ public class LocalManager {
             return new ArrayList<>();
     }
 
-    // Fetches the header of all the local maps to display for play
+    /**
+     * Gets the local drafts
+     * @param loggedUser : username of the Gamer
+     * @return : List of local drafts
+     */
     public static ArrayList<LocalStructure> fetchLocalDraft(String loggedUser) {
         File usrDir;
 
@@ -182,6 +231,11 @@ public class LocalManager {
             return new ArrayList<>();
     }
 
+    /**
+     * Converts a file to a LocalStructure
+     * @param file : file to be converted
+     * @return the LocalStructure
+     */
     private static LocalStructure parseStruct(File file) {
         // Parse the file into a map
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
@@ -194,6 +248,11 @@ public class LocalManager {
         return null;
     }
 
+    /**
+     * Adds a draft locally
+     * @param mapName : name of the draft
+     * @param mapContent : Drafts file
+     */
     public static void LocalDraftAdd(String mapName, File mapContent) {
 
         String mapStringContent = parseMap(mapContent);
@@ -231,6 +290,11 @@ public class LocalManager {
         else { System.out.println("Something is wrong with buffer"); }
     }
 
+    /**
+     * Converts a file to a String
+     * @param mapContent File to be converted
+     * @return the single string
+     */
     private static String parseMap(File mapContent) {
         System.out.println(mapContent);
         try (BufferedReader reader = new BufferedReader(new FileReader(mapContent))) {
@@ -248,6 +312,10 @@ public class LocalManager {
         return null;
     }
 
+    /**
+     * Moves a draft to a specific location
+     * @param x place to move to
+     */
     public static void moveDraftTo(LocalStructure x) {
         // NOTE this might be null but shouldnt
 
@@ -284,6 +352,11 @@ public class LocalManager {
         }
     }
 
+    /**
+     * Overloaded method
+     * @param x : place to move to
+     * @param changedName : new name of the draft
+     */
     public static void moveDraftTo(LocalStructure x, String changedName) {
         // NOTE this might be null but shouldnt
 

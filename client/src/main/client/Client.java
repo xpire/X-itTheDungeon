@@ -240,51 +240,15 @@ public class Client {
         return null;
     }
 
+    /**
+     * Checks if a user is logged in
+     * @return true if logged in
+     */
     public boolean isLoggedin() { return Loggedin; }
 
+    /**
+     * Gets the user that is logged in
+     * @return the user that is logged in
+     */
     public String getLoggedUser() { return LoggedUser; }
-
-
-//    public static void main(String[] args) {
-//        String testName = "User5";
-//        String testPassword = "Thisisapassword1";
-//
-//        Client currClient = new Client();
-//
-//        // Testing register
-//        // System.out.println(currClient.attemptRegister(testName, testPassword));
-//
-//        // Test Login feature
-//        System.out.println(currClient.attemptLogin(testName, testPassword));
-//        //Testing login feature
-//        System.out.println("Is Loggedin: " + currClient.isLoggedin());
-//        System.out.println("Who logged in: " + currClient.getLoggedUser());
-//        System.out.println();
-//
-//        // Try logging off
-//        System.out.println(currClient.attemptLogout());
-//        System.out.println("Is Loggedin: " + currClient.isLoggedin());
-//        System.out.println("Who logged in: " + currClient.getLoggedUser());
-//        System.out.println();
-//
-//        // Try pulling all map from server
-//        System.out.println(currClient.attemptLogin(testName, testPassword));
-//        System.out.println(currClient.pullGlobalMaps());
-//        System.out.println();
-//
-//        // Try Request specific map
-//        System.out.println(currClient.RequestSpecMap("Even","generic_1"));
-//        System.out.println();
-//
-//        //Try Uploading a another map
-//        System.out.println(currClient.attemptUpload("generic_4", "This is just a test and is to be deleted later"));
-//        System.out.println();
-//
-//        // Try logging off
-//        System.out.println(currClient.attemptLogout());
-//        System.out.println("Is Loggedin: " + currClient.isLoggedin());
-//        System.out.println("Who logged in: " + currClient.getLoggedUser());
-//        System.out.println();
-//
-//    }
 }

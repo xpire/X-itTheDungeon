@@ -1,5 +1,8 @@
 package  main.client.validator;
 
+/**
+ * Checker interface
+ */
 public interface Checker {
     /**
      * Check that the those input are allowed to be send to server
