@@ -63,7 +63,11 @@ public class PlayMode implements Game {
         level = new MapLoader().loadLevel(levelName, levelPath);
 
         if (isPublishTest) level.addEventHandler(LevelEvent.LEVEL_PASSED, e -> {
-            LocalManager.LocalDraftAdd(level.getName(), level.save());
+            //LocalManager.LocalDraftAdd(level.getName(), level.toFile());
+            System.out.println("YOU WON, CAN NOW PUBLISH");
+            System.out.println("YOU WON, CAN NOW PUBLISH");
+            System.out.println("YOU WON, CAN NOW PUBLISH");
+            System.out.println("YOU WON, CAN NOW PUBLISH");
         });
 
         avatar = level.getAvatar();

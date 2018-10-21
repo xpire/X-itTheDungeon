@@ -255,11 +255,10 @@ public abstract class Entity {
     }
 
     public Image getImage(String path) {
-        FileInputStream inputStream = null;
-        StringBuilder sb = new StringBuilder();
-        sb.append("./src/asset/").append(path);
+        FileInputStream inputStream;
+        String imagePath = String.format("./src/asset/%s", path);
         try {
-            inputStream = new FileInputStream(sb.toString());
+            inputStream = new FileInputStream(imagePath);
             return new Image(inputStream);
         } catch (FileNotFoundException e) {
             e.printStackTrace();

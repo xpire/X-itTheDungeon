@@ -11,6 +11,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.effect.DropShadow;
+import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -26,6 +27,7 @@ import main.entities.terrain.*;
 import main.content.ObjectiveFactory;
 import main.maploading.DraftBuilder;
 import main.maploading.InvalidMapException;
+import main.math.Vec2d;
 import main.math.Vec2i;
 import main.sprite.SpriteView;
 
@@ -74,7 +76,7 @@ public class CreativeLabScreen extends AppScreen {
      * Initialises the ToolBox GridPlane on the scene
      */
     public void initialiseToolBox(GridPane toolbox) {
-        int numCols = 11, numRows = 2;
+        int numCols = 12, numRows = 2;
 
         initialiseGridPane(toolbox, numCols, numRows, true);
         ArrayList<SpriteView> spriteViews = new ArrayList<>();
@@ -104,10 +106,25 @@ public class CreativeLabScreen extends AppScreen {
         addSelectHandler(spriteViews, new Hound(temp), 9, 1);
         addSelectHandler(spriteViews, new Coward(temp), 10, 1);
 
+        addEraser(spriteViews);
+
+
         for (Node n : toolbox.getChildren()) {
             GridPane.setHalignment(n, HPos.CENTER);
             GridPane.setValignment(n, VPos.CENTER);
         }
+    }
+
+    private void addEraser(ArrayList<SpriteView> spriteViews) {
+        SpriteView eraser = new SpriteView(
+                new Image("./src/asset/sprite/eraser.png"), new Vec2d(-8, -8), 2, 2);
+        eraser.setOnMouseClicked(e -> {
+            selectedEntity = "E";
+            setSelectedGlow(spriteViews, eraser);
+        });
+
+        spriteViews.add(eraser);
+        controller.getToolbox().add(eraser, 11, 0, 2, 1);
     }
 
     /**
@@ -131,11 +148,9 @@ public class CreativeLabScreen extends AppScreen {
         exit.setText("Exit");
 
         //Maybe make the options menu more fxml integrated rather than model
-        save.setOnAction(e -> draftBuilder.saveMap(draftBuilder.getName(), "main/drafts"));
+        save.setOnAction(e -> draftBuilder.getLevel().toFile(draftBuilder.getName(), "main/drafts"));
         exit.setOnAction(e -> controller.switchScreen(new CreateModeSelectScreen(this.getStage())));
-        publish.setOnAction(e -> {
-            testPlay(true);
-        });
+        publish.setOnAction(e -> testPlay(true));
 
         optionsMenu.add(save, 0, 0);
         optionsMenu.add(saveAs, 0, 1);
@@ -145,12 +160,14 @@ public class CreativeLabScreen extends AppScreen {
 
         Label rowsLabel  = new Label("Rows: ");
         rowsLabel.setMinWidth(15.0);
-        TextField newRow = new TextField();
+        TextField newRow = new TextField(String.valueOf(draftBuilder.getNRows()));
+        newRow.setOnAction(e -> resize.fire());
         newRow.setMaxWidth(45.0);
 
         Label colsLabel  = new Label("Cols: ");
         colsLabel.setMinWidth(15.0);
-        TextField newCol = new TextField();
+        TextField newCol = new TextField(String.valueOf(draftBuilder.getNCols()));
+        newCol.setOnAction(e -> resize.fire());
         newCol.setMaxWidth(45.0);
 
         HBox resizeRow = new HBox();
@@ -167,10 +184,10 @@ public class CreativeLabScreen extends AppScreen {
                 int newRowSize = Integer.parseInt(newRow.getText());
                 int newColSize = Integer.parseInt(newCol.getText());
 
-                if (newRowSize < 0 || newColSize < 0) {
-                    System.out.println("Positive numbers please");
-                    newRow.clear();
-                    newCol.clear();
+                if (!new Vec2i(newColSize, newRowSize).within(new Vec2i(4, 4), new Vec2i(24, 24))) {
+                    System.out.println("Size between 4x4 and 24x24 please");
+                    newRow.setText(String.valueOf(draftBuilder.getNRows()));
+                    newCol.setText(String.valueOf(draftBuilder.getNCols()));
                     return;
                 }
 
@@ -179,9 +196,9 @@ public class CreativeLabScreen extends AppScreen {
 
                 draftBuilder.displayLevel();
             } catch (NumberFormatException nfe) {
-                System.out.println(nfe.getMessage());
-                newRow.clear();
-                newCol.clear();
+                nfe.printStackTrace();
+                newRow.setText(String.valueOf(draftBuilder.getNRows()));
+                newCol.setText(String.valueOf(draftBuilder.getNCols()));
             }
         });
 
@@ -295,7 +312,7 @@ public class CreativeLabScreen extends AppScreen {
      */
     public void testPlay(boolean isPublishTest) {
 
-        draftBuilder.saveMap("tempSave", "save/temp");
+        draftBuilder.getLevel().toFile("tempSave", "save/temp");
         controller.switchScreen(new PlayLevelScreen(this, this.getStage(), "tempSave", "src/save/temp", 0, isPublishTest));
     }
 

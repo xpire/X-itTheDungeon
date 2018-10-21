@@ -89,76 +89,76 @@ public class DraftBuilder {
         return level.getNCols();
     }
 
-    /**
-     * Saves the current state of the draft to a .txt file which can
-     * be later loaded by the MapLoader
-     *
-     * Opens a new txt file for writing,
-     * Writes the dimensions
-     * Writes the Levels body
-     * Writes the objective
-     * Writes the key-door mapping
-     *
-     * @param mapName name of the draft
-     * @param path save location, root at main
-     */
-    public void saveMap(String mapName, String path) {
-        String mapPath = String.format("./src/%s/%s.txt", path, mapName);
-
-        BufferedWriter w = null;
-        try {
-            w = new BufferedWriter(
-                    new OutputStreamWriter(
-                            new FileOutputStream(
-                                    new File(mapPath))));
-
-            int nRow = getNRows();
-            int nCol = getNCols();
-
-            //set the map size
-            w.write(nRow + "\t" + nCol);
-            w.append("\n");
-
-            //setting objectives
-            w.write(level.listObjectives());
-            w.newLine();
-
-            //set the main body of the map
-            StringBuilder metaData = new StringBuilder();
-
-            for (int i = 0; i < nRow; i++) {
-                for (int j = 0; j < nCol; j++) {
-                    Vec2i pos = new Vec2i(j, i);
-                    StringBuilder sb = new StringBuilder();
-
-                    Iterator<Entity> it = level.getEntitiesAt(pos);
-
-                    while (it.hasNext()) {
-                        Entity e = it.next();
-
-                        sb.append(e.getSymbol());
-                        if (e.getMetaData() != null)
-                            metaData.append(e.getMetaData()).append("\n");
-                    }
-
-                    w.write(sb.toString() + "\t");
-                }
-                w.newLine();
-            }
-
-            //set the key-door mapping
-            w.write(metaData.toString());
-
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-        } finally {
-            try {
-                if (w != null) w.close();
-            } catch (IOException e) {
-                System.out.println(e.getMessage());
-            }
-        }
-    }
+//    /**
+//     * Saves the current state of the draft to a .txt file which can
+//     * be later loaded by the MapLoader
+//     *
+//     * Opens a new txt file for writing,
+//     * Writes the dimensions
+//     * Writes the Levels body
+//     * Writes the objective
+//     * Writes the key-door mapping
+//     *
+//     * @param mapName name of the draft
+//     * @param path save location, root at main
+//     */
+//    public void saveMap(String mapName, String path) {
+//        String mapPath = String.format("./src/%s/%s.txt", path, mapName);
+//
+//        BufferedWriter w = null;
+//        try {
+//            w = new BufferedWriter(
+//                    new OutputStreamWriter(
+//                            new FileOutputStream(
+//                                    new File(mapPath))));
+//
+//            int nRow = getNRows();
+//            int nCol = getNCols();
+//
+//            //set the map size
+//            w.write(nRow + "\t" + nCol);
+//            w.append("\n");
+//
+//            //setting objectives
+//            w.write(level.listObjectives());
+//            w.newLine();
+//
+//            //set the main body of the map
+//            StringBuilder metaData = new StringBuilder();
+//
+//            for (int i = 0; i < nRow; i++) {
+//                for (int j = 0; j < nCol; j++) {
+//                    Vec2i pos = new Vec2i(j, i);
+//                    StringBuilder sb = new StringBuilder();
+//
+//                    Iterator<Entity> it = level.getEntitiesAt(pos);
+//
+//                    while (it.hasNext()) {
+//                        Entity e = it.next();
+//
+//                        sb.append(e.getSymbol());
+//                        if (e.getMetaData() != null)
+//                            metaData.append(e.getMetaData()).append("\n");
+//                    }
+//
+//                    w.write(sb.toString() + "\t");
+//                }
+//                w.newLine();
+//            }
+//
+//            //set the key-door mapping
+//            w.write(metaData.toString());
+//
+//        } catch (IOException e) {
+//            System.out.println(e.getMessage());
+//        } finally {
+//            try {
+//                if (w != null) w.close();
+//            } catch (IOException e) {
+//                System.out.println(e.getMessage());
+//            }
+//        }
+//    }
 
     /**
      * Adds a non key-door entity to the level at a specified position
