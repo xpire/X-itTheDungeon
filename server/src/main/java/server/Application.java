@@ -7,7 +7,7 @@ import static server.controller.util.JsonUtil.mapJson;
 import static spark.Spark.*;
 
 /**
- * Main class to run the server, as well as read all map from directory
+ * Main class to run the server, as well as read all maps from directory
  * Main controller class.
  * @author Peiyu Tang 2018 Sept.
  */
@@ -21,7 +21,7 @@ public class Application {
         post(Path.Web.LOGOUT, loginController.handleLogoutPost);
         post(Path.Web.REGISTER, loginController.handleRegisterPost);
 
-        // Handles request in requesting map from client
+        // Handles request in requesting maps from client
         post(Path.Web.REQUESTONE, mapController.getOne, mapJson());
         get(Path.Web.REQUESTALL, mapController.getAllMaps, headerJson());
         post(Path.Web.UPLOAD, mapController.addNewMap);

@@ -7,16 +7,16 @@ import spark.*;
 import static server.controller.util.RequestUtil.*;
 
 /**
- * The class which handles map data manipulation.
+ * The class which handles maps data manipulation.
  * @author Peiyu Tang 2018 Oct.
  */
 public class mapController {
 
     private static final String NO_LOGIN = "Not logged in";
     private static final String NO_VAR = "No variable";
-    private static final String DUP_MAP = "Duplicate map names";
-    private static final String MAP_SUCC = "Create map successful";
-    public static final String MAP_FAIL = "Cannot find specified map.";
+    private static final String DUP_MAP = "Duplicate maps names";
+    private static final String MAP_SUCC = "Create maps successful";
+    public static final String MAP_FAIL = "Cannot find specified maps.";
 
     /**
      * Handling all maps fetching
@@ -28,7 +28,7 @@ public class mapController {
     };
 
     /**
-     * Handle when user request a specific map
+     * Handle when user request a specific maps
      */
     public static Route getOne = (Request request, Response response) -> {
         // If the user has logged in

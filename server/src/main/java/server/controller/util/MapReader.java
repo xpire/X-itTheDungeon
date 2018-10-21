@@ -27,7 +27,7 @@ public class MapReader {
     }
 
     /**
-     * @return List of headers in the map pool
+     * @return List of headers in the maps pool
      */
     public List<Header> getHeader() {
         return files
@@ -39,7 +39,7 @@ public class MapReader {
     /**
      * Parse the header for each file to return
      * @param currFile Current file object to parse
-     * @return The headers of the required map
+     * @return The headers of the required maps
      */
     public Header parseHeader(File currFile) {
         try (BufferedReader reader = new BufferedReader(new FileReader(currFile))) {
@@ -53,10 +53,10 @@ public class MapReader {
     }
 
     /**
-     * Return a specific map
+     * Return a specific maps
      * @param currUser Requested username
      * @param wantedMap Requested wantedMap
-     * @return return the specific map
+     * @return return the specific maps
      */
     public Map getMap(String currUser, String wantedMap) {
         Header currHeader = new Header (currUser, wantedMap);
@@ -68,34 +68,34 @@ public class MapReader {
     }
 
     /**
-     * Parse the map from a file
+     * Parse the maps from a file
      * @param file Requested file
-     * @return The map object from
+     * @return The maps object from
      */
     private Map parseMap(File file) {
-        // Parse the file into a map
+        // Parse the file into a maps
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             // Find the json object
             String json = reader.readLine();
             return new Gson().fromJson(json,Map.class);
         }
         catch (FileNotFoundException e) {
-            System.out.println("Internal Server Error: Not found file in parsing map.");
+            System.out.println("Internal Server Error: Not found file in parsing maps.");
             stop();
         }
-        catch (IOException e) { Application.forceStop("Internal Server Error: Not found file in parsing map."); }
+        catch (IOException e) { Application.forceStop("Internal Server Error: Not found file in parsing maps."); }
         return null;
     }
 
     /**
-     * Add another map into the database
+     * Add another maps into the database
      * @param userName The requested username
      * @param mapName The Map name preferred
-     * @param mapContent the content of the map
+     * @param mapContent the content of the maps
      */
     public boolean addMap(String userName, String mapName, String mapContent) {
         String NEW_PATH = PATH + mapName + ".json";
-        // Instantiate new map
+        // Instantiate new maps
         Map map = new Map(new Header(userName, mapName), mapContent);
         if (thereIs(map) != null) return false;
 
@@ -112,15 +112,15 @@ public class MapReader {
             }
             else { return false; }
         }
-        catch (IOException e) { Application.forceStop("Internal Server Error: Cannot add map due to file error."); }
+        catch (IOException e) { Application.forceStop("Internal Server Error: Cannot add maps due to file error."); }
         return false;
     }
 
     /**
-     * Check that this map can be added or not not, criteria is that maps can be he same name but the user cannot
+     * Check that this maps can be added or not not, criteria is that maps can be he same name but the user cannot
      * be the same.
-     * @param map The requested map
-     * @return If the map can be added
+     * @param map The requested maps
+     * @return If the maps can be added
      */
     private Map thereIs(Map map) {
         return files
