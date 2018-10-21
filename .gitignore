@@ -257,6 +257,5 @@ server/.idea/
 client/*.iml
 server/*.iml
 
-client/*/save/
+client/*/save/*
 
-client/src/asset/local/*
