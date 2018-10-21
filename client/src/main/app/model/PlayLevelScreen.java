@@ -71,13 +71,4 @@ public class PlayLevelScreen extends AppScreen {
     protected AppController getController() {
         return controller;
     }
-//
-//    private void addPublishHandler(LevelPlayer world, String filename) {
-//        if (isPublishTest) {
-//            world.addEventHandler(LevelEvent.LEVEL_PASSED, e -> {
-//                LocalManager.LocalDraftAdd(filename, world.getLevel().toFile(filename, "asset/buffer/"));
-//                controller.switchScreen(new CreateModeSelectScreen(this.getStage()));
-//            });
-//        }
-//    }
 }
