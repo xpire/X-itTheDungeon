@@ -7,10 +7,17 @@ import main.app.model.PlayLevelSelectScreen;
 import main.sound.SoundManager;
 import main.app.model.*;
 
+/**
+ * Controller for the PlayMode Select screen
+ */
 public class PlayModeSelectController extends AppController {
 
     private SoundManager soundManager = SoundManager.getInstance(5);
 
+    /**
+     * Generic constructor
+     * @param screen : the corresponding screen
+     */
     public PlayModeSelectController(AppScreen screen) {
         super(screen);
     }
@@ -20,13 +27,11 @@ public class PlayModeSelectController extends AppController {
 
     }
 
-
     @FXML
     public void onStoryBtnPressed() {
         switchScreen(new PlayLevelSelectScreen(screen.getStage()));
         soundManager.playSoundEffect("Item");
     }
-
 
     @FXML
     public void onBackBtnPressed() {

@@ -1,15 +1,12 @@
 package main.maploading;
 
 import javafx.scene.Group;
-import javafx.scene.Node;
 import main.Level;
 import main.content.ObjectiveFactory;
-import main.entities.Entity;
 import main.math.Vec2i;
 
-import java.io.*;
+import java.io.File;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import static main.content.ObjectiveFactory.makeObjective;
 
@@ -89,77 +86,6 @@ public class DraftBuilder {
         return level.getNCols();
     }
 
-//    /**
-//     * Saves the current state of the drafts to a .txt file which can
-//     * be later loaded by the MapLoader
-//     *
-//     * Opens a new txt file for writing,
-//     * Writes the dimensions
-//     * Writes the Levels body
-//     * Writes the objective
-//     * Writes the key-door mapping
-//     *
-//     * @param mapName name of the drafts
-//     * @param path save location, root at main
-//     */
-//    public void saveMap(String mapName, String path) {
-//        String mapPath = String.format("./src/%s/%s.txt", path, mapName);
-//
-//        BufferedWriter w = null;
-//        try {
-//            w = new BufferedWriter(
-//                    new OutputStreamWriter(
-//                            new FileOutputStream(
-//                                    new File(mapPath))));
-//
-//            int nRow = getNRows();
-//            int nCol = getNCols();
-//
-//            //set the map size
-//            w.write(nRow + "\t" + nCol);
-//            w.append("\n");
-//
-//            //setting objectives
-//            w.write(level.listObjectives());
-//            w.newLine();
-//
-//            //set the main body of the map
-//            StringBuilder metaData = new StringBuilder();
-//
-//            for (int i = 0; i < nRow; i++) {
-//                for (int j = 0; j < nCol; j++) {
-//                    Vec2i pos = new Vec2i(j, i);
-//                    StringBuilder sb = new StringBuilder();
-//
-//                    Iterator<Entity> it = level.getEntitiesAt(pos);
-//
-//                    while (it.hasNext()) {
-//                        Entity e = it.next();
-//
-//                        sb.append(e.getSymbol());
-//                        if (e.getMetaData() != null)
-//                            metaData.append(e.getMetaData()).append("\n");
-//                    }
-//
-//                    w.write(sb.toString() + "\t");
-//                }
-//                w.newLine();
-//            }
-//
-//            //set the key-door mapping
-//            w.write(metaData.toString());
-//
-//        } catch (IOException e) {
-//            System.out.println(e.getMessage());
-//        } finally {
-//            try {
-//                if (w != null) w.close();
-//            } catch (IOException e) {
-//                System.out.println(e.getMessage());
-//            }
-//        }
-//    }
-
     /**
      * Adds a non key-door entity to the level at a specified position
      * @param tile the position to add the entity to
@@ -190,38 +116,75 @@ public class DraftBuilder {
         }
     }
 
+    /**
+     * Getter for the associated level
+     * @return the level
+     */
     public Level getLevel() {
         return level;
     }
 
+    /**
+     * Remove all entities at a position
+     * @param pos the position
+     */
     public void eraseEntitiesAt(Vec2i pos) {
         level.removeAllAt(pos, true);
     }
 
+    /**
+     * Remove all set objectives
+     */
     public void clearObjectives() {
         level.clearObjectives();
     }
 
+    /**
+     * List the current objectives in string form
+     * @return
+     */
     public String listObjectives() {
         return level.listObjectives();
     }
 
+    /**
+     * Getter for the view
+     * @return the levels view
+     */
     public Group getView() {
         return level.getView();
     }
 
+    /**
+     * Sets the name of the level
+     * @param newName the new name
+     */
     public void setName(String newName) {
         level.setName(newName);
     }
 
+    /**
+     * Saves a level as a file
+     * @param mapName : name of the map
+     * @param path : path to save to
+     * @return the File saved
+     */
     public File toFile(String mapName, String path) {
         return level.toFile(mapName, path);
     }
 
+    /**
+     * Checks if a level is trivially completable
+     * @return true if all objectives are already done
+     */
     public boolean isTrivialLevel() {
         return level.checkAchievedAllObjectives();
     }
 
+    /**
+     * checks if the level contains an exit
+     * @return true if exit is found
+     */
     public boolean containsExit() {
         return level.containsExit();
     }

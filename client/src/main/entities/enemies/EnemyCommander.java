@@ -48,11 +48,18 @@ public class EnemyCommander {
         return getEnemies().stream().anyMatch(Enemy::isHunter);
     }
 
-
+    /**
+     * Getter for the Avatars position
+     * @return the avatars position
+     */
     public Vec2i getAvatarPos() {
         return avatar.getGridPos();
     }
 
+    /**
+     * Checks if the avatar is enraged by an invincibility potion
+     * @return true if avatar is enraged
+     */
     public boolean isAvatarRaged() {
         return avatar.isRaged();
     }

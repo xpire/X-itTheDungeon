@@ -3,12 +3,9 @@ package main.app.model;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
-import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Box;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import main.Level;
 import main.app.controller.AppController;
@@ -22,6 +19,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+/**
+ * Screen for the Creative Mode Selection page
+ */
 public class CreateModeSelectScreen extends AppScreen{
 
     private static final double PREVIEW_SIZE = 270.0;
@@ -33,11 +33,19 @@ public class CreateModeSelectScreen extends AppScreen{
 
     private CreateModeSelectController controller;
 
+    /**
+     * Generic constructor
+     * @param stage : corresponding stage
+     */
     public CreateModeSelectScreen(Stage stage) {
         super(stage);
         this.controller = new CreateModeSelectController(this);
     }
 
+    /**
+     * Initialises the view of all drafts in an Accordion structure
+     * @param draftsView : the reference to the Accordion from JavaFX
+     */
     public void initialiseDraftList(Accordion draftsView) {
         try {
             Files.walk(Paths.get("src/main/drafts"))
@@ -48,6 +56,11 @@ public class CreateModeSelectScreen extends AppScreen{
         }
     }
 
+    /**
+     * Creates TitledPanes to be added to the accordion
+     * @param path : path of the draft to be included in the TitledPane
+     * @return The finished TitledPane
+     */
     private TitledPane makeTitlePane(Path path) {
         File file       = path.toFile();
         String filename = getFilenameWithoutExt(file);
@@ -77,6 +90,12 @@ public class CreateModeSelectScreen extends AppScreen{
         return title;
     }
 
+    /**
+     * Creates the renaming section of each TitledPane
+     * @param file : the file the TitledPane contains
+     * @param filename : name of the file
+     * @return A HBox which contains all components
+     */
     private HBox makeNameBox(File file, String filename) {
         HBox boxName       = new HBox();
         Label lblName      = new Label("Name: ");
@@ -84,6 +103,7 @@ public class CreateModeSelectScreen extends AppScreen{
         Button btnOk       = new Button("OK");
         Button btnRename   = new Button("Rename");
 
+        boxName.setSpacing(10);
         txtName.setEditable(false);
         btnOk.setVisible(false);
 
@@ -109,6 +129,11 @@ public class CreateModeSelectScreen extends AppScreen{
         return boxName;
     }
 
+    /**
+     * Adds a delete button to each TitledPane
+     * @param file : file which the TitledPane contains
+     * @return the completed delete button
+     */
     private Button makeDeleteBtn(File file) {
         Button deleteBtn = new Button();
         deleteBtn.setText("Delete");
@@ -120,6 +145,11 @@ public class CreateModeSelectScreen extends AppScreen{
         return deleteBtn;
     }
 
+    /**
+     * Adds a resumeCreating button to each TitledPane
+     * @param filename : name of the file contained by the TitledPane
+     * @return the completed resume button
+     */
     private Button makeResumeBtn(String filename) {
         Button resumeBtn = new Button();
         resumeBtn.setText("Resume Working");
@@ -130,11 +160,22 @@ public class CreateModeSelectScreen extends AppScreen{
         return resumeBtn;
     }
 
+    /**
+     * Gets the name of a file without its extension
+     * @param file : File you want the name of
+     * @return the file's name
+     */
     private String getFilenameWithoutExt(File file) {
         String filename = file.getName();
         return filename.substring(0, filename.lastIndexOf('.'));
     }
 
+    /**
+     * Creates the preview pane within each TitledPane which shows a snapshot
+     * of the draft in progress
+     * @param filename : name of the file contained by the TitledPane
+     * @return the Pane which contains the preview
+     */
     private Pane makePreview(String filename) {
         StackPane pane = new StackPane();
 
@@ -158,10 +199,20 @@ public class CreateModeSelectScreen extends AppScreen{
         return pane;
     }
 
+    /**
+     * Logic to rename a file
+     * @param file : File to be renamed
+     * @param newName : new name of the file
+     * @return : true if rename was successful
+     */
     private boolean renameFile(File file, String newName) {
         return file.renameTo(new File(file.getParentFile(), newName));
     }
 
+    /**
+     * Initialises a new Draft
+     * @param draftName : name for the new draft
+     */
     public void initialiseNewDraft(String draftName) {
         DraftBuilder draftBuilder = new DraftBuilder(8, 8, draftName);
         controller.switchScreen(new CreativeLabScreen(this.getStage(), draftBuilder));

@@ -5,34 +5,34 @@ import javafx.scene.input.KeyEvent;
 
 import java.util.HashMap;
 
+/**
+ * Class which handles input during a game
+ */
 public class Input {
 
-    // 1. allow binding switching
-
-    // 2. allow for multiple user actions per key-code by
-    // storing a list of user actions instead
-
-//    private boolean isProcessing = false;
     private boolean isListening = false;
 
     private HashMap<KeyCode, UserAction> bindings = new HashMap<>();
 
+    /**
+     * Begins listening for input
+     */
     public void startListening() {
         isListening = true;
     }
 
+    /**
+     * Stops listening for input
+     */
     public void stopListening() {
         isListening = false;
         bindings.values().forEach(UserAction::stopAction);
     }
-//    public void startProcessing() {
-//        isProcessing = true;
-//    }
-//
-//    public void stopProcessing() {
-//        isProcessing = false;
-//    }
 
+    /**
+     * Actions when a key is pressed
+     * @param evt the key event which occurs
+     */
     public void onKeyEvent(KeyEvent evt) {
         if (!isListening) return;
 
@@ -45,23 +45,35 @@ public class Input {
         }
     }
 
+    /**
+     * Adds a key binding to the game
+     * @param code : Keyboard stroke
+     * @param action : In game action
+     */
     public void addBinding(KeyCode code, UserAction action) {
         bindings.put(code, action);
     }
 
-    public void removeBinding(KeyCode code) {
-        bindings.remove(code);
-    }
-
+    /**
+     * Updates the status of keys which correspond to actions
+     */
     public void update() {
         bindings.values().forEach(UserAction::update);
     }
 
+    /**
+     * Begins an key-action
+     * @param code the corresponding keystroke
+     */
     private void startAction(KeyCode code) {
         if (bindings.containsKey(code))
             bindings.get(code).startAction();
     }
 
+    /**
+     * Ends a key-action
+     * @param code : the corresponding keystroke
+     */
     private void stopAction(KeyCode code) {
         if (bindings.containsKey(code))
             bindings.get(code).stopAction();

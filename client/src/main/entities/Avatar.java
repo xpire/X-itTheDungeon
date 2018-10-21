@@ -4,9 +4,6 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.scene.effect.Bloom;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.Glow;
 import javafx.scene.paint.Color;
@@ -19,7 +16,6 @@ import main.entities.pickup.*;
 import main.entities.prop.FlyingArrow;
 import main.entities.prop.LitBomb;
 import main.entities.terrain.Door;
-import main.entities.terrain.Pit;
 import main.events.AnimationEvent;
 import main.events.DeathEvent;
 import main.events.AvatarEvent;
@@ -32,13 +28,6 @@ import main.sprite.SpriteView;
 import java.util.ArrayList;
 
 public class Avatar extends Entity {
-
-    /*
-    - refactor: exposing property is unsafe
-    - restart button should work
-    - image display also
-    - buff?
-     */
 
     private Key key;
     private Sword sword;
@@ -64,7 +53,6 @@ public class Avatar extends Entity {
 
     private Runnable nextAction;
 
-    // THINGS THAT CAN BE RUN AFTER ON_CREATED
     {
         symbol = 'P';
 
@@ -130,7 +118,10 @@ public class Avatar extends Entity {
         level.removeAvatar();
     }
 
-    public void onThreatenedByPit(Pit pit) {
+    /**
+     * Actions when the Avatar walks over a pit
+     */
+    public void onThreatenedByPit() {
         if (isHovering()) return;
 
         level.postEvent(new DeathEvent(DeathEvent.DEATH_BY_FALL, true));
@@ -139,7 +130,10 @@ public class Avatar extends Entity {
         destroy();
     }
 
-    public void onThreatenedByBomb(Bomb bomb) {
+    /**
+     * Logic when Avatar is in a bomb explosion
+     */
+    public void onThreatenedByBomb() {
         if (isRaged()) return;
 
         level.postEvent(new DeathEvent(DeathEvent.DEATH_BY_BOMB, true));
@@ -147,6 +141,10 @@ public class Avatar extends Entity {
         destroy();
     }
 
+    /**
+     * Logic when Avatar touches an enemy
+     * @param enemy the enemy threatening it
+     */
     public void onThreatenedByEnemy(Enemy enemy) {
         if (isRaged()) {
             level.postEvent(new DeathEvent(DeathEvent.DEATH_BY_ATTACK, false));
@@ -162,7 +160,7 @@ public class Avatar extends Entity {
 
     @Override
     public void onExploded() {
-        onThreatenedByBomb(null); // TODO
+        onThreatenedByBomb();
     }
 
 
@@ -175,17 +173,24 @@ public class Avatar extends Entity {
         nextAction = null;
     }
 
+    /**
+     * Sets the next action to run
+     * @param action : action to be run
+     */
     public void setNextAction(Runnable action) {
         nextAction = action;
     }
 
+    /**
+     * Ends the players turn
+     */
     private void endTurn() {
         level.postEvent(new AvatarEvent(AvatarEvent.AVATAR_TURN_ENDED));
     }
 
 
-    /*
-        MOVE AVATAR
+    /**
+     * Moves the Avatar up, down, left, right respecitvely
      */
     public void moveUp() {
         faceUp();
@@ -204,6 +209,10 @@ public class Avatar extends Entity {
         tryMove(Vec2i.EAST);
     }
 
+    /**
+     * Attempts to move the Avatar in a certain direction
+     * @param dir : direction to move
+     */
     private void tryMove(Vec2i dir) {
 
         if (!dir.isDirection()) return;
@@ -219,6 +228,10 @@ public class Avatar extends Entity {
         }
     }
 
+    /**
+     * Moves the Avatar in a certain direction
+     * @param dir : direction to move in
+     */
     private void move(Vec2i dir) {
         level.moveAvatar(pos.add(dir));
 
@@ -235,8 +248,8 @@ public class Avatar extends Entity {
     }
 
 
-    /*
-        CHANGE AVATAR DIRECTION
+    /**
+     * Changes the avatars direction to be facing up, down, left, right respectively
      */
     public void faceUp() {
         sprite.setState("Face Up");
@@ -535,8 +548,9 @@ public class Avatar extends Entity {
         return true;
     }
 
-
-    // Rendering
+    /**
+     * Renders the animations
+     */
     public void generateAnimations() {
         Runnable beforePlay = () -> level.postEvent(new AnimationEvent(AnimationEvent.ANIMATION_STARTED));
         Runnable afterPlay = () -> level.postEvent(new AnimationEvent(AnimationEvent.ANIMATION_STOPPED));
@@ -770,6 +784,10 @@ public class Avatar extends Entity {
 
     // Inventory Observer
 
+    /**
+     * Getter for the swords durability
+     * @return
+     */
     public IntegerProperty getSwordDurability() { return swordDurability; }
 
     /**
@@ -796,6 +814,10 @@ public class Avatar extends Entity {
         return numTreasures;
     }
 
+    /**
+     * Checks if the Avatar has a matching key
+     * @return true if they have the key
+     */
     public BooleanProperty hasKeyProperty() {
         return hasKeyProperty;
     }

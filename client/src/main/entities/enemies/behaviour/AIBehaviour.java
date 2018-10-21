@@ -27,5 +27,9 @@ public abstract class AIBehaviour {
         this.target = target;
     }
 
+    /**
+     * Decides the target tiles for each AI
+     * @return
+     */
     public abstract List<Vec2i> decideTargetTiles();
 }

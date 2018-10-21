@@ -35,11 +35,22 @@ public class LevelBuilder {
 
     private ArrayList<LayerBuilder> builders;
 
-
+    /**
+     * Generic constructor
+     * @param nRows : number of rows of the level
+     * @param nCols : number of cols of the level
+     * @param size : size of the tile
+     * @param name : name of the level
+     * @param isCreateMode : if the level is initialised for creative lab
+     */
     public LevelBuilder(int nRows, int nCols, double size, String name, boolean isCreateMode) {
         this(new Level(nRows, nCols, size, name, isCreateMode));
     }
 
+    /**
+     * Overloaded method given a complete level
+     * @param level
+     */
     public LevelBuilder(Level level) {
         this.level = level;
         initLayerBuilders();
@@ -92,8 +103,11 @@ public class LevelBuilder {
         builder.makeAndAttachForcefully(pos, entityCode, true);
     }
 
-
-    // TODO: PASS IN FACTORY AS A DEPENDENCY
+    /**
+     * Sets the objectives within a level
+     * @param objectives : list of objectives
+     * @throws InvalidMapException : bad objectives found
+     */
     public void setObjectives(ArrayList<String> objectives) throws InvalidMapException {
 
         for (String objective : objectives) {
@@ -105,21 +119,33 @@ public class LevelBuilder {
         }
     }
 
+    /**
+     * Getter for number of rows
+     * @return the number of rows
+     */
     public int getNRows() {
         return level.getNRows();
     }
 
-
+    /**
+     * Getter for number of cols
+     * @return number of cols
+     */
     public int getNCols() {
         return level.getNCols();
     }
 
-
+    /**
+     * Getter for the level
+     * @return the level
+     */
     public Level getLevel() {
         return level;
     }
 
-
+    /**
+     * Creates the layer builders
+     */
     public void initLayerBuilders() {
         initTerrainLayerBuilder();
         initPropLayerBuilder();
@@ -135,7 +161,9 @@ public class LevelBuilder {
         builders.add(avatarLayerBuilder);
     }
 
-
+    /**
+     * Creates the terrain layer
+     */
     private void initTerrainLayerBuilder() {
         EntityFactory<Terrain> terrainFactory = new EntityFactory<>();
         terrainFactory.addSupplier('|', () -> new Door(level));
@@ -153,6 +181,9 @@ public class LevelBuilder {
                 (pos, entity) -> level.addTerrain(pos, entity));
     }
 
+    /**
+     * Creates the props layer
+     */
     private void initPropLayerBuilder() {
         EntityFactory<Prop> propFactory = new EntityFactory<>();
         propFactory.addSupplier('O', () -> new Boulder(level));
@@ -165,6 +196,9 @@ public class LevelBuilder {
                 (pos, entity) -> level.addProp(pos, entity));
     }
 
+    /**
+     * Creates the pickup layer
+     */
     private void initPickupLayerBuilder() {
         EntityFactory<Pickup> pickupFactory = new EntityFactory<>();
         pickupFactory.addSupplier('-', () -> new Arrow(level));
@@ -182,6 +216,9 @@ public class LevelBuilder {
                 (pos, entity) -> level.addPickup(pos, entity));
     }
 
+    /**
+     * Creates the enemy layer
+     */
     private void initEnemyLayerBuilder() {
         EntityFactory<Enemy> enemyFactory = new EntityFactory<>();
         enemyFactory.addSupplier('1', () -> new Hunter(level));
@@ -196,6 +233,9 @@ public class LevelBuilder {
                 (pos, entity) -> level.addEnemy(pos, entity));
     }
 
+    /**
+     * Creates the avatar layer
+     */
     private void initAvatarLayerBuilder() {
         EntityFactory<Avatar> avatarFactory = new EntityFactory<>();
         avatarFactory.addSupplier('P', () -> new Avatar(level));
@@ -207,6 +247,16 @@ public class LevelBuilder {
                 (pos, entity) -> level.addAvatar(pos, entity));
     }
 
+    /**
+     * Creates a generic layer builder
+     * @param level : level the builder corresponds to
+     * @param factory : entity factory
+     * @param canPlace : function determining whether an entity can be placed
+     * @param canReplace : function determining whether an entity can be replaced
+     * @param addEntity : function to add an entity
+     * @param <T> : The generic class the layerBuilder is made for
+     * @return
+     */
     private <T extends Entity> LayerBuilder<T> createLayerBuilder(
             Level level, EntityFactory<T> factory,
             BiFunction<Vec2i, T, Boolean> canPlace,

@@ -1,19 +1,18 @@
 package main.maploading;
 
 import main.Level;
-import main.entities.Entity;
 import main.math.Vec2i;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Scanner;
 
 /**
  * A Class to load in maps from txt files which can then be used in Play Mode and Create Mode
  */
 public class MapLoader {
-
-    // TODO: assetLoader, asset to path mapping
 
     private LevelBuilder builder;
 
@@ -48,13 +47,24 @@ public class MapLoader {
         return builder.getLevel();
     }
 
-
+    /**
+     * Overloaded method setting createMode to flase
+     * @param mapName : name of the map
+     * @param path : path to the map
+     * @return : the loaded level
+     */
     public Level loadLevel(String mapName, String path) {
         return loadLevel(mapName, path, false);
     }
 
 
-    // Extract dimensions, initialise the level
+    /**
+     * Initialises a Level with given dimensions
+     * @param sc : Scanner to read
+     * @param mapName : name of the map
+     * @param isCreateMode : if the map is being loaded for the creative mode
+     * @throws InvalidMapException : No dimensions set
+     */
     private void initLevelWithDimensions(Scanner sc, String mapName, boolean isCreateMode) throws InvalidMapException {
 
         if (!sc.hasNextLine()) throw new InvalidMapException("Empty Map");
@@ -65,12 +75,15 @@ public class MapLoader {
         int nRow = Integer.parseInt(line[0]);
         int nCol = Integer.parseInt(line[1]);
 
-        // TODO: fixed size 30.0
         builder = new LevelBuilder(nRow, nCol, 30, mapName, isCreateMode);
     }
 
 
-    // Extract objective
+    /**
+     * Sets the objectives of the level
+     * @param sc : scanner to read to file
+     * @throws InvalidMapException : No objectives set
+     */
     private void setObjectives(Scanner sc) throws InvalidMapException {
 
         if (!sc.hasNextLine()) throw new InvalidMapException("No objective");
@@ -85,7 +98,11 @@ public class MapLoader {
     }
 
 
-    // Extract grid entities, skip keys and doors for later
+    /**
+     * Adds entities to the level
+     * @param sc : scanner to read the file
+     * @throws InvalidMapException : bad entities found
+     */
     private void addEntities(Scanner sc) throws InvalidMapException {
         String[] line;
 
@@ -104,7 +121,11 @@ public class MapLoader {
         }
     }
 
-    // Extract keys and doors
+    /**
+     * Adds keys and doors to the map
+     * @param sc : scanner to read the file
+     * @throws InvalidMapException : key door mapping is invalid
+     */
     private void addKeysAndDoors(Scanner sc) throws InvalidMapException {
         String[] line;
 
@@ -126,7 +147,11 @@ public class MapLoader {
         }
     }
 
-
+    /**
+     * Read a line fromm the txt file
+     * @param sc : scanner to read the file
+     * @return the line read in from the file, split by whitespace
+     */
     private String[] readLine(Scanner sc) {
         return sc.nextLine().split("\\s+");
     }

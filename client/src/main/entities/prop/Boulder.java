@@ -20,7 +20,7 @@ public class Boulder extends Prop {
 
     /**
      * Basic constructor
-     * @param level
+     * @param level level the boulder belongs to
      */
     public Boulder(Level level) {
         super(level);

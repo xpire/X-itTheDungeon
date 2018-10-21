@@ -79,6 +79,5 @@ public abstract class Pickup extends Entity {
      * Getter for the Pickups score
      * @return the score
      */
-
     public int getScore() { return score; }
 }

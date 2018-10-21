@@ -3,7 +3,6 @@ package main.entities.terrain;
 import main.Level;
 import main.entities.Avatar;
 import main.entities.Entity;
-import main.math.Vec2i;
 
 /**
  * Abstracts the Terrain entities of the Level
@@ -12,7 +11,7 @@ public abstract class Terrain extends Entity {
 
     /**
      * Basic constructor
-     * @param level
+     * @param level : level the terrain belongs to
      */
     public Terrain(Level level) {
         super(level);

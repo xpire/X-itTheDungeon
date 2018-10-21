@@ -1,7 +1,6 @@
 package main.maploading;
 
 import main.component.ViewComponent;
-import main.entities.terrain.Ground;
 import main.entities.terrain.Terrain;
 import main.math.Vec2i;
 import main.util.Array2DIterator;
@@ -9,6 +8,9 @@ import main.util.Array2DIterator;
 import java.util.Iterator;
 import java.util.function.Supplier;
 
+/**
+ * Class representing the Terrain Layer of the each Level
+ */
 public class TerrainLayer extends EntityLayer<Terrain> {
 
     private Supplier<Terrain> defaultTerrain;
@@ -18,6 +20,12 @@ public class TerrainLayer extends EntityLayer<Terrain> {
 
     private Terrain[][] terrains;
 
+    /**
+     * Generic constructor
+     * @param nRows : number of rows in the level
+     * @param nCols : number of cols in the level
+     * @param defaultTerrain : the default terrain (ground)
+     */
     public TerrainLayer(int nRows, int nCols, Supplier<Terrain> defaultTerrain) {
         this.nRows = nRows;
         this.nCols = nCols;
@@ -47,6 +55,12 @@ public class TerrainLayer extends EntityLayer<Terrain> {
         return terrain;
     }
 
+    /**
+     * Removes a Terrain entity from the level and replaces it with the default terrain
+     * @param pos : position to remove from
+     * @param replaceWithDefault : whether or not to replace with default
+     * @return the removed terrain
+     */
     public Terrain removeEntity(Vec2i pos, boolean replaceWithDefault) {
         Terrain terrain = removeEntity(pos);
 

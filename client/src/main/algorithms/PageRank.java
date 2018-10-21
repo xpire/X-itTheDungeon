@@ -5,6 +5,9 @@ import main.math.Vec2i;
 import java.util.Comparator;
 import java.util.List;
 
+/**
+ * PageRank calculator for the strategist to determine the optimal target tile
+ */
 public class PageRank {
 
     private Vec2i pos;
@@ -24,7 +27,10 @@ public class PageRank {
         this.pastMoves  = pastMoves;
     }
 
-    /* Getting result */
+    /**
+     * Gets the optimal page rank result
+     * @return the optimal result
+     */
     public Vec2i getResult() {
         float[][] markov = initMarkovMatrix();
         float[] ranks = pageRank(markov);
@@ -39,20 +45,16 @@ public class PageRank {
     private float[][] initMarkovMatrix() {
         float[][] markov = new float[4][4];
 
-        // matrix filled with 1s
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
                 markov[i][j] = 1;
             }
         }
 
-        // normalising vector
         int[] totals = {4,4,4,4};
 
-        // process data
         processPastMoves(markov, totals);
 
-        // normalise matrix
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
                 markov[i][j] /= totals[i];
@@ -78,15 +80,13 @@ public class PageRank {
     /**
      * Applying a simple page rank algorithm
      * @param markov The markov matrix
-     * @return
+     * @return the calculated page rank
      */
     private float[] pageRank(float[][] markov) {
         float[] ret = {1,1,1,1}; // initial ranks
 
-        // 20 Rounds of matrix multiplication
-        for (int i = 0; i < NUM_ITERATIONS; i++) {
+        for (int i = 0; i < NUM_ITERATIONS; i++)
             ret = matMul(markov, ret);
-        }
 
         return ret;
     }
@@ -95,15 +95,14 @@ public class PageRank {
      * Handles matrix multiplication for this algorithm
      * @param matrix Request matrices
      * @param vec Vector of ranks
-     * @return
+     * @return the multiplied matrix
      */
     private float[] matMul(float[][] matrix, float[] vec) {
         float[] ret = new float[4];
 
-        // Handles each indexing of the vector
-        for (int j = 0; j < 4; j++) {
+        for (int j = 0; j < 4; j++)
             ret[j] = sumCol(matrix[j], vec);
-        }
+
         return ret;
     }
 
@@ -138,9 +137,7 @@ public class PageRank {
      * @param ranks List of rank
      * @return The rank of the coordinate
      */
-    // may be should return an index instead
     private float getRank(Vec2i v, float[] ranks) {
-        // Get rank of the coordinate
         if (v.equals(pos.add(Vec2i.NORTH)))
             return ranks[0];
 

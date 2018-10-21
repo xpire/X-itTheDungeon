@@ -1,14 +1,11 @@
 package main.entities.terrain;
 
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import main.Level;
 import main.entities.Avatar;
 import main.entities.Entity;
 import main.entities.enemies.Enemy;
 import main.math.Vec2d;
 import main.sprite.SpriteView;
-
 
 /**
  * Class describing the Pit entity
@@ -29,7 +26,7 @@ public class HeatPlate extends Terrain{
 
     /**
      * Basic constructor
-     * @param level
+     * @param level : the level the heat plate belongs to
      */
     public HeatPlate(Level level) {
         super(level);
@@ -58,7 +55,7 @@ public class HeatPlate extends Terrain{
             }
 
             if (level.hasAvatar(pos)) {
-                level.getAvatar().onThreatenedByBomb(null);
+                level.getAvatar().onThreatenedByBomb();
             }
 
         }
@@ -83,6 +80,6 @@ public class HeatPlate extends Terrain{
     @Override
     public void onEnterByAvatar(Avatar avatar) {
         if (state == BURN)
-            avatar.onThreatenedByBomb(null);
+            avatar.onThreatenedByBomb();
     }
 }

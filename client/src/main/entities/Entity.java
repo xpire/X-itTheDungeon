@@ -16,20 +16,10 @@ import main.sprite.SpriteView;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
-
-/*
-TODO: refactor using the visitor pattern
-
-EntityVisitor {
-
-}
- */
-
 /**
  * Class which represents all Entities available in the Game
  * provides behaviours and interactions for entities
  */
-
 public abstract class Entity {
 
     public final static double DEFAULT_SIZE = 30.0;
@@ -40,7 +30,7 @@ public abstract class Entity {
     protected ViewComponent view;
 
     public SpriteView sprite;
-    public SoundManager soundManager;// = SoundManager.getInstance(5);
+    public SoundManager soundManager;
 
 
     /**
@@ -55,6 +45,9 @@ public abstract class Entity {
         onCreated();
     }
 
+    /**
+     * Logic when the level has been rescaled
+     */
     public void onLevelRescaled() {
         view.getView().setScaleX(size()/DEFAULT_SIZE);
         view.getView().setScaleY(size()/DEFAULT_SIZE);
@@ -66,7 +59,6 @@ public abstract class Entity {
      */
     public void onCreated() {}
 
-    // Removes from map
     /**
      * logic when an entity is removed from the level
      */

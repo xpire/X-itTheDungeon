@@ -6,6 +6,10 @@ import javafx.scene.text.Font;
 
 import java.util.function.Function;
 
+/**
+ * Class representing the view of the games objectives
+ * @param <T> An objective
+ */
 public class ObjectiveView<T extends TargetCountTrigger> {
 
     private CheckBox checkBox;
@@ -13,6 +17,15 @@ public class ObjectiveView<T extends TargetCountTrigger> {
     private T objective;
     private Function<T, String> labelText;
 
+    public ObjectiveView(T objective) {
+        this(objective, null);
+    }
+
+    /**
+     * Generic constructor
+     * @param objective : the objective
+     * @param labelText : the label of the objective
+     */
     public ObjectiveView(T objective, Function<T, String> labelText) {
         this.objective = objective;
         this.labelText = labelText;
@@ -26,6 +39,9 @@ public class ObjectiveView<T extends TargetCountTrigger> {
         objective.subscribe(this::update);
     }
 
+    /**
+     * updates the objective progress
+     */
     private void update() {
         if (objective.isTriggered()) {
             checkBox.setSelected(true);
@@ -39,10 +55,11 @@ public class ObjectiveView<T extends TargetCountTrigger> {
         checkBox.setText(labelText == null ? "" : labelText.apply(objective));
     }
 
-    public void setLabelText(Function<T, String> labelText) {
-        this.labelText = labelText;
-    }
 
+    /**
+     * Gets the associated checkbox
+     * @return the checkbox
+     */
     public CheckBox getCheckBox() {
         return checkBox;
     }

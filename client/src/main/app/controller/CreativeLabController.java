@@ -7,6 +7,9 @@ import javafx.scene.layout.*;
 import main.app.model.CreativeLabScreen;
 import main.sound.SoundManager;
 
+/**
+ * Controller for the Creative Lab screen
+ */
 public class CreativeLabController extends AppController<CreativeLabScreen> {
 
     @FXML
@@ -28,7 +31,7 @@ public class CreativeLabController extends AppController<CreativeLabScreen> {
 
 
     /**
-     * Basic constructor for the CreativeLab Controller
+     * Generic constructor
      * @param screen : the corresponding screen
      */
     public CreativeLabController(CreativeLabScreen screen) {

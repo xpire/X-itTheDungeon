@@ -12,6 +12,9 @@ import main.app.model.PlayLevelScreen;
 import main.app.model.SettingScreen;
 import main.sound.SoundManager;
 
+/**
+ * Controller class for the Play Level screen of the application
+ */
 public class PlayLevelController extends AppController<PlayLevelScreen> {
 
     public static PlayModeUILocator locator;
@@ -56,6 +59,10 @@ public class PlayLevelController extends AppController<PlayLevelScreen> {
     @FXML
     private VBox vbxObjectives;
 
+    /**
+     * Generic constructor
+     * @param screen : Corresponding screen
+     */
     public PlayLevelController(PlayLevelScreen screen) {
         super(screen);
     }
@@ -105,7 +112,10 @@ public class PlayLevelController extends AppController<PlayLevelScreen> {
         switchScreen(new SettingScreen(screen.getStage(), screen));
     }
 
-
+    /**
+     * Getter for the dynamic layer of the Level (where the game is displayed)
+     * @return the dynamic layer
+     */
     public StackPane getDynamicLayer() {
         return dynamicLayer;
     }

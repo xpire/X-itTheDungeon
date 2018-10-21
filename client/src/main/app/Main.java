@@ -1,29 +1,19 @@
 package main.app;
 
-
 import javafx.application.Application;
 import javafx.stage.Stage;
 import main.app.model.MainScreen;
 import main.client.Client;
 import main.content.GameConfig;
-import main.events.EventBus;
 import main.sound.SoundManager;
 import main.content.AchievementInit;
 import main.content.StatInit;
 import main.trigger.achievement.AchievementSystem;
 import main.persistence.JsonPersistor;
 
-
-
-/*
-Todo:
-1. local storage
-2. unlocking next level
-3. stars
-4. unlocking boss level
-5. entities: fire spikes, bomb radius buff potion,
+/**
+ * Class which begins the instance of the Game
  */
-
 public class Main extends Application {
 
     private final int WIDTH = 960;
@@ -43,6 +33,7 @@ public class Main extends Application {
     public void start(Stage s){
         primaryStage = s;
 
+
         s.setWidth(WIDTH);
         s.setHeight(HEIGHT);
 
@@ -51,6 +42,7 @@ public class Main extends Application {
         new StatInit(achievementSystem.getBus(), gameConfig.getIntStat()).init();
         new AchievementInit(achievementSystem, gameConfig.getIntStat()).init();
         new MainScreen(s).start();
+
     }
 
 
@@ -63,6 +55,10 @@ public class Main extends Application {
         soundManager.shutDown();
     }
 
+    /**
+     * Main function which begins the application
+     * @param args : system parameters
+     */
     public static void main(String[] args) {
         launch(args);
     }

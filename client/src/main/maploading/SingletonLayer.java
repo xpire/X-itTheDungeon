@@ -7,18 +7,33 @@ import main.math.Vec2i;
 import java.util.Collections;
 import java.util.Iterator;
 
+/**
+ * Class representing the Layer of the level containing a single entity (the Avatar)
+ * @param <T> Any class which extends entity
+ */
 public class SingletonLayer<T extends Entity> extends EntityLayer<T> {
 
     private T entity;
 
+    /**
+     * Generic constructor
+     */
     public SingletonLayer() {
         view = new ViewComponent();
     }
 
+    /**
+     * Getter for the entity
+     * @return
+     */
     public T get() {
         return entity;
     }
 
+    /**
+     * Removes the entity from the view
+     * @return
+     */
     public T remove() {
         if (entity != null) {
             view.removeNode(entity.getView());  // remove entity view
@@ -30,6 +45,10 @@ public class SingletonLayer<T extends Entity> extends EntityLayer<T> {
         return copy;
     }
 
+    /**
+     * moves the entity
+     * @param pos position to move to
+     */
     public void move(Vec2i pos) {
         entity.setPos(pos);
     }

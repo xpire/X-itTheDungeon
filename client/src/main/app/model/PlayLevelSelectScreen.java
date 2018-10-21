@@ -4,6 +4,9 @@ import javafx.stage.Stage;
 import main.app.controller.AppController;
 import main.app.controller.PlayLevelSelectController;
 
+/**
+ * Screen where levels are selected to be played
+ */
 public class PlayLevelSelectScreen extends AppScreen{
 
     {
@@ -11,6 +14,10 @@ public class PlayLevelSelectScreen extends AppScreen{
         fxmlName = "main/app/view/playLevelSelect.fxml";
     }
 
+    /**
+     * Generic constructor
+     * @param stage : the corresponding stage
+     */
     public PlayLevelSelectScreen(Stage stage) {
         super(stage);
     }

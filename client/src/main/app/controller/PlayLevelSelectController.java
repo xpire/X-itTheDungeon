@@ -11,8 +11,15 @@ import main.sound.SoundManager;
 
 import java.util.ArrayList;
 
+/**
+ * Controller Class for the Level Select screen
+ */
 public class PlayLevelSelectController extends AppController {
 
+    /**
+     * Generic constructor
+     * @param screen : the corresponding screen
+     */
     public PlayLevelSelectController(AppScreen screen) {
         super(screen);
     }
@@ -27,12 +34,6 @@ public class PlayLevelSelectController extends AppController {
     private Button btnLevel4;
     @FXML
     private Button btnLevel5;
-//    @FXML
-//    public Button btnLevel6;
-//    @FXML
-//    public Button btnLevel7;
-//    @FXML
-//    public Button btnLevel8;
 
     private SoundManager soundManager = SoundManager.getInstance(5);
 
@@ -66,6 +67,7 @@ public class PlayLevelSelectController extends AppController {
         }
     }
 
+    @FXML
     private void onLevelSelected(String filename, int levelNum) {
         soundManager.playSoundEffect("Item");
         soundManager.playBGM("Level " + levelNum);

@@ -4,6 +4,9 @@ import javafx.stage.Stage;
 import main.app.controller.AppController;
 import main.app.controller.LoginPageController;
 
+/**
+ * Screen for the login page
+ */
 public class LoginScreen extends AppScreen {
 
     {
@@ -11,6 +14,10 @@ public class LoginScreen extends AppScreen {
         fxmlName = "main/app/view/loginPage.fxml";
     }
 
+    /**
+     * Generic constructor
+     * @param stage : corresponding screen
+     */
     public LoginScreen(Stage stage) { super(stage); }
 
     @Override

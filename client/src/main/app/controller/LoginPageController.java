@@ -12,13 +12,18 @@ import main.app.model.RegisterScreen;
 import main.sound.SoundManager;
 
 /**
- * This class controls the login page of the controller
+ * The controller of the Login Page screen
  */
 public class LoginPageController extends AppController {
+
+    /**
+     * Generic constructor
+     * @param screen : the corresponding screen
+     */
     public LoginPageController(AppScreen screen) { super(screen); }
 
-
     private SoundManager soundManager = SoundManager.getInstance(5);
+
     @FXML
     private Label response;
 
@@ -27,6 +32,7 @@ public class LoginPageController extends AppController {
 
     @FXML
     private TextField InputName;
+
     @FXML
     private PasswordField InputPassword;
 
@@ -35,6 +41,7 @@ public class LoginPageController extends AppController {
 
     // TODO Change the handle here for exception
     // TODO Change the handle input and alerting
+
     @FXML
     public void onLoginBtnPressed() {
         soundManager.playSoundEffect("Item");

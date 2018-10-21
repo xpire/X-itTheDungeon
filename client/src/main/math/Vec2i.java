@@ -166,12 +166,12 @@ public class Vec2i {
         return String.format("%d, %d", x, y);
     }
 
+    /**
+     * normalise a vector length
+     * @return the value of the norm
+     */
     public int norm1() {
         return Math.abs(x) + Math.abs(y);
-    }
-
-    public double length() {
-        return Math.sqrt(x * x + y * y);
     }
 
     /**
@@ -182,28 +182,21 @@ public class Vec2i {
      */
     public int manhattan(Vec2i other) { return Math.abs(other.x - this.x) + Math.abs(other.y - this.y); } // TODO
 
+    /**
+     * Checks if a vector is adjacent to current
+     * @param other : other vector
+     * @return true if adjacent
+     */
     public boolean isAdjacent(Vec2i other) {
         return this.sub(other).norm1() <= 1;
     }
 
+    /**
+     * Checks if a vector is a direction
+     * @return true if is direction
+     */
     public boolean isDirection() {
         return norm1() == 1;
     }
 
-//    public boolean isNorthOf(Vec2i other) {
-//        return this.sub(other).equals(NORTH);
-//    }
-//
-//    public boolean isSouthOf(Vec2i other) {
-//        Vec2i dir = this.sub(other);
-//        return dir.getX() == 0 && dir.getY() < 0;
-//    }
-//
-//    public boolean isWestOf(Vec2i other) {
-//        return this.sub(other).equals(WEST);
-//    }
-//
-//    public boolean isEastOf(Vec2i other) {
-//        return this.sub(other).equals(EAST);
-//    }
 }

@@ -40,6 +40,9 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Screen for the Creative Lab
+ */
 public class CreativeLabScreen extends AppScreen {
 
     {
@@ -55,6 +58,11 @@ public class CreativeLabScreen extends AppScreen {
     private boolean wasKey = false;
     private Vec2i originalPos;
 
+    /**
+     * Basic constructor
+     * @param stage : corresponding stage
+     * @param draftBuilder : draftBuilder associated with the current instance of the lab
+     */
     public CreativeLabScreen(Stage stage, DraftBuilder draftBuilder) {
         super(stage);
         this.controller = new CreativeLabController(this);
@@ -347,6 +355,7 @@ public class CreativeLabScreen extends AppScreen {
 
     /**
      * Saves the current state of the level to a temporary file and runs it in Play Mode
+     * Will save under a specific name if the level is being evaluated for publishing
      */
     public void testPlay(boolean isPublishTest) {
 

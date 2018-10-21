@@ -4,12 +4,15 @@ import javafx.animation.AnimationTimer;
 
 import java.util.function.Consumer;
 
+/**
+ * Class which runs the game loop of the application
+ */
 public class GameLoop extends AnimationTimer {
 
     private final float NANO_PER_SEC = 1000000000f;
     private final float SEC_PER_TICK = 1 / 60f;
     private final float MAX_TICKS_PER_FRAME = 5;
-    private final int LAG_CAP = 100; // 100 seconds
+    private final int LAG_CAP = 100;
 
     private long prevTime = 0;
     private float lag = 0;
@@ -20,7 +23,11 @@ public class GameLoop extends AnimationTimer {
     private Game game;
     private Consumer<Integer> fpsReporter;
 
-
+    /**
+     * Basic constructor
+     * @param game : instance of the game
+     * @param fpsReporter : an fps counter for the game
+     */
     public GameLoop(Game game, Consumer<Integer> fpsReporter) {
         this.game = game;
         this.fpsReporter = fpsReporter;
@@ -42,10 +49,8 @@ public class GameLoop extends AnimationTimer {
 
         lag += (currTime - prevTime) / NANO_PER_SEC;
 
-        // Before update
         game.onUpdateBegin();
 
-        // Update Loop
         int count = 0;
         while (lag >= SEC_PER_TICK && count < MAX_TICKS_PER_FRAME) {
             game.onUpdate();
@@ -53,15 +58,12 @@ public class GameLoop extends AnimationTimer {
             count++;
         }
 
-        // After update
         game.onUpdateEnd();
 
-        // Float overflow handling
         if (lag > LAG_CAP) {
             lag = LAG_CAP / 10.0f;
         }
 
-        // FPS reporting
         nFrames++;
         secondsElapsed += (currTime - prevTime) / NANO_PER_SEC;
         if (secondsElapsed >= 2.0f) {

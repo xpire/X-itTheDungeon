@@ -63,6 +63,10 @@ public abstract class Enemy extends Entity {
             return path.get(0);
     }
 
+    /**
+     * Decides the behaviour of an AI
+     * @return
+     */
     protected abstract AIBehaviour decideBehaviour();
 
     /**

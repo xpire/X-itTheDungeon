@@ -19,21 +19,17 @@ public class CowardBehaviour extends AIBehaviour {
 
         ArrayList<Vec2i> tiles = new ArrayList<>();
 
-        // distance from target
         int maxDist = pos.manhattan(target);
 
         for (Vec2i dir : Vec2i.DIRECTIONS) {
 
-            // tile adjacent to the AI
             Vec2i adj = pos.add(dir);
 
-            // distance away from the target
             if (!level.isValidGridPos(adj)) continue;
             if (!level.isPassableForEnemy(adj, null)) continue;
 
             int dist = adj.manhattan(target);
 
-            // find tiles farthest from the target
             if (dist > maxDist) {
                 maxDist = dist;
                 tiles.clear();

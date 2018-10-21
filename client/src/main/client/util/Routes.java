@@ -1,5 +1,8 @@
 package  main.client.util;
 
+/**
+ * Defines routes required for the server
+ */
 public class Routes {
     // Below are log in routes
     public static final String LanRoute = "http://localhost:8080/";

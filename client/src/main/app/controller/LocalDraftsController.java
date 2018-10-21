@@ -1,12 +1,14 @@
 package main.app.controller;
 
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import main.app.Main;
 import main.app.engine.AlertHelper;
-import main.app.model.*;
+import main.app.model.AppScreen;
+import main.app.model.LocalDraftsScreen;
+import main.app.model.PlayLevelScreen;
+import main.app.model.PlayModeSelectScreen;
 import main.client.structure.ReqStructure;
 import main.client.util.LocalManager;
 import main.sound.SoundManager;
@@ -15,13 +17,19 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.ResourceBundle;
 
+/**
+ * Controller for the Local Drafts screen
+ */
 public class LocalDraftsController extends AppController {
 
     public static String PATH = "src/asset/buffer/";
+
+    /**
+     * Generic constructor
+     * @param screen : the corresponding screen
+     */
     public LocalDraftsController(AppScreen screen) { super(screen); }
 
     @FXML
