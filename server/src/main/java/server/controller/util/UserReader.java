@@ -8,6 +8,7 @@ import org.mindrot.jbcrypt.BCrypt;
 import spark.Request;
 
 import java.io.*;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -31,7 +32,8 @@ public class UserReader {
     public static void UpdateUser(Request request) {
         Map<String, String> reqContent = new Gson().fromJson(request.body(), Map.class);
 
-        try (BufferedReader currFile = new BufferedReader(new FileReader(PATH2))){
+        try {
+            BufferedReader currFile = new BufferedReader(new FileReader(PATH2));
             String currLine;
             StringBuilder fileBuffer = new StringBuilder();
 
@@ -39,14 +41,14 @@ public class UserReader {
             while ((currLine = currFile.readLine()) != null) {
                 // This is the current json
                 Map<String, String> status = gson.fromJson(currLine, Map.class);
-                if (status.get("userName").equals(reqContent.get("userName"))) { fileBuffer.append(request.body()); }
+                if (status.get("userName").equals(reqContent.get("userName"))) { fileBuffer.append(new Gson().toJson(reqContent, Map.class)); }
                 else { fileBuffer.append(currLine); }
 
                 fileBuffer.append('\n');
             }
 
             // Write to the file again
-            PrintWriter pw = new PrintWriter(PATH2);
+            FileWriter pw = new FileWriter(new File(PATH2));
             pw.write(fileBuffer.toString());
             pw.close();
 
@@ -58,14 +60,14 @@ public class UserReader {
     public static String retrieve(Request request) {
         Map<String, String> reqContent = new Gson().fromJson(request.body(), Map.class);
 
-        try (BufferedReader currFile = new BufferedReader(new FileReader(PATH2))) {
+        try {
+            BufferedReader currFile = new BufferedReader(new FileReader(PATH2));
             String currLine;
 
             // read all the lines from the prev file
             while ((currLine = currFile.readLine()) != null) {
                 // This is the current json
                 Map<String, String> status = gson.fromJson(currLine, Map.class);
-
                 if (status.get("userName").equals(reqContent.get("userName"))) { return (status.get("statContent")); }
             }
         }
@@ -141,18 +143,16 @@ public class UserReader {
             // Write the actual function
             try { nWriter.write(gson.toJson(addUser, User.class) + "\n"); }
             catch (Exception e) { Application.forceStop("Error writing to file"); }
-            UserStatus status = new UserStatus(
-                    currUser,
-                    0,
-                    0,
-                    0,
-                    0,
-                    IntStream.of(new int[9]).boxed().collect(Collectors.toList())
-            );
+
+            Map<String, String> temp = new HashMap<>();
+
+            temp.put("userName", addUser.getUsername());
+            temp.put("statContent", "");
 
             // Write the actual function
-            try { sWriter.write(gson.toJson(status, UserStatus.class) + "\n"); }
+            try { sWriter.write(gson.toJson(temp, Map.class) + "\n"); }
             catch (Exception e) { Application.forceStop("Error writing to file"); }
+
             nWriter.close();
             sWriter.close();
         } catch (IOException e){ Application.forceStop("Internal Server error: cannot write to file."); }
