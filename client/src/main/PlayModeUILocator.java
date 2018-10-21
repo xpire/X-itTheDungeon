@@ -1,6 +1,7 @@
 package main;
 
 import javafx.scene.Group;
+import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 
 public class PlayModeUILocator {
@@ -11,6 +12,8 @@ public class PlayModeUILocator {
     private InventoryView invBomb;
     private InventoryView invKey;
     private InventoryView invGold;
+    private Label lblTitle;
+    private Label lblSubtitle;
 
     private VBox objectivesPanel;
 
@@ -20,6 +23,8 @@ public class PlayModeUILocator {
         invBomb     = builder.invBomb;
         invKey      = builder.invKey;
         invGold     = builder.invGold;
+        lblTitle    = builder.lblTitle;
+        lblSubtitle = builder.lblSubtitle;
         objectivesPanel = builder.objectivesPanel;
     }
 
@@ -43,6 +48,15 @@ public class PlayModeUILocator {
         return invGold;
     }
 
+    public Label getLblTitle() {
+        return lblTitle;
+    }
+
+    public Label getLblSubtitle() {
+        return lblSubtitle;
+    }
+
+
     public VBox getObjectivesPanel() {
         return objectivesPanel;
     }
@@ -54,6 +68,8 @@ public class PlayModeUILocator {
         private InventoryView invBomb;
         private InventoryView invKey;
         private InventoryView invGold;
+        private Label lblTitle;
+        private Label lblSubtitle;
 
         private VBox objectivesPanel;
 
@@ -79,6 +95,16 @@ public class PlayModeUILocator {
 
         public Builder gold(InventoryView gold) {
             invGold = gold;
+            return this;
+        }
+
+        public Builder title(Label title) {
+            lblTitle = title;
+            return this;
+        }
+
+        public Builder subtitle(Label subtitle) {
+            lblSubtitle = subtitle;
             return this;
         }
 

@@ -67,6 +67,7 @@ public class LevelPlayer {
         builder.inputNode.addEventHandler(KeyEvent.ANY, scheduler.getInput()::onKeyEvent);
 
         initEvents();
+        initTitleView();
         initObjectivesView();
         initInventoryView(level.getAvatar());
         initInput(level.getAvatar());
@@ -82,6 +83,11 @@ public class LevelPlayer {
         scheduler.stop();
     }
 
+    private void initTitleView() {
+        PlayModeUILocator locator = PlayLevelController.locator;
+        locator.getLblTitle().setText(title);
+        locator.getLblSubtitle().setText(subtitle);
+    }
 
     private void initEvents() {
         level.addEventHandler(AvatarEvent.AVATAR_TURN_ENDED, event -> scheduler.endPlayerTurn());
@@ -195,7 +201,7 @@ public class LevelPlayer {
 
         public Builder levelNum(int levelNum) {
             this.levelNum = levelNum;
-            this.subtitle = "" + levelNum;
+            this.subtitle = "Level " + levelNum;
             return this;
         }
 

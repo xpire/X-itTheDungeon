@@ -40,9 +40,9 @@ public class PlayLevelSelectController extends AppController {
     public void initialize() {
 
         ArrayList<LevelMeta> levelMetas = new ArrayList<>();
-        levelMetas.add(new LevelMeta("level01", 1, btnLevel1));
-        levelMetas.add(new LevelMeta("level02", 2, btnLevel2));
-        levelMetas.add(new LevelMeta("level03", 3, btnLevel3));
+        levelMetas.add(new LevelMeta("Start of Journey", 1, btnLevel1));
+        levelMetas.add(new LevelMeta("Boulder Puzzle", 2, btnLevel2));
+        levelMetas.add(new LevelMeta("Big Map", 3, btnLevel3));
         levelMetas.add(new LevelMeta("level04", 4, btnLevel4));
         levelMetas.add(new LevelMeta("level05", 5, btnLevel5));
 

@@ -46,6 +46,12 @@ public class PlayLevelController extends AppController<PlayLevelScreen> {
     private Label lblGold;
 
     @FXML
+    private Label lblTitle;
+
+    @FXML
+    private Label lblSubtitle;
+
+    @FXML
     private VBox vbxObjectives;
 
     public PlayLevelController(PlayLevelScreen screen) {
@@ -63,6 +69,8 @@ public class PlayLevelController extends AppController<PlayLevelScreen> {
                 .bomb(new InventoryView(imgBomb, lblBomb))
                 .key(new InventoryView(imgKey, null))
                 .gold(new InventoryView(imgGold, lblGold))
+                .title(lblTitle)
+                .subtitle(lblSubtitle)
                 .objectives(vbxObjectives)
                 .build();
     }
