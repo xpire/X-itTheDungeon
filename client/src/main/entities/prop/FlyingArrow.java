@@ -1,14 +1,15 @@
 package main.entities.prop;
 
 import javafx.animation.TranslateTransition;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.util.Duration;
+<<<<<<< HEAD
 import main.entities.Entity;
+=======
+>>>>>>> Entity package javadoc done
 import main.Level;
+import main.entities.Entity;
 import main.math.Vec2d;
 import main.math.Vec2i;
-import main.sprite.SpriteAnimation;
 import main.sprite.SpriteView;
 
 /**
@@ -20,12 +21,11 @@ public class FlyingArrow extends Prop{
 
     {
         isProjectile = true;
-//        Vec2i direction;
     }
 
     /**
      * Basic constructor
-     * @param level
+     * @param level level entity belongs to
      */
     public FlyingArrow(Level level, Vec2i pos, Vec2i dir) {
         super(level);
@@ -38,25 +38,20 @@ public class FlyingArrow extends Prop{
      * Logic for shooting the arrow, and animation
      */
     private void shoot() {
-        // kill first enemy in avatar's direction, if the enemy exists and is reachable
         sprite.setState(sprite.directionParser(direction));
         Vec2i finishPos = new Vec2i(pos);
         while(level.isValidGridPos(finishPos)) {
 
-            // enemy hit
             if (level.hasEnemy(finishPos)) {
                 level.getEnemy(finishPos).destroy();
                 break;
-            }
-            // non-passable entity hit
-            else if (!level.isPassableForProp(finishPos, this)) {
+            } else if (!level.isPassableForProp(finishPos, this)) {
                 break;
             }
 
             finishPos = finishPos.add(direction);
         }
 
-        //animate the path from pos to finishPos which should be in direction
         TranslateTransition transition = new TranslateTransition();
         transition.setDuration(Duration.millis(40*pos.manhattan(finishPos)+1));
         transition.setNode(sprite);

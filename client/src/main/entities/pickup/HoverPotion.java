@@ -1,22 +1,15 @@
 package main.entities.pickup;
 
 import javafx.scene.Group;
-import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
-import main.entities.Avatar;
 import main.Level;
+import main.entities.Avatar;
 import main.math.Vec2d;
-import main.math.Vec2i;
 import main.sprite.SpriteView;
 
 /**
  * Class describing the Hover Potion entity
  */
 public class HoverPotion extends Pickup{
-
-    private Group pot;
 
     {
         symbol = '^';

@@ -78,11 +78,4 @@ public class ViewComponent {
         return centre;
     }
 
-    /**
-     * setter for the centre of the view
-     * @param centre centre vector
-     */
-    public void setCentre(Vec2d centre) {
-        this.centre = centre;
-    }
 }

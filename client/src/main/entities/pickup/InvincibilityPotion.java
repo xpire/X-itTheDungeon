@@ -1,14 +1,9 @@
 package main.entities.pickup;
 
 import javafx.scene.Group;
-import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
-import main.entities.Avatar;
 import main.Level;
+import main.entities.Avatar;
 import main.math.Vec2d;
-import main.math.Vec2i;
 import main.sprite.SpriteView;
 
 /**
@@ -16,7 +11,6 @@ import main.sprite.SpriteView;
  */
 public class InvincibilityPotion extends Pickup{
 
-    private Group pot;
     private int duration;
 
     {
@@ -26,7 +20,7 @@ public class InvincibilityPotion extends Pickup{
 
     /**
      * Basic constructor
-     * @param level
+     * @param level : level of the invincibility potion belongs to
      */
     public InvincibilityPotion(Level level) {
         super(level);

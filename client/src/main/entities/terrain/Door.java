@@ -1,7 +1,6 @@
 package main.entities.terrain;
 
 
-import javafx.scene.shape.Rectangle;
 import main.Level;
 import main.entities.Avatar;
 import main.entities.Entity;
@@ -16,8 +15,6 @@ import main.sprite.SpriteView;
  * Class describing the Door entity
  */
 public class Door extends Terrain {
-
-    // TODO unused methods, eclipse testing, user stories -- deep, assumptions
 
     private boolean isOpen;
 
@@ -41,7 +38,6 @@ public class Door extends Terrain {
         sprite.addState("Open", getImage("sprite/terrain/door/1.png"), new Vec2d(-8,-15),1.875,1.875);
         view.addNode(sprite);
 
-        // Enforce Key-Door coupling in creative mode
         level.addEventHandler(KeyEvent.KEY_REMOVED, e -> {
             if (level.isCreateMode() && e.isMatchingDoor(this)) {
                 destroy();
@@ -59,13 +55,11 @@ public class Door extends Terrain {
     /**
      * flag to open a door
      */
-    public void onOpen() {
+    private void onOpen() {
         isOpen = true;
         level.postEvent(new DoorEvent(DoorEvent.DOOR_OPENED, this));
-//        doorFrame.setFill(Color.SILVER);
         sprite.setState("Open");
     }
-
 
 
     @Override

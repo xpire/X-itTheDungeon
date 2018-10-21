@@ -1,6 +1,5 @@
 package main.entities.pickup;
 
-import javafx.scene.shape.Circle;
 import main.entities.Avatar;
 import main.events.TreasureEvent;
 import main.Level;
@@ -11,8 +10,6 @@ import main.sprite.SpriteView;
  * Class describing the Treasure entity
  */
 public class Treasure extends Pickup{
-
-    private Circle coin;
 
     {
         symbol = '$';

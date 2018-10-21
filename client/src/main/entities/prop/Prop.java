@@ -1,9 +1,8 @@
 package main.entities.prop;
 
+import main.Level;
 import main.entities.Avatar;
 import main.entities.Entity;
-import main.Level;
-import main.math.Vec2i;
 
 /**
  * Abstracts the Prop entity on the Level

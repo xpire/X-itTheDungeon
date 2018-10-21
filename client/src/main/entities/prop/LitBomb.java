@@ -4,15 +4,13 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.shape.Circle;
 import javafx.util.Duration;
-import main.entities.Entity;
 import main.Level;
+import main.entities.Entity;
 import main.math.Vec2d;
 import main.math.Vec2i;
 import main.sprite.SpriteAnimation;
 import main.sprite.SpriteView;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 
 /**
@@ -20,7 +18,11 @@ import java.util.Iterator;
  */
 public class LitBomb extends Prop{
 
+<<<<<<< HEAD
     private final int MAX_FUSE_LENGTH = 3;
+=======
+    private final int MAX_FUSE_LENGTH = 5;
+>>>>>>> Entity package javadoc done
     private Integer fuseLength = MAX_FUSE_LENGTH;
     private int radius = 1;
     private EventHandler<ActionEvent> afterFinish =  e -> {
@@ -30,12 +32,9 @@ public class LitBomb extends Prop{
 
     /**
      * Basic Constructor
-     * @param level
+     * @param level : level the lit bomb belongs to
+     * @param radius : radius of the bomb's explosion
      */
-    public LitBomb(Level level) {
-        super(level);
-    }
-
     public LitBomb(Level level, int radius) {
         super(level);
         this.radius = radius;

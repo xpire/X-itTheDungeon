@@ -1,12 +1,8 @@
 package main.entities.pickup;
 
-import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
-import main.entities.Avatar;
 import main.Level;
+import main.entities.Avatar;
 import main.math.Vec2d;
-import main.math.Vec2i;
 import main.sprite.SpriteView;
 
 /**
@@ -59,6 +55,10 @@ public class Sword extends Pickup {
         return avatar.pickUpSword(this);
     }
 
+    /**
+     * Getter for the remaining durability of a sword
+     * @return the remaining durability
+     */
     public int getDurability() {
         return durability;
     }

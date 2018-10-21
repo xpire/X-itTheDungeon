@@ -1,6 +1,5 @@
 package main.entities.terrain;
 
-import javafx.scene.shape.Rectangle;
 import main.Level;
 import main.entities.Avatar;
 import main.entities.Entity;
@@ -14,15 +13,13 @@ import main.sprite.SpriteView;
  */
 public class Pit extends Terrain{
 
-    private Rectangle hole;
-
     {
         symbol = '#';
     }
 
     /**
      * Basic constructor
-     * @param level
+     * @param level : level pit belongs to
      */
     public Pit(Level level) {
         super(level);
@@ -58,6 +55,6 @@ public class Pit extends Terrain{
 
     @Override
     public void onEnterByAvatar(Avatar avatar) {
-        avatar.onThreatenedByPit(this);
+        avatar.onThreatenedByPit();
     }
 }

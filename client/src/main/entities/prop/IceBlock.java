@@ -14,8 +14,6 @@ import main.sprite.SpriteView;
  */
 public class IceBlock extends Prop {
 
-    // Melts when on a heat plate
-
     {
         symbol = 'I';
         isHeavy = true;
@@ -23,7 +21,7 @@ public class IceBlock extends Prop {
 
     /**
      * Basic constructor
-     * @param level
+     * @param level : level iceBlock belongs to
      */
     public IceBlock(Level level) {
         super(level);
