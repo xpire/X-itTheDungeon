@@ -8,6 +8,7 @@ import org.mindrot.jbcrypt.BCrypt;
 import spark.Request;
 
 import java.io.*;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import static server.controller.util.RequestUtil.*;
@@ -28,14 +29,7 @@ public class UserReader {
     public UserReader() { }
 
     public static void UpdateUser(Request request) {
-        UserStatus currStatus = new UserStatus(
-                RequestUtil.getSessionCurrentUser(request),
-                getenemyKilled(request),
-                gettreasureCollected(request),
-                getmaxLevel(request),
-                getbombsKilled(request),
-                getLevelStar(request)
-        );
+        Map<String, String> reqContent = new Gson().fromJson(request.body(), Map.class);
 
         try (BufferedReader currFile = new BufferedReader(new FileReader(PATH2))){
             String currLine;
@@ -44,15 +38,10 @@ public class UserReader {
             // read all the lines from the prev file
             while ((currLine = currFile.readLine()) != null) {
                 // This is the current json
-                UserStatus status = gson.fromJson(currLine, UserStatus.class);
-                // Is
-                if (status.getUsername().equals(currStatus.getUsername())) {
-                    String add = gson.toJson(currStatus, UserStatus.class);
-                    fileBuffer.append(add);
-                }
-                else {
-                    fileBuffer.append(currLine);
-                }
+                Map<String, String> status = gson.fromJson(currLine, Map.class);
+                if (status.get("userName").equals(reqContent.get("userName"))) { fileBuffer.append(request.body()); }
+                else { fileBuffer.append(currLine); }
+
                 fileBuffer.append('\n');
             }
 
@@ -65,6 +54,26 @@ public class UserReader {
         catch(FileNotFoundException e) { Application.forceStop("Internal Server Error: Cannot read status file."); }
         catch (IOException e) { Application.forceStop("Internal Server Error: Cannot copy status file."); }
     }
+
+    public static String retrieve(Request request) {
+        Map<String, String> reqContent = new Gson().fromJson(request.body(), Map.class);
+
+        try (BufferedReader currFile = new BufferedReader(new FileReader(PATH2))) {
+            String currLine;
+
+            // read all the lines from the prev file
+            while ((currLine = currFile.readLine()) != null) {
+                // This is the current json
+                Map<String, String> status = gson.fromJson(currLine, Map.class);
+
+                if (status.get("userName").equals(reqContent.get("userName"))) { return (status.get("statContent")); }
+            }
+        }
+        catch(FileNotFoundException e) { Application.forceStop("Internal Server Error: Cannot read status file."); }
+        catch (IOException e) { Application.forceStop("Internal Server Error: Cannot copy status file."); }
+        return null;
+    }
+
 
     /**
      * Check if the user exists in the data base

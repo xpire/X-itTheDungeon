@@ -26,6 +26,7 @@ public class Application {
         get(Path.Web.REQUESTALL, mapController.getAllMaps, headerJson());
         post(Path.Web.UPLOAD, mapController.addNewMap);
         post(Path.Web.UPDATE, userController.updateStatus);
+        post(Path.Web.GETSTAT, userController.getStatus);
 
         // Fix the response type to json
         after((req, res) -> { res.type("application/json"); });

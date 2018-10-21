@@ -24,6 +24,7 @@ public class userController {
             return("Update successful");
         }
     };
+    public static Route getStatus = (Request request, Response response) -> UserReader.retrieveStats(request);
 
     /**
      * Authenticate the user by hashing the inputted password using the stored salt,
