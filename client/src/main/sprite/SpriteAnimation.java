@@ -12,6 +12,10 @@ import main.math.Vec2i;
 
 import java.util.ArrayList;
 
+/**
+ * Class managing the various animations used in our application
+ * Includes playing animations, aligning them, setting states
+ */
 public class SpriteAnimation extends Transition {
 
     private final ImageView imageView;

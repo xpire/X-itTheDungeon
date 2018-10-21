@@ -5,8 +5,18 @@ import com.google.gson.stream.JsonReader;
 
 import java.io.*;
 
+/**
+ * Saves and loads data in json format
+ */
 public class JsonPersistor {
 
+    /**
+     * save function
+     * @param filename : name of file
+     * @param obj : object to be saved
+     * @param gson : Gson instance
+     * @param <T> : generic
+     */
     public <T> void save(String filename, T obj, Gson gson) {
         try (Writer writer = new FileWriter(filename)) {
             gson.toJson(obj, writer);
@@ -16,6 +26,14 @@ public class JsonPersistor {
 
     }
 
+    /**
+     * Load function
+     * @param filename name of file
+     * @param clazz class of the object
+     * @param gson : Gson instance
+     * @param <T> : generic
+     * @return The loaded object
+     */
     public <T> T load(String filename, Class<T> clazz, Gson gson) {
         try (JsonReader reader = new JsonReader(new FileReader(filename))) {
             return gson.fromJson(reader, clazz);

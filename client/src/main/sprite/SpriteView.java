@@ -2,18 +2,20 @@ package main.sprite;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import main.math.Vec2d;
 import main.math.Vec2i;
 
-import javax.swing.*;
 import java.util.HashMap;
 
+/**
+ * Class managing all sprites used in our game
+ * This includes loading the sprite, storing it, setting its states
+ * adding animations, parsing direction
+ */
 public class SpriteView extends ImageView{
 
-    //    private Vec2d baseOffset = new Vec2d();
     private HashMap<String, Image> states = new HashMap<>();
     private HashMap<String, Vec2d> offsets = new HashMap<>();
     private HashMap<String, Double> scaleX = new HashMap<>();
@@ -92,11 +94,6 @@ public class SpriteView extends ImageView{
         scaleY.put("Default", scaleY.get("Default") * newScaleY);
 
         setState("Default");
-    }
-
-    public class SpriteState {
-        private Rectangle2D viewport;
-        private Vec2d offset;
     }
 
 }

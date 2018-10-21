@@ -6,7 +6,6 @@ import javafx.event.EventType;
 import main.events.EventBus;
 
 import java.util.ArrayList;
-import java.util.function.Consumer;
 
 /**
  * An abstraction of game Achievements
@@ -34,12 +33,25 @@ public abstract class Trigger {
      */
     public abstract void deactivate(EventBus bus);
 
-
+    /**
+     * Adds an event handler to certain triggers
+     * @param bus event bus
+     * @param type type of event
+     * @param handler handler function
+     * @param <T> Generic event
+     */
     protected <T extends Event> void addEventHandler(EventBus bus, EventType<T> type, EventHandler<? super T> handler) {
         bus.addEventHandler(type, handler);
         bus.addEventHandler(type, POST);
     }
 
+    /**
+     * removes event handlers from triggers
+     * @param bus the event bus
+     * @param type type of the event
+     * @param handler handler function
+     * @param <T> generic event
+     */
     protected <T extends Event> void removeEventHandler(EventBus bus, EventType<T> type, EventHandler<? super T> handler) {
         bus.removeEventHandler(type, handler);
         bus.removeEventHandler(type, POST);
@@ -52,10 +64,9 @@ public abstract class Trigger {
         listeners.add(callback);
     }
 
-    public void unsubscribe(Runnable callback) {
-        listeners.remove(callback);
-    }
-
+    /**
+     * Notifies listeners that an even has been triggered
+     */
     protected void post() {
         listeners.forEach(Runnable::run);
     }
