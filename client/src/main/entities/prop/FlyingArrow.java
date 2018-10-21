@@ -35,6 +35,9 @@ public class FlyingArrow extends Prop{
         shoot();
     }
 
+    /**
+     * Logic for shooting the arrow, and animation
+     */
     private void shoot() {
         // kill first enemy in avatar's direction, if the enemy exists and is reachable
         sprite.setState(sprite.directionParser(direction));
@@ -64,7 +67,7 @@ public class FlyingArrow extends Prop{
         if (direction.getX() == 0)
             transition.setByY(pos.getY() + (finishPos.getY()-pos.getY())*30);
 
-        transition.setOnFinished(e -> this.onDestroyed());
+        transition.setOnFinished(e -> this.destroy());
         transition.play();
     }
 
