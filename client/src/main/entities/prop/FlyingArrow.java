@@ -4,7 +4,6 @@ import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.util.Duration;
-import main.PlayMode;
 import main.entities.Entity;
 import main.Level;
 import main.math.Vec2d;

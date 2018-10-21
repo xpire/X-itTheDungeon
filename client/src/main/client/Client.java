@@ -1,17 +1,17 @@
 package main.client;
 
+import com.google.gson.Gson;
+import com.mashape.unirest.http.HttpResponse;
+import com.mashape.unirest.http.Unirest;
+import com.mashape.unirest.http.exceptions.UnirestException;
 import javafx.scene.control.Alert;
 import main.app.engine.AlertHelper;
-import main.client.structure.LoginStruct;
+import main.client.structure.LoginStructure;
 import main.client.structure.MapStructure;
 import main.client.structure.ReqStructure;
 import main.client.structure.StatsStructure;
 import main.client.util.LocalManager;
 import main.client.util.Routes;
-import com.google.gson.Gson;
-import com.mashape.unirest.http.HttpResponse;
-import com.mashape.unirest.http.Unirest;
-import com.mashape.unirest.http.exceptions.UnirestException;
 import main.client.validator.Validator;
 
 /**
@@ -66,7 +66,7 @@ public class Client {
                 // Parse into Gson and send to request
                 String res = Post(
                         Routes.LOGIN,
-                        new Gson().toJson(new LoginStruct(username, password), LoginStruct.class)
+                        new Gson().toJson(new LoginStructure(username, password), LoginStructure.class)
                 );
 
                 if (res == null) { return "Internet error. "; }
@@ -97,7 +97,7 @@ public class Client {
             // No error checking as user is not given an input
             String res = Post(
                     Routes.LOGOUT,
-                    new Gson().toJson(new LoginStruct(LoggedUser, null))
+                    new Gson().toJson(new LoginStructure(LoggedUser, null))
             );
 
             // check if its logged in
@@ -132,7 +132,7 @@ public class Client {
         ) {
             return Post(
                     Routes.REGISTER,
-                    new Gson().toJson(new LoginStruct(username, password))
+                    new Gson().toJson(new LoginStructure(username, password))
             );
         } else { return Routes.INVALID_INPUT; }
     }

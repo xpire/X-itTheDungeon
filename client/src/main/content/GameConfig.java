@@ -4,6 +4,7 @@ package main.content;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import javafx.beans.property.SimpleIntegerProperty;
+import main.persistence.JsonPersistor;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
@@ -12,38 +13,31 @@ import java.util.Iterator;
 // Initialiser Class for the Whole Game
 public class GameConfig {
 
-    private ArrayList<LevelConfig> levelConfigs;
+//    private ArrayList<LevelConfig> levelConfigs;
     private IntStat intStat = new IntStat();
-
-    public GameConfig() {
-        levelConfigs = new ArrayList<>();
-        levelConfigs.add(new LevelConfig("Level 1", "level01", 1));
-        levelConfigs.add(new LevelConfig("Level 2", "level02", 2));
-        levelConfigs.add(new LevelConfig("Level 3", "level03", 3));
-
-        levelConfigs.get(0).unlock();
-    }
 
     public IntStat getIntStat() {
         return intStat;
     }
 
-    public int getNumLevels() {
-        return levelConfigs.size();
+    public int getMaxLevelCompleted() {
+        return intStat.getStat(IntStat.Key.MAX_LEVEL_CONQUERED).get();
     }
 
-    public Iterator<LevelConfig> levels() {
-        return levelConfigs.iterator();
-    }
+    public static GameConfig load(String path) {
+        GameConfig config;
+        try {
+            config = new JsonPersistor().load(path, GameConfig.class, SerialisationProxy.getBuilder().create());
+            if (config == null)
+                config = new GameConfig();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            config = new GameConfig();
+        }
 
-    public boolean isCompleted(int level) {
-        return levelConfigs.get(level).isCompleted();
+        return config;
     }
-
-    public boolean isLocked(int level) {
-        return levelConfigs.get(level).isLocked();
-    }
-
 
     public static final class SerialisationProxy {
 

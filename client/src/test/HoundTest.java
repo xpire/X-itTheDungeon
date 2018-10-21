@@ -1,7 +1,7 @@
 //package test;
 //
 //import main.entities.Avatar;
-//import main.entities.enemies.EnemyManager;
+//import main.entities.enemies.EnemyCommander;
 //import main.entities.enemies.Hound;
 //import main.entities.enemies.Hunter;
 //import main.Level;
@@ -86,7 +86,7 @@
 //
 //        public ArrayList<Vec2i> runDecideMove(Level level, Vec2i houndLocation, Vec2i avatarLocation, Vec2i hunterLocation) {
 //            level.setAvatar(avatarLocation, new Avatar(level, avatarLocation));
-//            EnemyManager enemyManager = new EnemyManager(level);
+//            EnemyCommander enemyManager = new EnemyCommander(level);
 //
 //            Hound hound = new Hound(level, houndLocation);
 //            hound.setManager(enemyManager);

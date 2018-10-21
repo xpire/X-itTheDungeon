@@ -1,15 +1,11 @@
 package main.entities.enemies;
 
-import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import main.Level;
-import main.behaviour.AIBehaviour;
-import main.behaviour.CowardBehaviour;
-import main.behaviour.HoundBehaviour;
-import main.behaviour.HunterBehaviour;
+import main.entities.enemies.behaviour.AIBehaviour;
+import main.entities.enemies.behaviour.CowardBehaviour;
+import main.entities.enemies.behaviour.HoundBehaviour;
+import main.entities.enemies.behaviour.HunterBehaviour;
 import main.math.Vec2d;
-import main.math.Vec2i;
 import main.sprite.SpriteView;
 
 /**

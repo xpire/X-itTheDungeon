@@ -1,4 +1,4 @@
-package main.behaviour;
+package main.entities.enemies.behaviour;
 
 import main.Level;
 import main.entities.enemies.Enemy;
@@ -22,6 +22,9 @@ public class HoundBehaviour extends AIBehaviour {
 
     @Override
     public List<Vec2i> decideTargetTiles(){
+
+        if (target.isAdjacent(pos))
+            return singletonList(target);
 
         // find the hunter closest to the player
         Vec2i closestHunterPos = getClosestHunterPos();

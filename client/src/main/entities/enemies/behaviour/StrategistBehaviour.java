@@ -1,4 +1,4 @@
-package main.behaviour;
+package main.entities.enemies.behaviour;
 
 // Going around boulder and avoid arrows
 

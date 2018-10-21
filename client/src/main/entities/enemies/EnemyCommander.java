@@ -9,7 +9,7 @@ import java.util.ArrayList;
 /**
  * Provides info that the enemies require to make their moves
  */
-public class EnemyManager {
+public class EnemyCommander {
 
     private Level level;
     private Avatar avatar;
@@ -18,7 +18,7 @@ public class EnemyManager {
      * Constructor for enemy manager
      * @param level Level it will exist in
      */
-    public EnemyManager(Level level) {
+    public EnemyCommander(Level level) {
         this.level = level;
         this.avatar = level.getAvatar();
         getEnemies().forEach(e -> e.setManager(this));
@@ -30,7 +30,9 @@ public class EnemyManager {
      */
     public void update() {
 
+        System.out.println("START ENEMIES!");
         getEnemies().forEach(e -> {
+            System.out.println("Enemy");
             Vec2i target = e.decideMove();
             if (!e.getGridPos().equals(target))
                 level.moveEnemy(target, e);

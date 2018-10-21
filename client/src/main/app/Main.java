@@ -27,10 +27,15 @@ Todo:
 
 public class Main extends Application {
 
-    public static EventBus playModeBus = new EventBus();
+    private final int WIDTH = 960;
+    private final int HEIGHT = 640;
+    private final String CONFIG_FILENAME = "src/save/localsave.json";
+
     public SoundManager soundManager = SoundManager.getInstance(5);
+
     public static GameConfig gameConfig;
     public static Client currClient = new Client();
+    public static EventBus playModeBus = new EventBus();
 
     public static Stage primaryStage;
     public static ServiceLocator locator;
@@ -39,28 +44,10 @@ public class Main extends Application {
     public void start(Stage s){
         primaryStage = s;
 
-        s.setWidth(960);
-        s.setHeight(640);
+        s.setWidth(WIDTH);
+        s.setHeight(HEIGHT);
 
-        try {
-            gameConfig = new JsonPersistor().load("src/save/localsave.json", GameConfig.class, GameConfig.SerialisationProxy.getBuilder().create());
-            if (gameConfig == null) {
-                gameConfig = new GameConfig();
-            }
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-            gameConfig = new GameConfig();
-        }
-
-//        gameConfig = new JsonPersistor().load("src/save/localsave.json", GameConfig.class, GameConfig.SerialisationProxy.getBuilder().create());
-//        if (gameConfig == null) {
-//            System.out.println("NULL ERROR!");
-//            gameConfig = new GameConfig();
-//        }
-
-//        gameConfig = new GameConfig();
-//        Gson gson = GameConfig.SerialisationProxy.getBuilder().create();
+        gameConfig = GameConfig.load(CONFIG_FILENAME);
 
         AchievementSystem achievementSystem = new AchievementSystem();
 
@@ -69,29 +56,17 @@ public class Main extends Application {
                 .build();
 
         new StatInit(playModeBus, gameConfig.getIntStat()).init();
-
-        AchievementInit achieveInit = new AchievementInit(achievementSystem, gameConfig.getIntStat());
-        achieveInit.init();
-
-//        System.out.println("AFTER SETUP");
-//        String data = gson.toJson(gameConfig);
-//        System.out.println(data);
-//
-//        GameConfig config2 = gson.fromJson(data, GameConfig.class);
-//        System.out.println(config2);
-//
-//        System.out.println(GameConfig.SerialisationProxy.getBuilder().create().toJson(gameConfig));
-
-        MainScreen sc = new MainScreen(s);
-        sc.start();
+        new AchievementInit(achievementSystem, gameConfig.getIntStat()).init();
+        new MainScreen(s).start();
     }
 
 
     @Override
     public void stop() {
-        if (currClient.isLoggedin()) currClient.attemptLogout();
-//        System.out.println(GameConfig.SerialisationProxy.getBuilder().create().toJson(gameConfig));
-        new JsonPersistor().save("src/save/localsave.json", gameConfig, GameConfig.SerialisationProxy.getBuilder().create());
+        if (currClient.isLoggedin())
+            currClient.attemptLogout();
+
+        new JsonPersistor().save(CONFIG_FILENAME, gameConfig, GameConfig.SerialisationProxy.getBuilder().create());
         soundManager.shutDown();
     }
 

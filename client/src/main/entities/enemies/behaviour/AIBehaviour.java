@@ -1,4 +1,4 @@
-package main.behaviour;
+package main.entities.enemies.behaviour;
 
 import main.Level;
 import main.math.Vec2i;
