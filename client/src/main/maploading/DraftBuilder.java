@@ -217,4 +217,12 @@ public class DraftBuilder {
     public File toFile(String mapName, String path) {
         return level.toFile(mapName, path);
     }
+
+    public boolean isTrivialLevel() {
+        return level.checkAchievedAllObjectives();
+    }
+
+    public boolean containsExit() {
+        return level.containsExit();
+    }
 }

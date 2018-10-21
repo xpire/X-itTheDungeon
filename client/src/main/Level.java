@@ -1059,4 +1059,13 @@ public class Level {
             }
         }
     }
+
+    public boolean containsExit() {
+        Iterator<Terrain> it = getTerrainIterator();
+
+        while (it.hasNext())
+            if (it.next().getSymbol() == 'X') return true;
+
+        return false;
+    }
 }

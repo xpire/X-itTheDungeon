@@ -143,7 +143,18 @@ public class CreativeLabScreen extends AppScreen {
         });
         help.setOnAction(e -> controller.switchScreen(new HelpManualScreen(getStage(), this)));
         exit.setOnAction(e -> controller.switchScreen(new CreateModeSelectScreen(this.getStage())));
-        publish.setOnAction(e -> testPlay(true));
+        publish.setOnAction(e -> {
+            if (draftBuilder.isTrivialLevel()) {
+                Toast.messageToast(getStage(), "Sorry, level is trivial");
+                return;
+            }
+            if (draftBuilder.containsExit() && !draftBuilder.listObjectives().contains("EXIT")) {
+                Toast.messageToast(getStage(), "Exit must be the condition if Exit exists");
+                return;
+            }
+
+            testPlay(true);
+        });
 
         HBox resizeRow = new HBox();
         HBox resizeCol = new HBox();
