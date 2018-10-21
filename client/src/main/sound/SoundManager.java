@@ -21,7 +21,7 @@ public class SoundManager {
     private static SoundManager soundManagerInstance = null;
     private ExecutorService soundPool;
     private Map<String, AudioClip> soundEffectsMap = new HashMap<>();
-    private double FXVolume = 0.5;
+    private double FXVolume = 1.0;
 //    private ExecutorService BGMPool;
     private MediaPlayer BGMPlayer;
     private Map<String, Media> BGMMap = new HashMap<>();
@@ -41,6 +41,7 @@ public class SoundManager {
         // - bomb
         loadSoundEffect("Lit Bomb Explosion","sfx/snd_blast.mp3");
         loadSoundEffect("Lit Bomb", "sfx/snd_burning.mp3");
+        loadSoundEffect("Explosion", "sfx/snd_explosion.mp3");
         // - boulder
         loadSoundEffect("Boulder", "sfx/snd_meld.mp3");
         // - flying arrow
@@ -77,6 +78,7 @@ public class SoundManager {
         loadSoundEffect("Drink", "sfx/snd_drink.mp3");
         //      - treasure
         loadSoundEffect("Treasure", "sfx/snd_gold.mp3");
+        loadSoundEffect("Coin", "sfx/snd_coin.mp3");
         // Game
         // - start
         loadSoundEffect("Start", "sfx/snd_descend.mp3");
@@ -109,7 +111,7 @@ public class SoundManager {
         StringBuilder sb = new StringBuilder("src/asset/music/");
         sb.append(source);
         File file = new File(sb.toString());
-        System.out.println(file.toURI().toString());
+//        System.out.println(file.toURI().toString());
         AudioClip sound = new AudioClip(file.toURI().toString());
         soundEffectsMap.put(name,sound);
     }
@@ -118,7 +120,7 @@ public class SoundManager {
         StringBuilder sb = new StringBuilder("src/asset/music/");
         sb.append(source);
         File file = new File(sb.toString());
-        System.out.println(file.toURI().toString());
+//        System.out.println(file.toURI().toString());
         Media sound = new Media(file.toURI().toString());
         BGMMap.put(name,sound);
     }

@@ -92,6 +92,7 @@ public class Main extends Application {
         if (currClient.isLoggedin()) currClient.attemptLogout();
 //        System.out.println(GameConfig.SerialisationProxy.getBuilder().create().toJson(gameConfig));
         new JsonPersistor().save("src/save/localsave.json", gameConfig, GameConfig.SerialisationProxy.getBuilder().create());
+        soundManager.shutDown();
     }
 
     public static void main(String[] args) {

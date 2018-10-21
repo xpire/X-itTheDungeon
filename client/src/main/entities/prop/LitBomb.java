@@ -15,6 +15,7 @@ import main.sprite.SpriteAnimation;
 import main.sprite.SpriteView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 
 /**
@@ -29,7 +30,8 @@ public class LitBomb extends Prop{
     private int radius = 1;
     private Vec2i direction = new Vec2i(0,0);
     private EventHandler<ActionEvent> afterFinish =  e -> {
-        onDestroyed();
+        this.destroyEntity(pos);
+        this.onDestroyed();
     };;
 
     /**
@@ -61,37 +63,23 @@ public class LitBomb extends Prop{
         sprite.addState("2", getImage("sprite/prop/litbomb/skull1.png"), new Vec2d(-8,-8), 1, 1);
         sprite.addState("1", getImage("sprite/prop/litbomb/skull2.png"), new Vec2d(-8,-8), 1, 1);
         sprite.addState("0", getImage("sprite/prop/litbomb/centre0.png"), new Vec2d(-8,-8), 1, 1);
-        SpriteAnimation explosion = new SpriteAnimation(sprite, new Duration(500),new Vec2i(-8,-8), 1);
-        explosion.addState(getImage("sprite/prop/litbomb/centre0.png"));
-        explosion.addState(getImage("sprite/prop/litbomb/centre1.png"));
-        explosion.addState(getImage("sprite/prop/litbomb/centre2.png"));
-        explosion.addState(getImage("sprite/prop/litbomb/centre3.png"));
-
-        explosion.alignToUp(1,1);
-        explosion.alignToUp(1,2);
-        explosion.alignToUp(1,3);
-
-        explosion.alignToLeft(1,1);
-        explosion.alignToLeft(1,2);
-        explosion.alignToLeft(1,3);
-        sprite.addAnime("Explosion", explosion);
-
+        sprite.addAnime("Centre", generateAnimation("centre", 4, new Vec2d(0,0), sprite));
+        sprite.addAnime("Middle", generateAnimation("middle", 4, new Vec2d(0,0), sprite));
+        sprite.addAnime("End", generateAnimation("right", 4, new Vec2d(0,0), sprite));
         view.addNode(sprite);
+
     }
 
 
     @Override
     public void onTurnUpdate() {
         sprite.setState(fuseLength.toString());
-        soundManager.playSoundEffect("Lit Bomb");
         fuseLength--;
-
-//        int count = MAX_FUSE_LENGTH - fuseLength;
-//        int redness = Math.min( (int)(((double)count)/MAX_FUSE_LENGTH * 255), 255);
-//        bomb.setFill(Color.rgb(redness, 0, 0));
 
         if (fuseLength < 0)
             onExplosion();
+        else
+            soundManager.playSoundEffect("Click");
     }
 
 
@@ -101,24 +89,79 @@ public class LitBomb extends Prop{
      */
     public void onExplosion() {
         System.out.println("EXPLOSION");
-        soundManager.playSoundEffect("Lit Bomb Explosion");
+        soundManager.playSoundEffect("Explosion");
         ArrayList<Vec2i> targets = new ArrayList<>();
 
         for (Vec2i dir : Vec2i.DIRECTIONS) {
             Vec2i target = new Vec2i(pos);
             for (int i = 1; i <= radius; i++) {
                 target = target.add(dir);
-
+                if (!level.canReplaceProp(target, this)) {
+                    break;
+                }
                 targets.add(target);
-                //TODO: animation wait
-//                sprite.playAnime("Lit Bomb Explosion");
 
-//                destroyEntity(target);
+                SpriteView temp = new SpriteView(getImage("sprite/prop/litbomb/centre0.png"),new Vec2d(-8 + dir.getX()*i*30,-8 + dir.getY()*i*30), 1.875,1.875);
+//                temp.setX(sprite.getX() + dir.getX()*i*30);
+//                temp.setY(sprite.getY() + dir.getY()*i*30);
+                if (i == radius) {
+                    //render end
+                    temp.addAnime("Default", generateAnimation("right", 4,   new Vec2d(dir.getX()*i*30,dir.getY()*i*30), temp));
+                } else {
+                    //render middle
+                    temp.addAnime("Default", generateAnimation("middle", 4,  new Vec2d(dir.getX()*i*30,dir.getY()*i*30), temp));
+                }
+                if (dir.equals(Vec2i.WEST)) {
+                    temp.setRotate(180);
+                } else if (dir.equals(Vec2i.NORTH)) {
+                    temp.setRotate(270);
+                } else if (dir.equals(Vec2i.SOUTH)) {
+                    temp.setRotate(90);
+                } else if (dir.equals(Vec2i.EAST)) {
+                    temp.setRotate(0);
+                }
+                view.addNode(temp);
+                final Vec2i fTarget = target;
+                temp.playAnime("Default", e -> {
+                    System.out.println("ANIMATION ENDED!");
+                    destroyEntity(fTarget);
+                });
+                destroyEntity(target);
             }
         }
-        destroyEntity(pos);
+//        System.out.printf("%d\n", targets.size());
+//        HashMap<String, SpriteView> flareMapping = new HashMap<>();
+        for (int j = 0; j < targets.size(); j++) {
+            System.out.println(targets.get(j));
+        }
 
-        onDestroyed();
+//        SpriteView temp = new SpriteView(getImage("sprite/prop/litbomb/centre0.png"),new Vec2d(-8,-8), 1.875,1.875);
+//        temp.addAnime("Default", generateAnimation("right", 4));
+//        view.addNode(temp);
+//        temp.setX(sprite.getX()+30);
+        sprite.playAnime("Centre",afterFinish);
+//        sprite.playAnime("Centre",afterFinish);
+
+
+//        this.destroyEntity(pos);
+//        onDestroyed();
+    }
+
+    public SpriteAnimation generateAnimation(String name, int number, Vec2d offset, SpriteView sp) {
+        System.out.println(offset);
+        SpriteAnimation end = new SpriteAnimation(sp, new Duration(500), new Vec2i(-8 + (int) offset.getX(), -8 + (int)offset.getY()), 1.875, 1.875);
+        StringBuilder sb;// = new StringBuilder("sprite/prop/litbomb/");
+//        sb.append(name);
+        for (Integer i = 0; i < number; i++) {
+            sb = new StringBuilder("sprite/prop/litbomb/").append(name);
+            end.addState(getImage(sb.append(i).append(".png").toString()));
+            if (i != 0) {
+//                end.alignToUp(1, i);
+//                end.alignToLeft(1, i);
+            }
+        }
+        end.alignOffset(offset);
+        return end;
     }
 
 
