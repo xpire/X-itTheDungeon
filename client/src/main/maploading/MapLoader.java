@@ -111,7 +111,7 @@ public class MapLoader {
         while (sc.hasNextLine()) {
 
             line = readLine(sc);
-            if (line.length == 0) break;
+            if (line.length == 0 || line.length == 1 && line[0].equals("")) break;
             if (line.length != 4) throw new InvalidMapException("Invalid Key-Door mapping");
 
             Vec2i keyPos = new Vec2i(

@@ -55,8 +55,6 @@ public class SpriteView extends ImageView{
         setY(offset.getY());
         setScaleX(scaleToBeSetX);
         setScaleY(scaleToBeSetY);
-//        setTranslateX(offset.getX());
-//        setTranslateY(offset.getY());
     }
 
     public void addAnime(String name, SpriteAnimation animation) {

@@ -375,7 +375,7 @@ public class Avatar extends Entity {
 
 
     @Override
-    public void onDestroyed() {
+    public void destroy() {
         level.removeAvatar();
     }
 
@@ -385,7 +385,7 @@ public class Avatar extends Entity {
         level.postEvent(new DeathEvent(DeathEvent.DEATH_BY_FALL, true));
         soundManager.playSoundEffect("Falling");
         soundManager.playSoundEffect("Death");
-        onDestroyed();
+        destroy();
     }
 
     public void onThreatenedByBomb(Bomb bomb) {
@@ -393,18 +393,18 @@ public class Avatar extends Entity {
 
         level.postEvent(new DeathEvent(DeathEvent.DEATH_BY_BOMB, true));
         soundManager.playSoundEffect("Death");
-        onDestroyed();
+        destroy();
     }
 
     public void onThreatenedByEnemy(Enemy enemy) {
         if (isRaged()) {
             level.postEvent(new DeathEvent(DeathEvent.DEATH_BY_ATTACK, false));
-            enemy.onDestroyed();
+            enemy.destroy();
         }
         else {
             level.postEvent(new DeathEvent(DeathEvent.DEATH_BY_ATTACK, true));
             soundManager.playSoundEffect("Death");
-            onDestroyed();
+            destroy();
         }
     }
 
@@ -543,7 +543,7 @@ public class Avatar extends Entity {
         if (level.isValidGridPos(target) && level.hasEnemy(target)) {
 
             // Kill the enemy
-            level.getEnemy(target).onDestroyed();
+            level.getEnemy(target).destroy();
             sword.reduceDurability();
             swordDurability.set(sword.getDurability());
             soundManager.playSoundEffect("Hit");
@@ -577,7 +577,6 @@ public class Avatar extends Entity {
 
         //Animation
         sprite.playAnimation("Bow", direction, doNothing);
-
 
         // -1 arrow
         numArrows.set(numArrows.get() - 1);

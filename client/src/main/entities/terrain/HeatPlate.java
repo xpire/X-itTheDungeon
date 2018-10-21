@@ -6,12 +6,9 @@ import main.Level;
 import main.entities.Avatar;
 import main.entities.Entity;
 import main.entities.enemies.Enemy;
-import main.entities.prop.Prop;
 import main.math.Vec2d;
-import main.math.Vec2i;
 import main.sprite.SpriteView;
 
-import java.util.EnumMap;
 
 /**
  * Class describing the Pit entity
@@ -76,7 +73,7 @@ public class HeatPlate extends Terrain{
 
         if (state == BURN) {
             if (level.hasEnemy(pos)) {
-                level.getEnemy(pos).onDestroyed(); //TodO differentiate between onDestroyed and destroy
+                level.getEnemy(pos).destroy(); //TodO differentiate between destroy and destroy
             }
 
             if (level.hasAvatar(pos)) {
@@ -99,7 +96,7 @@ public class HeatPlate extends Terrain{
     @Override
     public void onEnterByEnemy(Enemy enemy) {
         if (state == BURN)
-            enemy.onDestroyed();
+            enemy.destroy();
     }
 
     @Override

@@ -25,7 +25,7 @@ public abstract class Prop extends Entity {
 
 
     @Override
-    public void onDestroyed() {
+    public void destroy() {
         level.removeProp(getGridPos());
     }
 

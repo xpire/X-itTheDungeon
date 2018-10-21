@@ -19,7 +19,7 @@ public abstract class Terrain extends Entity {
     }
 
     @Override
-    public void onDestroyed() {
+    public void destroy() {
         level.removeTerrain(getGridPos(), true);
     }
 

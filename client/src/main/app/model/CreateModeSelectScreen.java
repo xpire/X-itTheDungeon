@@ -8,6 +8,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Box;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+import main.Level;
 import main.app.controller.AppController;
 import main.app.controller.CreateModeSelectController;
 import main.maploading.DraftBuilder;
@@ -46,36 +47,43 @@ public class CreateModeSelectScreen extends AppScreen{
                      HBox totalView = new HBox();
                      totalView.setSpacing(10);
 
-                     ScrollPane viewPane = new ScrollPane();
-                     viewPane.setPrefSize(270, 270);
-                     viewPane.setMaxSize(270,270);
+//                     ScrollPane viewPane = new ScrollPane();
+//                     viewPane.setPrefSize(270, 270);
+//                     viewPane.setMaxSize(270,270);
 
                      DraftBuilder previewBuilder = new DraftBuilder(
                              new MapLoader().loadLevel(trimmedFileName, "src/main/drafts", true));
 
                      Group preview = previewBuilder.getView();
 
+                     Level level = previewBuilder.getLevel();
+                     double scaleFactor = 270.0 / Math.max(level.getWidth(), level.getHeight());
+
+                     level.rescale(30.0 * scaleFactor);
+
 //                     preview.setScaleX(9.0/Math.max(previewBuilder.getNCols(), previewBuilder.getNRows()));
 //                     preview.setScaleY(9.0/Math.max(previewBuilder.getNCols(), previewBuilder.getNRows()));
-                     viewPane.setBorder(new Border(new BorderStroke(Color.BLACK,
-                             BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
-                     viewPane.setContent(preview);
+//                     viewPane.setBorder(new Border(new BorderStroke(Color.BLACK,
+//                             BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+//                     viewPane.setContent(preview);
 //                     viewPane.setPrefViewportWidth(100);
 
-                     int maxDim = Math.max(previewBuilder.getNCols(), previewBuilder.getNRows());
-                     int prefSize = 9;
-                     double scaleFactor = (double) prefSize/maxDim;
-
-                     System.out.println(previewBuilder.getNCols() + " " + previewBuilder.getNRows() + " " + scaleFactor);
-                     preview.setScaleX(scaleFactor);
-                     preview.setScaleY(scaleFactor);
-                     preview.setTranslateX(-(previewBuilder.getNCols() - prefSize) * 15 * scaleFactor);
+//                     int maxDim = Math.max(previewBuilder.getNCols(), previewBuilder.getNRows());
+//                     int prefSize = 9;
+//                     double scaleFactor = (double) prefSize/maxDim;
+//
+//                     System.out.println(previewBuilder.getNCols() + " " + previewBuilder.getNRows() + " " + scaleFactor);
+//                     preview.setScaleX(scaleFactor);
+//                     preview.setScaleY(scaleFactor);
+//                     preview.setTranslateX(-(previewBuilder.getNCols() - prefSize) * 15 * scaleFactor);
 //                     preview.setTranslateY(-(previewBuilder.getNRows() - prefSize) * 16.1 * scaleFactor);
 //
 
-                     viewPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-                     viewPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-                     totalView.getChildren().add(viewPane);
+//                     viewPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+//                     viewPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+//                     totalView.getChildren().add(viewPane);
+
+                     totalView.getChildren().add(preview);
 
                      VBox optionsList = new VBox();
                      optionsList.setSpacing(10);

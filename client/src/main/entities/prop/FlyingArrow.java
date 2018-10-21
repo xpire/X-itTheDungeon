@@ -45,7 +45,7 @@ public class FlyingArrow extends Prop{
 
             // enemy hit
             if (level.hasEnemy(finishPos)) {
-                level.getEnemy(finishPos).onDestroyed();
+                level.getEnemy(finishPos).destroy();
                 break;
             }
             // non-passable entity hit
@@ -68,7 +68,7 @@ public class FlyingArrow extends Prop{
         transition.setOnFinished(e -> {
 //            if (level.hasEnemy(fPos))
 //                level.getEnemy(fPos).onDestroyed();
-            this.onDestroyed();
+            destroy();
         });
         transition.play();
     }

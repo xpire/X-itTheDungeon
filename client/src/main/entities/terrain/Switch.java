@@ -67,7 +67,7 @@ public class Switch extends Terrain{
     }
 
     @Override
-    public void onDestroyed() {
+    public void destroy() {
         level.postEvent(new SwitchEvent(SwitchEvent.SWITCH_DESTROYED));
     }
 

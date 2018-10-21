@@ -86,4 +86,8 @@ public abstract class EntityLayer <T extends Entity> {
     public void setOnEntityLeave(BiConsumer<Vec2i, T> onEntityLeave) {
         this.onEntityLeave = onEntityLeave;
     }
+
+    public void rescale() {
+        iterator().forEachRemaining(Entity::onLevelRescaled);
+    }
 }
