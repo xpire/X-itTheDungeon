@@ -31,6 +31,8 @@ import main.math.Vec2d;
 import main.math.Vec2i;
 import main.sprite.SpriteView;
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -108,23 +110,7 @@ public class CreativeLabScreen extends AppScreen {
 
         addEraser(spriteViews);
 
-
-        for (Node n : toolbox.getChildren()) {
-            GridPane.setHalignment(n, HPos.CENTER);
-            GridPane.setValignment(n, VPos.CENTER);
-        }
-    }
-
-    private void addEraser(ArrayList<SpriteView> spriteViews) {
-        SpriteView eraser = new SpriteView(
-                new Image("./src/asset/sprite/eraser.png"), new Vec2d(-8, -8), 2, 2);
-        eraser.setOnMouseClicked(e -> {
-            selectedEntity = "E";
-            setSelectedGlow(spriteViews, eraser);
-        });
-
-        spriteViews.add(eraser);
-        controller.getToolbox().add(eraser, 11, 0, 2, 1);
+        centreGridPaneChildren(toolbox);
     }
 
     /**
@@ -147,37 +133,35 @@ public class CreativeLabScreen extends AppScreen {
         publish.setText("Publish");
         exit.setText("Exit");
 
-        //Maybe make the options menu more fxml integrated rather than model
         save.setOnAction(e -> draftBuilder.getLevel().toFile(draftBuilder.getName(), "main/drafts"));
         exit.setOnAction(e -> controller.switchScreen(new CreateModeSelectScreen(this.getStage())));
         publish.setOnAction(e -> testPlay(true));
 
+        HBox resizeRow = new HBox();
+        HBox resizeCol = new HBox();
+
+        Label rowsLabel  = new Label("Rows: ");
+        Label colsLabel  = new Label("Cols: ");
+        rowsLabel.setMinWidth(15.0);
+        colsLabel.setMinWidth(15.0);
+
+        TextField newRow = new TextField(String.valueOf(draftBuilder.getNRows()));
+        TextField newCol = new TextField(String.valueOf(draftBuilder.getNCols()));
+        newRow.setMaxWidth(45.0);
+        newCol.setMaxWidth(45.0);
+        newRow.setOnAction(e -> resize.fire());
+        newCol.setOnAction(e -> resize.fire());
+
+        resizeRow.getChildren().addAll(rowsLabel, newRow);
+        resizeCol.getChildren().addAll(colsLabel, newCol);
+
         optionsMenu.add(save, 0, 0);
         optionsMenu.add(saveAs, 0, 1);
         optionsMenu.add(resize, 0, 2);
-        optionsMenu.add(publish, 0, 5);
-        optionsMenu.add(exit, 0, 7);
-
-        Label rowsLabel  = new Label("Rows: ");
-        rowsLabel.setMinWidth(15.0);
-        TextField newRow = new TextField(String.valueOf(draftBuilder.getNRows()));
-        newRow.setOnAction(e -> resize.fire());
-        newRow.setMaxWidth(45.0);
-
-        Label colsLabel  = new Label("Cols: ");
-        colsLabel.setMinWidth(15.0);
-        TextField newCol = new TextField(String.valueOf(draftBuilder.getNCols()));
-        newCol.setOnAction(e -> resize.fire());
-        newCol.setMaxWidth(45.0);
-
-        HBox resizeRow = new HBox();
-        resizeRow.getChildren().addAll(rowsLabel, newRow);
-
-        HBox resizeCol = new HBox();
-        resizeCol.getChildren().addAll(colsLabel, newCol);
-
         optionsMenu.add(resizeRow, 0 ,3);
         optionsMenu.add(resizeCol, 0 , 4);
+        optionsMenu.add(publish, 0, 5);
+        optionsMenu.add(exit, 0, 7);
 
         resize.setOnAction(e -> {
             try {
@@ -202,11 +186,7 @@ public class CreativeLabScreen extends AppScreen {
             }
         });
 
-        for (Node n : optionsMenu.getChildren()) {
-            GridPane.setHalignment(n, HPos.CENTER);
-            GridPane.setValignment(n, VPos.CENTER);
-        }
-
+        centreGridPaneChildren(optionsMenu);
     }
 
     /**
@@ -266,7 +246,6 @@ public class CreativeLabScreen extends AppScreen {
             }
 
             setObjectives(objectives);
-        System.out.println(draftBuilder.listObjectives());
         };
 
         exitCondition.setOnAction(makeMutuallyExclusive);
@@ -279,7 +258,11 @@ public class CreativeLabScreen extends AppScreen {
         objectivesBox.add(treasureCondition, 1, 0);
         objectivesBox.add(switchCondition, 1, 1);
 
-        for (Node n : objectivesBox.getChildren()) {
+        centreGridPaneChildren(objectivesBox);
+    }
+
+    private void centreGridPaneChildren(GridPane gp) {
+        for (Node n : gp.getChildren()) {
             GridPane.setHalignment(n, HPos.CENTER);
             GridPane.setValignment(n, VPos.CENTER);
         }
@@ -394,7 +377,6 @@ public class CreativeLabScreen extends AppScreen {
      * @param j : y position
      */
     private void editorSelectHandler(int i, int j) {
-        //make this prettier..this is bloody atrocious
         Pane pane = new Pane();
         pane.setPrefSize(30, 30);
 
@@ -493,6 +475,25 @@ public class CreativeLabScreen extends AppScreen {
 
         views.add(s);
         controller.getToolbox().add(s, x, y);
+    }
+
+    /**
+     * Special method to load in the eraser sprite to the toolbox
+     * @param spriteViews : the ArrayList of all sprites in the toolbox
+     */
+    private void addEraser(ArrayList<SpriteView> spriteViews) {
+        SpriteView eraser;
+        try (FileInputStream image = new FileInputStream("./src/asset/sprite/eraser.png")) {
+            eraser = new SpriteView(new Image(image), new Vec2d(-8, -8), 2, 2);
+            eraser.setOnMouseClicked(e -> {
+                selectedEntity = "E";
+                setSelectedGlow(spriteViews, eraser);
+            });
+            spriteViews.add(eraser);
+            controller.getToolbox().add(eraser, 11, 1, 2, 1);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
 
     /**
