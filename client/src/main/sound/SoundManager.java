@@ -111,7 +111,7 @@ public class SoundManager {
         StringBuilder sb = new StringBuilder("src/asset/music/");
         sb.append(source);
         File file = new File(sb.toString());
-        System.out.println(file.toURI().toString());
+//        System.out.println(file.toURI().toString());
         AudioClip sound = new AudioClip(file.toURI().toString());
         soundEffectsMap.put(name,sound);
     }
@@ -120,7 +120,7 @@ public class SoundManager {
         StringBuilder sb = new StringBuilder("src/asset/music/");
         sb.append(source);
         File file = new File(sb.toString());
-        System.out.println(file.toURI().toString());
+//        System.out.println(file.toURI().toString());
         Media sound = new Media(file.toURI().toString());
         BGMMap.put(name,sound);
     }
