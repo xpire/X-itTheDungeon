@@ -70,4 +70,12 @@ public class MainController extends AppController implements Initializable  {
     public void onHelpBtnPressed() {
         switchScreen(new HelpManualScreen(screen.getStage(), screen));
     }
+
+    public void onSettingBtnPressed() {
+        switchScreen(new SettingScreen(screen.getStage(), screen));
+    }
+
+    public void onExitBtnPressed() { screen.getStage().close(); }
+
+
 }

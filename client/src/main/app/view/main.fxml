@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="640.0" prefWidth="960.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane prefHeight="640.0" prefWidth="960.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Button fx:id="btnPlay" layoutX="243.0" layoutY="295.0" mnemonicParsing="false" onAction="#onPlayBtnPressed" prefHeight="104.0" prefWidth="182.0" text="Play" />
       <Button fx:id="btnMake" layoutX="555.0" layoutY="295.0" mnemonicParsing="false" onAction="#onMakeBtnPressed" prefHeight="104.0" prefWidth="203.0" text="Make" />
@@ -19,7 +19,7 @@
       </Label>
       <Button layoutX="291.0" layoutY="512.0" minWidth="52.0" mnemonicParsing="false" onAction="#onTrophyBtnPressed" prefHeight="52.0" prefWidth="52.0" text="Troph" />
       <Button layoutX="409.0" layoutY="512.0" minWidth="52.0" mnemonicParsing="false" onAction="#onHelpBtnPressed" prefHeight="52.0" prefWidth="52.0" text="Help" />
-      <Button layoutX="538.0" layoutY="512.0" minWidth="52.0" mnemonicParsing="false" prefHeight="52.0" prefWidth="52.0" text="Setting" />
-      <Button layoutX="656.0" layoutY="512.0" minWidth="52.0" mnemonicParsing="false" prefHeight="52.0" prefWidth="52.0" text="Exit" />
+      <Button layoutX="538.0" layoutY="512.0" minWidth="52.0" mnemonicParsing="false" onAction="#onSettingBtnPressed" prefHeight="52.0" prefWidth="52.0" text="Setting" />
+      <Button layoutX="656.0" layoutY="512.0" minWidth="52.0" mnemonicParsing="false" onAction="#onExitBtnPressed" prefHeight="52.0" prefWidth="52.0" text="Exit" />
    </children>
 </AnchorPane>
