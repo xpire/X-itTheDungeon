@@ -29,7 +29,8 @@ public class Arrow extends Pickup{
 
     @Override
     public void onCreated(){
-        sprite = new SpriteView(getImage("sprite/pickup/arrow/0.png"), new Vec2d(-8,-8), 1,1);
+        super.onCreated();
+        sprite = new SpriteView(getImage("sprite/pickup/arrow/0.png"),new Vec2d(-8,-8), 1,1);
         view.addNode(sprite);
     }
 

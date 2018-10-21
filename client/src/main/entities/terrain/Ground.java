@@ -27,6 +27,7 @@ public class Ground extends Terrain {
 
     @Override
     public void onCreated() {
+        super.onCreated();
         sprite = new SpriteView(getImage("sprite/terrain/ground/8.png"),new Vec2d(-8,-8), 1.875,1.875);
         view.addNode(sprite);
     }

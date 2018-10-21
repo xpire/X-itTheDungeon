@@ -32,11 +32,7 @@ public class Sword extends Pickup {
 
     @Override
     public void onCreated(){
-//        Rectangle stick = new Rectangle(16, 2, Color.STEELBLUE);
-//        stick.setRotate(-45);
-//        view.addNode(stick);
-//        view.setCentre(new Vec2d(8, 2));
-
+        super.onCreated();
         sprite = new SpriteView(getImage("sprite/pickup/sword/0.png"),new Vec2d(-8,-8), 1,1);
         view.addNode(sprite);
     }

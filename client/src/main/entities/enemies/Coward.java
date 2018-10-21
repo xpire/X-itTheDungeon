@@ -37,7 +37,6 @@ public class Coward extends Enemy {
     @Override
     public void onCreated(){
         super.onCreated();
-//        view.addNode(new Circle(10, Color.GREEN));
         sprite = new SpriteView(getImage("sprite/enemies/coward/0.png"),new Vec2d(-6,-8), 1.875,1.875);
         view.addNode(sprite);
     }

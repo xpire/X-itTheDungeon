@@ -29,8 +29,7 @@ public class Boulder extends Prop {
 
     @Override
     public void onCreated(){
-//        Circle circle = new Circle(12, Color.HONEYDEW);
-//        view.addNode(circle);
+        super.onCreated();
         sprite = new SpriteView(getImage("sprite/prop/boulder/2.png"), new Vec2d(-8,-8), 1,1);
         view.addNode(sprite);
     }

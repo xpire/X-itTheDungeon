@@ -35,7 +35,6 @@ public class Hound extends Enemy { //TODO remove test codes
     @Override
     public void onCreated(){
         super.onCreated();
-//        view.addNode(new Circle(10, Color.YELLOW));
         sprite = new SpriteView(getImage("sprite/enemies/hound/0.png"),new Vec2d(-6,-8), 1.875,1.875);
         view.addNode(sprite);
     }

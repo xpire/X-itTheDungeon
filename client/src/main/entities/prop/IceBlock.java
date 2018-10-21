@@ -31,8 +31,7 @@ public class IceBlock extends Prop {
 
     @Override
     public void onCreated(){
-//        Circle circle = new Circle(12, Color.LIGHTBLUE);
-//        view.addNode(circle);
+        super.onCreated();
         sprite = new SpriteView(getImage("sprite/prop/boulder/0.png"),new Vec2d(-8,-8), 1.875,1.875);
         view.addNode(sprite);
     }
@@ -59,38 +58,53 @@ public class IceBlock extends Prop {
         Vec2i dir = pos.sub(avatar.getGridPos());
         Vec2i target = pos.add(dir);
         Vec2i originalPos = new Vec2i(pos);
-
         int counter = 0;
 
+        //check if a single push is possible
         if (!level.isPassableForProp(target, this))
             return false;
+
+        //Set current sprite as invisible
         sprite.setVisible(false);
-        SpriteView spriteTransition = new SpriteView(getImage("sprite/prop/boulder/0.png"),new Vec2d(-8,-8), 1.875,1.875);
+
+        //Sprite for the transition
+        SpriteView spriteTransition = new SpriteView(
+                getImage("sprite/prop/boulder/0.png"),
+                new Vec2d(-8,-8),
+                1.875,
+                1.875
+        );
         Vec2d worldPos = level.gridPosToWorldPosCentre(originalPos).add(new Vec2d(-8, -8));
         spriteTransition.setX(worldPos.getX());
         spriteTransition.setY(worldPos.getY());
         level.getView().getChildren().add(spriteTransition);
 
-
+        //Move the actual sprite
         while (level.isPassableForProp(target, this)) {
             level.moveProp(target, this);
             target = target.add(dir);
             counter++;
         }
+        //-1 for over counting
         target = target.sub(dir);
 
+        //Translation sprite
         TranslateTransition transition = new TranslateTransition();
-        transition.setDuration(Duration.millis(1000));
+        transition.setDuration(Duration.millis(1+counter*100));
         transition.setNode(spriteTransition);
 
+        //Calculate translate path
         if (dir.getY() == 0)
             transition.setByX((target.getX()-originalPos.getX())*30);
         if (dir.getX() == 0)
             transition.setByY((target.getY()-originalPos.getY())*30);
+
+        //Reset visibilities, remove sprite for transition
         transition.setOnFinished(e -> {
             sprite.setVisible(true);
             spriteTransition.setVisible(false);
         });
+
         transition.play();
 
         return true;
