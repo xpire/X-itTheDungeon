@@ -36,7 +36,12 @@ public class AchievementInit {
         Achievement a = new Achievement(name, desc, target, stats.get(statType));
         a.isAchieved().addListener((observable, oldValue, newValue) -> {
             if (newValue) {
-                Toast.makeToast(Main.primaryStage, "Achievement Unlocked: " + a.getName(), 1000, 500, 1000);
+                new Toast.Builder(Main.primaryStage)
+                        .msg("Achievement Unlocked: " + a.getName())
+                        .toastDelay(1000)
+                        .fadeInDelay(500)
+                        .fadeOutDelay(1000)
+                        .makeToast();
             }
         });
 

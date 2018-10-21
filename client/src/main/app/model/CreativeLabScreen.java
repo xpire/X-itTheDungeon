@@ -16,6 +16,8 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import main.Level;
+import main.Toast;
+import main.app.Main;
 import main.app.controller.AppController;
 import main.app.controller.CreativeLabController;
 import main.entities.Avatar;
@@ -133,7 +135,10 @@ public class CreativeLabScreen extends AppScreen {
         publish.setText("Publish");
         exit.setText("Exit");
 
-        save.setOnAction(e -> draftBuilder.getLevel().toFile(draftBuilder.getName(), "main/drafts"));
+        save.setOnAction(e -> {
+            draftBuilder.getLevel().toFile(draftBuilder.getName(), "main/drafts");
+            printPrompt("Draft Saved");
+        });
         exit.setOnAction(e -> controller.switchScreen(new CreateModeSelectScreen(this.getStage())));
         publish.setOnAction(e -> testPlay(true));
 
@@ -155,28 +160,29 @@ public class CreativeLabScreen extends AppScreen {
         resizeRow.getChildren().addAll(rowsLabel, newRow);
         resizeCol.getChildren().addAll(colsLabel, newCol);
 
-
         HBox saveAsBox = new HBox();
-        TextField newName = new TextField();
-        newName.setPromptText("New Name:");
+        TextField newName = new TextField(draftBuilder.getName());
         newName.setMaxWidth(90);
         newName.setVisible(false);
 
         Button confirmName = new Button("OK");
         confirmName.setVisible(false);
         confirmName.setOnAction(confirm -> {
-            if (!newName.getText().equals("")) {
-                draftBuilder.toFile(newName.getText(), "main/drafts");
-                draftBuilder.setName(newName.getText());
-                System.out.println("map saved!");
+            String newDraftName = newName.getText();
+            if (!newDraftName.equals("") && newDraftName.matches("[a-zA-Z0-9]+")) {
+
+                draftBuilder.toFile(newDraftName, "main/drafts");
+                draftBuilder.setName(newDraftName);
+                printPrompt("Draft saved as " + newDraftName);
             }
             else {
-                System.out.println("plz enter a name");
+                printPrompt("Please enter a valid draft name");
             }
         });
 
         saveAs.setOnAction(e -> {
             newName.setVisible(true);
+            newName.requestFocus();
             confirmName.setVisible(true);
         });
 
@@ -199,7 +205,7 @@ public class CreativeLabScreen extends AppScreen {
                 int newColSize = Integer.parseInt(newCol.getText());
 
                 if (!new Vec2i(newColSize, newRowSize).within(new Vec2i(4, 4), new Vec2i(24, 24))) {
-                    System.out.println("Size between 4x4 and 24x24 please");
+                    printPrompt("Size must be between 4x4 and 24x24");
                     newRow.setText(String.valueOf(draftBuilder.getNRows()));
                     newCol.setText(String.valueOf(draftBuilder.getNCols()));
                     return;
@@ -430,14 +436,14 @@ public class CreativeLabScreen extends AppScreen {
                             selectedEntity = "|";
                             wasKey = true;
                             isKeyDoorMatching = true;
-                            System.out.println("plz set matching door");
+                            printPrompt("Please select position of matching door");
                             break;
                         case "|":
                             originalPos = pos;
                             selectedEntity = "K";
                             wasKey = false;
                             isKeyDoorMatching = true;
-                            System.out.println("plz set matching key");
+                            printPrompt("Please select position of matching key");
                             break;
                         default:
                             draftBuilder.editTileGUI(pos, selectedEntity);
@@ -459,7 +465,7 @@ public class CreativeLabScreen extends AppScreen {
                             selectedEntity = "K";
                             break;
                         default:
-                            System.out.println("selected entity was changed");
+                            printPrompt("Error: selected entity was changed");
                     }
                     isKeyDoorMatching = false;
                     draftBuilder.displayLevel();
@@ -558,6 +564,14 @@ public class CreativeLabScreen extends AppScreen {
      */
     public Node getView() {
         return draftBuilder.getView();
+    }
+
+    /**
+     * Prints prompts out on the screen when needed
+     * @param prompt : msg to be printed out
+     */
+    private void printPrompt(String prompt) {
+        Toast.messageToast(Main.primaryStage, prompt);
     }
 
     @Override
