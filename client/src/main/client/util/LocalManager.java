@@ -10,7 +10,6 @@ import java.util.Arrays;
 import java.util.stream.Collectors;
 
 public class LocalManager {
-
     public static class LocalStructure {
         public String username;
         public String mapname;
@@ -240,6 +239,7 @@ public class LocalManager {
 
             while ((Line = reader.readLine()) != null) {
                 contentMap.append(Line);
+                contentMap.append("\n");
             }
 
             return contentMap.toString();
@@ -324,6 +324,38 @@ public class LocalManager {
                 }
             }
             catch (IOException e) { e.printStackTrace(); }
+        }
+    }
+
+    // User is logged in
+    public static void delMap(LocalStructure x) {
+        File[] files = new File(PATH + Main.currClient.getLoggedUser() + "/downloads/").listFiles();
+
+        File correctFile = Arrays.stream(files)
+                .filter(e -> parseStruct(e).equals(x))
+                .findFirst()
+                .orElse(null);
+
+        if (correctFile != null) {
+            if (correctFile.delete()) {
+                System.out.println("Delete nice.");
+            }
+        }
+    }
+
+    // User is logged in
+    public static void delMapDraft(LocalStructure x, String who) {
+        File[] files = new File(PATH + who + "/drafts/").listFiles();
+
+        File correctFile = Arrays.stream(files)
+                .filter(e -> parseStruct(e).equals(x))
+                .findFirst()
+                .orElse(null);
+
+        if (correctFile != null) {
+            if (correctFile.delete()) {
+                System.out.println("Delete nice.");
+            }
         }
     }
 }

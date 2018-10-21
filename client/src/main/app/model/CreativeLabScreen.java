@@ -29,6 +29,7 @@ import main.entities.terrain.*;
 import main.content.ObjectiveFactory;
 import main.maploading.DraftBuilder;
 import main.maploading.InvalidMapException;
+import main.maploading.MapLoader;
 import main.math.Vec2d;
 import main.math.Vec2i;
 import main.sprite.SpriteView;
@@ -144,11 +145,14 @@ public class CreativeLabScreen extends AppScreen {
         help.setOnAction(e -> controller.switchScreen(new HelpManualScreen(getStage(), this)));
         exit.setOnAction(e -> controller.switchScreen(new CreateModeSelectScreen(this.getStage())));
         publish.setOnAction(e -> {
-            if (draftBuilder.isTrivialLevel()) {
+            draftBuilder.toFile("objectiveTestTemp", "save/temp");
+            Level tempLevel = new MapLoader().loadLevel("objectiveTestTemp", "src/save/temp", true);
+
+            if (tempLevel.checkAchievedAllObjectives()) {
                 Toast.messageToast(getStage(), "Sorry, level is trivial");
                 return;
             }
-            if (draftBuilder.containsExit() && !draftBuilder.listObjectives().contains("EXIT")) {
+            if (tempLevel.containsExit() && !tempLevel.listObjectives().contains("EXIT")) {
                 Toast.messageToast(getStage(), "Exit must be the condition if Exit exists");
                 return;
             }
