@@ -48,7 +48,7 @@ public class CreateModeSelectController extends AppController<CreateModeSelectSc
     @FXML
     public void onBeginNewDraftBtnPressed() {
         if (newDraftNameField.getText().length() == 0) {
-            System.out.println("plz give the draft a name");
+            System.out.println("plz give the drafts a name");
             return;
         }
 

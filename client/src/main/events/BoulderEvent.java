@@ -6,7 +6,7 @@ import main.entities.prop.Boulder;
 import main.entities.terrain.Door;
 
 /**
- * An event which indicates that a door has been removed from a draft
+ * An event which indicates that a door has been removed from a drafts
  */
 public class BoulderEvent extends GameEvent {
 

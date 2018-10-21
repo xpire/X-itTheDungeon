@@ -2,6 +2,9 @@ package main;
 
 import javafx.beans.binding.Binding;
 import javafx.beans.binding.Bindings;
+import javafx.event.Event;
+import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -26,6 +29,8 @@ import main.events.AvatarEvent;
 import main.events.LevelEvent;
 import main.maploading.MapLoader;
 import main.sound.SoundManager;
+
+import java.awt.event.ActionEvent;
 
 
 /*
@@ -58,17 +63,9 @@ public class PlayMode implements Game {
     private boolean isGameOver = false;
 
     // TAKE SCENE OUT!
-    public PlayMode(Scene scene, String levelName, String levelPath, boolean isPublishTest) {
+    public PlayMode(Scene scene, String levelName, String levelPath) {
 
         level = new MapLoader().loadLevel(levelName, levelPath);
-
-        if (isPublishTest) level.addEventHandler(LevelEvent.LEVEL_PASSED, e -> {
-            //LocalManager.LocalDraftAdd(level.getName(), level.toFile());
-            System.out.println("YOU WON, CAN NOW PUBLISH");
-            System.out.println("YOU WON, CAN NOW PUBLISH");
-            System.out.println("YOU WON, CAN NOW PUBLISH");
-            System.out.println("YOU WON, CAN NOW PUBLISH");
-        });
 
         avatar = level.getAvatar();
 
@@ -252,4 +249,10 @@ public class PlayMode implements Game {
     public void setLevelNum(int levelNum) {
         this.levelNum = levelNum;
     }
+
+    public <T extends Event> void addEventHandler(EventType<T> type, EventHandler<? super T> handler) {
+        level.addEventHandler(type, handler);
+    }
+
+    public Level getLevel() { return level; }
 }

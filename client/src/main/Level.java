@@ -985,7 +985,7 @@ public class Level {
         return size;
     }
     /**
-     * Saves the current state of the draft to a .txt file which can
+     * Saves the current state of the drafts to a .txt file which can
      * be later loaded by the MapLoader
      *
      * Opens a new txt file for writing,
@@ -994,7 +994,7 @@ public class Level {
      * Writes the objective
      * Writes the key-door mapping
      *
-     * @param mapName name of the draft
+     * @param mapName name of the drafts
      * @param path save location, root at main
      */
     public File toFile(String mapName, String path) {

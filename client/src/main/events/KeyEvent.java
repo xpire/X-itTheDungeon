@@ -6,7 +6,7 @@ import main.entities.pickup.Key;
 import main.entities.terrain.Door;
 
 /**
- * Event which indicates when a key has been removed in a draft
+ * Event which indicates when a key has been removed in a drafts
  */
 public class KeyEvent extends GameEvent {
 

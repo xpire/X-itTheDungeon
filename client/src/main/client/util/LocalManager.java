@@ -107,12 +107,16 @@ public class LocalManager {
 
     // Overloaded method
     public static void addMap(String username, String mapName, String mapContent, String where) {
+
+        System.out.println(mapName);
         File wantDir;
         if (!where.equals("default")) {
-            wantDir = new File(PATH + username + "/downloads/" + mapName + ".json");
+            wantDir = new File(PATH + username + "/drafts/" + mapName + ".json");
         } else {
-            wantDir = new File(PATH + "default" + "/downloads/" + mapName + ".json");
+            wantDir = new File(PATH + "default/" + mapName + ".json");
         }
+
+        System.out.println(wantDir.getName());
         try {
             if (wantDir.createNewFile()) {
                 FileWriter writer = new FileWriter(wantDir);
@@ -126,9 +130,8 @@ public class LocalManager {
                         )
                 );
                 writer.close();
-            } else {
-                System.out.println("Cannot create file.");
             }
+            else { System.out.println("Cannot create file."); }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -148,6 +151,19 @@ public class LocalManager {
             return new ArrayList<>();
     }
 
+    // Fetches the header of all the local maps to display for play
+    public static ArrayList<LocalStructure> fetchLocalDraft(String loggedUser) {
+        File usrDir = new File(PATH + loggedUser + "/drafts/");
+        File[] files = usrDir.listFiles();
+
+        if (files != null || files.length == 0)
+            return Arrays.stream(files)
+                    .map(LocalManager::parseStruct)
+                    .collect(Collectors.toCollection(ArrayList::new));
+        else
+            return new ArrayList<>();
+    }
+
     private static LocalStructure parseStruct(File file) {
         // Parse the file into a map
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
@@ -160,13 +176,19 @@ public class LocalManager {
         return null;
     }
 
-    public static void LocalDraftAdd(String mapName, String mapContent) {
+    public static void LocalDraftAdd(String mapName, File mapContent) {
+
+        String mapStringContent = parseMap(mapContent);
+
+        System.out.println(mapContent);
+
+        if (mapStringContent == null) { System.out.println("Publish operations failed"); }
         if (Main.currClient.isLoggedin()) {
             if (hasLogged(Main.currClient.getLoggedUser())) {
                 addMap(
                         Main.currClient.getLoggedUser(),
                         mapName,
-                        mapContent,
+                        mapStringContent,
                         "null"
                 );
             }
@@ -174,7 +196,7 @@ public class LocalManager {
                 addMap(
                         Main.currClient.getLoggedUser(),
                         mapName,
-                        mapContent,
+                        mapStringContent,
                         "default"
                 );
             }
@@ -183,9 +205,27 @@ public class LocalManager {
             addMap(
                     "Unknown",
                     mapName,
-                    mapContent,
+                    mapStringContent,
                     "default"
             );
         }
+        if (mapContent.delete()){ System.out.println("File deletion complete!!"); }
+        else { System.out.println("Something is wrong with buffer"); }
+    }
+
+    private static String parseMap(File mapContent) {
+        System.out.println(mapContent);
+        try (BufferedReader reader = new BufferedReader(new FileReader(mapContent))) {
+            StringBuilder contentMap = new StringBuilder();
+            String Line;
+
+            while ((Line = reader.readLine()) != null) {
+                contentMap.append(Line);
+            }
+
+            return contentMap.toString();
+        } catch (IOException e) {e.printStackTrace();}
+        System.out.println("Shouldn't be here. check parseMap");
+        return null;
     }
 }
