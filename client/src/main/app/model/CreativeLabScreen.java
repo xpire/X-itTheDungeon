@@ -95,7 +95,7 @@ public class CreativeLabScreen extends AppScreen {
         addSelectHandler(spriteViews, new Exit(temp), 5, 0);
         addSelectHandler(spriteViews, new Boulder(temp), 6, 0, 1.5, 1.5);
         addSelectHandler(spriteViews, new IceBlock(temp), 7, 0);
-//        addSelectHandler(spriteViews, new HeatPlate(temp), 8, 0);
+        addSelectHandler(spriteViews, new HeatPlate(temp), 8, 0);
         addSelectHandler(spriteViews, new Hunter(temp), 9, 0);
         addSelectHandler(spriteViews, new Strategist(temp), 10, 0);
         addSelectHandler(spriteViews, new Arrow(temp), 0, 1, 1.5, 1.5);
@@ -119,19 +119,21 @@ public class CreativeLabScreen extends AppScreen {
      * Initialises the Options GridPlane on the scene
      */
     public void initialiseOptions(GridPane optionsMenu) {
-        int numCols = 1, numRows = 8;
+        int numCols = 1, numRows = 9;
 
         initialiseGridPane(optionsMenu, numCols, numRows, true);
 
         Button save    = new Button();
         Button saveAs  = new Button();
         Button resize  = new Button();
+        Button help    = new Button();
         Button publish = new Button();
         Button exit    = new Button();
 
         save.setText("Save");
         saveAs.setText("Save As");
         resize.setText("Resize");
+        help.setText("Help");
         publish.setText("Publish");
         exit.setText("Exit");
 
@@ -139,6 +141,7 @@ public class CreativeLabScreen extends AppScreen {
             draftBuilder.getLevel().toFile(draftBuilder.getName(), "main/drafts");
             printPrompt("Draft Saved");
         });
+        help.setOnAction(e -> controller.switchScreen(new HelpManualScreen(getStage(), this)));
         exit.setOnAction(e -> controller.switchScreen(new CreateModeSelectScreen(this.getStage())));
         publish.setOnAction(e -> testPlay(true));
 
@@ -196,8 +199,9 @@ public class CreativeLabScreen extends AppScreen {
         optionsMenu.add(resize, 0, 3);
         optionsMenu.add(resizeRow, 0 ,4);
         optionsMenu.add(resizeCol, 0 , 5);
-        optionsMenu.add(publish, 0, 6);
-        optionsMenu.add(exit, 0, 7);
+        optionsMenu.add(help, 0, 6);
+        optionsMenu.add(publish, 0, 7);
+        optionsMenu.add(exit, 0, 8);
 
         resize.setOnAction(e -> {
             try {
