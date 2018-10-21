@@ -6,20 +6,21 @@ import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import main.app.Main;
 import main.app.engine.AlertHelper;
-import main.app.model.AppScreen;
-import main.app.model.ExploreModeScreen;
-import main.app.model.LocalDraftsScreen;
-import main.app.model.PlayModeSelectScreen;
+import main.app.model.*;
 import main.client.structure.ReqStructure;
 import main.client.util.LocalManager;
 import main.sound.SoundManager;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class LocalDraftsController extends AppController {
 
+    public static String PATH = "src/asset/buffer/";
     public LocalDraftsController(AppScreen screen) { super(screen); }
 
     @FXML
@@ -33,9 +34,6 @@ public class LocalDraftsController extends AppController {
             ArrayList<LocalManager.LocalStructure> pData = LocalManager.fetchLocalDraft(Main.currClient.getLoggedUser());
             Tab ptab = new Tab();
             ptab.setText("My drafts");
-
-            Button Play = new Button();
-            Play.setText("Playe this Level");
 
             Accordion personalList = new Accordion();
 
@@ -56,9 +54,30 @@ public class LocalDraftsController extends AppController {
                     );
                 });
 
+                Button play = new Button();
+                play.setText("Play this level");
+
+                play.setOnAction(e ->{
+                    String map = x.mapContent;
+
+                    try (PrintWriter writer = new PrintWriter(new File(PATH))){
+                        writer.print(map);
+                    }
+                    catch (IOException s) { s.printStackTrace(); }
+
+                    switchScreen(new PlayLevelScreen(
+                            screen,
+                            screen.getStage(),
+                            "buffer",
+                            PATH,
+                            0 ,
+                            false
+                    ));
+                });
+
                 uploadBtn.setText("Upload this map.");
                 VBox box = new VBox();
-                box.getChildren().addAll(new Label("Author: " + x.username), uploadBtn, Play);
+                box.getChildren().addAll(new Label("Author: " + x.username), uploadBtn, play);
                 curr.setContent(box);
                 personalList.getPanes().add(curr);
             }
@@ -91,8 +110,6 @@ public class LocalDraftsController extends AppController {
             Button uploadBtn = new Button();
             uploadBtn.setText("Add this draft to my drafts.");
 
-            Button play = new Button();
-            play.setText("Play this level");
 
             if (!Main.currClient.isLoggedin()) { uploadBtn.setVisible(false); }
 
@@ -130,6 +147,26 @@ public class LocalDraftsController extends AppController {
                     switchScreen(new LocalDraftsScreen(screen.getStage()));
                 }
             });
+
+            Button play = new Button();
+            play.setText("Play this level");
+
+            play.setOnAction(e ->{
+                String map = x.mapContent;
+
+                try (PrintWriter writer = new PrintWriter(new File(PATH))){ writer.print(map); }
+                catch (IOException s) { s.printStackTrace(); }
+
+                switchScreen(new PlayLevelScreen(
+                        screen,
+                        screen.getStage(),
+                        "buffer",
+                        PATH,
+                        0 ,
+                        false
+                ));
+            });
+
 
             VBox box = new VBox();
             box.getChildren().addAll(new Label("Author: " + x.username), uploadBtn, addReq, tryAgain, play);

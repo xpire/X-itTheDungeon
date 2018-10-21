@@ -7,10 +7,15 @@ import javafx.scene.layout.VBox;
 import main.app.Main;
 import main.app.engine.AlertHelper;
 import main.app.model.AppScreen;
+import main.app.model.PlayLevelScreen;
 import main.app.model.PlayModeSelectScreen;
 import main.client.util.LocalManager;
 import main.sound.SoundManager;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -19,6 +24,8 @@ public class LocalLevelsController extends AppController {
     public LocalLevelsController(AppScreen screen) { super(screen); }
 
     private SoundManager soundManager = SoundManager.getInstance(5);
+
+    public static String PATH = "src/asset/buffer/";
 
     @FXML
     Accordion localView;
@@ -40,17 +47,30 @@ public class LocalLevelsController extends AppController {
             for (LocalManager.LocalStructure x: localMaps) {
                 TitledPane curr = new TitledPane();
                 curr.setText(x.username);
-                Button Downloadbtn = new Button();
+                Button playBtn = new Button();
+                playBtn.setText("Play this map.");
 
-                Downloadbtn.setOnAction(e -> {
-                    soundManager.playSoundEffect("Item");
+                playBtn.setOnAction(e -> {
+
                     String map = x.mapContent;
-                    // TODO launch the play test mode
+                    System.out.println(x.mapContent);
+
+                    try (PrintWriter writer = new PrintWriter(new File(PATH))){ writer.print(map); }
+                    catch (IOException s) { s.printStackTrace(); }
+
+                    switchScreen(new PlayLevelScreen(
+                            screen,
+                            screen.getStage(),
+                            "buffer",
+                            PATH,
+                            0 ,
+                            false
+                    ));
                 });
 
-                Downloadbtn.setText("Play this map.");
+
                 VBox box = new VBox();
-                box.getChildren().addAll(new Label("Author: " + x.username), Downloadbtn);
+                box.getChildren().addAll(new Label("Author: " + x.username), playBtn);
                 curr.setContent(box);
 
                 localView.getPanes().add(curr);
