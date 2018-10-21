@@ -348,8 +348,8 @@ public class CreativeLabScreen extends AppScreen {
 
         String saveName = (isPublishTest) ? draftBuilder.getName() : "tempSave";
         draftBuilder.toFile(saveName, "save/temp");
-
-        controller.switchScreen(new PlayLevelScreen(this, this.getStage(), saveName, "src/save/temp", 0, isPublishTest));
+        controller.switchScreen(new PlayLevelScreen(this, getStage(), saveName, "src/save/temp",
+                -1, isPublishTest, draftBuilder.getName(), Main.currClient.getLoggedUser()));
     }
 
     /**

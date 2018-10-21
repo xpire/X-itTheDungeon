@@ -9,6 +9,7 @@ import main.InventoryView;
 import main.PlayModeUILocator;
 import main.app.model.HelpManualScreen;
 import main.app.model.PlayLevelScreen;
+import main.app.model.SettingScreen;
 import main.sound.SoundManager;
 
 public class PlayLevelController extends AppController<PlayLevelScreen> {
@@ -101,7 +102,7 @@ public class PlayLevelController extends AppController<PlayLevelScreen> {
     @FXML
     public void onSettingsBtnPressed() {
         soundManager.playSoundEffect("Item");
-
+        switchScreen(new SettingScreen(screen.getStage(), screen));
     }
 
 

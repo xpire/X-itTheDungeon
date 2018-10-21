@@ -118,6 +118,8 @@ public class Avatar extends Entity {
         sprite.addState("Face Left", getImage("sprite/idle/1.png"), new Vec2d(-11,-15), 1,1);
         sprite.addState("Face Right", getImage("sprite/idle/1.png"), new Vec2d(-11,-15), -1,1);
 
+        generateAnimations();
+
         faceDown();
         view.addNode(sprite);
     }

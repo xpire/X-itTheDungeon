@@ -51,7 +51,8 @@ public class GameScheduler implements Game {
 
             } else {
                 onEnemyTurn.run();
-                onRoundEnd.run();
+                if (isRunning)
+                    onRoundEnd.run();
             }
         } else {
             onPlayerTurn.run();

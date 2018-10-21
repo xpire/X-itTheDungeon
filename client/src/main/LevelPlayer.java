@@ -46,23 +46,24 @@ public class LevelPlayer {
         this.subtitle   = builder.subtitle;
         this.levelNum   = builder.levelNum;
 
+        messagePane.getChildren().add(level.getView());
+        view = new ViewComponent(messagePane);
+
         if (level.getAvatar() == null) {
             scheduler = new GameScheduler(() -> {}, () -> {}, () -> {}, () -> false);
-            return;
+        }
+        else {
+            scheduler = new GameScheduler(
+                    () -> level.getAvatar().update(),
+                    () -> enemyCommander.update(),
+                    this::onRoundEnd,
+                    () -> !level.getEnemies().isEmpty());
         }
 
         enemyCommander = new EnemyCommander(level);
-        scheduler = new GameScheduler(
-                        () -> level.getAvatar().update(),
-                        () -> enemyCommander.update(),
-                        this::onRoundEnd,
-                        () -> !level.getEnemies().isEmpty());
 
         level.addEventHandler(AnimationEvent.ANIMATION_STARTED, e -> scheduler.getInput().stopListening());
         level.addEventHandler(AnimationEvent.ANIMATION_STOPPED, e -> scheduler.getInput().startListening());
-
-        messagePane.getChildren().add(level.getView());
-        view = new ViewComponent(messagePane);
 
         builder.inputNode.addEventHandler(KeyEvent.ANY, scheduler.getInput()::onKeyEvent);
 
@@ -106,6 +107,7 @@ public class LevelPlayer {
 
     private void initInventoryView(Avatar avatar) {
         PlayModeUILocator locator = PlayLevelController.locator;
+        if(avatar == null) return;
         locator.getInvBomb().bindInteger(avatar.getNumBombsProperty().asObject());
         locator.getInvArrow().bindInteger(avatar.getNumArrowsProperty().asObject());
         locator.getInvSword().bindInteger(avatar.getSwordDurability().asObject());
@@ -114,6 +116,7 @@ public class LevelPlayer {
     }
 
     private void initInput(Avatar avatar) {
+        if (avatar == null) return;
         addAction(avatar, KeyCode.W,        avatar::faceUp);
         addAction(avatar, KeyCode.S,        avatar::faceDown);
         addAction(avatar, KeyCode.A,        avatar::faceLeft);
@@ -192,6 +195,11 @@ public class LevelPlayer {
         public Builder(String levelName, String levelPath, boolean isCreativeMode) {
             title = levelName;
             level = new MapLoader().loadLevel(levelName, levelPath, isCreativeMode);
+        }
+
+        public Builder title(String title) {
+            this.title = title;
+            return this;
         }
 
         public Builder subtitle(String subtitle) {

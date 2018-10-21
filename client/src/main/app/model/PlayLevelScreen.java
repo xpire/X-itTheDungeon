@@ -20,7 +20,11 @@ public class PlayLevelScreen extends AppScreen {
     private AppScreen parentScreen;
     private Scene scene;
     private int levelNum;
+
     private boolean isPublishTest;
+
+    private String title;
+    private String subtitle;
 
     {
         title = "X-it the Dungeon";
@@ -31,6 +35,10 @@ public class PlayLevelScreen extends AppScreen {
     private PlayLevelController controller;
 
     public PlayLevelScreen(AppScreen parent, Stage stage, String filename, String filePath, int levelNum, boolean isPublishTest) {
+        this(parent, stage, filename, filePath, levelNum, isPublishTest, filename, "Level " + levelNum);
+    }
+
+    public PlayLevelScreen(AppScreen parent, Stage stage, String filename, String filePath, int levelNum, boolean isPublishTest, String title, String subtitle) {
         super(stage);
         this.parentScreen = parent;
         this.filename = filename;
@@ -38,6 +46,8 @@ public class PlayLevelScreen extends AppScreen {
         this.levelNum = levelNum;
         this.isPublishTest = isPublishTest;
         this.controller = new PlayLevelController(this);
+        this.title = title;
+        this.subtitle = subtitle;
     }
 
     public void restart() {
@@ -49,6 +59,8 @@ public class PlayLevelScreen extends AppScreen {
         world = new LevelPlayer.Builder(filename, filePath)
                 .input(scene)
                 .levelNum(levelNum)
+                .title(title)
+                .subtitle(subtitle)
                 .addBus(Main.achievementSystem.getBus())
                 .build();
 
@@ -71,13 +83,4 @@ public class PlayLevelScreen extends AppScreen {
     protected AppController getController() {
         return controller;
     }
-//
-//    private void addPublishHandler(LevelPlayer world, String filename) {
-//        if (isPublishTest) {
-//            world.addEventHandler(LevelEvent.LEVEL_PASSED, e -> {
-//                LocalManager.LocalDraftAdd(filename, world.getLevel().toFile(filename, "asset/buffer/"));
-//                controller.switchScreen(new CreateModeSelectScreen(this.getStage()));
-//            });
-//        }
-//    }
 }
