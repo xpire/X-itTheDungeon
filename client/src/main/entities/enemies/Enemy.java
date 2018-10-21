@@ -2,7 +2,7 @@ package main.entities.enemies;
 
 import main.Level;
 import main.algorithms.GridAStar;
-import main.behaviour.AIBehaviour;
+import main.entities.enemies.behaviour.AIBehaviour;
 import main.entities.Avatar;
 import main.entities.Entity;
 import main.events.DeathEvent;
@@ -19,7 +19,7 @@ public abstract class Enemy extends Entity {
 
     protected boolean isHunter = false;
 
-    protected EnemyManager manager = null;
+    protected EnemyCommander manager = null;
 
     /**
      * Constructors for Enemies
@@ -102,7 +102,7 @@ public abstract class Enemy extends Entity {
      * Set the manager of this entity
      * @param manager Manager of all AIs
      */
-    public void setManager(EnemyManager manager) { this.manager = manager; }
+    public void setManager(EnemyCommander manager) { this.manager = manager; }
 
 
     /**

@@ -4,11 +4,9 @@ import javafx.animation.Interpolator;
 import javafx.animation.Transition;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
-import main.PlayMode;
 import main.math.Vec2d;
 import main.math.Vec2i;
 
@@ -17,6 +15,7 @@ import java.util.ArrayList;
 public class SpriteAnimation extends Transition {
 
     private final ImageView imageView;
+
     private ArrayList<Image> states = new ArrayList<>();
     private ArrayList<Vec2d> offsets = new ArrayList<>();
     private int lastIndex;
@@ -24,11 +23,26 @@ public class SpriteAnimation extends Transition {
     private double scaleX;
     private double scaleY;
 
-    public SpriteAnimation(ImageView imageView, Duration duration, Vec2i coord, double setScaleX, double setScaleY) {
-        this.imageView = imageView;
-        this.initialOffset = coord;
-        this.scaleX = setScaleX;
-        this.scaleY = setScaleY;
+    private Runnable beforePlay;
+    private Runnable afterPlay;
+
+    public SpriteAnimation(ImageView imageView, Duration duration, Vec2i coord,
+                           double setScaleX, double setScaleY) {
+        this(imageView, duration, coord, setScaleX, setScaleY, () -> {}, () -> {});
+    }
+
+    public SpriteAnimation(ImageView imageView, Duration duration, Vec2i coord,
+                           double setScaleX, double setScaleY,
+                           Runnable beforePlay, Runnable afterPlay) {
+
+        this.imageView      = imageView;
+        this.initialOffset  = coord;
+        this.scaleX         = setScaleX;
+        this.scaleY         = setScaleY;
+
+        this.beforePlay     = beforePlay;
+        this.afterPlay      = afterPlay;
+
         setCycleDuration(duration);
         setInterpolator(Interpolator.LINEAR);
     }
@@ -37,7 +51,8 @@ public class SpriteAnimation extends Transition {
     protected void interpolate(double k) {
         final int index = Math.min((int) Math.floor(k * states.size()), states.size() - 1);
 
-        if (index == lastIndex) return;
+        if (index == lastIndex)
+            return;
 
         setState(index);
         lastIndex = index;
@@ -57,8 +72,6 @@ public class SpriteAnimation extends Transition {
 
         Image viewport = states.get(0);
         double baseHeight = viewport.getHeight();
-        Vec2d baseOffset = offsets.get(0);
-
         double height = states.get(i).getHeight();
         offsets.get(i).setY(scaleFactor*(baseHeight-height));
     }
@@ -68,8 +81,6 @@ public class SpriteAnimation extends Transition {
 
         Image viewport = states.get(0);
         double baseWidth = viewport.getWidth();
-        Vec2d baseOffset = offsets.get(0);
-
         double width = states.get(i).getWidth();
         offsets.get(i).setX(scaleFactor * (baseWidth - width));
     }
@@ -79,8 +90,6 @@ public class SpriteAnimation extends Transition {
 
         Image viewport = states.get(0);
         double baseHeight = viewport.getHeight();
-        Vec2d baseOffset = offsets.get(0);
-
         double height = states.get(i).getHeight();
         offsets.get(i).setY((scaleFactor - 1) * (height - baseHeight));
     }
@@ -90,19 +99,8 @@ public class SpriteAnimation extends Transition {
 
         Image viewport = states.get(0);
         double baseWidth = viewport.getWidth();
-        Vec2d baseOffset = offsets.get(0);
-
         double width = states.get(i).getWidth();
         offsets.get(i).setX((scaleFactor - 1) * (width - baseWidth));
-    }
-
-    public void alignManual(Vec2d coord, int i) {
-        if (states.isEmpty()) return;
-
-        Image viewport = states.get(0);
-        Vec2d baseOffset = offsets.get(0);
-        offsets.get(i).setX((baseOffset.getX()+coord.getX()));
-        offsets.get(i).setY(baseOffset.getY()+coord.getY());
     }
 
     private void setState(int index) {
@@ -119,18 +117,15 @@ public class SpriteAnimation extends Transition {
         initialOffset.add(30,0);
     }
 
-
     public void play(EventHandler<ActionEvent> afterFinish) {
-        this.imageView.setX(initialOffset.getX());
-        this.imageView.setY(initialOffset.getY());
-        this.imageView.setScaleX(scaleX);
-        this.imageView.setScaleY(scaleY);
-//TODO: turn off input when animation plays
-        PlayMode.input.stopListening();
-        System.out.println("STOP INPUT");
-        this.setOnFinished(e -> {
-            PlayMode.input.startListening();
-            System.out.println("START INPUT");
+        imageView.setX(initialOffset.getX());
+        imageView.setY(initialOffset.getY());
+        imageView.setScaleX(scaleX);
+        imageView.setScaleY(scaleY);
+
+        beforePlay.run();
+        setOnFinished(e -> {
+            afterPlay.run();
             afterFinish.handle(e);
         });
         super.play();

@@ -62,6 +62,9 @@ public class Level {
     private SingletonLayer<Avatar> avatarLayer;
 
     private EventBus eventBus = new EventBus();
+    private ArrayList<EventBus> externalBuses = new ArrayList<>();
+
+
     private ObjectiveSystem objectiveSystem = new ObjectiveSystem(eventBus);
 
     private ImageView background;
@@ -897,7 +900,11 @@ public class Level {
      */
     public void postEvent(Event event) {
         eventBus.postEvent(event);
-        Main.playModeBus.postEvent(event);
+        externalBuses.forEach(bus -> bus.postEvent(event));
+    }
+
+    public void addBus(EventBus bus) {
+        externalBuses.add(bus);
     }
 
     /**
@@ -925,14 +932,6 @@ public class Level {
     /*
         GAME ACHIEVEMENT
      */
-
-    /**
-     * Getter for the Event Bus
-     * @return The event bus
-     */
-    public EventBus getEventBus() {
-        return eventBus;
-    }
 
     public void addObjective(Objective objective) {
         objectiveSystem.addObjective(objective);

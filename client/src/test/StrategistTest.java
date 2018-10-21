@@ -1,7 +1,7 @@
 //package test;
 //
-//import main.behaviour.AIBehaviour;
-//import main.behaviour.StrategistBehaviour;
+//import main.entities.enemies.behaviour.AIBehaviour;
+//import main.entities.enemies.behaviour.StrategistBehaviour;
 //import main.Level;
 //import main.math.Vec2i;
 //import org.junit.Test;

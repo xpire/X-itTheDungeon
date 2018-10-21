@@ -1,10 +1,10 @@
 package  main.client.structure;
 
-public class LoginStruct {
+public class LoginStructure {
     public String username;
     public String password;
 
-    public LoginStruct(String username, String password) {
+    public LoginStructure(String username, String password) {
         this.username = username;
         this.password = password;
     }

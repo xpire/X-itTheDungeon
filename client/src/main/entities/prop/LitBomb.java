@@ -20,12 +20,9 @@ import java.util.Iterator;
  */
 public class LitBomb extends Prop{
 
-    private Circle bomb;
-
-    private final int MAX_FUSE_LENGTH = 5;
+    private final int MAX_FUSE_LENGTH = 3;
     private Integer fuseLength = MAX_FUSE_LENGTH;
     private int radius = 1;
-    private Vec2i direction = new Vec2i(0,0);
     private EventHandler<ActionEvent> afterFinish =  e -> {
         this.destroyEntity(pos);
         destroy();

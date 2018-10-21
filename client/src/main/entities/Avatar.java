@@ -14,13 +14,13 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.util.Duration;
 import main.Level;
-import main.PlayMode;
 import main.entities.enemies.Enemy;
 import main.entities.pickup.*;
 import main.entities.prop.FlyingArrow;
 import main.entities.prop.LitBomb;
 import main.entities.terrain.Door;
 import main.entities.terrain.Pit;
+import main.events.AnimationEvent;
 import main.events.DeathEvent;
 import main.events.AvatarEvent;
 import main.math.Vec2d;
@@ -61,8 +61,6 @@ public class Avatar extends Entity {
     private Circle hoverView;
     private Circle rageView;
     private SoundManager soundManager;
-
-    private EventHandler<ActionEvent> afterFinish;
 
     private Runnable nextAction;
 
@@ -120,14 +118,7 @@ public class Avatar extends Entity {
         sprite.addState("Face Left", getImage("sprite/idle/1.png"), new Vec2d(-11,-15), 1,1);
         sprite.addState("Face Right", getImage("sprite/idle/1.png"), new Vec2d(-11,-15), -1,1);
 
-        afterFinish =  e -> {
-            PlayMode.input.startListening();
-            System.out.println("START INPUT");
-        };
-
-        generateAnimations();
         faceDown();
-
         view.addNode(sprite);
     }
 
@@ -545,7 +536,12 @@ public class Avatar extends Entity {
 
     // Rendering
     public void generateAnimations() {
-        SpriteAnimation swordLeft = new SpriteAnimation(sprite, new Duration(500), new Vec2i(-11,-15),1,1);
+        Runnable beforePlay = () -> level.postEvent(new AnimationEvent(AnimationEvent.ANIMATION_STARTED));
+        Runnable afterPlay = () -> level.postEvent(new AnimationEvent(AnimationEvent.ANIMATION_STOPPED));
+
+        SpriteAnimation swordLeft = new SpriteAnimation(sprite,
+                new Duration(500), new Vec2i(-11,-15),1,1, beforePlay, afterPlay);
+
         swordLeft.addState(getImage("sprite/idle/1.png"));
         swordLeft.addState(getImage("sprite/sword_left/0.png"));
         swordLeft.addState(getImage("sprite/sword_left/1.png"));
@@ -578,7 +574,7 @@ public class Avatar extends Entity {
         swordLeft.alignToDown(1,9);
         sprite.addAnime("Sword Left", swordLeft);
 
-        SpriteAnimation swordRight = new SpriteAnimation(sprite, new Duration(500), new Vec2i(-11,-15), -1,1);
+        SpriteAnimation swordRight = new SpriteAnimation(sprite, new Duration(500), new Vec2i(-11,-15), -1,1, beforePlay, afterPlay);
         swordRight.addState(getImage("sprite/idle/1.png"));
         swordRight.addState(getImage("sprite/sword_left/0.png"));
         swordRight.addState(getImage("sprite/sword_left/1.png"));
@@ -611,7 +607,7 @@ public class Avatar extends Entity {
         swordRight.alignToDown(1,9);
         sprite.addAnime("Sword Right", swordRight);
 
-        SpriteAnimation swordUp = new SpriteAnimation(sprite, new Duration(500), new Vec2i(-12,-15), 1,1);
+        SpriteAnimation swordUp = new SpriteAnimation(sprite, new Duration(500), new Vec2i(-12,-15), 1,1, beforePlay, afterPlay);
         swordUp.addState(getImage("sprite/idle/0.png"));
         swordUp.addState(getImage("sprite/sword_up/0.png"));
         swordUp.addState(getImage("sprite/sword_up/1.png"));
@@ -644,7 +640,7 @@ public class Avatar extends Entity {
         swordUp.alignToLeft(1,9);
         sprite.addAnime("Sword Up", swordUp);
 
-        SpriteAnimation swordDown = new SpriteAnimation(sprite, new Duration(500), new Vec2i(-12,-15), 1,1);
+        SpriteAnimation swordDown = new SpriteAnimation(sprite, new Duration(500), new Vec2i(-12,-15), 1,1, beforePlay, afterPlay);
         swordDown.addState(getImage("sprite/idle/2.png"));
         swordDown.addState(getImage("sprite/sword_down/0.png"));
         swordDown.addState(getImage("sprite/sword_down/1.png"));
@@ -677,7 +673,7 @@ public class Avatar extends Entity {
         swordDown.alignToRight(1,9);
         sprite.addAnime("Sword Down", swordDown);
 
-        SpriteAnimation bowUp = new SpriteAnimation(sprite, new Duration(500), new Vec2i(-12,-15), 1,1);
+        SpriteAnimation bowUp = new SpriteAnimation(sprite, new Duration(500), new Vec2i(-12,-15), 1,1, beforePlay, afterPlay);
         bowUp.addState(getImage("sprite/idle/0.png"));
         bowUp.addState(getImage("sprite/bow_up/0.png"));
         bowUp.addState(getImage("sprite/bow_up/1.png"));
@@ -704,7 +700,7 @@ public class Avatar extends Entity {
         bowUp.alignToRight(1,7);
         sprite.addAnime("Bow Up", bowUp);
 
-        SpriteAnimation bowDown = new SpriteAnimation(sprite, new Duration(500), new Vec2i(-12,-15), 1,1);
+        SpriteAnimation bowDown = new SpriteAnimation(sprite, new Duration(500), new Vec2i(-12,-15), 1,1, beforePlay, afterPlay);
         bowDown.addState(getImage("sprite/idle/2.png"));
         bowDown.addState(getImage("sprite/bow_down/0.png"));
         bowDown.addState(getImage("sprite/bow_down/1.png"));
@@ -731,7 +727,7 @@ public class Avatar extends Entity {
         bowDown.alignToRight(1,7);
         sprite.addAnime("Bow Down", bowDown);
 
-        SpriteAnimation bowLeft = new SpriteAnimation(sprite, new Duration(500), new Vec2i(-12,-15), 1,1);
+        SpriteAnimation bowLeft = new SpriteAnimation(sprite, new Duration(500), new Vec2i(-12,-15), 1,1, beforePlay, afterPlay);
         bowLeft.addState(getImage("sprite/idle/1.png"));
         bowLeft.addState(getImage("sprite/bow_left/0.png"));
         bowLeft.addState(getImage("sprite/bow_left/1.png"));
@@ -750,7 +746,7 @@ public class Avatar extends Entity {
         bowLeft.alignToUp(1,7);
         sprite.addAnime("Bow Left", bowLeft);
 
-        SpriteAnimation bowRight = new SpriteAnimation(sprite, new Duration(500), new Vec2i(-12,-15), -1,1);
+        SpriteAnimation bowRight = new SpriteAnimation(sprite, new Duration(500), new Vec2i(-12,-15), -1,1, beforePlay, afterPlay);
         bowRight.addState(getImage("sprite/idle/1.png"));
         bowRight.addState(getImage("sprite/bow_left/0.png"));
         bowRight.addState(getImage("sprite/bow_left/1.png"));

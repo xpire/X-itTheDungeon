@@ -7,6 +7,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import main.InventoryView;
 import main.PlayModeUILocator;
+import main.app.model.HelpManualScreen;
 import main.app.model.PlayLevelScreen;
 import main.sound.SoundManager;
 
@@ -46,6 +47,12 @@ public class PlayLevelController extends AppController<PlayLevelScreen> {
     private Label lblGold;
 
     @FXML
+    private Label lblTitle;
+
+    @FXML
+    private Label lblSubtitle;
+
+    @FXML
     private VBox vbxObjectives;
 
     public PlayLevelController(PlayLevelScreen screen) {
@@ -63,6 +70,8 @@ public class PlayLevelController extends AppController<PlayLevelScreen> {
                 .bomb(new InventoryView(imgBomb, lblBomb))
                 .key(new InventoryView(imgKey, null))
                 .gold(new InventoryView(imgGold, lblGold))
+                .title(lblTitle)
+                .subtitle(lblSubtitle)
                 .objectives(vbxObjectives)
                 .build();
     }
@@ -85,6 +94,7 @@ public class PlayLevelController extends AppController<PlayLevelScreen> {
     @FXML
     public void onHelpBtnPressed() {
         soundManager.playSoundEffect("Item");
+        switchScreen(new HelpManualScreen(screen.getStage(), screen));
 
     }
 

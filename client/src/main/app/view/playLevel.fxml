@@ -125,12 +125,12 @@
                </font>
             </Label>
             <Separator layoutX="5.0" layoutY="245.0" prefHeight="3.0" prefWidth="184.0" />
-            <Label layoutX="25.0" layoutY="44.0" text="Switch me on">
+            <Label fx:id="lblTitle" layoutX="19.0" layoutY="36.0" prefHeight="31.0" prefWidth="156.0" text="Switch me on">
                <font>
-                  <Font size="18.0" />
+                  <Font name="Baloo" size="18.0" />
                </font>
             </Label>
-            <Label layoutX="126.0" layoutY="67.0" text="Level 8">
+            <Label fx:id="lblSubtitle" layoutX="31.0" layoutY="67.0" prefHeight="14.0" prefWidth="146.0" text="Level 8">
                <font>
                   <Font size="11.0" />
                </font>

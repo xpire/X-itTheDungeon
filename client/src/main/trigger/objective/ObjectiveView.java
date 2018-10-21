@@ -13,10 +13,6 @@ public class ObjectiveView<T extends TargetCountTrigger> {
     private T objective;
     private Function<T, String> labelText;
 
-    public ObjectiveView(T objective) {
-        this(objective, null);
-    }
-
     public ObjectiveView(T objective, Function<T, String> labelText) {
         this.objective = objective;
         this.labelText = labelText;
@@ -24,6 +20,8 @@ public class ObjectiveView<T extends TargetCountTrigger> {
         checkBox = new CheckBox();
         checkBox.setTextFill(Color.BLACK);
         checkBox.setFont(Font.font(11));
+        checkBox.setFocusTraversable(false);
+        checkBox.setMouseTransparent(true);
         update();
         objective.subscribe(this::update);
     }
