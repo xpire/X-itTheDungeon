@@ -71,16 +71,16 @@ public class RequestUtil {
      *     "name": String,
      *     "mapName": String
      * }
-     * Getting the requested username of the map
+     * Getting the requested username of the maps
      * @param request the user request for
      * @return The wanted user
      */
     public static String getWantedUser(Request request) { return new Gson().fromJson(request.body(), Header.class).getName(); }
 
     /**
-     * Return the name of the wanted map
+     * Return the name of the wanted maps
      * @param request The user request
-     * @return The wanted map name of the user
+     * @return The wanted maps name of the user
      */
     public static String getWantedMap(Request request) { return new Gson().fromJson(request.body(), Header.class).getMapname(); }
 
@@ -90,16 +90,16 @@ public class RequestUtil {
      *      "mapName": String,
      *      "mapContent": String
      * }
-     * Get the content of the uploaded map
+     * Get the content of the uploaded maps
      * @param request The current request of the user
-     * @return The content user uploaded map
+     * @return The content user uploaded maps
      */
     public static String getUploadedMap(Request request) { return new Gson().fromJson(request.body(), addNewMap.class).mapContent; }
 
     /**
-     * Get the name of the map given by the user
+     * Get the name of the maps given by the user
      * @param request The current request of the user
-     * @return The name of the user entered map
+     * @return The name of the user entered maps
      */
     public static String getUploadedMapName(Request request) { return new Gson().fromJson(request.body(), addNewMap.class).mapName; }
     public static String getUpdateName(Request request) { return new Gson().fromJson(request.body(), UserStatus.class).getUsername(); }

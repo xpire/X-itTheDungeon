@@ -35,9 +35,7 @@ public class Client {
 
     private boolean Loggedin;
     private String LoggedUser;
-    /**
-     * TODO Optional feature, must discuss with Ian
-     */
+
     public Client() {
         Loggedin = false;
         LoggedUser = null;

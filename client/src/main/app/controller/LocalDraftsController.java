@@ -12,6 +12,7 @@ import main.client.util.LocalManager;
 import main.sound.SoundManager;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URL;
@@ -60,8 +61,15 @@ public class LocalDraftsController extends AppController {
                 play.setOnAction(e ->{
                     String map = x.mapContent;
 
-                    try (PrintWriter writer = new PrintWriter(new File(PATH))){
-                        writer.print(map);
+                    File test = new File(PATH + "buffer.txt");
+                    try {
+                        PrintWriter writer = new PrintWriter(test);
+                        writer.print("");
+                        writer.close();
+
+                        FileWriter writer2 = new FileWriter(test);
+                        writer2.write(map);
+                        writer2.close();
                     }
                     catch (IOException s) { s.printStackTrace(); }
 
@@ -76,8 +84,19 @@ public class LocalDraftsController extends AppController {
                 });
 
                 uploadBtn.setText("Upload this map.");
+
+                Button deleteBtn = new Button();
+                deleteBtn.setText("Delete this map");
+
+                deleteBtn.setOnAction(e -> {
+                    LocalManager.delMapDraft(x, Main.currClient.getLoggedUser());
+                    AlertHelper.showAlert(Alert.AlertType.INFORMATION,"Message", "Map deleted");
+                    switchScreen(new LocalDraftsScreen(screen.getStage()));
+                });
+
+
                 VBox box = new VBox();
-                box.getChildren().addAll(new Label("Author: " + x.username), uploadBtn, play);
+                box.getChildren().addAll(new Label("Author: " + x.username), uploadBtn, play, deleteBtn);
                 curr.setContent(box);
                 personalList.getPanes().add(curr);
             }
@@ -154,7 +173,17 @@ public class LocalDraftsController extends AppController {
             play.setOnAction(e ->{
                 String map = x.mapContent;
 
-                try (PrintWriter writer = new PrintWriter(new File(PATH))){ writer.print(map); }
+                System.out.println(map);
+                File test = new File(PATH + "buffer.txt");
+                try {
+                    PrintWriter writer = new PrintWriter(test);
+                    writer.print("");
+                    writer.close();
+
+                    FileWriter writer2 = new FileWriter(test);
+                    writer2.write(map);
+                    writer2.close();
+                }
                 catch (IOException s) { s.printStackTrace(); }
 
                 switchScreen(new PlayLevelScreen(
@@ -167,9 +196,18 @@ public class LocalDraftsController extends AppController {
                 ));
             });
 
+            Button deleteBtn = new Button();
+            deleteBtn.setText("Delete this map");
+
+            deleteBtn.setOnAction(e -> {
+                LocalManager.delMapDraft(x, "default");
+                AlertHelper.showAlert(Alert.AlertType.INFORMATION,"Message", "Map deleted");
+                switchScreen(new LocalDraftsScreen(screen.getStage()));
+            });
+
 
             VBox box = new VBox();
-            box.getChildren().addAll(new Label("Author: " + x.username), uploadBtn, addReq, tryAgain, play);
+            box.getChildren().addAll(new Label("Author: " + x.username), uploadBtn, addReq, tryAgain, play, deleteBtn);
             curr.setContent(box);
             defaultList.getPanes().add(curr);
         }

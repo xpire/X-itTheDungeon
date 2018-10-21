@@ -1,7 +1,7 @@
 package server.model;
 
 /**
- * Header object for comparison and map return
+ * Header object for comparison and maps return
  * @author Peiyu Tang
  */
 public class Header {

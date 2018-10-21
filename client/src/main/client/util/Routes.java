@@ -2,7 +2,7 @@ package  main.client.util;
 
 public class Routes {
     // Below are log in routes
-    public static final String LanRoute = "http://192.168.0.7:8080/";
+    public static final String LanRoute = "http://localhost:8080/";
     public static final String LOGIN = "login/";
     public static final String LOGOUT = "logout/";
     public static final String REGISTER = "register/";

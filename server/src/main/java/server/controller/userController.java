@@ -14,7 +14,7 @@ import spark.Route;
 public class userController {
 
     /**
-     * Handle when user request a specific map
+     * Handle when user request a specific maps
      */
     public static Route updateStatus = (Request request, Response response) -> {
         // Is the user logged in?
