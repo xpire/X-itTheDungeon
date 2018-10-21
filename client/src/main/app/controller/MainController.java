@@ -1,7 +1,6 @@
 package main.app.controller;
 
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import main.app.Main;
 import main.app.engine.AlertHelper;
@@ -9,13 +8,11 @@ import main.app.model.*;
 import main.sound.SoundManager;
 import javafx.scene.control.Alert;
 
-import java.net.URL;
-import java.util.ResourceBundle;
-
+/**
+ * Controller class for the main menu screen of the application
+ */
 public class MainController extends AppController  {
 
-//    @FXML
-//    private Button btnStart;
     private SoundManager soundManager = SoundManager.getInstance(5);
 
     @FXML
@@ -24,6 +21,10 @@ public class MainController extends AppController  {
     @FXML
     Button btnLogout;
 
+    /**
+     * Generic constructor
+     * @param screen : the corresponding screen
+     */
     public MainController(MainScreen screen) {
          super(screen);
     }
@@ -73,20 +74,21 @@ public class MainController extends AppController  {
 
     }
 
+    @FXML
     public void onHelpBtnPressed() {
         switchScreen(new HelpManualScreen(screen.getStage(), screen));
         soundManager.playSoundEffect("Item");
     }
 
+    @FXML
     public void onSettingBtnPressed() {
         switchScreen(new SettingScreen(screen.getStage(), screen));
         soundManager.playSoundEffect("Item");
     }
 
+    @FXML
     public void onExitBtnPressed() {
         soundManager.playSoundEffect("Item");
         screen.getStage().close();
     }
-
-
 }

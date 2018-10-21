@@ -1,33 +1,30 @@
 package main.app.controller;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Slider;
-import main.app.Main;
-import main.app.model.MainScreen;
 import main.app.model.SettingScreen;
 import main.sound.SoundManager;
 
-import java.net.URL;
-import java.util.ResourceBundle;
-
+/**
+ * Controller for the Settings screen
+ */
 public class SettingController extends AppController<SettingScreen> {
 
     private SoundManager soundManager = SoundManager.getInstance(5);
 
+    /**
+     * Generic constructor
+     * @param screen : the corresponding screen
+     */
     public SettingController(SettingScreen screen) {
         super(screen);
     }
 
     @FXML
-    private Slider sliderFX; //=new Slider(0,100,100);
+    private Slider sliderFX;
 
     @FXML
-    private Slider sliderBGM;// = new Slider(0,100,100);
-
-
+    private Slider sliderBGM;
 
     @FXML
     public void initialize() {

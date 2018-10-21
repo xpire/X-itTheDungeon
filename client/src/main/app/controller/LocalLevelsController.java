@@ -15,20 +15,28 @@ import main.sound.SoundManager;
 import java.io.*;
 import java.util.ArrayList;
 
+/**
+ * Controller for the LocalLevels screen
+ */
 public class LocalLevelsController extends AppController {
+
+    /**
+     * Generic constructor
+     * @param screen : the corresponding screen
+     */
     public LocalLevelsController(AppScreen screen) { super(screen); }
 
     private SoundManager soundManager = SoundManager.getInstance(5);
 
-    public static String PATH = "src/asset/buffer/";
+    private static String PATH = "src/asset/buffer/";
 
     @FXML
-    Accordion localView;
+    private Accordion localView;
 
     @FXML
     public void initialize() {
         ArrayList<LocalManager.LocalStructure> localMaps;
-        // Is the user logged in?
+
         if (!Main.currClient.isLoggedin()) {
             AlertHelper.showAlert(Alert.AlertType.ERROR,"Error","Please login to see downloaded maps.");
             return;

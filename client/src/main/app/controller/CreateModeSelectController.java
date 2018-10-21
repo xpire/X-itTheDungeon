@@ -9,6 +9,9 @@ import main.app.model.CreateModeSelectScreen;
 import main.app.model.MainScreen;
 import main.sound.SoundManager;
 
+/**
+ * Controller for the CreativeMode Select screen
+ */
 public class CreateModeSelectController extends AppController<CreateModeSelectScreen>{
 
     SoundManager soundManager = SoundManager.getInstance(5);
@@ -22,6 +25,10 @@ public class CreateModeSelectController extends AppController<CreateModeSelectSc
     @FXML
     private Button beginNewDraftBtn;
 
+    /**
+     * Generic constructor
+     * @param screen : the corresponding screen
+     */
     public CreateModeSelectController(CreateModeSelectScreen screen) {
         super(screen);
     }

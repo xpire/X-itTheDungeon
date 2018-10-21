@@ -15,10 +15,17 @@ import main.sound.SoundManager;
 
 import java.util.ArrayList;
 
+/**
+ * Controller for the ExploreMode screen
+ */
 public class ExploreModeController extends AppController {
 
     private SoundManager soundManager = SoundManager.getInstance(5);
 
+    /**
+     * Generic constructor
+     * @param screen : the corresponding screen
+     */
     public ExploreModeController(AppScreen screen) { super(screen); }
 
     @FXML
