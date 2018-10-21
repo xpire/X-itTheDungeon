@@ -1,1 +1,1 @@
-{"userName":"admin", "statContent":"just a test"}
+{"userName":"admin","statContent":"{\n  \"intStat\": {\n    \"stats\": {\n      \"NUM_PIT_DEATHS\": 0,\n      \"NUM_BOMB_DEATHS\": 0,\n      \"MAX_LEVEL_CONQUERED\": 0,\n      \"NUM_ENEMIES_KILLED\": 0,\n      \"NUM_TREASURES_COLLECTED\": 0,\n      \"NUM_BOULDERS_BOMBED\": 0,\n      \"NUM_ENEMIES_KILLED_WITH_BOMB\": 0,\n      \"NUM_ENEMIES_KILLED_WITH_ARROW\": 0,\n      \"NUM_ENEMIES_KILLED_WHEN_INVINCIBLE\": 0,\n      \"NUM_DOORS_UNLOCKED\": 0\n    }\n  }\n}"}

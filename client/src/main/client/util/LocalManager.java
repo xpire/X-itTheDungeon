@@ -208,7 +208,12 @@ public class LocalManager {
     }
 
     public static void downloadConfig() {
-        Main.gameConfig = getGsonConverter().fromJson(Main.currClient.downloadStats(), GameConfig.class);
+        try {
+            Main.gameConfig = getGsonConverter().fromJson(Main.currClient.downloadStats(), GameConfig.class);
+        }
+        catch(Exception e) {
+            Main.gameConfig = new GameConfig();
+        }
         saveConfig();
     }
 
@@ -218,10 +223,10 @@ public class LocalManager {
 
     private static String getConfigPath() {
         if (Main.currClient.isLoggedin()) {
-            return PATH + Main.currClient.getLoggedUser() + "/stats/statistic.json";
+            return PATH + Main.currClient.getLoggedUser() + "/stats/stats.json";
         }
         else {
-            return PATH + "default/stats/statistic.json";
+            return PATH + "default/stats/stats.json";
         }
     }
 
@@ -255,6 +260,8 @@ public class LocalManager {
         if (loggedUser.equals("default")) { usrDir = new File(PATH + loggedUser + "/"); }
         else { usrDir = new File(PATH + loggedUser + "/drafts/"); }
 
+        System.out.println(PATH + loggedUser + "/drafts/");
+        System.out.println(PATH + loggedUser + "/drafts/");
         File[] files = usrDir.listFiles();
 
         if (files != null || files.length == 0)

@@ -14,6 +14,6 @@ public class Path {
         @Getter public static final String REQUESTONE = "/reqone/";
         @Getter public static final String UPLOAD = "/upload/";
         @Getter public static final String UPDATE = "/update/";
-        public static final String GETSTAT = "/getstat/";
+        @Getter public static final String GETSTAT = "/getstat/";
     }
 }

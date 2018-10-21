@@ -197,7 +197,7 @@ public class Client {
     public String uploadStats(String statContent) {
         if (Loggedin) {
             HashMap<String, String> body = new HashMap<>();
-            body.put("username", Main.currClient.LoggedUser);
+            body.put("userName", Main.currClient.LoggedUser);
             body.put("statContent", statContent);
 
             return Post(
@@ -211,7 +211,12 @@ public class Client {
     public String downloadStats() {
         if (Loggedin) {
             HashMap<String, String> body = new HashMap<>();
-            body.put("username", Main.currClient.LoggedUser);
+            body.put("userName", Main.currClient.LoggedUser);
+
+            System.out.println(Post(
+                    Routes.GET_STAT,
+                    new Gson().toJson(body, HashMap.class)
+            ));
 
             return Post(
                     Routes.GET_STAT,
