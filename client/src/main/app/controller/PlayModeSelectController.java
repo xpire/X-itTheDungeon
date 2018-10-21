@@ -39,4 +39,7 @@ public class PlayModeSelectController extends AppController {
 
     @FXML
     public void onLocalBtnPressed() { switchScreen(new LocalLevelScreen(screen.getStage())); }
+
+    @FXML
+    public void onDraftBtnPressed() { switchScreen(new LocalDraftsScreen(screen.getStage())); }
 }

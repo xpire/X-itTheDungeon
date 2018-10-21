@@ -11,6 +11,7 @@ import javafx.scene.layout.VBox;
 import main.app.Main;
 import main.app.engine.AlertHelper;
 import main.app.model.AppScreen;
+import main.app.model.ExploreModeScreen;
 import main.app.model.PlayModeSelectScreen;
 import main.client.structure.ReqStructure;
 import main.client.util.LocalManager;
@@ -42,7 +43,7 @@ public class ExploreModeController extends AppController implements Initializabl
                     curr.setText(x.mapname);
                     Button Downloadbtn = new Button();
                     Downloadbtn.setOnAction(e -> {
-                        if (LocalManager.hasMapLocal(x)) { AlertHelper.showAlert(Alert.AlertType.INFORMATION,"Message","You already have this map!!!"); }
+                        if (LocalManager.hasMapLocal(x, "downloads")) { AlertHelper.showAlert(Alert.AlertType.INFORMATION,"Message","You already have this map!!!"); }
                         else {
                             // Add to local maps
                             LocalManager.addMap(x, Main.currClient.getLoggedUser());

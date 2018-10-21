@@ -21,6 +21,16 @@ public class LocalManager {
             this.mapname = mapname;
             this.mapContent = mapContent;
         }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (obj.getClass() != LocalStructure.class) return false;
+            LocalStructure redefined = (LocalStructure) obj;
+            return this.username.equals(redefined.username) &&
+                    this.mapname.equals(redefined.mapname) &&
+                    this.mapContent.equals(redefined.mapContent);
+        }
+
     }
 
     public class MapStruct {
@@ -60,8 +70,13 @@ public class LocalManager {
     }
 
     // Does this map exist?
-    public static boolean hasMapLocal(ReqStructure request) {
-        File[] files = new File(PATH + Main.currClient.getLoggedUser() + "/downloads/").listFiles();
+    public static boolean hasMapLocal(ReqStructure request, String path) {
+        File[] files = new File(PATH + Main.currClient.getLoggedUser() + "/" + path + "/").listFiles();
+
+        for (File x: files) {
+            System.out.println(x.getName());
+        }
+
         if (files == null || files.length == 0) { return false; }
         else {
             return Arrays.stream(files)
@@ -153,7 +168,11 @@ public class LocalManager {
 
     // Fetches the header of all the local maps to display for play
     public static ArrayList<LocalStructure> fetchLocalDraft(String loggedUser) {
-        File usrDir = new File(PATH + loggedUser + "/drafts/");
+        File usrDir;
+
+        if (loggedUser.equals("default")) { usrDir = new File(PATH + loggedUser + "/"); }
+        else { usrDir = new File(PATH + loggedUser + "/drafts/"); }
+
         File[] files = usrDir.listFiles();
 
         if (files != null || files.length == 0)
@@ -227,5 +246,84 @@ public class LocalManager {
         } catch (IOException e) {e.printStackTrace();}
         System.out.println("Shouldn't be here. check parseMap");
         return null;
+    }
+
+    public static void moveDraftTo(LocalStructure x) {
+        // NOTE this might be null but shouldnt
+
+        // shouldnt be null
+        // Find file in default folder
+        File correctFile = Arrays.stream(new File(PATH + "default/").listFiles())
+                .filter(e -> parseStruct(e).equals(x))
+                .findFirst()
+                .orElse(null);
+
+        if (correctFile == null) { System.out.println("This shouldnt be null"); }
+
+        else {
+            String content = "";
+            // copy file content
+            try (BufferedReader reader = new BufferedReader(new FileReader(correctFile))) {
+                content = reader.readLine();
+            } catch (IOException e) { e.printStackTrace(); }
+
+            // delete content
+            if (correctFile.delete()) { System.out.println("File deleted correctly"); }
+            // move to correct directory
+            File adjustedFile = new File(PATH + Main.currClient.getLoggedUser() + "/" + "drafts/" + x.mapname + ".json");
+
+            try {
+                if (adjustedFile.createNewFile()) {
+                    System.out.println("Create file. good");
+                    FileWriter writer = new FileWriter(adjustedFile);
+                    writer.write(content);
+                    writer.close();
+                }
+            }
+            catch (IOException e) { e.printStackTrace(); }
+        }
+    }
+
+    public static void moveDraftTo(LocalStructure x, String changedName) {
+        // NOTE this might be null but shouldnt
+
+        // shouldnt be null
+        // Find file in default folder
+        File correctFile = Arrays.stream(new  File(PATH + "default/").listFiles())
+                .filter(e -> parseStruct(e).equals(x))
+                .findFirst()
+                .orElse(null);
+
+        if (correctFile == null) {
+            System.out.println("This shouldnt be null");
+        }
+
+        else {
+            String content = "";
+            // copy file content
+            try (BufferedReader reader = new BufferedReader(new FileReader(correctFile))) {
+                content = reader.readLine();
+            } catch (IOException e) { e.printStackTrace(); }
+
+            // delete content
+//            if (correctFile.delete()) { System.out.println("File deleted correctly"); }
+            // move to correct directory
+            File adjustedFile = new File(PATH + Main.currClient.getLoggedUser() + "/" + "drafts/" + changedName + ".json");
+
+            try {
+                if (adjustedFile.createNewFile()) {
+                    System.out.println("Create file. good");
+                    FileWriter writer = new FileWriter(adjustedFile);
+
+                    LocalStructure buf = new Gson().fromJson(content, LocalStructure.class);
+                    buf.mapname = changedName;
+                    content = new Gson().toJson(buf, LocalStructure.class);
+
+                    writer.write(content);
+                    writer.close();
+                }
+            }
+            catch (IOException e) { e.printStackTrace(); }
+        }
     }
 }
