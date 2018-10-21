@@ -5,6 +5,7 @@ import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import javafx.scene.control.Alert;
+import main.app.Main;
 import main.app.engine.AlertHelper;
 import main.client.structure.LoginStructure;
 import main.client.structure.MapStructure;
@@ -13,6 +14,8 @@ import main.client.structure.StatsStructure;
 import main.client.util.LocalManager;
 import main.client.util.Routes;
 import main.client.validator.Validator;
+
+import java.util.HashMap;
 
 /**
  * A client class that handles the transition of data between the server
@@ -188,15 +191,31 @@ public class Client {
     }
 
     /**
-     * TODO Sync Ian with this part, which structure to use
-     * @param currStats structure of current user stats
+     * @param statContent representation of statistics
      * @return The message returned by the server.
      */
-    public String updateStats(StatsStructure currStats) {
+    public String uploadStats(String statContent) {
         if (Loggedin) {
+            HashMap<String, String> body = new HashMap<>();
+            body.put("username", Main.currClient.LoggedUser);
+            body.put("statContent", statContent);
+
             return Post(
                     Routes.UPDATE,
-                    new Gson().toJson(currStats, ReqStructure.class)
+                    new Gson().toJson(body, HashMap.class)
+            );
+        }
+        else { return Routes.NOT_LOGGED_IN; }
+    }
+
+    public String downloadStats() {
+        if (Loggedin) {
+            HashMap<String, String> body = new HashMap<>();
+            body.put("username", Main.currClient.LoggedUser);
+
+            return Post(
+                    Routes.GET_STAT,
+                    new Gson().toJson(body, HashMap.class)
             );
         }
         else { return Routes.NOT_LOGGED_IN; }

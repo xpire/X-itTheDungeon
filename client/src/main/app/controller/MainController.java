@@ -5,6 +5,7 @@ import javafx.scene.control.Button;
 import main.app.Main;
 import main.app.engine.AlertHelper;
 import main.app.model.*;
+import main.client.util.LocalManager;
 import main.sound.SoundManager;
 import javafx.scene.control.Alert;
 
@@ -65,13 +66,16 @@ public class MainController extends AppController  {
         soundManager.playSoundEffect("Item");
     }
 
+
     @FXML
     public void onLogoutBtnPressed() {
+        LocalManager.saveConfig();
+        LocalManager.uploadConfig();
         AlertHelper.showAlert(Alert.AlertType.INFORMATION, "Hello!!!", Main.currClient.attemptLogout());
         btnLogin.setVisible(true);
         btnLogout.setVisible(false);
         soundManager.playSoundEffect("Item");
-
+        LocalManager.loadConfig();
     }
 
     @FXML

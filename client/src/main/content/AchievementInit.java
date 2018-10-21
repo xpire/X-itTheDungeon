@@ -29,7 +29,7 @@ public class AchievementInit {
         addAchievement("Dumberman", "Kill yourself with a Bomb", 1, IntStat.Key.NUM_BOMB_DEATHS);
         addAchievement("Boulder Destroyer", "Destroy 5 Boulders", 5, IntStat.Key.NUM_BOULDERS_BOMBED);
         addAchievement("Lock Picker", "Open 3 Doors", 3, IntStat.Key.NUM_DOORS_UNLOCKED);
-        addAchievement("XD Master", "Beat All Levels", 8, IntStat.Key.MAX_LEVEL_CONQUERED); //TODO hardcoded!
+        addAchievement("XD Master", "Beat All Levels", 4, IntStat.Key.MAX_LEVEL_CONQUERED);
     }
 
     private void addAchievement(String name, String desc, int target, IntStat.Key statType) {

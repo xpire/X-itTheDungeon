@@ -3,10 +3,13 @@ package main.client.util;
 import com.google.gson.Gson;
 import main.app.Main;
 import main.client.structure.ReqStructure;
+import main.content.GameConfig;
+import main.persistence.JsonPersistor;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Scanner;
 import java.util.stream.Collectors;
 
 /**
@@ -72,7 +75,8 @@ public class LocalManager {
 
         if (!new File(PATH + username).mkdirs() ||
                 !new File(PATH + username + "/" + "drafts").mkdirs() ||
-                !new File(PATH + username + "/" + "downloads").mkdirs()) {
+                !new File(PATH + username + "/" + "downloads").mkdirs() ||
+                !new File(PATH + username + "/" + "stats").mkdirs()) {
             System.out.println("Internal Error: Make directory failed.");
         }
     }
@@ -190,6 +194,39 @@ public class LocalManager {
 
     }
 
+    public static void loadConfig() {
+        Main.gameConfig = GameConfig.load(getConfigPath());
+    }
+
+    public static void saveConfig() {
+        new JsonPersistor().save(getConfigPath(), Main.gameConfig, GameConfig.SerialisationProxy.getBuilder().create());
+    }
+
+    public static void uploadConfig() {
+        saveConfig();
+        Main.currClient.uploadStats(getGsonConverter().toJson(Main.gameConfig));
+    }
+
+    public static void downloadConfig() {
+        Main.gameConfig = getGsonConverter().fromJson(Main.currClient.downloadStats(), GameConfig.class);
+        saveConfig();
+    }
+
+    private static Gson getGsonConverter() {
+        return GameConfig.SerialisationProxy.getBuilder().create();
+    }
+
+    private static String getConfigPath() {
+        if (Main.currClient.isLoggedin()) {
+            return PATH + Main.currClient.getLoggedUser() + "/stats/statistic.json";
+        }
+        else {
+            return PATH + "default/stats/statistic.json";
+        }
+    }
+
+
+    // Fetches the header of all the local maps to display for play
     /**
      * Gets the local maps
      * @param loggedUser : Username of the Gamer

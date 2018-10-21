@@ -145,7 +145,8 @@ public class LevelPlayer {
         level.getTerrainIterator().forEachRemaining(Entity::onTurnUpdate);
         level.getPropIterator().forEachRemaining(Entity::onTurnUpdate);
         level.getPickupIterator().forEachRemaining(Entity::onTurnUpdate);
-        level.getAvatar().onRoundEnd();
+        if (level.getAvatar() != null)
+            level.getAvatar().onRoundEnd();
 
         if (level.checkAchievedAllObjectives())
             gameWin();

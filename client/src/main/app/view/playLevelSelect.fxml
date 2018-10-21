@@ -13,10 +13,9 @@
             <Font size="53.0" />
          </font>
       </Label>
-      <Button fx:id="btnLevel1" layoutX="180.0" layoutY="281.0" mnemonicParsing="false" prefHeight="64.0" prefWidth="65.0" text="Level 1" />
-      <Button fx:id="btnLevel2" layoutX="348.0" layoutY="186.0" mnemonicParsing="false" prefHeight="64.0" prefWidth="65.0" text="Level 2" />
-      <Button fx:id="btnLevel3" layoutX="487.0" layoutY="272.0" mnemonicParsing="false" prefHeight="64.0" prefWidth="65.0" text="Level 3" />
-      <Button fx:id="btnLevel4" layoutX="454.0" layoutY="405.0" mnemonicParsing="false" prefHeight="64.0" prefWidth="65.0" text="Level 4" />
-      <Button fx:id="btnLevel5" layoutX="296.0" layoutY="405.0" mnemonicParsing="false" prefHeight="64.0" prefWidth="65.0" text="Level 5" />
+      <Button fx:id="btnLevel1" layoutX="208.0" layoutY="281.0" mnemonicParsing="false" prefHeight="64.0" prefWidth="65.0" text="Level 1" />
+      <Button fx:id="btnLevel2" layoutX="375.0" layoutY="427.0" mnemonicParsing="false" prefHeight="64.0" prefWidth="65.0" text="Level 2" />
+      <Button fx:id="btnLevel3" layoutX="507.0" layoutY="230.0" mnemonicParsing="false" prefHeight="64.0" prefWidth="65.0" text="Level 3" />
+      <Button fx:id="btnLevel4" layoutX="699.0" layoutY="345.0" mnemonicParsing="false" prefHeight="64.0" prefWidth="65.0" text="Level 4" />
    </children>
 </AnchorPane>

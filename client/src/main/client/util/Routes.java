@@ -15,6 +15,8 @@ public class Routes {
     public static final String PULL_ONE = "reqone/";
     public static final String UPDATE = "update/";
 
+    public static final String GET_STAT = "getstat/";
+
     // Get routes
     public static final String PULL_ALL = "reqall/";
 

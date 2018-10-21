@@ -13,7 +13,6 @@ import java.util.Iterator;
 // Initialiser Class for the Whole Game
 public class GameConfig {
 
-//    private ArrayList<LevelConfig> levelConfigs;
     private IntStat intStat = new IntStat();
 
     public IntStat getIntStat() {
@@ -45,11 +44,7 @@ public class GameConfig {
 
         static {
             builder = IntStat.SerialisationProxy.getBuilder().setPrettyPrinting();
-//                    .registerTypeAdapter(
-//                            new TypeToken<ArrayList<LevelConfig>>(){}.getType(),
-//                            type -> new ArrayList<>());
         }
-
         public static GsonBuilder getBuilder() {
             return builder;
         }

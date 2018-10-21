@@ -9,6 +9,8 @@ import main.app.Main;
 import main.app.model.AppScreen;
 import main.app.model.MainScreen;
 import main.app.model.RegisterScreen;
+import main.client.util.LocalManager;
+import main.content.GameConfig;
 import main.sound.SoundManager;
 
 /**
@@ -44,12 +46,18 @@ public class LoginPageController extends AppController {
 
     @FXML
     public void onLoginBtnPressed() {
+        LocalManager.saveConfig();
+
         soundManager.playSoundEffect("Item");
         response.setText(Main.currClient
                 .attemptLogin(
                 InputName.getText(),
                 InputPassword.getText()
         ));
+
+        if (Main.currClient.isLoggedin())
+            LocalManager.downloadConfig();
+        LocalManager.loadConfig();
     }
 
     @FXML
