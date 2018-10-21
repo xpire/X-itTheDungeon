@@ -31,7 +31,7 @@ public class Key extends Pickup {
 
     @Override
     public void onCreated(){
-//        view.addNode(new Circle(5, Color.HOTPINK));
+        super.onCreated();
         sprite = new SpriteView(getImage("sprite/pickup/key/1.png"),new Vec2d(-8,-8), 1,1);
         view.addNode(sprite);
 

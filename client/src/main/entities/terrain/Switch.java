@@ -9,6 +9,7 @@ import main.events.SwitchEvent;
 import main.Level;
 import main.math.Vec2d;
 import main.math.Vec2i;
+import main.sound.SoundManager;
 import main.sprite.SpriteView;
 
 /**
@@ -18,7 +19,6 @@ public class Switch extends Terrain{
 
     private boolean wasOn;
     private boolean isOn;
-    private Rectangle floorSwitch;
 
     {
         symbol  = '/';
@@ -39,8 +39,8 @@ public class Switch extends Terrain{
      */
     public void onActivated() {
         isOn = true;
-//        floorSwitch.setFill(Color.GREEN);
         sprite.setState("Pressed");
+        soundManager.playSoundEffect("Click");
 
     }
 
@@ -49,20 +49,19 @@ public class Switch extends Terrain{
      */
     public void onDeactivated() {
         isOn = false;
-//        floorSwitch.setFill(Color.RED);
         sprite.setState("Not Pressed");
+        soundManager.playSoundEffect("Click");
     }
 
     @Override
     public void onCreated(){
-//        floorSwitch = new Rectangle(30, 30);
-//        view.addNode(floorSwitch);
-//        view.setCentre(new Vec2d(15, 15));
+        super.onCreated();
         sprite = new SpriteView(getImage("sprite/terrain/switch/notpressed2.png"),new Vec2d(-8,-8), 1.875,1.875);
         sprite.addState("Not Pressed", getImage("sprite/terrain/switch/notpressed2.png"),new Vec2d(-8,-8), 1.875,1.875);
         sprite.addState("Pressed", getImage("sprite/terrain/switch/pressed2.png"),new Vec2d(-8,-8), 1.875,1.875);
         view.addNode(sprite);
         onDeactivated();
+        soundManager = SoundManager.getInstance(5);
         level.postEvent(new SwitchEvent(SwitchEvent.SWITCH_CREATED));
     }
 

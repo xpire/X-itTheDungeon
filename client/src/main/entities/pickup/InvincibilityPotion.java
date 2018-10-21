@@ -35,19 +35,8 @@ public class InvincibilityPotion extends Pickup{
 
     @Override
     public void onCreated(){
-
-//        Circle potBottom  = new Circle(5, Color.TOMATO);
-//        Rectangle potPipe = new Rectangle(4, 10, Color.TOMATO);
-//        potPipe.setTranslateX(-2);
-//        potPipe.setTranslateY(-10);
-//
-//        pot = new Group();
-//        pot.getChildren().add(potPipe);
-//        pot.getChildren().add(potBottom);
-//        pot.setTranslateY(3);
-//
-//        view.addNode(pot);
-        sprite = new SpriteView(getImage("sprite/pickup/potion/2.png"),new Vec2d(-8,-8), 1,1);
+        super.onCreated();
+        sprite = new SpriteView(getImage("sprite/pickup/potion/0.png"),new Vec2d(-8,-8), 1,1);
         view.addNode(sprite);
     }
 

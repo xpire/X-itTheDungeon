@@ -29,9 +29,7 @@ public class Exit extends Terrain{
 
     @Override
     public void onCreated() {
-//        Rectangle exit = new Rectangle(30, 30, Color.GOLD);
-//        view.addNode(exit);
-//        view.setCentre(new Vec2d(15, 15));
+        super.onCreated();
         sprite = new SpriteView(getImage("sprite/terrain/exit/5.png"),new Vec2d(-8,-8), 1.875,1.875);
         view.addNode(sprite);
     }

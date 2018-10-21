@@ -29,7 +29,7 @@ public class Bomb extends Pickup{
 
     @Override
     public void onCreated(){
-//        view.addNode(new Circle(5, Color.BLACK));
+        super.onCreated();
         sprite = new SpriteView(getImage("sprite/pickup/bomb/1.png"),new Vec2d(-8,-8), 1,1);
         view.addNode(sprite);
     }

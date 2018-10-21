@@ -30,9 +30,7 @@ public class Pit extends Terrain{
 
     @Override
     public void onCreated(){
-//        hole = new Rectangle(30, 30, Color.BLACK);
-//        view.addNode(hole);
-//        view.setCentre(new Vec2d(15, 15));
+        super.onCreated();
         sprite = new SpriteView(getImage("sprite/terrain/pit/0.png"),new Vec2d(-8,-8), 1.875,1.875);
         view.addNode(sprite);
     }

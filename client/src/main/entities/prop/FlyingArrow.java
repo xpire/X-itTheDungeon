@@ -18,8 +18,6 @@ import main.sprite.SpriteView;
 public class FlyingArrow extends Prop{
 
     public Vec2i direction;
-    EventHandler<ActionEvent> afterFinish =  e -> {
-    };
 
     {
         isProjectile = true;
@@ -56,44 +54,29 @@ public class FlyingArrow extends Prop{
             finishPos = finishPos.add(direction);
         }
 
-        final Vec2i fPos = new Vec2i(finishPos);
-        //animate the path from pos to finishPos which should be in directionn
+        //animate the path from pos to finishPos which should be in direction
         TranslateTransition transition = new TranslateTransition();
         transition.setDuration(Duration.millis(40*pos.manhattan(finishPos)+1));
         transition.setNode(sprite);
+
         if (direction.getY() == 0)
             transition.setToX(pos.getX() + (finishPos.getX()-pos.getX())*30);
         if (direction.getX() == 0)
             transition.setByY(pos.getY() + (finishPos.getY()-pos.getY())*30);
-        transition.setOnFinished(e -> {
-//            if (level.hasEnemy(fPos))
-//                level.getEnemy(fPos).onDestroyed();
-            destroy();
-        });
+
+        transition.setOnFinished(e -> this.onDestroyed());
         transition.play();
     }
 
 
     @Override
     public void onCreated() {
+        super.onCreated();
         sprite = new SpriteView(getImage("sprite/prop/flyingarrow/0.png"), new Vec2d(-8,-3), 1, 1);
         sprite.addState("Left",getImage("sprite/prop/flyingarrow/0.png"), new Vec2d(-8,-3), 1, 1);
         sprite.addState("Right",getImage("sprite/prop/flyingarrow/0.png"), new Vec2d(-8,-3), -1, 1);
         sprite.addState("Up",getImage("sprite/prop/flyingarrow/3.png"), new Vec2d(-3,-8), 1, 1);
         sprite.addState("Down",getImage("sprite/prop/flyingarrow/8.png"), new Vec2d(-3,-8), 1, 1);
-        SpriteAnimation left = new SpriteAnimation(sprite, new Duration(500), new Vec2i(-8,-3),1,1);
-        left.addState(getImage("sprite/prop/flyingarrow/0.png"), new Vec2d(-8,-3));
-        sprite.addAnime("Left", left);
-        SpriteAnimation right = new SpriteAnimation(sprite, new Duration(500), new Vec2i(-8,-3),-1,1);
-        right.addState(getImage("sprite/prop/flyingarrow/0.png"), new Vec2d(-8,-3));
-        sprite.addAnime("Right", right);
-        SpriteAnimation up = new SpriteAnimation(sprite, new Duration(500), new Vec2i(-3,-8),1,1);
-        up.addState(getImage("sprite/prop/flyingarrow/3.png"), new Vec2d(-3,-8));
-        sprite.addAnime("Up", up);
-        SpriteAnimation down = new SpriteAnimation(sprite, new Duration(500), new Vec2i(-3,-8),1,1);
-        down.addState(getImage("sprite/prop/flyingarrow/8.png"), new Vec2d(-3,-8));
-        sprite.addAnime("Down", down);
-
         view.addNode(sprite);
     }
 

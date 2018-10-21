@@ -20,7 +20,6 @@ public class Door extends Terrain {
     // TODO unused methods, eclipse testing, user stories -- deep, assumptions
 
     private boolean isOpen;
-    private Rectangle doorFrame;
 
     {
         symbol = '|';
@@ -37,11 +36,7 @@ public class Door extends Terrain {
 
     @Override
     public void onCreated(){
-//        doorFrame = new Rectangle(6, 30, Color.BLACK);
-//        view.addNode(doorFrame);
-//        view.setCentre(new Vec2d(3, 15));
-
-
+        super.onCreated();
         sprite = new SpriteView(getImage("sprite/terrain/door/0.png"),new Vec2d(-8,-8), 1.875,1.875);
         sprite.addState("Open", getImage("sprite/terrain/door/1.png"), new Vec2d(-8,-15),1.875,1.875);
         view.addNode(sprite);

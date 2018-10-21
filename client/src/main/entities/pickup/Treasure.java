@@ -28,10 +28,7 @@ public class Treasure extends Pickup{
 
     @Override
     public void onCreated(){
-        super.onCreated(); //TODO: do this for all
-
-//        coin = new Circle(5, Color.GOLD);
-//        view.addNode(coin);
+        super.onCreated();
         sprite = new SpriteView(getImage("sprite/pickup/treasure/5.png"),new Vec2d(-8,-8), 1,1);
         view.addNode(sprite);
 
