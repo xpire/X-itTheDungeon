@@ -1,16 +1,13 @@
 package main.app.controller;
 
 import javafx.fxml.FXML;
-import javafx.scene.Group;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
+import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import main.PlayMode;
+import main.InventoryView;
 import main.PlayModeUILocator;
-import main.app.model.AppScreen;
 import main.app.model.PlayLevelScreen;
-import main.app.model.PlayModeSelectScreen;
 import main.sound.SoundManager;
 
 public class PlayLevelController extends AppController<PlayLevelScreen> {
@@ -21,21 +18,32 @@ public class PlayLevelController extends AppController<PlayLevelScreen> {
     @FXML
     private StackPane dynamicLayer;
 
-    // TODO create a class InventoryItemView
     @FXML
-    private Group invSword;
+    private ImageView imgSword;
 
     @FXML
-    private Group invArrow;
+    private ImageView imgArrow;
 
     @FXML
-    private Group invBomb;
+    private ImageView imgBomb;
 
     @FXML
-    private Group invKey;
+    private ImageView imgKey;
 
     @FXML
-    private Group invGold;
+    private ImageView imgGold;
+
+    @FXML
+    private Label lblSword;
+
+    @FXML
+    private Label lblArrow;
+
+    @FXML
+    private Label lblBomb;
+
+    @FXML
+    private Label lblGold;
 
     @FXML
     private VBox vbxObjectives;
@@ -50,11 +58,11 @@ public class PlayLevelController extends AppController<PlayLevelScreen> {
         vbxObjectives.getChildren().clear();
 
         locator = new PlayModeUILocator.Builder()
-                .sword(invSword)
-                .arrow(invArrow)
-                .bomb(invBomb)
-                .key(invKey)
-                .gold(invGold)
+                .sword(new InventoryView(imgSword, lblSword))
+                .arrow(new InventoryView(imgArrow, lblArrow))
+                .bomb(new InventoryView(imgBomb, lblBomb))
+                .key(new InventoryView(imgKey, null))
+                .gold(new InventoryView(imgGold, lblGold))
                 .objectives(vbxObjectives)
                 .build();
     }

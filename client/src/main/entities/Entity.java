@@ -32,7 +32,7 @@ EntityVisitor {
 
 public abstract class Entity {
 
-    protected final static double DEFAULT_SIZE = 30.0;
+    public final static double DEFAULT_SIZE = 30.0;
     protected char symbol = '?';
 
     protected Vec2i pos;
