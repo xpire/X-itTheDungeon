@@ -21,12 +21,14 @@ public class SpriteAnimation extends Transition {
     private ArrayList<Vec2d> offsets = new ArrayList<>();
     private int lastIndex;
     private Vec2i initialOffset;
-    private int scale;
+    private double scaleX;
+    private double scaleY;
 
-    public SpriteAnimation(ImageView imageView, Duration duration, Vec2i coord, int setScale) {
+    public SpriteAnimation(ImageView imageView, Duration duration, Vec2i coord, double setScaleX, double setScaleY) {
         this.imageView = imageView;
         this.initialOffset = coord;
-        this.scale = setScale;
+        this.scaleX = setScaleX;
+        this.scaleY = setScaleY;
         setCycleDuration(duration);
         setInterpolator(Interpolator.LINEAR);
     }
@@ -110,11 +112,19 @@ public class SpriteAnimation extends Transition {
         imageView.setImage(viewport);
     }
 
+    public void alignOffset(Vec2d offset) {
+        for (Vec2d o : offsets) {
+            o.add(new Vec2d(30,0));
+        }
+        initialOffset.add(30,0);
+    }
+
 
     public void play(EventHandler<ActionEvent> afterFinish) {
         this.imageView.setX(initialOffset.getX());
         this.imageView.setY(initialOffset.getY());
-        this.imageView.setScaleX(scale);
+        this.imageView.setScaleX(scaleX);
+        this.imageView.setScaleY(scaleY);
 //TODO: turn off input when animation plays
         PlayMode.input.stopListening();
         System.out.println("STOP INPUT");

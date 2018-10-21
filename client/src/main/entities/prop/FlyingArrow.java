@@ -71,8 +71,8 @@ public class FlyingArrow extends Prop{
         if (direction.getX() == 0)
             transition.setByY(pos.getY() + (finishPos.getY()-pos.getY())*30);
         transition.setOnFinished(e -> {
-            if (level.hasEnemy(fPos))
-                level.getEnemy(fPos).onDestroyed();
+//            if (level.hasEnemy(fPos))
+//                level.getEnemy(fPos).onDestroyed();
             this.onDestroyed();
         });
         transition.play();
@@ -89,16 +89,16 @@ public class FlyingArrow extends Prop{
         sprite.addState("Right",getImage("sprite/prop/flyingarrow/0.png"), new Vec2d(-8,-3), -1, 1);
         sprite.addState("Up",getImage("sprite/prop/flyingarrow/3.png"), new Vec2d(-3,-8), 1, 1);
         sprite.addState("Down",getImage("sprite/prop/flyingarrow/8.png"), new Vec2d(-3,-8), 1, 1);
-        SpriteAnimation left = new SpriteAnimation(sprite, new Duration(500), new Vec2i(-8,-3),1);
+        SpriteAnimation left = new SpriteAnimation(sprite, new Duration(500), new Vec2i(-8,-3),1,1);
         left.addState(getImage("sprite/prop/flyingarrow/0.png"), new Vec2d(-8,-3));
         sprite.addAnime("Left", left);
-        SpriteAnimation right = new SpriteAnimation(sprite, new Duration(500), new Vec2i(-8,-3),-1);
+        SpriteAnimation right = new SpriteAnimation(sprite, new Duration(500), new Vec2i(-8,-3),-1,1);
         right.addState(getImage("sprite/prop/flyingarrow/0.png"), new Vec2d(-8,-3));
         sprite.addAnime("Right", right);
-        SpriteAnimation up = new SpriteAnimation(sprite, new Duration(500), new Vec2i(-3,-8),1);
+        SpriteAnimation up = new SpriteAnimation(sprite, new Duration(500), new Vec2i(-3,-8),1,1);
         up.addState(getImage("sprite/prop/flyingarrow/3.png"), new Vec2d(-3,-8));
         sprite.addAnime("Up", up);
-        SpriteAnimation down = new SpriteAnimation(sprite, new Duration(500), new Vec2i(-3,-8),1);
+        SpriteAnimation down = new SpriteAnimation(sprite, new Duration(500), new Vec2i(-3,-8),1,1);
         down.addState(getImage("sprite/prop/flyingarrow/8.png"), new Vec2d(-3,-8));
         sprite.addAnime("Down", down);
 
