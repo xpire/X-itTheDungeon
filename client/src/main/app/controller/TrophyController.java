@@ -27,21 +27,7 @@ public class TrophyController extends AppController<TrophyScreen> {
 
     @FXML
     public void initialize() {
-        AchievementSystem achievementSystem = Main.locator.getAchievementSystem();
-        lvAchievements.setItems(FXCollections.observableArrayList(achievementSystem.getAchievements()));
-
-//        lvAchievements.setCellFactory(lv -> new ListCell<Achievement>() {
-//            @Override
-//            public void updateItem(Achievement a, boolean empty) {
-//                super.updateItem(a, empty);
-//                if (empty) {
-//                    setText(null);
-//                    setGraphic(null);
-//                } else {
-//                    setText(String.format("%s - %s", a.getName(), a.getDescription()));
-//                }
-//            }
-//        });
+        lvAchievements.setItems(FXCollections.observableArrayList(Main.achievementSystem.getAchievements()));
     }
 
 

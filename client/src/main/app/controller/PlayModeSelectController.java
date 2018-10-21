@@ -9,7 +9,7 @@ import main.app.model.*;
 
 public class PlayModeSelectController extends AppController {
 
-    SoundManager soundManager = SoundManager.getInstance(5);
+    private SoundManager soundManager = SoundManager.getInstance(5);
 
     public PlayModeSelectController(AppScreen screen) {
         super(screen);

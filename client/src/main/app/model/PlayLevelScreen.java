@@ -5,9 +5,11 @@ import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+
+import main.LevelPlayer;
+import main.app.Main;
 import main.app.controller.AppController;
 import main.app.controller.PlayLevelController;
-import main.LevelPlayer;
 
 
 public class PlayLevelScreen extends AppScreen {
@@ -16,6 +18,7 @@ public class PlayLevelScreen extends AppScreen {
     private String filePath;
     private String filename;
     private AppScreen parentScreen;
+    private Scene scene;
     private int levelNum;
     private boolean isPublishTest;
 
@@ -37,8 +40,6 @@ public class PlayLevelScreen extends AppScreen {
         this.controller = new PlayLevelController(this);
     }
 
-    private Scene scene;
-
     public void restart() {
         Pane layer = controller.getDynamicLayer();
 
@@ -48,6 +49,7 @@ public class PlayLevelScreen extends AppScreen {
         world = new LevelPlayer.Builder(filename, filePath)
                 .input(scene)
                 .levelNum(levelNum)
+                .addBus(Main.achievementSystem.getBus())
                 .build();
 
         layer.getChildren().add(world.getView());

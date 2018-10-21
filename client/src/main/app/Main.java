@@ -3,7 +3,6 @@ package main.app;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
-import main.ServiceLocator;
 import main.app.model.MainScreen;
 import main.client.Client;
 import main.content.GameConfig;
@@ -35,10 +34,10 @@ public class Main extends Application {
 
     public static GameConfig gameConfig;
     public static Client currClient = new Client();
-    public static EventBus playModeBus = new EventBus();
 
     public static Stage primaryStage;
-    public static ServiceLocator locator;
+
+    public static AchievementSystem achievementSystem = new AchievementSystem();
 
     @Override
     public void start(Stage s){
@@ -49,13 +48,7 @@ public class Main extends Application {
 
         gameConfig = GameConfig.load(CONFIG_FILENAME);
 
-        AchievementSystem achievementSystem = new AchievementSystem();
-
-        locator = new ServiceLocator.ServiceLocatorBuilder()
-                .achievementSystem(achievementSystem)
-                .build();
-
-        new StatInit(playModeBus, gameConfig.getIntStat()).init();
+        new StatInit(achievementSystem.getBus(), gameConfig.getIntStat()).init();
         new AchievementInit(achievementSystem, gameConfig.getIntStat()).init();
         new MainScreen(s).start();
     }

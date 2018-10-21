@@ -9,11 +9,11 @@ import java.util.function.Predicate;
 
 public class StatInit {
 
-    private EventBus playModeBus;
+    private EventBus achievementBus;
     private IntStat stats;
 
-    public StatInit(EventBus playModeBus, IntStat stats) {
-        this.playModeBus = playModeBus;
+    public StatInit(EventBus achievementBus, IntStat stats) {
+        this.achievementBus = achievementBus;
         this.stats = stats;
     }
 
@@ -33,20 +33,14 @@ public class StatInit {
         addCounter(DeathEvent.DEATH_BY_ATTACK,  IntStat.Key.NUM_ENEMIES_KILLED_WHEN_INVINCIBLE, e -> !e.isAvatar());
 
         addCounter(DoorEvent.DOOR_OPENED,       IntStat.Key.NUM_DOORS_UNLOCKED);
-
-
-    }
-
-    private <T extends Event> void add(EventType<T> type, EventHandler<T> handler) {
-        playModeBus.addEventHandler(type, handler);
     }
 
     private <T extends Event> void addCounter(EventType<T> type, IntStat.Key stat) {
-        playModeBus.addEventHandler(type, e -> stats.increment(stat));
+        achievementBus.addEventHandler(type, e -> stats.increment(stat));
     }
 
     private <T extends Event> void addCounter(EventType<T> type, IntStat.Key stat, Predicate<T> condition) {
-        playModeBus.addEventHandler(type, e -> {
+        achievementBus.addEventHandler(type, e -> {
             if (condition.test(e))
                 stats.increment(stat);
         });
