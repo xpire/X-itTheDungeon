@@ -2,8 +2,10 @@ package main.app.controller;
 
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.paint.Color;
 import javafx.util.Callback;
 import main.app.Main;
 import main.app.model.*;
@@ -28,6 +30,18 @@ public class TrophyController extends AppController<TrophyScreen> {
     @FXML
     public void initialize() {
         lvAchievements.setItems(FXCollections.observableArrayList(Main.achievementSystem.getAchievements()));
+        lvAchievements.setCellFactory(view ->
+            new ListCell<Achievement>() {
+                @Override
+                public void updateItem(Achievement item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (item != null) {
+                        setText(item.toString());
+                        if (item.isAchieved().get())
+                            setTextFill(Color.GREEN);
+                    }
+                }
+        });
     }
 
 
