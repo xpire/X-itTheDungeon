@@ -10,7 +10,7 @@ public class SettingScreen extends SubScreen{
 
     {
         title = "X-it the Dungeon";
-        fxmlName = "main/app/view/settings.fxml";
+        fxmlName = "main/app/view/setting.fxml";
     }
 
     public SettingScreen(Stage stage, AppScreen parent) {
