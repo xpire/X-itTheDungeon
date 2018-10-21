@@ -34,7 +34,6 @@ public class CreateModeSelectController extends AppController<CreateModeSelectSc
     @FXML
     public void onEnterLabBtnPressed() {
         soundManager.playSoundEffect("Item");
-
         newDraftNameField.setVisible(true);
         beginNewDraftBtn.setVisible(true);
     }
@@ -47,6 +46,7 @@ public class CreateModeSelectController extends AppController<CreateModeSelectSc
 
     @FXML
     public void onBeginNewDraftBtnPressed() {
+        soundManager.playSoundEffect("Item");
         if (newDraftNameField.getText().equals("") || !newDraftNameField.getText().matches("[a-zA-Z0-9]+")) {
             Toast.messageToast(screen.getStage(), "Please enter valid name");
             return;

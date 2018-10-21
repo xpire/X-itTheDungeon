@@ -12,21 +12,23 @@ import main.app.model.LocalDraftsScreen;
 import main.app.model.PlayModeSelectScreen;
 import main.client.structure.ReqStructure;
 import main.client.util.LocalManager;
+import main.sound.SoundManager;
 
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-public class LocalDraftsController extends AppController implements Initializable {
+public class LocalDraftsController extends AppController {
 
     public LocalDraftsController(AppScreen screen) { super(screen); }
 
     @FXML
     public TabPane paneDraft;
 
+    private SoundManager soundManager = SoundManager.getInstance(5);
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    @FXML
+    public void initialize() {
         if (Main.currClient.isLoggedin()) {
             ArrayList<LocalManager.LocalStructure> pData = LocalManager.fetchLocalDraft(Main.currClient.getLoggedUser());
             Tab ptab = new Tab();
@@ -96,6 +98,7 @@ public class LocalDraftsController extends AppController implements Initializabl
 
             // Button is pressed
             uploadBtn.setOnAction(e -> {
+                soundManager.playSoundEffect("Item");
                 System.out.println(x.mapname);
                 if (LocalManager.hasMapLocal(new ReqStructure(Main.currClient.getLoggedUser(), x.mapname), "drafts")) {
                     addReq.setVisible(true);
@@ -139,5 +142,8 @@ public class LocalDraftsController extends AppController implements Initializabl
     }
 
     @FXML
-    public void onBackBtnPressed() { switchScreen(new PlayModeSelectScreen(screen.getStage())); }
+    public void onBackBtnPressed() {
+        switchScreen(new PlayModeSelectScreen(screen.getStage()));
+        soundManager.playSoundEffect("Item");
+    }
 }

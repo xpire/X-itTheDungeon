@@ -9,6 +9,7 @@ import main.app.Main;
 import main.app.model.AppScreen;
 import main.app.model.MainScreen;
 import main.app.model.RegisterScreen;
+import main.sound.SoundManager;
 
 /**
  * This class controls the login page of the controller
@@ -16,6 +17,8 @@ import main.app.model.RegisterScreen;
 public class LoginPageController extends AppController {
     public LoginPageController(AppScreen screen) { super(screen); }
 
+
+    private SoundManager soundManager = SoundManager.getInstance(5);
     @FXML
     private Label response;
 
@@ -34,6 +37,7 @@ public class LoginPageController extends AppController {
     // TODO Change the handle input and alerting
     @FXML
     public void onLoginBtnPressed() {
+        soundManager.playSoundEffect("Item");
         response.setText(Main.currClient
                 .attemptLogin(
                 InputName.getText(),
@@ -42,8 +46,14 @@ public class LoginPageController extends AppController {
     }
 
     @FXML
-    public void onBackBtnPressed() { switchScreen(new MainScreen(screen.getStage())); }
+    public void onBackBtnPressed() {
+        switchScreen(new MainScreen(screen.getStage()));
+        soundManager.playSoundEffect("Item");
+    }
 
     @FXML
-    public void onRegisterBtnPressed() { switchScreen(new RegisterScreen(screen.getStage())); }
+    public void onRegisterBtnPressed() {
+        switchScreen(new RegisterScreen(screen.getStage()));
+        soundManager.playSoundEffect("Item");
+    }
 }

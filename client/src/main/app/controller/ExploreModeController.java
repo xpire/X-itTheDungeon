@@ -15,20 +15,23 @@ import main.app.model.ExploreModeScreen;
 import main.app.model.PlayModeSelectScreen;
 import main.client.structure.ReqStructure;
 import main.client.util.LocalManager;
+import main.sound.SoundManager;
 
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-public class ExploreModeController extends AppController implements Initializable {
+public class ExploreModeController extends AppController {
+
+    private SoundManager soundManager = SoundManager.getInstance(5);
 
     public ExploreModeController(AppScreen screen) { super(screen); }
 
     @FXML
     public Accordion headerList;
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    @FXML
+    public void initialize() {
         if (Main.currClient.isLoggedin()) {
             ArrayList<ReqStructure> globMaps = new Gson()
                     .fromJson(Main
@@ -43,6 +46,7 @@ public class ExploreModeController extends AppController implements Initializabl
                     curr.setText(x.mapname);
                     Button Downloadbtn = new Button();
                     Downloadbtn.setOnAction(e -> {
+                        soundManager.playSoundEffect("Item");
                         if (LocalManager.hasMapLocal(x, "downloads")) { AlertHelper.showAlert(Alert.AlertType.INFORMATION,"Message","You already have this map!!!"); }
                         else {
                             // Add to local maps
@@ -62,5 +66,8 @@ public class ExploreModeController extends AppController implements Initializabl
     }
 
     @FXML
-    public void onBackBtnPressed() { switchScreen(new PlayModeSelectScreen(screen.getStage())); }
+    public void onBackBtnPressed() {
+        switchScreen(new PlayModeSelectScreen(screen.getStage()));
+        soundManager.playSoundEffect("Item");
+    }
 }

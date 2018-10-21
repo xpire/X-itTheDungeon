@@ -8,10 +8,12 @@ import main.app.Main;
 import main.app.model.AppScreen;
 import main.app.model.MainScreen;
 import main.app.model.RegisterScreen;
+import main.sound.SoundManager;
 
 public class RegisterPageController extends AppController {
     public RegisterPageController(AppScreen screen) { super(screen); }
 
+    private SoundManager soundManager = SoundManager.getInstance(5);
     @FXML
     private Label response;
 
@@ -22,10 +24,14 @@ public class RegisterPageController extends AppController {
 
 
     @FXML
-    public void onBackBtnPressed() { switchScreen(new MainScreen(screen.getStage())); }
+    public void onBackBtnPressed() {
+        switchScreen(new MainScreen(screen.getStage()));
+        soundManager.playSoundEffect("Item");
+    }
 
     @FXML
     public void onRegisterBtnPressed() {
+        soundManager.playSoundEffect("Item");
         response.setText(Main.currClient
                 .attemptRegister(
                         InputName.getText(),

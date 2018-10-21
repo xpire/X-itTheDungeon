@@ -7,6 +7,7 @@ import javafx.scene.control.ListView;
 import javafx.util.Callback;
 import main.app.Main;
 import main.app.model.*;
+import main.sound.SoundManager;
 import main.trigger.achievement.Achievement;
 import main.trigger.achievement.AchievementSystem;
 
@@ -22,6 +23,7 @@ public class TrophyController extends AppController<TrophyScreen> {
         super(screen);
     }
 
+    private SoundManager soundManager = SoundManager.getInstance(5);
 
     @FXML
     public void initialize() {
@@ -46,5 +48,6 @@ public class TrophyController extends AppController<TrophyScreen> {
     @FXML
     public void onBackBtnPressed() {
         switchScreen(new MainScreen(screen.getStage()));
+        soundManager.playSoundEffect("Item");
     }
 }
