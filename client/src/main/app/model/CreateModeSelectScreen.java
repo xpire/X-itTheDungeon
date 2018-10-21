@@ -103,6 +103,7 @@ public class CreateModeSelectScreen extends AppScreen{
         Button btnOk       = new Button("OK");
         Button btnRename   = new Button("Rename");
 
+        boxName.setSpacing(10);
         txtName.setEditable(false);
         btnOk.setVisible(false);
 

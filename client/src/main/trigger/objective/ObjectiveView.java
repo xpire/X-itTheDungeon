@@ -17,8 +17,6 @@ public class ObjectiveView<T extends TargetCountTrigger> {
     private T objective;
     private Function<T, String> labelText;
 
-<<<<<<< HEAD
-=======
     public ObjectiveView(T objective) {
         this(objective, null);
     }
@@ -28,7 +26,6 @@ public class ObjectiveView<T extends TargetCountTrigger> {
      * @param objective : the objective
      * @param labelText : the label of the objective
      */
->>>>>>> most other javadoc done
     public ObjectiveView(T objective, Function<T, String> labelText) {
         this.objective = objective;
         this.labelText = labelText;
@@ -61,7 +58,7 @@ public class ObjectiveView<T extends TargetCountTrigger> {
 
     /**
      * Gets the associated checkbox
-     * @return
+     * @return the checkbox
      */
     public CheckBox getCheckBox() {
         return checkBox;

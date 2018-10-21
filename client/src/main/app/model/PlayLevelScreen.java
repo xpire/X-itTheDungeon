@@ -79,6 +79,8 @@ public class PlayLevelScreen extends AppScreen {
                 .addBus(Main.achievementSystem.getBus())
                 .build();
 
+        if (isPublishTest) addPublishHandler(world, filename);
+
         layer.getChildren().add(world.getView());
         StackPane.setAlignment(world.getView(), Pos.CENTER);
         world.startGame();

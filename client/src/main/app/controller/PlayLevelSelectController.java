@@ -34,18 +34,8 @@ public class PlayLevelSelectController extends AppController {
     private Button btnLevel4;
     @FXML
     private Button btnLevel5;
-//    @FXML
-//    public Button btnLevel6;
-//    @FXML
-//    public Button btnLevel7;
-//    @FXML
-//    public Button btnLevel8;
 
-<<<<<<< HEAD
     private SoundManager soundManager = SoundManager.getInstance(5);
-=======
-    SoundManager soundManager = SoundManager.getInstance(5);
->>>>>>> app.controller package javadoc done
 
     @FXML
     public void initialize() {
@@ -77,12 +67,8 @@ public class PlayLevelSelectController extends AppController {
         }
     }
 
-<<<<<<< HEAD
-    private void onLevelSelected(String filename, int levelNum) {
-=======
     @FXML
-    public void onLevelSelected(String filename, int levelNum) {
->>>>>>> app.controller package javadoc done
+    private void onLevelSelected(String filename, int levelNum) {
         soundManager.playSoundEffect("Item");
         soundManager.playBGM("Level " + levelNum);
 

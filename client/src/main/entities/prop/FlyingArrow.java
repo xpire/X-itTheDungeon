@@ -2,12 +2,8 @@ package main.entities.prop;
 
 import javafx.animation.TranslateTransition;
 import javafx.util.Duration;
-<<<<<<< HEAD
 import main.entities.Entity;
-=======
->>>>>>> Entity package javadoc done
 import main.Level;
-import main.entities.Entity;
 import main.math.Vec2d;
 import main.math.Vec2i;
 import main.sprite.SpriteView;

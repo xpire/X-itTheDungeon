@@ -13,13 +13,10 @@ import java.util.stream.Collectors;
  * Manages all server requests and parses data
  */
 public class LocalManager {
-<<<<<<< HEAD
-=======
 
     /**
      * Class representing maps stored in GSON form
      */
->>>>>>> client package javadoc done
     public static class LocalStructure {
         public String username;
         public String mapname;

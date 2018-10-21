@@ -1,16 +1,9 @@
 package main.entities.enemies;
 
-<<<<<<< HEAD
 import main.entities.enemies.behaviour.AIBehaviour;
 import main.entities.enemies.behaviour.CowardBehaviour;
 import main.entities.enemies.behaviour.StrategistBehaviour;
 import main.Level;
-=======
-import main.Level;
-import main.behaviour.AIBehaviour;
-import main.behaviour.CowardBehaviour;
-import main.behaviour.StrategistBehaviour;
->>>>>>> Entity package javadoc done
 import main.math.Vec2d;
 import main.sprite.SpriteView;
 

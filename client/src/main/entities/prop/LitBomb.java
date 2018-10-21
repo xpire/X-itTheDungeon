@@ -2,7 +2,6 @@ package main.entities.prop;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.shape.Circle;
 import javafx.util.Duration;
 import main.Level;
 import main.entities.Entity;
@@ -18,11 +17,7 @@ import java.util.Iterator;
  */
 public class LitBomb extends Prop{
 
-<<<<<<< HEAD
     private final int MAX_FUSE_LENGTH = 3;
-=======
-    private final int MAX_FUSE_LENGTH = 5;
->>>>>>> Entity package javadoc done
     private Integer fuseLength = MAX_FUSE_LENGTH;
     private int radius = 1;
     private EventHandler<ActionEvent> afterFinish =  e -> {
