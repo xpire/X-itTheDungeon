@@ -18,12 +18,13 @@ public class userController {
      */
     public static Route updateStatus = (Request request, Response response) -> {
         // Is the user logged in?
-        if (!loginController.userIsLoggedIn(request) || !RequestUtil.getSessionCurrentUser(request).equals(RequestUtil.getUpdateName(request))) { return("Not logged in"); }
+        if (!loginController.userIsLoggedIn(request)) { return("Not logged in"); }
         else {
             UserReader.UpdateUser(request);
             return("Update successful");
         }
     };
+    public static Route getStatus = (Request request, Response response) -> UserReader.retrieve(request);
 
     /**
      * Authenticate the user by hashing the inputted password using the stored salt,

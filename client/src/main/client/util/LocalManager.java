@@ -259,6 +259,7 @@ public class LocalManager {
 
         if (files != null || files.length == 0)
             return Arrays.stream(files)
+                    .filter(e -> !e.getName().equals("stats"))
                     .map(LocalManager::parseStruct)
                     .collect(Collectors.toCollection(ArrayList::new));
         else
@@ -276,9 +277,11 @@ public class LocalManager {
             // Find the json object
             String json = reader.readLine();
             return new Gson().fromJson(json, LocalStructure.class);
+        } catch (FileNotFoundException e) {
+            System.out.println("Error in getting local maps.");
+        } catch (IOException e) {
+            System.out.println("Error in getting maps.");
         }
-        catch (FileNotFoundException e) { System.out.println("Error in getting local maps."); }
-        catch (IOException e) { System.out.println("Error in getting maps."); }
         return null;
     }
 
