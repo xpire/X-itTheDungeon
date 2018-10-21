@@ -812,6 +812,7 @@ public class Level {
         layers.forEach(layer -> layer.resize(newNRows, newNCols));
         nRows = newNRows;
         nCols = newNCols;
+        rescale(getSize());
     }
 
     /**

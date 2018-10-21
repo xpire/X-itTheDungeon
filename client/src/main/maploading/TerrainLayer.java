@@ -50,7 +50,7 @@ public class TerrainLayer extends EntityLayer<Terrain> {
     public Terrain removeEntity(Vec2i pos, boolean replaceWithDefault) {
         Terrain terrain = removeEntity(pos);
 
-        if (replaceWithDefault)
+        if (terrain != null && replaceWithDefault)
             addEntity(pos, defaultTerrain.get());
 
         return terrain;

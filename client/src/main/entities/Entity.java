@@ -251,7 +251,7 @@ public abstract class Entity {
      * @return
      */
     public String getMetaData() {
-        return "";
+        return null;
     }
 
     public Image getImage(String path) {

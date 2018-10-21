@@ -197,6 +197,11 @@ public class LevelPlayer {
             level = new MapLoader().loadLevel(levelName, levelPath, isCreativeMode);
         }
 
+        public Builder title(String title) {
+            this.title = title;
+            return this;
+        }
+
         public Builder subtitle(String subtitle) {
             this.subtitle = subtitle;
             return this;
