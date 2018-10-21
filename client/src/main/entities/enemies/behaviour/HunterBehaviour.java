@@ -12,6 +12,12 @@ import static java.util.Collections.singletonList;
  */
 public class HunterBehaviour extends AIBehaviour {
 
+    /**
+     * Generic constructor
+     * @param level : level which the hunter belongs to
+     * @param pos : position of the hunter
+     * @param target : hunters target tile
+     */
     public HunterBehaviour(Level level, Vec2i pos, Vec2i target) {
         super(level, pos, target);
     }

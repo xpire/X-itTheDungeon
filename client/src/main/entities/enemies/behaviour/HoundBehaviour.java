@@ -16,6 +16,12 @@ import static java.util.Collections.singletonList;
 
 public class HoundBehaviour extends AIBehaviour {
 
+    /**
+     * Basic constructor
+     * @param level : level hound belongs in
+     * @param pos : position of the hound
+     * @param target : hounds target
+     */
     public HoundBehaviour(Level level, Vec2i pos, Vec2i target) {
         super(level, pos, target);
     }
@@ -26,19 +32,17 @@ public class HoundBehaviour extends AIBehaviour {
         if (target.isAdjacent(pos))
             return singletonList(target);
 
-        // find the hunter closest to the player
         Vec2i closestHunterPos = getClosestHunterPos();
 
-        // no closest hunter, Hound becomes a hunter
-        if (closestHunterPos == null) {
-            return singletonList(target);
-        }
+        if (closestHunterPos == null) return singletonList(target);
 
-        // pretend we have a cartesian plane
         return getOppositeTilesTo(closestHunterPos);
     }
 
-
+    /**
+     * Finds the hunter closest to the hound
+     * @return the tile with the closest hunter
+     */
     private Vec2i getClosestHunterPos() {
         return level.getEnemies().stream()
                 .filter(Enemy::isHunter)
@@ -47,7 +51,11 @@ public class HoundBehaviour extends AIBehaviour {
                 .orElse(null);
     }
 
-
+    /**
+     * Gets the tiles opposite to the nearest hunter
+     * @param closestHunterPos : position of the nearest hunter
+     * @return : a list of tiles opposite the hunter
+     */
     private ArrayList<Vec2i> getOppositeTilesTo(Vec2i closestHunterPos) {
         int changeX = target.getX() - closestHunterPos.getX();
         int changeY = target.getY() - closestHunterPos.getY();
@@ -63,7 +71,6 @@ public class HoundBehaviour extends AIBehaviour {
         else // changeY == 0
             return horizontalSweep(changeX > 0 , dist);
     }
-
 
     /**
      * Get the diagonally opposite quadrant to a Hunter's curr position relative to the player
@@ -138,7 +145,12 @@ public class HoundBehaviour extends AIBehaviour {
         return tiles;
     }
 
-
+    /**
+     * checks if a tile is a valid option to travel to
+     * @param target : target tile
+     * @param dist : distance to that tile
+     * @return : true of valid option
+     */
     private boolean isValidTile(Vec2i target, int dist) {
         if (target.manhattan(target) > dist)               return false; //TODO what does this do?
         if (!level.isValidGridPos(target))                 return false;
@@ -146,8 +158,6 @@ public class HoundBehaviour extends AIBehaviour {
 
         return true;
     }
-
-
 
     /**
      * Checks whether or not a looping limit has been reached, given an increment/decrement flag
@@ -162,7 +172,6 @@ public class HoundBehaviour extends AIBehaviour {
         else
             return (value >= limit);
     }
-
 
     /**
      * Iterates a value given a inc/dec flag

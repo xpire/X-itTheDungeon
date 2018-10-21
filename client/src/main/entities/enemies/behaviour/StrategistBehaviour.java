@@ -1,7 +1,5 @@
 package main.entities.enemies.behaviour;
 
-// Going around boulder and avoid arrows
-
 import main.Level;
 import main.algorithms.PageRank;
 import main.math.Vec2i;
@@ -17,6 +15,13 @@ public class StrategistBehaviour extends AIBehaviour {
 
     private ArrayList<Integer> pastMoves;
 
+    /**
+     * Generic Constructor
+     * @param level : level which the strategist belongs to
+     * @param pos : position of the strategist
+     * @param target : position of its target
+     * @param pastMoves : list of the strategists past moves
+     */
     public StrategistBehaviour(Level level, Vec2i pos, Vec2i target, ArrayList<Integer> pastMoves) {
         super(level, pos, target);
         this.pastMoves = pastMoves;
@@ -70,16 +75,31 @@ public class StrategistBehaviour extends AIBehaviour {
         return res;
     }
 
+    /**
+     * Getter for the highest value tile
+     * @param tiles list of tiles to choose from
+     * @return the best tile to travel to
+     */
     private Vec2i getHighestIncentiveTile(List<Vec2i> tiles) {
         return tiles.stream()
                 .max(Comparator.comparing(this::getScore))
                 .orElse(target);
     }
 
+    /**
+     * Checks if a tile within a region has a pickup entity on it
+     * @param tiles : region of tiles to check
+     * @return true if any tile in the region has a pickup
+     */
     private boolean hasPickup(List<Vec2i> tiles) {
         return tiles.stream().anyMatch(level::hasPickup);
     }
 
+    /**
+     * Gets the score of a tile
+     * @param pos : the tile to check
+     * @return : integer value
+     */
     private int getScore(Vec2i pos) {
         if (level.hasPickup(pos))
             return level.getPickup(pos).getScore();
