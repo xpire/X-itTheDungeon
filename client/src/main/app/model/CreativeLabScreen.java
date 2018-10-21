@@ -166,7 +166,7 @@ public class CreativeLabScreen extends AppScreen {
         confirmName.setVisible(false);
         confirmName.setOnAction(confirm -> {
             if (!newName.getText().equals("")) {
-                draftBuilder.getLevel().toFile(newName.getText(), "main/drafts");
+                draftBuilder.toFile(newName.getText(), "main/drafts");
                 draftBuilder.setName(newName.getText());
                 System.out.println("map saved!");
             }
@@ -325,8 +325,10 @@ public class CreativeLabScreen extends AppScreen {
      */
     public void testPlay(boolean isPublishTest) {
 
-        draftBuilder.getLevel().toFile("tempSave", "save/temp");
-        controller.switchScreen(new PlayLevelScreen(this, this.getStage(), "tempSave", "src/save/temp", 0, isPublishTest));
+        String saveName = (isPublishTest) ? draftBuilder.getName() : "tempSave";
+        draftBuilder.toFile(saveName, "save/temp");
+
+        controller.switchScreen(new PlayLevelScreen(this, this.getStage(), saveName, "src/save/temp", 0, isPublishTest));
     }
 
     /**

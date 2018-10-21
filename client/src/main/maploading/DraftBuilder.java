@@ -213,4 +213,8 @@ public class DraftBuilder {
     public void setName(String newName) {
         level.setName(newName);
     }
+
+    public File toFile(String mapName, String path) {
+        return level.toFile(mapName, path);
+    }
 }
