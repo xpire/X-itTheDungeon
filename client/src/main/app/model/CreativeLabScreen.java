@@ -155,12 +155,42 @@ public class CreativeLabScreen extends AppScreen {
         resizeRow.getChildren().addAll(rowsLabel, newRow);
         resizeCol.getChildren().addAll(colsLabel, newCol);
 
+
+        HBox saveAsBox = new HBox();
+        TextField newName = new TextField();
+        newName.setPromptText("New Name:");
+        newName.setMaxWidth(90);
+        newName.setVisible(false);
+
+        Button confirmName = new Button("OK");
+        confirmName.setVisible(false);
+        confirmName.setOnAction(confirm -> {
+            if (!newName.getText().equals("")) {
+                draftBuilder.getLevel().toFile(newName.getText(), "main/drafts");
+                draftBuilder.setName(newName.getText());
+                System.out.println("map saved!");
+            }
+            else {
+                System.out.println("plz enter a name");
+            }
+        });
+
+        saveAs.setOnAction(e -> {
+            newName.setVisible(true);
+            confirmName.setVisible(true);
+        });
+
+        newName.setOnAction(e -> confirmName.fire());
+
+        saveAsBox.getChildren().addAll(newName, confirmName);
+
         optionsMenu.add(save, 0, 0);
         optionsMenu.add(saveAs, 0, 1);
-        optionsMenu.add(resize, 0, 2);
-        optionsMenu.add(resizeRow, 0 ,3);
-        optionsMenu.add(resizeCol, 0 , 4);
-        optionsMenu.add(publish, 0, 5);
+        optionsMenu.add(saveAsBox, 0, 2);
+        optionsMenu.add(resize, 0, 3);
+        optionsMenu.add(resizeRow, 0 ,4);
+        optionsMenu.add(resizeCol, 0 , 5);
+        optionsMenu.add(publish, 0, 6);
         optionsMenu.add(exit, 0, 7);
 
         resize.setOnAction(e -> {

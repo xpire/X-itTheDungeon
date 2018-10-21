@@ -209,4 +209,8 @@ public class DraftBuilder {
     public Group getView() {
         return level.getView();
     }
+
+    public void setName(String newName) {
+        level.setName(newName);
+    }
 }
