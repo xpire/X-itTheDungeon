@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 import main.app.model.MainScreen;
 import main.client.Client;
+import main.client.util.LocalManager;
 import main.content.GameConfig;
 import main.sound.SoundManager;
 import main.content.AchievementInit;
@@ -18,7 +19,6 @@ public class Main extends Application {
 
     private final int WIDTH = 960;
     private final int HEIGHT = 640;
-    private final String CONFIG_FILENAME = "src/save/localsave.json";
 
     public SoundManager soundManager = SoundManager.getInstance(5);
 
@@ -37,7 +37,7 @@ public class Main extends Application {
         s.setWidth(WIDTH);
         s.setHeight(HEIGHT);
 
-        gameConfig = GameConfig.load(CONFIG_FILENAME);
+        LocalManager.loadConfig();
 
         new StatInit(achievementSystem.getBus(), gameConfig.getIntStat()).init();
         new AchievementInit(achievementSystem, gameConfig.getIntStat()).init();
@@ -48,10 +48,11 @@ public class Main extends Application {
 
     @Override
     public void stop() {
-        if (currClient.isLoggedin())
+        LocalManager.saveConfig();
+        if (currClient.isLoggedin()) {
+            LocalManager.uploadConfig();
             currClient.attemptLogout();
-
-        new JsonPersistor().save(CONFIG_FILENAME, gameConfig, GameConfig.SerialisationProxy.getBuilder().create());
+        }
         soundManager.shutDown();
     }
 

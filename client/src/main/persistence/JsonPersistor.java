@@ -23,7 +23,6 @@ public class JsonPersistor {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     /**

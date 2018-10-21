@@ -102,9 +102,11 @@ public class SoundManager {
 
         //BGM
         loadMusic("Main Menu","bgm/05-hendy_marvin-ready_for_action.mp3");
-        loadMusic("Level 1", "bgm/02-hendy_marvin-plan_revenge.mp3");
-        loadMusic("Level 2", "bgm/03-hendy_marvin-rushing_fast.mp3");
-        loadMusic("Level 3", "bgm/theme.mp3");
+        loadMusic("1", "bgm/02-hendy_marvin-plan_revenge.mp3");
+        loadMusic("2", "bgm/03-hendy_marvin-rushing_fast.mp3");
+        loadMusic("3", "bgm/02-hendy_marvin-plan_revenge.mp3");
+        loadMusic("4", "bgm/03-hendy_marvin-rushing_fast.mp3");
+        loadMusic("5", "bgm/theme.mp3");
         loadMusic("Happy", "bgm/surface.mp3");
         loadMusic("Cutscene", "bgm/game.mp3");
 

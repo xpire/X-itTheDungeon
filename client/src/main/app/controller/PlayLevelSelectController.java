@@ -32,8 +32,6 @@ public class PlayLevelSelectController extends AppController {
     private Button btnLevel3;
     @FXML
     private Button btnLevel4;
-    @FXML
-    private Button btnLevel5;
 
     private SoundManager soundManager = SoundManager.getInstance(5);
 
@@ -44,8 +42,7 @@ public class PlayLevelSelectController extends AppController {
         levelMetas.add(new LevelMeta("Start of Journey", 1, btnLevel1));
         levelMetas.add(new LevelMeta("Boulder Puzzle", 2, btnLevel2));
         levelMetas.add(new LevelMeta("Big Map", 3, btnLevel3));
-        levelMetas.add(new LevelMeta("level04", 4, btnLevel4));
-        levelMetas.add(new LevelMeta("level05", 5, btnLevel5));
+        levelMetas.add(new LevelMeta("Brutal", 4, btnLevel4));
 
         levelMetas.forEach(meta -> {
             Button btn = meta.button;
@@ -70,7 +67,7 @@ public class PlayLevelSelectController extends AppController {
     @FXML
     private void onLevelSelected(String filename, int levelNum) {
         soundManager.playSoundEffect("Item");
-        soundManager.playBGM("Level " + levelNum);
+        soundManager.playBGM("" + levelNum);
 
         switchScreen(new PlayLevelScreen(screen, screen.getStage(), filename, "src/asset/level", levelNum, false));
     }
