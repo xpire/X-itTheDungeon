@@ -8,6 +8,9 @@ import main.app.controller.AppController;
 
 import java.io.IOException;
 
+/**
+ * Abstract class for the Sceens of the application
+ */
 public abstract class AppScreen {
 
     protected Stage stage;
@@ -16,10 +19,17 @@ public abstract class AppScreen {
     protected String title = "X-it the Dungeon";
     protected String fxmlName = "";
 
+    /**
+     * Basic constructor
+     * @param stage : corresponding stage
+     */
     public AppScreen(Stage stage) {
         this.stage = stage;
     }
 
+    /**
+     * Initialises the screen
+     */
     public void start() {
         stage.setTitle(title);
         initLoader();
@@ -40,19 +50,41 @@ public abstract class AppScreen {
         }
     }
 
+    /**
+     * Actions before a scene is displayed on the screen
+     * @param scene : corresponding scene
+     */
     protected void beforeSceneDisplay(Scene scene){}
+
+    /**
+     * Actions after a scene is displayed on the screen
+     */
     protected void afterSceneDisplay(){}
 
+    /**
+     * Actions when the screen is destroyedd
+     */
     public void onDestroyed(){}
 
+    /**
+     * Loads the associated fxml page
+     */
     private void initLoader() {
         fxmlLoader = new FXMLLoader(
                 getClass().getClassLoader().getResource(fxmlName));
         fxmlLoader.setController(getController());
     }
 
+    /**
+     * Getter for the controller corresponding to the screen
+     * @return the corresponding controller
+     */
     protected abstract AppController getController();
 
+    /**
+     * Getter for the stage
+     * @return : the corresponding stage
+     */
     public Stage getStage() {
         return stage;
     }

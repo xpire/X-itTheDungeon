@@ -1,10 +1,12 @@
 package main.app.model;
 
-import javafx.fxml.FXML;
 import javafx.stage.Stage;
 import main.app.controller.AppController;
 import main.app.controller.MainController;
 
+/**
+ * Screen for the main page
+ */
 public class MainScreen extends AppScreen{
 
     {
@@ -12,10 +14,13 @@ public class MainScreen extends AppScreen{
         fxmlName = "main/app/view/main.fxml";
     }
 
+    /**
+     * Generic constructor
+     * @param stage : corresponding stage
+     */
     public MainScreen(Stage stage) {
         super(stage);
     }
-
 
     @Override
     protected AppController getController() {

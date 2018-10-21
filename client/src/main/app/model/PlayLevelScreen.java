@@ -10,11 +10,14 @@ import main.LevelPlayer;
 import main.app.Main;
 import main.app.controller.AppController;
 import main.app.controller.PlayLevelController;
+import main.client.util.LocalManager;
+import main.events.LevelEvent;
 
-
+/**
+ * Screen for Playing a level
+ */
 public class PlayLevelScreen extends AppScreen {
 
-//    private final String FILEPATH = "src/asset/level";
     private String filePath;
     private String filename;
     private AppScreen parentScreen;
@@ -34,6 +37,15 @@ public class PlayLevelScreen extends AppScreen {
     private LevelPlayer world;
     private PlayLevelController controller;
 
+    /**
+     * Basic constructor
+     * @param parent : screen which this game from
+     * @param stage : the corresponding stage
+     * @param filename : name of the level being played
+     * @param filePath : path of the level being played
+     * @param levelNum : pre-defined level progression index
+     * @param isPublishTest : whether or not the level is being played as a pre-publish test
+     */
     public PlayLevelScreen(AppScreen parent, Stage stage, String filename, String filePath, int levelNum, boolean isPublishTest) {
         this(parent, stage, filename, filePath, levelNum, isPublishTest, filename, "Level " + levelNum);
     }
@@ -50,6 +62,9 @@ public class PlayLevelScreen extends AppScreen {
         this.subtitle = subtitle;
     }
 
+    /**
+     * Restarting a level within the same screen
+     */
     public void restart() {
         Pane layer = controller.getDynamicLayer();
 
@@ -69,6 +84,9 @@ public class PlayLevelScreen extends AppScreen {
         world.startGame();
     }
 
+    /**
+     * When the back button on the screen is pressed
+     */
     public void backBtnPressed() {
         controller.switchScreen(parentScreen);
     }
@@ -82,5 +100,20 @@ public class PlayLevelScreen extends AppScreen {
     @Override
     protected AppController getController() {
         return controller;
+    }
+
+    /**
+     * Adds an event handler to the level if it is being evaluated for publishing
+     * The event listens for the level's successful completion, and publishes if it hears this
+     * @param world : the PlayMode instance
+     * @param filename : levels name
+     */
+    private void addPublishHandler(LevelPlayer world, String filename) {
+        if (isPublishTest) {
+            world.addEventHandler(LevelEvent.LEVEL_PASSED, e -> {
+                LocalManager.LocalDraftAdd(filename, world.getLevel().toFile(filename, "asset/buffer/"));
+                controller.switchScreen(new CreateModeSelectScreen(this.getStage()));
+            });
+        }
     }
 }

@@ -4,6 +4,9 @@ import javafx.stage.Stage;
 import main.app.controller.AppController;
 import main.app.controller.LocalDraftsController;
 
+/**
+ * Screen of the local drafts page
+ */
 public class LocalDraftsScreen extends AppScreen{
 
     {
@@ -11,6 +14,10 @@ public class LocalDraftsScreen extends AppScreen{
         fxmlName = "main/app/view/localDrafts.fxml";
     }
 
+    /**
+     * Generic constructor
+     * @param stage : corresponding stage
+     */
     public LocalDraftsScreen(Stage stage) { super(stage); }
 
     @Override
