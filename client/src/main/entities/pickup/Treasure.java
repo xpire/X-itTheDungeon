@@ -1,13 +1,10 @@
 package main.entities.pickup;
 
-import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import main.entities.Avatar;
 import main.events.TreasureEvent;
 import main.Level;
 import main.math.Vec2d;
-import main.math.Vec2i;
 import main.sprite.SpriteView;
 
 /**
@@ -29,10 +26,6 @@ public class Treasure extends Pickup{
         super(level);
     }
 
-    public Treasure(Level level, Vec2i pos) {
-        super(level, pos);
-    }
-
     @Override
     public void onCreated(){
         super.onCreated(); //TODO: do this for all
@@ -46,8 +39,8 @@ public class Treasure extends Pickup{
     }
 
     @Override
-    public void onDestroyed() {
-        super.onDestroyed();
+    public void destroy() {
+        super.destroy();
         level.postEvent(new TreasureEvent(TreasureEvent.TREASURE_COLLECTED));
     }
 

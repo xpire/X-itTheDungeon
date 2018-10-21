@@ -31,11 +31,7 @@ public class Hound extends Enemy { //TODO remove test codes
     public Hound(Level level) {
         super(level);
     }
-
-    public Hound(Level map, Vec2i pos) {
-        super(map, pos);
-    }
-
+    
     @Override
     public void onCreated(){
         super.onCreated();

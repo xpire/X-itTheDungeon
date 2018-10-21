@@ -8,7 +8,6 @@ import main.entities.Entity;
 import main.events.DeathEvent;
 import main.events.EnemyEvent;
 import main.math.Vec2i;
-import main.sound.SoundManager;
 
 import java.util.List;
 
@@ -29,9 +28,6 @@ public abstract class Enemy extends Entity {
     public Enemy(Level level) {
         super(level);
     }
-    public Enemy(Level level, Vec2i pos) {
-        super(level, pos);
-    }
 
     @Override
     public void onCreated() {
@@ -39,7 +35,7 @@ public abstract class Enemy extends Entity {
     }
 
     @Override
-    public void onDestroyed() {
+    public void destroy() {
         level.postEvent(new EnemyEvent(EnemyEvent.ENEMY_KILLED));
         level.removeEnemy(pos);
         soundManager.playSoundEffect("Mob");
@@ -48,7 +44,7 @@ public abstract class Enemy extends Entity {
     @Override
     public void onExploded() {
         level.postEvent(new DeathEvent(DeathEvent.DEATH_BY_BOMB, false));
-        onDestroyed();
+        destroy();
     }
 
     /**

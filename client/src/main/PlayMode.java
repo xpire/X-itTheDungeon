@@ -1,5 +1,6 @@
 package main;
 
+import javafx.beans.binding.Binding;
 import javafx.beans.binding.Bindings;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -65,31 +66,7 @@ public class PlayMode implements Game {
         input = new Input();
 
         if (avatar == null) {
-            gameLoop = new GameLoop(new Game() {
-                @Override
-                public void onStart() {
-                }
-
-                @Override
-                public void onUpdateBegin() {
-
-                }
-
-                @Override
-                public void onUpdate() {
-
-                }
-
-                @Override
-                public void onUpdateEnd() {
-
-                }
-
-                @Override
-                public void onStop() {
-
-                }
-            }, fps -> System.out.println("FPS: " + fps));
+            gameLoop = null;
             return;
         }
 
@@ -103,25 +80,26 @@ public class PlayMode implements Game {
     }
 
     public void startGame() {
+        if (gameLoop == null) return;
         gameLoop.start();
         input.startListening();
         soundManager.playSoundEffect("Start");
     }
 
     public void pauseGame() {
+        if (gameLoop == null) return;
         gameLoop.stop();
         input.stopListening();
     }
 
     public void endGame() {
+        if (gameLoop == null) return;
         gameLoop.stop();
     }
 
     private void initEvents() {
         level.addEventHandler(AvatarEvent.AVATAR_TURN_ENDED, event -> endPlayerTurn());
         level.addEventHandler(DeathEvent.ANY, e -> {
-            System.out.println("DIED! " + e.isAvatar());
-
             if (e.isAvatar())
                 gameOver();
         });
@@ -134,30 +112,13 @@ public class PlayMode implements Game {
         objectives.getChildren().clear();
         level.getObjectiveViews().forEachRemaining( o -> objectives.getChildren().add(o.getCheckBox()));
 
-        Label lblNumArrows = new Label();
-        locator.getInvArrow().getChildren().clear();
-        locator.getInvArrow().getChildren().add(lblNumArrows);
-        lblNumArrows.textProperty().bind(Bindings.format("%d", avatar.getNumArrowsProperty()));
 
-        Label lblNumBombs = new Label();
-        locator.getInvBomb().getChildren().clear();
-        locator.getInvBomb().getChildren().add(lblNumBombs);
-        lblNumBombs.textProperty().bind(Bindings.format("%d", avatar.getNumBombsProperty()));
+        locator.getInvBomb().bindInteger(avatar.getNumBombsProperty().asObject());
+        locator.getInvArrow().bindInteger(avatar.getNumArrowsProperty().asObject());
+        locator.getInvSword().bindInteger(avatar.getSwordDurability().asObject());
+        locator.getInvGold().bindCountText(avatar.getNumTreasuresProperty().asObject());
+        locator.getInvKey().bindBoolean(avatar.hasKeyProperty());
 
-        Label lblSwordDurability = new Label();
-        locator.getInvSword().getChildren().clear();
-        locator.getInvSword().getChildren().add(lblSwordDurability);
-        lblSwordDurability.textProperty().bind(Bindings.format("%d", avatar.getSwordDurability()));
-
-        Label lblNumTreasures = new Label();
-        locator.getInvGold().getChildren().clear();
-        locator.getInvGold().getChildren().add(lblNumTreasures);
-        lblNumTreasures.textProperty().bind(Bindings.format("%d", avatar.getNumTreasuresProperty()));
-
-        Label lblHasKey = new Label();
-        locator.getInvGold().getChildren().clear();
-        locator.getInvKey().getChildren().add(lblHasKey);
-        lblHasKey.textProperty().bind(Bindings.format("%s", avatar.hasKeyProperty()));
     }
 
 
@@ -204,7 +165,6 @@ public class PlayMode implements Game {
 
         if (!level.getEnemies().isEmpty()) {
             if (isPlayerTurn) {
-
                 onPlayerTurn();
             } else {
                 onEnemyTurn();

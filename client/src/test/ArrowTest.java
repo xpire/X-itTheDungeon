@@ -24,8 +24,8 @@ public class ArrowTest {
         Level level = mapLoader.loadLevel("TestArrow1", "../testdata/");
         Vec2i arrowLocation = new Vec2i(2, 2);
         Vec2i avatarLocation = new Vec2i(2, 3);
-        level.setAvatar(avatarLocation, new Avatar(level, avatarLocation));
-        level.setPickup(arrowLocation, new Arrow(level, arrowLocation));
+//        level.setAvatar(avatarLocation, new Avatar(level, avatarLocation));
+//        level.setPickup(arrowLocation, new Arrow(level, arrowLocation));
         level.displayLevel();
         System.out.println(level.getAvatar().getNumArrowsProperty());
         assertEquals((int) level.getAvatar().getNumArrowsProperty().getValue(), 0);
@@ -43,10 +43,10 @@ public class ArrowTest {
         Vec2i cowardLocation = new Vec2i(2, 5);
         Vec2i avatarLocation = new Vec2i(3, 3);
         Vec2i arrowLocation = new Vec2i(2, 2);
-        level.setAvatar(avatarLocation, new Avatar(level, avatarLocation));
-        level.setPickup(arrowLocation, new Arrow(level, arrowLocation));
-        Coward coward = new Coward(level, cowardLocation);
-        level.setEnemy(cowardLocation, coward);
+//        level.setAvatar(avatarLocation, new Avatar(level, avatarLocation));
+//        level.setPickup(arrowLocation, new Arrow(level, arrowLocation));
+//        Coward coward = new Coward(level, cowardLocation);
+//        level.setEnemy(cowardLocation, coward);
 
         level.displayLevel();
         System.out.println(level.getAvatar().getNumArrowsProperty());

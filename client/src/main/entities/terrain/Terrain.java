@@ -18,12 +18,8 @@ public abstract class Terrain extends Entity {
         super(level);
     }
 
-    public Terrain(Level level, Vec2i pos) {
-        super(level, pos);
-    }
-
     @Override
-    public void onDestroyed() {
+    public void destroy() {
         level.removeTerrain(getGridPos(), true);
     }
 

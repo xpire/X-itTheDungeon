@@ -30,19 +30,14 @@ public class FlyingArrow extends Prop{
      * Basic constructor
      * @param level
      */
-    public FlyingArrow(Level level, Vec2i dir) {
-        super(level);
-        this.direction = dir;
-        shoot();
-    }
-
     public FlyingArrow(Level level, Vec2i pos, Vec2i dir) {
-        super(level, pos);
+        super(level);
+        this.pos = pos;
         this.direction = dir;
         shoot();
     }
 
-    void shoot() {
+    private void shoot() {
         // kill first enemy in avatar's direction, if the enemy exists and is reachable
         sprite.setState(sprite.directionParser(direction));
         Vec2i finishPos = new Vec2i(pos);
@@ -50,7 +45,7 @@ public class FlyingArrow extends Prop{
 
             // enemy hit
             if (level.hasEnemy(finishPos)) {
-                level.getEnemy(finishPos).onDestroyed();
+                level.getEnemy(finishPos).destroy();
                 break;
             }
             // non-passable entity hit
@@ -73,14 +68,11 @@ public class FlyingArrow extends Prop{
         transition.setOnFinished(e -> {
 //            if (level.hasEnemy(fPos))
 //                level.getEnemy(fPos).onDestroyed();
-            this.onDestroyed();
+            destroy();
         });
         transition.play();
-
-
-
-
     }
+
 
     @Override
     public void onCreated() {

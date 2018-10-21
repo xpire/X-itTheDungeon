@@ -2,11 +2,8 @@ package main.entities.prop;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.util.Duration;
-import main.PlayMode;
 import main.entities.Entity;
 import main.Level;
 import main.math.Vec2d;
@@ -31,8 +28,8 @@ public class LitBomb extends Prop{
     private Vec2i direction = new Vec2i(0,0);
     private EventHandler<ActionEvent> afterFinish =  e -> {
         this.destroyEntity(pos);
-        this.onDestroyed();
-    };;
+        destroy();
+    };
 
     /**
      * Basic Constructor
@@ -46,11 +43,6 @@ public class LitBomb extends Prop{
         super(level);
         this.radius = radius;
     }
-
-    public LitBomb(Level level, Vec2i pos) {
-        super(level, pos);
-    }
-
 
     @Override
     public void onCreated(){
@@ -87,7 +79,7 @@ public class LitBomb extends Prop{
      * Logic when the bomb explodes, killing everythings in the
      * plus shape around the bomb
      */
-    public void onExplosion() {
+    private void onExplosion() {
         System.out.println("EXPLOSION");
         soundManager.playSoundEffect("Explosion");
         ArrayList<Vec2i> targets = new ArrayList<>();
@@ -135,30 +127,17 @@ public class LitBomb extends Prop{
             System.out.println(targets.get(j));
         }
 
-//        SpriteView temp = new SpriteView(getImage("sprite/prop/litbomb/centre0.png"),new Vec2d(-8,-8), 1.875,1.875);
-//        temp.addAnime("Default", generateAnimation("right", 4));
-//        view.addNode(temp);
-//        temp.setX(sprite.getX()+30);
-        sprite.playAnime("Centre",afterFinish);
-//        sprite.playAnime("Centre",afterFinish);
-
-
-//        this.destroyEntity(pos);
-//        onDestroyed();
+        sprite.playAnime("Centre", afterFinish);
     }
 
-    public SpriteAnimation generateAnimation(String name, int number, Vec2d offset, SpriteView sp) {
+    private SpriteAnimation generateAnimation(String name, int number, Vec2d offset, SpriteView sp) {
         System.out.println(offset);
         SpriteAnimation end = new SpriteAnimation(sp, new Duration(500), new Vec2i(-8 + (int) offset.getX(), -8 + (int)offset.getY()), 1.875, 1.875);
         StringBuilder sb;// = new StringBuilder("sprite/prop/litbomb/");
 //        sb.append(name);
-        for (Integer i = 0; i < number; i++) {
+        for (int i = 0; i < number; i++) {
             sb = new StringBuilder("sprite/prop/litbomb/").append(name);
             end.addState(getImage(sb.append(i).append(".png").toString()));
-            if (i != 0) {
-//                end.alignToUp(1, i);
-//                end.alignToLeft(1, i);
-            }
         }
         end.alignOffset(offset);
         return end;

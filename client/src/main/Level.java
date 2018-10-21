@@ -5,6 +5,8 @@ import javafx.event.EventHandler;
 import javafx.event.EventType;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import main.app.Main;
 import main.trigger.objective.Objective;
 import main.trigger.objective.ObjectiveSystem;
@@ -61,6 +63,7 @@ public class Level {
     private EventBus eventBus = new EventBus();
     private ObjectiveSystem objectiveSystem = new ObjectiveSystem(eventBus);
 
+    private ImageView background;
 
     /**
      * Constructor for the Level class
@@ -71,6 +74,7 @@ public class Level {
      * @param isCreateMode : flag to differentiate events that should be triggered
      */
 
+    //TODO does not resize at the start
     public Level(int nRows, int nCols, double size, String name, boolean isCreateMode) {
         this.nRows = nRows;
         this.nCols = nCols;
@@ -78,17 +82,15 @@ public class Level {
         this.name = name;
         this.isCreateMode = isCreateMode;
 
-//        GridPane gridView = new GridPane();
-//        gridView.setMinSize(getWidth(), getHeight());
-//        gridView.gridLinesVisibleProperty().set(true);
-
-//        view = new ViewComponent(gridView);
         view = new ViewComponent();
 
-        terrains = new TerrainLayer(nRows, nCols, () -> new Ground(this));
-        props    = new HashMapLayer<>();
-        pickups  = new HashMapLayer<>();
-        enemies  = new HashMapLayer<>();
+        background = new ImageView(new Image("asset/sprite/terrain/ground/8.png"));
+        view.addNode(background);
+
+        terrains    = new TerrainLayer(nRows, nCols, () -> new Ground(this));
+        props       = new HashMapLayer<>();
+        pickups     = new HashMapLayer<>();
+        enemies     = new HashMapLayer<>();
         avatarLayer = new SingletonLayer<>();
 
         props.setOnEntityEnter(this::notifyOnEnterByProp);
@@ -113,7 +115,10 @@ public class Level {
                 addTerrain(new Vec2i(x, y), ground);
             }
         }
+
+        rescale(size);
     }
+
 
     /**
      * Level constructor which sets PlayMode as the default flag
@@ -125,6 +130,15 @@ public class Level {
     public Level(int nRows, int nCols, double size, String name) {
         this(nRows, nCols, size, name, false);
     }
+
+
+    public void rescale(double tileSize) {
+        size = tileSize;
+        layers.forEach(EntityLayer::rescale);
+        background.setFitWidth(getWidth());
+        background.setFitHeight(getHeight());
+    }
+
 
 
     /*
@@ -964,5 +978,9 @@ public class Level {
 
     public void clearObjectives() {
         objectiveSystem.clearObjectives();
+    }
+
+    public double getSize() {
+        return size;
     }
 }

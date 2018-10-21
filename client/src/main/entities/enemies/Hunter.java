@@ -30,10 +30,6 @@ public class Hunter extends Enemy {
         super(level);
     }
 
-    public Hunter(Level level, Vec2i pos) {
-        super(level, pos);
-    }
-
 
     @Override
     public void onCreated(){

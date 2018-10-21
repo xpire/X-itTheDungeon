@@ -10,7 +10,6 @@ import main.entities.prop.Prop;
 import main.events.DoorEvent;
 import main.events.KeyEvent;
 import main.math.Vec2d;
-import main.math.Vec2i;
 import main.sprite.SpriteView;
 
 /**
@@ -36,11 +35,6 @@ public class Door extends Terrain {
         super(level);
     }
 
-    public Door(Level level, Vec2i pos) {
-        super(level, pos);
-    }
-
-
     @Override
     public void onCreated(){
 //        doorFrame = new Rectangle(6, 30, Color.BLACK);
@@ -55,7 +49,7 @@ public class Door extends Terrain {
         // Enforce Key-Door coupling in creative mode
         level.addEventHandler(KeyEvent.KEY_REMOVED, e -> {
             if (level.isCreateMode() && e.isMatchingDoor(this)) {
-                onDestroyed();
+                destroy();
             }
         });
     }

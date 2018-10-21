@@ -20,8 +20,8 @@ public class HoverPotionTest {
         Level level = mapLoader.loadLevel("TestHoverPotion", "../testdata/");
         Vec2i avatarLocation = new Vec2i(3, 3);
         Vec2i HoverPotionLocation = new Vec2i(2, 2);
-        level.setAvatar(avatarLocation, new Avatar(level, avatarLocation));
-        level.setPickup(HoverPotionLocation, new HoverPotion(level, HoverPotionLocation));
+//        level.setAvatar(avatarLocation, new Avatar(level, avatarLocation));
+//        level.setPickup(HoverPotionLocation, new HoverPotion(level, HoverPotionLocation));
 
         level.displayLevel();
         System.out.println(level.getAvatar().isHovering());

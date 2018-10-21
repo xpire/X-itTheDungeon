@@ -30,10 +30,6 @@ public class BombPotion extends Pickup{
         super(level);
     }
 
-    public BombPotion(Level level, Vec2i pos) {
-        super(level, pos);
-    }
-
     @Override
     public void onCreated(){
 

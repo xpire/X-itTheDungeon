@@ -1,8 +1,6 @@
 package main.entities.prop;
 
 import javafx.animation.TranslateTransition;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.util.Duration;
 import main.Level;
 import main.entities.Avatar;
@@ -31,11 +29,6 @@ public class IceBlock extends Prop {
         super(level);
     }
 
-    public IceBlock(Level level, Vec2i pos) {
-        super(level, pos);
-    }
-
-
     @Override
     public void onCreated(){
 //        Circle circle = new Circle(12, Color.LIGHTBLUE);
@@ -47,7 +40,7 @@ public class IceBlock extends Prop {
 
     @Override
     public void onExploded() {
-        onDestroyed();
+        destroy();
     }
 
 

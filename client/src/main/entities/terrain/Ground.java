@@ -25,18 +25,8 @@ public class Ground extends Terrain {
      */
     public Ground(Level level) { super(level); }
 
-    public Ground(Level level, Vec2i pos) {
-        super(level, pos);
-    }
-
     @Override
     public void onCreated() {
-//        Rectangle tile = new Rectangle(30, 30, Color.rgb(222, 222, 222));
-//        tile.setStrokeType(StrokeType.INSIDE);
-//        tile.setStroke(Color.BLACK);
-//        tile.setStrokeWidth(0.2);
-//        view.addNode(tile);
-//        view.setCentre(new Vec2d(15, 15));
         sprite = new SpriteView(getImage("sprite/terrain/ground/8.png"),new Vec2d(-8,-8), 1.875,1.875);
         view.addNode(sprite);
     }

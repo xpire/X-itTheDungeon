@@ -34,10 +34,6 @@ public class Switch extends Terrain{
         super(level);
     }
 
-    public Switch(Level level, Vec2i pos) {
-        super(level, pos);
-    }
-
     /**
      * Flag if the switch is activated
      */
@@ -71,7 +67,7 @@ public class Switch extends Terrain{
     }
 
     @Override
-    public void onDestroyed() {
+    public void destroy() {
         level.postEvent(new SwitchEvent(SwitchEvent.SWITCH_DESTROYED));
     }
 

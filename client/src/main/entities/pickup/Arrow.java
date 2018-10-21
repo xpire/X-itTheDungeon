@@ -26,18 +26,12 @@ public class Arrow extends Pickup{
         super(level);
     }
 
-    public Arrow(Level level, Vec2i pos) {
-        super(level, pos);
-    }
 
     @Override
     public void onCreated(){
-//        view.addNode(new Rectangle(16, 4, Color.SALMON));
-//        view.setCentre(new Vec2d(8, 2));
-        sprite = new SpriteView(getImage("sprite/pickup/arrow/0.png"),new Vec2d(-8,-8), 1,1);
+        sprite = new SpriteView(getImage("sprite/pickup/arrow/0.png"), new Vec2d(-8,-8), 1,1);
         view.addNode(sprite);
     }
-
 
     @Override
     public boolean onPickupBy(Avatar avatar) {

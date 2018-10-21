@@ -32,10 +32,6 @@ public class InvincibilityPotion extends Pickup{
         super(level);
     }
 
-    public InvincibilityPotion(Level level, Vec2i pos) {
-        super(level, pos);
-    }
-
 
     @Override
     public void onCreated(){

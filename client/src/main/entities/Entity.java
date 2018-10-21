@@ -32,11 +32,13 @@ EntityVisitor {
 
 public abstract class Entity {
 
+    public final static double DEFAULT_SIZE = 30.0;
     protected char symbol = '?';
 
     protected Vec2i pos;
     protected Level level;
     protected ViewComponent view;
+
     public SpriteView sprite;
     public SoundManager soundManager;// = SoundManager.getInstance(5);
 
@@ -46,15 +48,17 @@ public abstract class Entity {
      * @param level current level
      */
     public Entity(Level level) {
-        this(level, new Vec2i());
-    }
-
-    public Entity(Level level, Vec2i pos) {
-        this.view  = new ViewComponent();
-        this.pos   = new Vec2i(pos);
+        this.view = new ViewComponent();
+        this.pos = new Vec2i(0,0);
         this.level = level;
         soundManager = SoundManager.getInstance(5);
         onCreated();
+    }
+
+    public void onLevelRescaled() {
+        view.getView().setScaleX(size()/DEFAULT_SIZE);
+        view.getView().setScaleY(size()/DEFAULT_SIZE);
+        view.moveTo(getWorldPos().sub(view.getCentre()));
     }
 
     /**
@@ -62,24 +66,7 @@ public abstract class Entity {
      */
     public void onCreated() {}
 
-    /**
-     * A to-string like implementation which gives
-     * information about the entity
-     * used in keys and doors to provide their mapping
-     * @return
-     */
-    public String getMetaData() {
-
-        return null;
-    }
-
     // Removes from map
-
-    /**
-     * logic when an entity is destroyed
-     */
-    public abstract void onDestroyed();
-
     /**
      * logic when an entity is removed from the level
      */
@@ -95,6 +82,10 @@ public abstract class Entity {
      */
     public void onTurnUpdate() {}
 
+    /**
+     * logic when an entity is destroyed
+     */
+    public abstract void destroy();
 
 
     /*
@@ -111,7 +102,6 @@ public abstract class Entity {
 
 
 
-
     /*
     Movement
      */
@@ -122,7 +112,6 @@ public abstract class Entity {
      * @param y - change in y
      */
     public void setPos(int x, int y) {
-//        Vec2i from = new Vec2i(pos);
         pos = new Vec2i(x, y);
         view.moveTo(getWorldPos().sub(view.getCentre()));
     }
@@ -255,6 +244,16 @@ public abstract class Entity {
     public void onLeaveByEnemy(Enemy enemy) {}
     public void onLeaveByAvatar(Avatar avatar) {}
 
+    /**
+     * A to-string like implementation which gives
+     * information about the entity
+     * used in keys and doors to provide their mapping
+     * @return
+     */
+    public String getMetaData() {
+        return "";
+    }
+
     public Image getImage(String path) {
         FileInputStream inputStream = null;
         StringBuilder sb = new StringBuilder();
@@ -266,5 +265,9 @@ public abstract class Entity {
             e.printStackTrace();
             return null;
         }
+    }
+
+    private double size() {
+        return level.getSize();
     }
 }

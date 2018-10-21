@@ -5,7 +5,6 @@ import main.entities.Entity;
 import main.entities.enemies.Enemy;
 import main.entities.prop.Prop;
 import main.Level;
-import main.math.Vec2i;
 
 /**
  * Abstracts the Pickup entities on the level
@@ -22,12 +21,8 @@ public abstract class Pickup extends Entity {
         super(level);
     }
 
-    public Pickup(Level level, Vec2i pos) {
-        super(level, pos);
-    }
-
     @Override
-    public void onDestroyed() {
+    public void destroy() {
         level.removePickup(getGridPos());
     }
 
@@ -54,7 +49,7 @@ public abstract class Pickup extends Entity {
     @Override
     public void onEnterByAvatar(Avatar avatar) {
         if (onPickupBy(avatar))
-            onDestroyed();
+            destroy();
     }
 
     /**

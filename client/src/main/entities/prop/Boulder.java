@@ -1,8 +1,5 @@
 package main.entities.prop;
 
-import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import main.entities.Avatar;
 import main.entities.Entity;
 import main.Level;
@@ -29,10 +26,6 @@ public class Boulder extends Prop {
         super(level);
     }
 
-    public Boulder(Level level, Vec2i pos) {
-        super(level, pos);
-    }
-
 
     @Override
     public void onCreated(){
@@ -46,7 +39,7 @@ public class Boulder extends Prop {
     @Override
     public void onExploded() {
         level.postEvent(new BoulderEvent(BoulderEvent.BOULDER_BOMBED));
-        onDestroyed();
+        destroy();
     }
 
 

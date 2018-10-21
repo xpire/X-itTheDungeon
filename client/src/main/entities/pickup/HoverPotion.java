@@ -30,10 +30,6 @@ public class HoverPotion extends Pickup{
         super(level);
     }
 
-    public HoverPotion(Level level, Vec2i pos) {
-        super(level, pos);
-    }
-
     @Override
     public void onCreated(){
 

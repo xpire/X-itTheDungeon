@@ -23,12 +23,9 @@ public abstract class Prop extends Entity {
         super(level);
     }
 
-    public Prop(Level level, Vec2i pos) {
-        super(level, pos);
-    }
 
     @Override
-    public void onDestroyed() {
+    public void destroy() {
         level.removeProp(getGridPos());
     }
 

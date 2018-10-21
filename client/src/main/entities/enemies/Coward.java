@@ -34,11 +34,6 @@ public class Coward extends Enemy {
         super(level);
     }
 
-    public Coward(Level level, Vec2i pos) {
-        super(level, pos);
-    }
-
-
     @Override
     public void onCreated(){
         super.onCreated();

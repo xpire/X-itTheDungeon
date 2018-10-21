@@ -64,7 +64,8 @@
                         </Group>
                         <Label layoutX="224.0" layoutY="23.0" text="Movement">
                            <font>
-                              <Font name="Baloo" size="30.0" />
+                              <Font name="Baloo" size="
+                              30.0" />
                            </font>
                         </Label>
                         <Group layoutX="577.0" layoutY="73.0">

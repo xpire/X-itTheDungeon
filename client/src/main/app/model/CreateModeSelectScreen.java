@@ -1,5 +1,7 @@
 package main.app.model;
 
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.*;
@@ -8,6 +10,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Box;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+import main.Level;
 import main.app.controller.AppController;
 import main.app.controller.CreateModeSelectController;
 import main.maploading.DraftBuilder;
@@ -16,9 +19,12 @@ import main.maploading.MapLoader;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class CreateModeSelectScreen extends AppScreen{
+
+    private static final double PREVIEW_SIZE = 270.0;
 
     {
         title = "Select Create Mode";
@@ -36,107 +42,124 @@ public class CreateModeSelectScreen extends AppScreen{
         try {
             Files.walk(Paths.get("src/main/drafts"))
                  .filter(Files::isRegularFile)
-                 .forEach(f -> {
-
-                     TitledPane titledPane = new TitledPane();
-                     String fileName = f.getFileName().toString();
-                     String trimmedFileName = fileName.substring(0, fileName.lastIndexOf('.'));
-                     titledPane.setText(trimmedFileName);
-
-                     HBox totalView = new HBox();
-                     totalView.setSpacing(10);
-
-                     ScrollPane viewPane = new ScrollPane();
-                     viewPane.setPrefSize(270, 270);
-                     viewPane.setMaxSize(270,270);
-
-                     DraftBuilder previewBuilder = new DraftBuilder(
-                             new MapLoader().loadLevel(trimmedFileName, "src/main/drafts", true));
-
-                     Group preview = previewBuilder.getView();
-
-//                     preview.setScaleX(9.0/Math.max(previewBuilder.getNCols(), previewBuilder.getNRows()));
-//                     preview.setScaleY(9.0/Math.max(previewBuilder.getNCols(), previewBuilder.getNRows()));
-                     viewPane.setBorder(new Border(new BorderStroke(Color.BLACK,
-                             BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
-                     viewPane.setContent(preview);
-//                     viewPane.setPrefViewportWidth(100);
-
-                     int maxDim = Math.max(previewBuilder.getNCols(), previewBuilder.getNRows());
-                     int prefSize = 9;
-                     double scaleFactor = (double) prefSize/maxDim;
-
-                     System.out.println(previewBuilder.getNCols() + " " + previewBuilder.getNRows() + " " + scaleFactor);
-                     preview.setScaleX(scaleFactor);
-                     preview.setScaleY(scaleFactor);
-                     preview.setTranslateX(-(previewBuilder.getNCols() - prefSize) * 15 * scaleFactor);
-//                     preview.setTranslateY(-(previewBuilder.getNRows() - prefSize) * 16.1 * scaleFactor);
-//
-
-                     viewPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-                     viewPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-                     totalView.getChildren().add(viewPane);
-
-                     VBox optionsList = new VBox();
-                     optionsList.setSpacing(10);
-
-                     HBox nameBox = new HBox();
-                     Label nameLabel = new Label("Name: ");
-                     TextField nameField = new TextField(trimmedFileName);
-                     Button okBtn = new Button("Ok");
-                     Button renameBtn = new Button("Rename");
-
-                     nameField.setEditable(false);
-                     okBtn.setVisible(false);
-
-                     nameField.setOnAction(e -> okBtn.fire());
-
-                     okBtn.setOnAction(e -> {
-                         String newName = String.format("%s.txt", nameField.getText());
-
-                         if (!renameFile(f.toFile(), newName)) System.out.println("Rename failed");
-
-                         nameField.setEditable(false);
-                         okBtn.setVisible(false);
-                         controller.switchScreen(new CreateModeSelectScreen(getStage()));
-                     });
-
-                     renameBtn.setOnAction(e -> {
-                         nameField.setEditable(true);
-                         nameField.requestFocus();
-                         okBtn.setVisible(true);
-                     });
-
-                     nameBox.getChildren().addAll(nameLabel, nameField, okBtn, renameBtn);
-
-                     Button resumeBtn = new Button();
-                     resumeBtn.setText("Resume Working");
-                     resumeBtn.setOnAction(e -> controller.switchScreen(
-                             new CreativeLabScreen(getStage(),
-                             new DraftBuilder(
-                             new MapLoader().loadLevel(trimmedFileName, "src/main/drafts", true)))));
-
-                     Button deleteBtn = new Button();
-                     deleteBtn.setText("Delete");
-                     deleteBtn.setOnAction(e -> {
-                         if (!f.toFile().delete()) System.out.println("Delete unsuccessful");
-                         controller.switchScreen(new CreateModeSelectScreen(getStage()));
-                     });
-
-                     optionsList.getChildren().addAll(nameBox, resumeBtn, deleteBtn);
-
-                     totalView.getChildren().add(optionsList);
-                     titledPane.setContent(totalView);
-
-                     draftsView.getPanes().add(titledPane);
-                 });
+                 .forEach(path -> draftsView.getPanes().add(makeTitlePane(path)));
         } catch (IOException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 
-    private boolean renameFile(File f, String newName) {
-        return f.renameTo(new File(f.getParentFile(), newName));
+    private TitledPane makeTitlePane(Path path) {
+        File file       = path.toFile();
+        String filename = getFilenameWithoutExt(file);
+
+        TitledPane title = new TitledPane();
+        title.setText(filename);
+
+        // Content
+        HBox totalView = new HBox();
+        totalView.setSpacing(10);
+
+        // Preview
+        Pane preview = makePreview(filename);
+
+        // Options Box
+        VBox boxOptions = new VBox();
+        boxOptions.setSpacing(10);
+
+        HBox boxName     = makeNameBox(file, filename);
+        Button deleteBtn = makeDeleteBtn(file);
+        Button resumeBtn = makeResumeBtn(filename);
+
+        // Overall
+        boxOptions.getChildren().addAll(boxName, resumeBtn, deleteBtn);
+        totalView.getChildren().addAll(preview, boxOptions);
+        title.setContent(totalView);
+        return title;
+    }
+
+    private HBox makeNameBox(File file, String filename) {
+        HBox boxName       = new HBox();
+        Label lblName      = new Label("Name: ");
+        TextField txtName  = new TextField(filename);
+        Button btnOk       = new Button("OK");
+        Button btnRename   = new Button("Rename");
+
+        txtName.setEditable(false);
+        btnOk.setVisible(false);
+
+        txtName.setOnAction(e -> btnOk.fire());
+        btnOk.setOnAction(e -> {
+            String newName = String.format("%s.txt", txtName.getText());
+
+            if (!renameFile(file, newName))
+                System.out.println("Rename failed"); // TODO!
+
+            txtName.setEditable(false);
+            btnOk.setVisible(false);
+            controller.switchScreen(new CreateModeSelectScreen(getStage()));
+        });
+
+        btnRename.setOnAction(e -> {
+            txtName.setEditable(true);
+            txtName.requestFocus();
+            btnOk.setVisible(true);
+        });
+
+        boxName.getChildren().addAll(lblName, txtName, btnOk, btnRename);
+        return boxName;
+    }
+
+    private Button makeDeleteBtn(File file) {
+        Button deleteBtn = new Button();
+        deleteBtn.setText("Delete");
+        deleteBtn.setOnAction(e -> {
+            if (!file.delete())
+                System.out.println("Delete unsuccessful");
+            controller.switchScreen(new CreateModeSelectScreen(getStage()));
+        });
+        return deleteBtn;
+    }
+
+    private Button makeResumeBtn(String filename) {
+        Button resumeBtn = new Button();
+        resumeBtn.setText("Resume Working");
+        resumeBtn.setOnAction(e -> controller.switchScreen(
+                new CreativeLabScreen(getStage(),
+                        new DraftBuilder(
+                                new MapLoader().loadLevel(filename, "src/main/drafts", true)))));
+        return resumeBtn;
+    }
+
+    private String getFilenameWithoutExt(File file) {
+        String filename = file.getName();
+        return filename.substring(0, filename.lastIndexOf('.'));
+    }
+
+    private Pane makePreview(String filename) {
+        StackPane pane = new StackPane();
+
+        pane.setPadding(Insets.EMPTY);
+        pane.setPrefWidth(PREVIEW_SIZE);
+        pane.setPrefHeight(PREVIEW_SIZE);
+        pane.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
+
+        pane.setBackground(new Background(new BackgroundFill(Color.GREY, CornerRadii.EMPTY, Insets.EMPTY)));
+
+        DraftBuilder builder = new DraftBuilder(new MapLoader().loadLevel(filename, "src/main/drafts", true));
+        Level level = builder.getLevel();
+
+        double scaleFactor = PREVIEW_SIZE / Math.max(level.getWidth(), level.getHeight());
+        level.rescale(level.getSize() * scaleFactor);
+
+        Group view = builder.getView();
+        StackPane.setMargin(view, Insets.EMPTY);
+        StackPane.setAlignment(view, Pos.CENTER);
+        pane.getChildren().add(view);
+        return pane;
+    }
+
+    private boolean renameFile(File file, String newName) {
+        return file.renameTo(new File(file.getParentFile(), newName));
     }
 
     public void initialiseNewDraft(String draftName) {

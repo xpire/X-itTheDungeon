@@ -23,10 +23,6 @@ public class TerrainLayer extends EntityLayer<Terrain> {
         this.nCols = nCols;
         this.defaultTerrain = defaultTerrain;
 
-//        GridPane gridView = new GridPane();
-//        gridView.setMinSize(nCols * size, nRows * size);
-//        gridView.gridLinesVisibleProperty().set(true);
-
         terrains = new Terrain[nRows][nCols];
         view = new ViewComponent();
     }

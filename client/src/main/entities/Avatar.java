@@ -94,11 +94,6 @@ public class Avatar extends Entity {
     }
 
 
-    public Avatar(Level level, Vec2i pos) {
-        super(level, pos);
-    }
-
-
     @Override
     public void onCreated() {
 //        Circle circle = new Circle(10, Color.AQUA);
@@ -380,7 +375,7 @@ public class Avatar extends Entity {
 
 
     @Override
-    public void onDestroyed() {
+    public void destroy() {
         level.removeAvatar();
     }
 
@@ -390,7 +385,7 @@ public class Avatar extends Entity {
         level.postEvent(new DeathEvent(DeathEvent.DEATH_BY_FALL, true));
         soundManager.playSoundEffect("Falling");
         soundManager.playSoundEffect("Death");
-        onDestroyed();
+        destroy();
     }
 
     public void onThreatenedByBomb(Bomb bomb) {
@@ -398,18 +393,18 @@ public class Avatar extends Entity {
 
         level.postEvent(new DeathEvent(DeathEvent.DEATH_BY_BOMB, true));
         soundManager.playSoundEffect("Death");
-        onDestroyed();
+        destroy();
     }
 
     public void onThreatenedByEnemy(Enemy enemy) {
         if (isRaged()) {
             level.postEvent(new DeathEvent(DeathEvent.DEATH_BY_ATTACK, false));
-            enemy.onDestroyed();
+            enemy.destroy();
         }
         else {
             level.postEvent(new DeathEvent(DeathEvent.DEATH_BY_ATTACK, true));
             soundManager.playSoundEffect("Death");
-            onDestroyed();
+            destroy();
         }
     }
 
@@ -548,7 +543,7 @@ public class Avatar extends Entity {
         if (level.isValidGridPos(target) && level.hasEnemy(target)) {
 
             // Kill the enemy
-            level.getEnemy(target).onDestroyed();
+            level.getEnemy(target).destroy();
             sword.reduceDurability();
             swordDurability.set(sword.getDurability());
             soundManager.playSoundEffect("Hit");
@@ -576,15 +571,12 @@ public class Avatar extends Entity {
 
         soundManager.playSoundEffect("Arrow");
         Vec2i arrowPos = new Vec2i(pos).add(direction);
-        System.out.printf("possss:%d %d, dir:%d %d\n",arrowPos.getX(), arrowPos.getY(), direction.getX(), direction.getY());
-        System.out.println(arrowPos);
-        System.out.println(direction);
+
         FlyingArrow arrow = new FlyingArrow(level, arrowPos, direction);
         level.addProp(arrowPos, arrow);
 
         //Animation
         sprite.playAnimation("Bow", direction, doNothing);
-
 
         // -1 arrow
         numArrows.set(numArrows.get() - 1);

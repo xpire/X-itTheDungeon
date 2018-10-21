@@ -6,11 +6,11 @@ import javafx.scene.layout.VBox;
 public class PlayModeUILocator {
 
     // Inventory
-    private Group invSword;
-    private Group invArrow;
-    private Group invBomb;
-    private Group invKey;
-    private Group invGold;
+    private InventoryView invSword;
+    private InventoryView invArrow;
+    private InventoryView invBomb;
+    private InventoryView invKey;
+    private InventoryView invGold;
 
     private VBox objectivesPanel;
 
@@ -23,23 +23,23 @@ public class PlayModeUILocator {
         objectivesPanel = builder.objectivesPanel;
     }
 
-    public Group getInvSword() {
+    public InventoryView getInvSword() {
         return invSword;
     }
 
-    public Group getInvArrow() {
+    public InventoryView getInvArrow() {
         return invArrow;
     }
 
-    public Group getInvBomb() {
+    public InventoryView getInvBomb() {
         return invBomb;
     }
 
-    public Group getInvKey() {
+    public InventoryView getInvKey() {
         return invKey;
     }
 
-    public Group getInvGold() {
+    public InventoryView getInvGold() {
         return invGold;
     }
 
@@ -49,35 +49,35 @@ public class PlayModeUILocator {
 
     public static class Builder {
 
-        private Group invSword;
-        private Group invArrow;
-        private Group invBomb;
-        private Group invKey;
-        private Group invGold;
+        private InventoryView invSword;
+        private InventoryView invArrow;
+        private InventoryView invBomb;
+        private InventoryView invKey;
+        private InventoryView invGold;
 
         private VBox objectivesPanel;
 
-        public Builder sword(Group sword) {
+        public Builder sword(InventoryView sword) {
             invSword = sword;
             return this;
         }
 
-        public Builder arrow(Group arrow) {
+        public Builder arrow(InventoryView arrow) {
             invArrow = arrow;
             return this;
         }
 
-        public Builder bomb(Group bomb) {
+        public Builder bomb(InventoryView bomb) {
             invBomb = bomb;
             return this;
         }
 
-        public Builder key(Group key) {
+        public Builder key(InventoryView key) {
             invKey = key;
             return this;
         }
 
-        public Builder gold(Group gold) {
+        public Builder gold(InventoryView gold) {
             invGold = gold;
             return this;
         }

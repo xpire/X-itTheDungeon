@@ -24,8 +24,8 @@ public class TreasureTest {
         Level level = mapLoader.loadLevel("TestTreasure1", "../testdata/");
         Vec2i TreasureLocation = new Vec2i(2, 2);
         Vec2i avatarLocation = new Vec2i(2, 3);
-        level.setAvatar(avatarLocation, new Avatar(level, avatarLocation));
-        level.setPickup(TreasureLocation, new Treasure(level, TreasureLocation));
+//        level.setAvatar(avatarLocation, new Avatar(level, avatarLocation));
+//        level.setPickup(TreasureLocation, new Treasure(level, TreasureLocation));
         level.displayLevel();
         System.out.println(level.getAvatar().getNumTreasuresProperty());
         assertEquals((int) level.getAvatar().getNumTreasuresProperty().getValue(), 0);
@@ -43,10 +43,10 @@ public class TreasureTest {
         Vec2i cowardLocation = new Vec2i(2, 5);
         Vec2i avatarLocation = new Vec2i(3, 3);
         Vec2i TreasureLocation = new Vec2i(2, 2);
-        level.setAvatar(avatarLocation, new Avatar(level, avatarLocation));
-        level.setPickup(TreasureLocation, new Treasure(level, TreasureLocation));
-        Coward coward = new Coward(level, cowardLocation);
-        level.setEnemy(cowardLocation, coward);
+//        level.setAvatar(avatarLocation, new Avatar(level, avatarLocation));
+//        level.setPickup(TreasureLocation, new Treasure(level, TreasureLocation));
+//        Coward coward = new Coward(level, cowardLocation);
+//        level.setEnemy(cowardLocation, coward);
 
         level.displayLevel();
         System.out.println(level.getAvatar().getNumTreasuresProperty());
