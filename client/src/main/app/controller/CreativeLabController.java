@@ -5,6 +5,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.layout.*;
 import main.app.model.CreativeLabScreen;
+import main.sound.SoundManager;
 
 public class CreativeLabController extends AppController<CreativeLabScreen> {
 
@@ -22,6 +23,8 @@ public class CreativeLabController extends AppController<CreativeLabScreen> {
 
     @FXML
     private GridPane objectivesBox;
+
+    private SoundManager soundManager = SoundManager.getInstance(5);
 
 
     /**
@@ -51,6 +54,7 @@ public class CreativeLabController extends AppController<CreativeLabScreen> {
     @FXML
     public void onPlayTestBtnPressed() {
         screen.testPlay(false);
+        soundManager.playSoundEffect("Item");
     }
 
     /**
@@ -58,6 +62,7 @@ public class CreativeLabController extends AppController<CreativeLabScreen> {
      * @return The currDraft GridPane
      */
     public GridPane getCurrDraft() {
+        soundManager.playSoundEffect("Item");
         return currDraft;
     }
 
@@ -66,6 +71,7 @@ public class CreativeLabController extends AppController<CreativeLabScreen> {
      * @return The toolbox GridPane
      */
     public GridPane getToolbox() {
+        soundManager.playSoundEffect("Item");
         return toolbox;
     }
 

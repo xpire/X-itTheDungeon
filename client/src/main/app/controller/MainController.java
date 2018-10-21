@@ -12,7 +12,7 @@ import javafx.scene.control.Alert;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class MainController extends AppController implements Initializable  {
+public class MainController extends AppController  {
 
 //    @FXML
 //    private Button btnStart;
@@ -28,8 +28,8 @@ public class MainController extends AppController implements Initializable  {
          super(screen);
     }
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    @FXML
+    public void initialize() {
         if (Main.currClient.isLoggedin()) {
             btnLogin.setVisible(false);
             btnLogout.setVisible(true);
@@ -55,27 +55,38 @@ public class MainController extends AppController implements Initializable  {
     @FXML
     public void onTrophyBtnPressed() {
         switchScreen(new TrophyScreen(screen.getStage()));
+        soundManager.playSoundEffect("Item");
     }
 
     @FXML
-    public void onLoginBtnPressed() { switchScreen(new LoginScreen(screen.getStage())); }
+    public void onLoginBtnPressed() {
+        switchScreen(new LoginScreen(screen.getStage()));
+        soundManager.playSoundEffect("Item");
+    }
 
     @FXML
     public void onLogoutBtnPressed() {
         AlertHelper.showAlert(Alert.AlertType.INFORMATION, "Hello!!!", Main.currClient.attemptLogout());
         btnLogin.setVisible(true);
         btnLogout.setVisible(false);
+        soundManager.playSoundEffect("Item");
+
     }
 
     public void onHelpBtnPressed() {
         switchScreen(new HelpManualScreen(screen.getStage(), screen));
+        soundManager.playSoundEffect("Item");
     }
 
     public void onSettingBtnPressed() {
         switchScreen(new SettingScreen(screen.getStage(), screen));
+        soundManager.playSoundEffect("Item");
     }
 
-    public void onExitBtnPressed() { screen.getStage().close(); }
+    public void onExitBtnPressed() {
+        soundManager.playSoundEffect("Item");
+        screen.getStage().close();
+    }
 
 
 }

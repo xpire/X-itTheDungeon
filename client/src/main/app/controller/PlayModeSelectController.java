@@ -35,11 +35,20 @@ public class PlayModeSelectController extends AppController {
     }
 
     @FXML
-    public void onExplorePressed() { switchScreen(new ExploreModeScreen(screen.getStage())); }
+    public void onExplorePressed() {
+        switchScreen(new ExploreModeScreen(screen.getStage()));
+        soundManager.playSoundEffect("Item");
+    }
 
     @FXML
-    public void onLocalBtnPressed() { switchScreen(new LocalLevelScreen(screen.getStage())); }
+    public void onLocalBtnPressed() {
+        switchScreen(new LocalLevelScreen(screen.getStage()));
+        soundManager.playSoundEffect("Item");
+    }
 
     @FXML
-    public void onDraftBtnPressed() { switchScreen(new LocalDraftsScreen(screen.getStage())); }
+    public void onDraftBtnPressed() {
+        switchScreen(new LocalDraftsScreen(screen.getStage()));
+        soundManager.playSoundEffect("Item");
+    }
 }
