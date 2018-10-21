@@ -6,11 +6,6 @@ import javafx.scene.Node;
 import javafx.scene.layout.*;
 import main.app.model.CreativeLabScreen;
 
-//TODO :
-//hover with key-door?
-
-//publish
-
 public class CreativeLabController extends AppController<CreativeLabScreen> {
 
     @FXML
@@ -55,7 +50,7 @@ public class CreativeLabController extends AppController<CreativeLabScreen> {
 
     @FXML
     public void onPlayTestBtnPressed() {
-        screen.testPlay();
+        screen.testPlay(false);
     }
 
     /**

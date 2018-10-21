@@ -4,8 +4,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Accordion;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import main.Toast;
 import main.app.model.CreateModeSelectScreen;
-import main.app.model.CreativeLabScreen;
 import main.app.model.MainScreen;
 import main.sound.SoundManager;
 
@@ -47,8 +47,8 @@ public class CreateModeSelectController extends AppController<CreateModeSelectSc
 
     @FXML
     public void onBeginNewDraftBtnPressed() {
-        if (newDraftNameField.getText().length() == 0) {
-            System.out.println("plz give the draft a name");
+        if (newDraftNameField.getText().equals("") || !newDraftNameField.getText().matches("[a-zA-Z0-9]+")) {
+            Toast.messageToast(screen.getStage(), "Please enter valid name");
             return;
         }
 

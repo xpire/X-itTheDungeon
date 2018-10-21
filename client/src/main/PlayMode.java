@@ -2,6 +2,9 @@ package main;
 
 import javafx.beans.binding.Binding;
 import javafx.beans.binding.Bindings;
+import javafx.event.Event;
+import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -10,11 +13,13 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
+import main.app.Main;
 import main.app.controller.PlayLevelController;
 import main.app.engine.Game;
 import main.app.engine.GameLoop;
 import main.app.engine.Input;
 import main.app.engine.UserAction;
+import main.client.util.LocalManager;
 import main.component.ViewComponent;
 import main.entities.Avatar;
 import main.entities.Entity;
@@ -24,6 +29,8 @@ import main.events.AvatarEvent;
 import main.events.LevelEvent;
 import main.maploading.MapLoader;
 import main.sound.SoundManager;
+
+import java.awt.event.ActionEvent;
 
 
 /*
@@ -59,6 +66,7 @@ public class PlayMode implements Game {
     public PlayMode(Scene scene, String levelName, String levelPath) {
 
         level = new MapLoader().loadLevel(levelName, levelPath);
+
         avatar = level.getAvatar();
 
         pane.getChildren().add(level.getView());
@@ -241,4 +249,10 @@ public class PlayMode implements Game {
     public void setLevelNum(int levelNum) {
         this.levelNum = levelNum;
     }
+
+    public <T extends Event> void addEventHandler(EventType<T> type, EventHandler<? super T> handler) {
+        level.addEventHandler(type, handler);
+    }
+
+    public Level getLevel() { return level; }
 }

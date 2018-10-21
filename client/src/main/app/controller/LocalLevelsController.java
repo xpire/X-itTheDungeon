@@ -5,6 +5,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import main.app.Main;
+import main.app.engine.AlertHelper;
 import main.app.model.AppScreen;
 import main.app.model.PlayModeSelectScreen;
 import main.client.util.LocalManager;
@@ -24,7 +25,10 @@ public class LocalLevelsController extends AppController implements Initializabl
     public void initialize(URL location, ResourceBundle resources) {
         ArrayList<LocalManager.LocalStructure> localMaps;
         // Is the user logged in?
-        if (!Main.currClient.isLoggedin()) { localMaps = LocalManager.fetchLocal("default"); }
+        if (!Main.currClient.isLoggedin()) {
+            AlertHelper.showAlert(Alert.AlertType.ERROR,"Error","Please login to see downloaded maps.");
+            return;
+        }
         else { localMaps = LocalManager.fetchLocal(Main.currClient.getLoggedUser()); }
 
         if (localMaps == null || localMaps.isEmpty()) {

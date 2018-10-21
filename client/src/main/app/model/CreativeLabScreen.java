@@ -11,10 +11,13 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.effect.DropShadow;
+import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import main.Level;
+import main.Toast;
+import main.app.Main;
 import main.app.controller.AppController;
 import main.app.controller.CreativeLabController;
 import main.entities.Avatar;
@@ -26,9 +29,12 @@ import main.entities.terrain.*;
 import main.content.ObjectiveFactory;
 import main.maploading.DraftBuilder;
 import main.maploading.InvalidMapException;
+import main.math.Vec2d;
 import main.math.Vec2i;
 import main.sprite.SpriteView;
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -74,7 +80,7 @@ public class CreativeLabScreen extends AppScreen {
      * Initialises the ToolBox GridPlane on the scene
      */
     public void initialiseToolBox(GridPane toolbox) {
-        int numCols = 11, numRows = 2;
+        int numCols = 12, numRows = 2;
 
         initialiseGridPane(toolbox, numCols, numRows, true);
         ArrayList<SpriteView> spriteViews = new ArrayList<>();
@@ -104,10 +110,9 @@ public class CreativeLabScreen extends AppScreen {
         addSelectHandler(spriteViews, new Hound(temp), 9, 1);
         addSelectHandler(spriteViews, new Coward(temp), 10, 1);
 
-        for (Node n : toolbox.getChildren()) {
-            GridPane.setHalignment(n, HPos.CENTER);
-            GridPane.setValignment(n, VPos.CENTER);
-        }
+        addEraser(spriteViews);
+
+        centreGridPaneChildren(toolbox);
     }
 
     /**
@@ -130,44 +135,79 @@ public class CreativeLabScreen extends AppScreen {
         publish.setText("Publish");
         exit.setText("Exit");
 
-        //Maybe make the options menu more fxml integrated rather than model
-        save.setOnAction(e -> draftBuilder.saveMap(draftBuilder.getName(), "main/drafts"));
+        save.setOnAction(e -> {
+            draftBuilder.getLevel().toFile(draftBuilder.getName(), "main/drafts");
+            printPrompt("Draft Saved");
+        });
         exit.setOnAction(e -> controller.switchScreen(new CreateModeSelectScreen(this.getStage())));
+        publish.setOnAction(e -> testPlay(true));
+
+        HBox resizeRow = new HBox();
+        HBox resizeCol = new HBox();
+
+        Label rowsLabel  = new Label("Rows: ");
+        Label colsLabel  = new Label("Cols: ");
+        rowsLabel.setMinWidth(15.0);
+        colsLabel.setMinWidth(15.0);
+
+        TextField newRow = new TextField(String.valueOf(draftBuilder.getNRows()));
+        TextField newCol = new TextField(String.valueOf(draftBuilder.getNCols()));
+        newRow.setMaxWidth(45.0);
+        newCol.setMaxWidth(45.0);
+        newRow.setOnAction(e -> resize.fire());
+        newCol.setOnAction(e -> resize.fire());
+
+        resizeRow.getChildren().addAll(rowsLabel, newRow);
+        resizeCol.getChildren().addAll(colsLabel, newCol);
+
+        HBox saveAsBox = new HBox();
+        TextField newName = new TextField(draftBuilder.getName());
+        newName.setMaxWidth(90);
+        newName.setVisible(false);
+
+        Button confirmName = new Button("OK");
+        confirmName.setVisible(false);
+        confirmName.setOnAction(confirm -> {
+            String newDraftName = newName.getText();
+            if (!newDraftName.equals("") && newDraftName.matches("[a-zA-Z0-9]+")) {
+
+                draftBuilder.toFile(newDraftName, "main/drafts");
+                draftBuilder.setName(newDraftName);
+                printPrompt("Draft saved as " + newDraftName);
+            }
+            else {
+                printPrompt("Please enter a valid draft name");
+            }
+        });
+
+        saveAs.setOnAction(e -> {
+            newName.setVisible(true);
+            newName.requestFocus();
+            confirmName.setVisible(true);
+        });
+
+        newName.setOnAction(e -> confirmName.fire());
+
+        saveAsBox.getChildren().addAll(newName, confirmName);
 
         optionsMenu.add(save, 0, 0);
         optionsMenu.add(saveAs, 0, 1);
-        optionsMenu.add(resize, 0, 2);
-        optionsMenu.add(publish, 0, 5);
+        optionsMenu.add(saveAsBox, 0, 2);
+        optionsMenu.add(resize, 0, 3);
+        optionsMenu.add(resizeRow, 0 ,4);
+        optionsMenu.add(resizeCol, 0 , 5);
+        optionsMenu.add(publish, 0, 6);
         optionsMenu.add(exit, 0, 7);
-
-        Label rowsLabel  = new Label("Rows: ");
-        rowsLabel.setMinWidth(15.0);
-        TextField newRow = new TextField();
-        newRow.setMaxWidth(45.0);
-
-        Label colsLabel  = new Label("Cols: ");
-        colsLabel.setMinWidth(15.0);
-        TextField newCol = new TextField();
-        newCol.setMaxWidth(45.0);
-
-        HBox resizeRow = new HBox();
-        resizeRow.getChildren().addAll(rowsLabel, newRow);
-
-        HBox resizeCol = new HBox();
-        resizeCol.getChildren().addAll(colsLabel, newCol);
-
-        optionsMenu.add(resizeRow, 0 ,3);
-        optionsMenu.add(resizeCol, 0 , 4);
 
         resize.setOnAction(e -> {
             try {
                 int newRowSize = Integer.parseInt(newRow.getText());
                 int newColSize = Integer.parseInt(newCol.getText());
 
-                if (newRowSize < 0 || newColSize < 0) {
-                    System.out.println("Positive numbers please");
-                    newRow.clear();
-                    newCol.clear();
+                if (!new Vec2i(newColSize, newRowSize).within(new Vec2i(4, 4), new Vec2i(24, 24))) {
+                    printPrompt("Size must be between 4x4 and 24x24");
+                    newRow.setText(String.valueOf(draftBuilder.getNRows()));
+                    newCol.setText(String.valueOf(draftBuilder.getNCols()));
                     return;
                 }
 
@@ -176,17 +216,13 @@ public class CreativeLabScreen extends AppScreen {
 
                 draftBuilder.displayLevel();
             } catch (NumberFormatException nfe) {
-                System.out.println(nfe.getMessage());
-                newRow.clear();
-                newCol.clear();
+                nfe.printStackTrace();
+                newRow.setText(String.valueOf(draftBuilder.getNRows()));
+                newCol.setText(String.valueOf(draftBuilder.getNCols()));
             }
         });
 
-        for (Node n : optionsMenu.getChildren()) {
-            GridPane.setHalignment(n, HPos.CENTER);
-            GridPane.setValignment(n, VPos.CENTER);
-        }
-
+        centreGridPaneChildren(optionsMenu);
     }
 
     /**
@@ -246,7 +282,6 @@ public class CreativeLabScreen extends AppScreen {
             }
 
             setObjectives(objectives);
-        System.out.println(draftBuilder.listObjectives());
         };
 
         exitCondition.setOnAction(makeMutuallyExclusive);
@@ -259,7 +294,11 @@ public class CreativeLabScreen extends AppScreen {
         objectivesBox.add(treasureCondition, 1, 0);
         objectivesBox.add(switchCondition, 1, 1);
 
-        for (Node n : objectivesBox.getChildren()) {
+        centreGridPaneChildren(objectivesBox);
+    }
+
+    private void centreGridPaneChildren(GridPane gp) {
+        for (Node n : gp.getChildren()) {
             GridPane.setHalignment(n, HPos.CENTER);
             GridPane.setValignment(n, VPos.CENTER);
         }
@@ -290,9 +329,12 @@ public class CreativeLabScreen extends AppScreen {
     /**
      * Saves the current state of the level to a temporary file and runs it in Play Mode
      */
-    public void testPlay() {
-        draftBuilder.saveMap("tempSave", "save/temp");
-        controller.switchScreen(new PlayLevelScreen(this, this.getStage(), "tempSave", "src/save/temp", 0));
+    public void testPlay(boolean isPublishTest) {
+
+        String saveName = (isPublishTest) ? draftBuilder.getName() : "tempSave";
+        draftBuilder.toFile(saveName, "save/temp");
+
+        controller.switchScreen(new PlayLevelScreen(this, this.getStage(), saveName, "src/save/temp", 0, isPublishTest));
     }
 
     /**
@@ -373,7 +415,6 @@ public class CreativeLabScreen extends AppScreen {
      * @param j : y position
      */
     private void editorSelectHandler(int i, int j) {
-        //make this prettier..this is bloody atrocious
         Pane pane = new Pane();
         pane.setPrefSize(30, 30);
 
@@ -395,14 +436,14 @@ public class CreativeLabScreen extends AppScreen {
                             selectedEntity = "|";
                             wasKey = true;
                             isKeyDoorMatching = true;
-                            System.out.println("plz set matching door");
+                            printPrompt("Please select position of matching door");
                             break;
                         case "|":
                             originalPos = pos;
                             selectedEntity = "K";
                             wasKey = false;
                             isKeyDoorMatching = true;
-                            System.out.println("plz set matching key");
+                            printPrompt("Please select position of matching key");
                             break;
                         default:
                             draftBuilder.editTileGUI(pos, selectedEntity);
@@ -424,7 +465,7 @@ public class CreativeLabScreen extends AppScreen {
                             selectedEntity = "K";
                             break;
                         default:
-                            System.out.println("selected entity was changed");
+                            printPrompt("Error: selected entity was changed");
                     }
                     isKeyDoorMatching = false;
                     draftBuilder.displayLevel();
@@ -475,6 +516,25 @@ public class CreativeLabScreen extends AppScreen {
     }
 
     /**
+     * Special method to load in the eraser sprite to the toolbox
+     * @param spriteViews : the ArrayList of all sprites in the toolbox
+     */
+    private void addEraser(ArrayList<SpriteView> spriteViews) {
+        SpriteView eraser;
+        try (FileInputStream image = new FileInputStream("./src/asset/sprite/eraser.png")) {
+            eraser = new SpriteView(new Image(image), new Vec2d(-8, -8), 2, 2);
+            eraser.setOnMouseClicked(e -> {
+                selectedEntity = "E";
+                setSelectedGlow(spriteViews, eraser);
+            });
+            spriteViews.add(eraser);
+            controller.getToolbox().add(eraser, 11, 1, 2, 1);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    /**
      * Overloaded addSelectHandler method which sets the additional scaling factors to 1
      * @param views : ArrayList of SpriteViews
      * @param entity : Entity corresponding to the sprite required
@@ -504,6 +564,14 @@ public class CreativeLabScreen extends AppScreen {
      */
     public Node getView() {
         return draftBuilder.getView();
+    }
+
+    /**
+     * Prints prompts out on the screen when needed
+     * @param prompt : msg to be printed out
+     */
+    private void printPrompt(String prompt) {
+        Toast.messageToast(Main.primaryStage, prompt);
     }
 
     @Override

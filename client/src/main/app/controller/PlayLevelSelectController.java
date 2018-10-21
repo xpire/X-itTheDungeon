@@ -55,7 +55,7 @@ public class PlayLevelSelectController extends AppController {
         soundManager.playSoundEffect("Item");
         soundManager.playBGM("Level " + levelNum);
 
-        switchScreen(new PlayLevelScreen(screen, screen.getStage(), filename, "src/asset/level", levelNum));
+        switchScreen(new PlayLevelScreen(screen, screen.getStage(), filename, "src/asset/level", levelNum, false));
     }
 
 

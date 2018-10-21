@@ -1,5 +1,6 @@
 package main;
 
+import com.sun.javafx.css.Style;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
@@ -22,10 +23,19 @@ public final class Toast
     private static boolean locked = false;
     private static LinkedList<ToastRequest> requests = new LinkedList<>();
 
-    public static void makeToast(Stage parent, String toastMsg, int toastDelay, int fadeInDelay, int fadeOutDelay) {
+//    public static void makeToast(Stage parent, String toastMsg, int toastDelay, int fadeInDelay, int fadeOutDelay) {
+//
+//        ToastRequest request = new ToastRequest(parent, toastMsg, toastDelay, fadeInDelay, fadeOutDelay);
+//
+//        if (!locked) {
+//            request.consume();
+//        }
+//        else {
+//            requests.add(request);
+//        }
+//    }
 
-        ToastRequest request = new ToastRequest(parent, toastMsg, toastDelay, fadeInDelay, fadeOutDelay);
-
+    private static void makeToast(ToastRequest request) {
         if (!locked) {
             request.consume();
         }
@@ -34,13 +44,14 @@ public final class Toast
         }
     }
 
-    public static void nextToast() {
+    private static void nextToast() {
         if (!requests.isEmpty()) {
             requests.removeFirst().consume();
         }
     }
 
-    private static void display(Stage parent, String toastMsg, int toastDelay, int fadeInDelay, int fadeOutDelay)
+    private static void display(Stage parent, String toastMsg, int toastDelay, int fadeInDelay, int fadeOutDelay,
+                                double fontSize, String style)
     {
         locked = true;
 
@@ -53,11 +64,11 @@ public final class Toast
 
         // Create toast content
         Text text = new Text(toastMsg);
-        text.setFont(Font.font("Verdana", 40));
+        text.setFont(Font.font("Verdana", fontSize));
         text.setFill(Color.RED);
 
         StackPane root = new StackPane(text);
-        root.setStyle("-fx-background-radius: 20; -fx-background-color: rgba(0, 0, 0, 0.2); -fx-padding: 50px;");
+        root.setStyle(style);
         root.setOpacity(0);
         root.setFocusTraversable(false);
         root.setMouseTransparent(true);
@@ -106,17 +117,82 @@ public final class Toast
         private int toastDelay;
         private int fadeInDelay;
         private int fadeOutDelay;
+        private double fontSize;
+        private String style;
 
-        private ToastRequest(Stage parent, String toastMsg, int toastDelay, int fadeInDelay, int fadeOutDelay) {
-            this.parent = parent;
-            this.toastMsg = toastMsg;
-            this.toastDelay = toastDelay;
-            this.fadeInDelay = fadeInDelay;
-            this.fadeOutDelay = fadeOutDelay;
+
+        private ToastRequest(Builder builder) {
+            this.parent         = builder.parent;
+            this.toastMsg       = builder.toastMsg;
+            this.toastDelay     = builder.toastDelay;
+            this.fadeInDelay    = builder.fadeInDelay;
+            this.fadeOutDelay   = builder.fadeOutDelay;
+            this.fontSize       = builder.fontSize;
+            this.style          = builder.style;
         }
 
         private void consume() {
-            Toast.display(parent, toastMsg, toastDelay, fadeInDelay, fadeOutDelay);
+            Toast.display(parent, toastMsg, toastDelay, fadeInDelay, fadeOutDelay, fontSize, style);
+        }
+    }
+
+    public static void messageToast(Stage parent, String message) {
+        new Toast.Builder(parent)
+                .msg(message)
+                .toastDelay(3000)
+                .fadeInDelay(250)
+                .fadeOutDelay(500)
+                .fontSize(26)
+                .style("-fx-background-radius: 10; -fx-background-color: rgba(0, 0, 0, 0.2); -fx-padding: 5px;")
+                .makeToast();
+    }
+
+    public static class Builder {
+        private Stage parent;
+        private String toastMsg = "";
+        private int toastDelay = 1000;
+        private int fadeInDelay = 1000;
+        private int fadeOutDelay = 1000;
+        private double fontSize = 40;
+        private String style = "-fx-background-radius: 20; -fx-background-color: rgba(0, 0, 0, 0.2); -fx-padding: 50px;";
+
+        public Builder(Stage parent) {
+            this.parent = parent;
+        }
+
+        public Builder msg(String msg) {
+            this.toastMsg = msg;
+            return this;
+        }
+
+        public Builder toastDelay(int delay) {
+            this.toastDelay = delay;
+            return this;
+        }
+
+        public Builder fadeInDelay(int delay) {
+            this.fadeInDelay = delay;
+            return this;
+        }
+
+
+        public Builder fadeOutDelay(int delay) {
+            this.fadeOutDelay = delay;
+            return this;
+        }
+
+        public Builder fontSize(double fontSize) {
+            this.fontSize = fontSize;
+            return this;
+        }
+
+        public Builder style(String style) {
+            this.style = style;
+            return this;
+        }
+
+        public void makeToast() {
+            Toast.makeToast(new ToastRequest(this));
         }
     }
 }

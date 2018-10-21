@@ -21,15 +21,15 @@ public class DraftBuilder {
     private Level level;
 
     /**
-     * Constructor when loading in an existing draft
-     * @param level : the existing draft
+     * Constructor when loading in an existing drafts
+     * @param level : the existing drafts
      */
     public DraftBuilder(Level level) {
         this.level = level;
     }
 
     /**
-     * Constructor when creating a new draft
+     * Constructor when creating a new drafts
      * @param nRows # of rows for the Draft
      * @param nCols # of cols for the Draft
      * @param draftName name of the Draft
@@ -39,15 +39,15 @@ public class DraftBuilder {
     }
 
     /**
-     * Gets the draft name
-     * @return name of the draft
+     * Gets the drafts name
+     * @return name of the drafts
      */
     public String getName() {
         return level.getName();
     }
 
     /**
-     * Displays the current state of the draft, in symbol format
+     * Displays the current state of the drafts, in symbol format
      */
     public void displayLevel() {
         level.displayLevel();
@@ -65,7 +65,7 @@ public class DraftBuilder {
     }
 
     /**
-     * Resizes the dimensions of the draft
+     * Resizes the dimensions of the drafts
      * @param newNRow new # of rows
      * @param newNCol new # of cols
      */
@@ -89,76 +89,76 @@ public class DraftBuilder {
         return level.getNCols();
     }
 
-    /**
-     * Saves the current state of the draft to a .txt file which can
-     * be later loaded by the MapLoader
-     *
-     * Opens a new txt file for writing,
-     * Writes the dimensions
-     * Writes the Levels body
-     * Writes the objective
-     * Writes the key-door mapping
-     *
-     * @param mapName name of the draft
-     * @param path save location, root at main
-     */
-    public void saveMap(String mapName, String path) {
-        String mapPath = String.format("./src/%s/%s.txt", path, mapName);
-
-        BufferedWriter w = null;
-        try {
-            w = new BufferedWriter(
-                    new OutputStreamWriter(
-                            new FileOutputStream(
-                                    new File(mapPath))));
-
-            int nRow = getNRows();
-            int nCol = getNCols();
-
-            //set the map size
-            w.write(nRow + "\t" + nCol);
-            w.append("\n");
-
-            //setting objectives
-            w.write(level.listObjectives());
-            w.newLine();
-
-            //set the main body of the map
-            StringBuilder metaData = new StringBuilder();
-
-            for (int i = 0; i < nRow; i++) {
-                for (int j = 0; j < nCol; j++) {
-                    Vec2i pos = new Vec2i(j, i);
-                    StringBuilder sb = new StringBuilder();
-
-                    Iterator<Entity> it = level.getEntitiesAt(pos);
-
-                    while (it.hasNext()) {
-                        Entity e = it.next();
-
-                        sb.append(e.getSymbol());
-                        if (e.getMetaData() != null)
-                            metaData.append(e.getMetaData()).append("\n");
-                    }
-
-                    w.write(sb.toString() + "\t");
-                }
-                w.newLine();
-            }
-
-            //set the key-door mapping
-            w.write(metaData.toString());
-
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-        } finally {
-            try {
-                if (w != null) w.close();
-            } catch (IOException e) {
-                System.out.println(e.getMessage());
-            }
-        }
-    }
+//    /**
+//     * Saves the current state of the drafts to a .txt file which can
+//     * be later loaded by the MapLoader
+//     *
+//     * Opens a new txt file for writing,
+//     * Writes the dimensions
+//     * Writes the Levels body
+//     * Writes the objective
+//     * Writes the key-door mapping
+//     *
+//     * @param mapName name of the drafts
+//     * @param path save location, root at main
+//     */
+//    public void saveMap(String mapName, String path) {
+//        String mapPath = String.format("./src/%s/%s.txt", path, mapName);
+//
+//        BufferedWriter w = null;
+//        try {
+//            w = new BufferedWriter(
+//                    new OutputStreamWriter(
+//                            new FileOutputStream(
+//                                    new File(mapPath))));
+//
+//            int nRow = getNRows();
+//            int nCol = getNCols();
+//
+//            //set the map size
+//            w.write(nRow + "\t" + nCol);
+//            w.append("\n");
+//
+//            //setting objectives
+//            w.write(level.listObjectives());
+//            w.newLine();
+//
+//            //set the main body of the map
+//            StringBuilder metaData = new StringBuilder();
+//
+//            for (int i = 0; i < nRow; i++) {
+//                for (int j = 0; j < nCol; j++) {
+//                    Vec2i pos = new Vec2i(j, i);
+//                    StringBuilder sb = new StringBuilder();
+//
+//                    Iterator<Entity> it = level.getEntitiesAt(pos);
+//
+//                    while (it.hasNext()) {
+//                        Entity e = it.next();
+//
+//                        sb.append(e.getSymbol());
+//                        if (e.getMetaData() != null)
+//                            metaData.append(e.getMetaData()).append("\n");
+//                    }
+//
+//                    w.write(sb.toString() + "\t");
+//                }
+//                w.newLine();
+//            }
+//
+//            //set the key-door mapping
+//            w.write(metaData.toString());
+//
+//        } catch (IOException e) {
+//            System.out.println(e.getMessage());
+//        } finally {
+//            try {
+//                if (w != null) w.close();
+//            } catch (IOException e) {
+//                System.out.println(e.getMessage());
+//            }
+//        }
+//    }
 
     /**
      * Adds a non key-door entity to the level at a specified position
@@ -208,5 +208,13 @@ public class DraftBuilder {
 
     public Group getView() {
         return level.getView();
+    }
+
+    public void setName(String newName) {
+        level.setName(newName);
+    }
+
+    public File toFile(String mapName, String path) {
+        return level.toFile(mapName, path);
     }
 }

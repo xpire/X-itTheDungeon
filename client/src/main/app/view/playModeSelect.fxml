@@ -3,11 +3,12 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="640.0" prefWidth="960.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane prefHeight="640.0" prefWidth="960.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Button fx:id="btnStory" layoutX="179.0" layoutY="330.0" mnemonicParsing="false" onAction="#onStoryBtnPressed" prefHeight="99.0" prefWidth="112.0" text="Story" />
-      <Button layoutX="604.0" layoutY="318.0" mnemonicParsing="false" prefHeight="99.0" onAction="#onLocalBtnPressed" prefWidth="112.0" text="My Level" />
-      <Button fx:id="btnExplore" layoutX="390.0" layoutY="318.0" mnemonicParsing="false" onAction ="#onExplorePressed" prefHeight="111.0" prefWidth="112.0" text="Explore" />
+      <Button fx:id="btnStory" layoutX="94.0" layoutY="330.0" mnemonicParsing="false" onAction="#onStoryBtnPressed" prefHeight="99.0" prefWidth="112.0" text="Story" />
+      <Button fx:id="levelBtn" layoutX="506.0" layoutY="330.0" mnemonicParsing="false" onAction="#onLocalBtnPressed" prefHeight="99.0" prefWidth="112.0" text="My Level" />
+      <Button fx:id="btnExplore" layoutX="285.0" layoutY="324.0" mnemonicParsing="false" onAction="#onExplorePressed" prefHeight="111.0" prefWidth="112.0" text="Explore" />
       <Button fx:id="btnBack" layoutX="14.0" layoutY="584.0" mnemonicParsing="false" onAction="#onBackBtnPressed" prefHeight="42.0" prefWidth="95.0" text="Back" />
+      <Button fx:id="draftBtn" layoutX="702.0" layoutY="330.0" mnemonicParsing="false" onAction="#onDraftBtnPressed" prefHeight="99.0" prefWidth="112.0" text="My Drafts" />
    </children>
 </AnchorPane>
