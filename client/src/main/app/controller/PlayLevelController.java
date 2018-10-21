@@ -7,6 +7,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import main.InventoryView;
 import main.PlayModeUILocator;
+import main.app.model.HelpManualScreen;
 import main.app.model.PlayLevelScreen;
 import main.sound.SoundManager;
 
@@ -93,6 +94,7 @@ public class PlayLevelController extends AppController<PlayLevelScreen> {
     @FXML
     public void onHelpBtnPressed() {
         soundManager.playSoundEffect("Item");
+        switchScreen(new HelpManualScreen(screen.getStage(), screen));
 
     }
 
